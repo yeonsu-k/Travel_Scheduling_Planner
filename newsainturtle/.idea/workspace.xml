@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f8132318-0887-4676-a1c0-54f2c745aeca" name="Changes" comment="[BE] feat: 프로젝트 생성">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/NewsainturtleApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/alarm/controller/AlramController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/alarm/dto/AlarmRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/alarm/entity/Alarm.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/alarm/exception/AlarmException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/alarm/repository/AlarmRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/alarm/service/AlarmService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/auth/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/auth/dto/AuthRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/auth/entity/Auth.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/auth/exception/AuthException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/auth/repository/ScheduleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/auth/service/ScheduleService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/common/config/WebConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/common/dto/BaseResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/common/exception/BadRequestException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/common/filter/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/schedule/controller/ScheduleController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/schedule/dto/ScheduleRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/schedule/entity/Schedule.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/schedule/exception/ScheduleException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/schedule/repository/ScheduleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/schedule/service/ScheduleService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/user/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/user/dto/UserRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/user/entity/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/user/exception/UserException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/user/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/newsainturtle/user/service/UserService.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="feature/back-issue7" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="develop" />
+        <option value="main" />
+      </list>
+    </option>
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2LOouXEfakMnRt0651wU1BFDs32" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/newsainturtle/alarm" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Desktop\NewSignProject\NewSainTurtleProject\newsainturtle\src\main\java\com\newsainturtle\alarm" />
+      <recent name="C:\Users\USER\Desktop\NewSignProject\NewSainTurtleProject\newsainturtle\src\main\java\com\newsainturtle\auth" />
+      <recent name="C:\Users\USER\Desktop\NewSignProject\NewSainTurtleProject\newsainturtle\src\main\java\com\newsainturtle\schedule" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.newsainturtle.alarm.exception" />
+      <recent name="com.newsainturtle.auth.exception" />
+      <recent name="com.newsainturtle.user.exception" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="NewsainturtleApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="newsainturtle.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.newsainturtle.NewsainturtleApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f8132318-0887-4676-a1c0-54f2c745aeca" name="Changes" comment="" />
+      <created>1675751715345</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1675751715345</updated>
+      <workItem from="1675751718065" duration="2843000" />
+    </task>
+    <task id="LOCAL-00001" summary="[BE] feat: 프로젝트 생성">
+      <created>1675753662653</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1675753662653</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[BE] feat: 프로젝트 생성" />
+    <option name="LAST_COMMIT_MESSAGE" value="[BE] feat: 프로젝트 생성" />
+  </component>
+</project>
