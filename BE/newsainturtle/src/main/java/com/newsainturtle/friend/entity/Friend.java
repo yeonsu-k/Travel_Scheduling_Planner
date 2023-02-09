@@ -38,7 +38,7 @@ public class Friend {
         this.receiveUser = receiveUser;
     }
 
-    public Friend update(boolean isAccept){
+    public Friend updateIsAccept(boolean isAccept){
         this.isAccept = isAccept;
         return this;
     }
