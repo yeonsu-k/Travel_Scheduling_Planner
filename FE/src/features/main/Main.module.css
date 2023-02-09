@@ -9,6 +9,16 @@
   grid-template-columns: 3fr 5fr;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.containerInner {
+  width: 80%;
+  text-align: center;
+}
+
 .video {
   width: 100%;
   height: 100vh;
@@ -78,4 +88,20 @@
   font-family: "Pretendard-Regular";
   font-size: 13px;
   letter-spacing: 5px;
+}
+
+.mainTextContainer {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.mainTitleText {
+  font-size: 1.8rem;
+}
+
+.mainSubTitleText {
+  font-family: "Montserrat";
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #999;
 }
