@@ -76,9 +76,25 @@ function Header() {
         }
       >
         <NavLink to="/" className={styles.link}>
-          <Stack direction="row" spacing={1.5} alignItems="baseline">
-            <Text value="MYRO" type="pageTitle" bold />
-            <Text value="MAKE YOUR ROUTE OPTIMIZED" type="caption" />
+          <Stack direction="row" spacing={1} alignItems="baseline">
+            <span
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: "700",
+                fontSize: "2.125rem",
+              }}
+            >
+              MYRO
+            </span>
+            <span
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: "400",
+                fontSize: "0.75rem",
+              }}
+            >
+              MAKE YOUR ROUTE OPTIMIZED
+            </span>
           </Stack>
         </NavLink>
 
