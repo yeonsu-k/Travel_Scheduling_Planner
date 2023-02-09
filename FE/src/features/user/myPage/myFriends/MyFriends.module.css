@@ -1,0 +1,14 @@
+/* MyFriends.tsx */
+
+.myFriendsTitle {
+  display: flex;
+}
+
+.addFriendsButton {
+  margin-left: auto;
+}
+
+.myFriendsList {
+  border: 1px solid black;
+  display: flex;
+}
