@@ -1,28 +1,16 @@
 import React, { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import { Avatar, Box, Menu, MenuItem, Stack, Button, Link, ButtonBase } from "@mui/material";
-import { GitHub, Logout, KeyboardArrowUp, KeyboardArrowDown } from "@mui/icons-material";
+import { Avatar, Box, Menu, MenuItem, Stack, Button, Link, ButtonBase, Badge, IconButton } from "@mui/material";
+import { Notifications } from "@mui/icons-material";
 import Text from "./Text";
 import styles from "./css/Header.module.css";
 import palette from "styles/colorPalette";
 import { useDispatch, useSelector } from "react-redux";
-import { red } from "@mui/material/colors";
 // import { rootState } from "app/store";
 // import api from "api/Api";
 // import Axios from "api/JsonAxios";
 // import { authActions } from "slices/authSlice";
-
-const GithubButton = styled(Button)(() => ({
-  margin: 3,
-  color: "black",
-  backgroundColor: "transparent",
-  "&:hover": {
-    backgroundColor: "transparent",
-    borderColor: palette.black,
-    boxShadow: "none",
-  },
-}));
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -105,6 +93,11 @@ function Header() {
           <NavLink to="/" className={styles.link}>
             여행지
           </NavLink>
+          <IconButton sx={{ color: "black" }} disableRipple>
+            <Badge color="error" overlap="circular" badgeContent={1} variant="dot">
+              <Notifications />
+            </Badge>
+          </IconButton>
           {
             // login ? (
             <>
