@@ -1,7 +1,12 @@
 import React from "react";
+import MainDisplay from "../features/main/MainDisplay";
 
 function MainPage() {
-  return <div>MainPage 페이지</div>;
+  return (
+    <div>
+      <MainDisplay />
+    </div>
+  );
 }
 
 export default MainPage;
