@@ -24,11 +24,11 @@ public class Friend {
     private boolean isAccept;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "request_user_id")
     private User requestUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "receive_user_id")
     private User receiveUser;
 
     @Builder
