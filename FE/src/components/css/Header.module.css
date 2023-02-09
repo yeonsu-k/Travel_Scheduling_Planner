@@ -1,7 +1,8 @@
 .wrapper {
   color: black;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 3px 60px;
+  height: 52px;
+  padding: 0px 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
