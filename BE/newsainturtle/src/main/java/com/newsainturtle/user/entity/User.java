@@ -18,8 +18,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
+
+    @Column(length = 30)
     private String email;
+    @Column(length = 20)
     private String nickname;
+    @Column(length = 20)
     private String password;
     private boolean kakao;
     private String profile;
