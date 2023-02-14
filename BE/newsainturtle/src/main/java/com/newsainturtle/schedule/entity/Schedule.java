@@ -23,25 +23,25 @@ public class Schedule {
     @Column(name = "host_id")
     private Long hostId;
 
-    @Column(name = "schedule_region")
+    @Column(name = "schedule_region", length = 20)
     private String scheduleRegion;
 
-    @Column(name = "schedule_name")
+    @Column(name = "schedule_name", length = 20)
     private String scheduleName;
 
     @Column(name = "is_private")
     private boolean isPrivate;
 
-    @Column(name = "schedule_start_day")
+    @Column(name = "schedule_start_day", length = 10)
     private String scheduleStartDay;
 
-    @Column(name = "schedule_end_day")
+    @Column(name = "schedule_end_day", length = 10)
     private String scheduleEndDay;
 
-    @Column(name = "schedule_start_location")
+    @Column(name = "schedule_start_location", length = 20)
     private String scheduleStartLocation;
 
-    @Column(name = "schedule_end_location")
+    @Column(name = "schedule_end_location", length = 20)
     private String scheduleEndLocation;
 
     private String vehicle;
