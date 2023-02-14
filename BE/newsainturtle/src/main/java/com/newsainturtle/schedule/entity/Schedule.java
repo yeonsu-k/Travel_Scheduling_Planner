@@ -21,7 +21,6 @@ public class Schedule {
     private Long scheduleId;
 
     @Column(name = "host_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hostId;
 
     @Column(name = "schedule_region")
@@ -56,8 +55,9 @@ public class Schedule {
     private LocalDateTime modifiedTime;
 
     @Builder
-    public Schedule(String scheduleRegion, String scheduleName, boolean isPrivate, String scheduleStartDay,
+    public Schedule(Long hostId, String scheduleRegion, String scheduleName, boolean isPrivate, String scheduleStartDay,
                     String scheduleEndDay, String scheduleStartLocation, String scheduleEndLocation, String vehicle) {
+        this.hostId = hostId;
         this.scheduleRegion = scheduleRegion;
         this.scheduleName = scheduleName;
         this.isPrivate = isPrivate;
