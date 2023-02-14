@@ -1,13 +1,16 @@
 import React from "react";
 import MyFriendsList from "./MyFriendsList";
 import styles from "./MyFriends.module.css";
+import Text from "components/Text";
 
 const MyFriends = () => {
   return (
-    <div>
+    <div className={styles.myFriends}>
       <div className={styles.myFriendsTitle}>
-        <div>나의 친구</div>
-        <button className={styles.addFriendsButton}>친구 추가하기</button>
+        <Text value="나의 친구" type="textTitle" bold en />
+        <button className={styles.addFriendsButton}>
+          <Text value="친구 추가하기" color="white" bold />
+        </button>
       </div>
       <MyFriendsList />
     </div>
