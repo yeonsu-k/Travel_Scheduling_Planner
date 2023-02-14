@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import MyProfile from "features/user/myPage/myProfile/MyProfile";
+import MySchedule from "features/user/myPage/mySchedule/MySchedule";
+import MyFriends from "features/user/myPage/myFriends/MyFriends";
 
 function MyPage() {
-  return <div>MyPage 페이지</div>;
+  const [viewSchedule, setViewSchedule] = useState(true);
+
+  return (
+    <div>
+      <MyProfile setViewSchedule={setViewSchedule} />
+      {viewSchedule ? <MySchedule /> : <MyFriends />}
+    </div>
+  );
 }
 
 export default MyPage;
