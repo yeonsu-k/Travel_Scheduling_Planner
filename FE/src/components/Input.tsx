@@ -20,7 +20,7 @@ const InputStyle = styled(InputBox)(() => ({
   padding: "0px",
   fontSize: "0.95rem",
   fontFamily: "Pretendard-Regular",
-  ".MuiInput-input": { padding: "7px 9px" },
+  ".MuiInput-input": { padding: "7px 2px" },
   "&:before": { borderBottom: "1px solid #e0e0e0" },
   "&:hover:not(.Mui-disabled, .Mui-error):before": { borderBottom: "1px solid #e0e0e0" },
   "&:after": { borderBottom: "2px solid #39f", transition: "none" },
