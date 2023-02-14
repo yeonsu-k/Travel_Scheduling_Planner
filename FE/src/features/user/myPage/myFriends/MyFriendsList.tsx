@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./MyFriends.module.css";
-import sampleImg from "assets/sample/cat.png";
+import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
 
 const MyFriendsList = () => {
