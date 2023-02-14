@@ -16,14 +16,14 @@ export const ButtonStyled = ({ text, color, radius, width, height, ...rest }: Pr
   const style = {
     background: color === "main" ? palette.main : color === "pink" ? palette.pink : palette.white,
     color: color === "main" ? palette.white : color === "pink" ? palette.black : "#666",
-    border: color ? "" : "1px solid #EDEDED",
+    border: color ? "" : "1px solid #efefef",
     borderRadius: radius ? "5px" : "0px",
-    padding: "0.5rem 1.4rem",
+    padding: color ? "0.3rem 0.8rem" : "0.5rem 1.4rem",
     boxShadow: color ? "" : "0px 5px 16px rgba(0, 0, 0, 0.08)",
     width: width,
     height: height,
     fontFamily: "Pretendard-Regular",
-    fontWeight: "400",
+    fontWeight: color ? "600" : "500",
   };
   return (
     <Button style={style} {...rest}>
@@ -36,7 +36,7 @@ ButtonStyled.defaultProps = {
   text: "BUTTON",
   color: "",
   width: "",
-  icon: "",
+  height: "",
   radius: false,
   disabled: false,
   onClick: undefined,
