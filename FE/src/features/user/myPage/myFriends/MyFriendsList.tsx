@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./MyFriends.module.css";
 import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
+import Button from "components/Button";
 
 const MyFriendsList = () => {
   return (
@@ -28,9 +29,7 @@ const MyFriendsList = () => {
         <Text value="2" />
       </div>
       <div className={styles.friendInfo}>
-        <button>
-          <Text value="친구 삭제" />
-        </button>
+        <Button text="친구 삭제" />
       </div>
     </div>
   );
