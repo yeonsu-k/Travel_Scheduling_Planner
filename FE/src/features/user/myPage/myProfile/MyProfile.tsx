@@ -23,14 +23,14 @@ const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
 
       <div className={styles.myProfileInfo} onClick={() => setViewSchedule(true)}>
         <Text value="나의 일정" type="text" bold en />
-        <div style={{ margin: "12%" }}></div>
-        <Text value="1" type="textTitle" bold />
+        <div style={{ margin: "15%" }}></div>
+        <Text value="0" type="pageTitle" bold />
       </div>
 
       <div className={styles.myProfileInfo} onClick={() => setViewSchedule(false)}>
         <Text value="나의 친구" type="text" bold en />
-        <div style={{ margin: "12%" }}></div>
-        <Text value="0" type="textTitle" bold />
+        <div style={{ margin: "15%" }}></div>
+        <Text value="1" type="pageTitle" bold />
         <br />
       </div>
     </div>
