@@ -1,10 +1,10 @@
 package com.newsainturtle.user.entity;
 
 import com.newsainturtle.friend.entity.Friend;
+import com.newsainturtle.notification.entity.Notification;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,6 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private final List<Friend> friends = new ArrayList<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "receiveUser", cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
 
