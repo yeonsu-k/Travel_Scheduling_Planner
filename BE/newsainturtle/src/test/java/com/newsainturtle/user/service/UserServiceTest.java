@@ -28,37 +28,37 @@ class UserServiceTest {
     @Nested
     @DisplayName("[이메일 중복 검사]")
     class EmailDuplicateCheck{
+        @Test
+        @DisplayName("[성공] - 이미 존재하는 이메일 ")
+        void alreadyExistEmail(){
+            //given
+            final EmailDuplicateCheckRequest emailDuplicateCheckRequest = EmailDuplicateCheckRequest.builder()
+                    .email("tjdtn123@naver.com").build();
+            final User user = User.builder()
+                    .email("tjdtn123@naver.com")
+                    .kakao(false)
+                    .nickname("성게")
+                    .profile("path/src")
+                    .password("1q2w3e4r!")
+                    .build();
+            doReturn(user).when(userRepository).findByEmail(emailDuplicateCheckRequest.getEmail());
+            //when
+            EmailDuplicateCheckResponse response = userService.emailDuplicateCheck(emailDuplicateCheckRequest);
+            //then
+            assertTrue(response.getIsDuplicate());
+        }
+        @Test
+        @DisplayName("[성공] - 존재하지 않는 이메일")
+        void notExistEmail(){
+            //given
+            final EmailDuplicateCheckRequest emailDuplicateCheckRequest = EmailDuplicateCheckRequest.builder()
+                    .email("tjdtn123@naver.com").build();
+            doReturn(null).when(userRepository).findByEmail(emailDuplicateCheckRequest.getEmail());
+            //when
+            EmailDuplicateCheckResponse response = userService.emailDuplicateCheck(emailDuplicateCheckRequest);
+            //then
+            assertFalse(response.getIsDuplicate());
+        }
+    }
 
-    }
-    @Test
-    @DisplayName("[성공] - 이미 존재하는 이메일 ")
-    void alreadyExistEmail(){
-        //given
-        final EmailDuplicateCheckRequest emailDuplicateCheckRequest = EmailDuplicateCheckRequest.builder()
-                .email("tjdtn123@naver.com").build();
-        final User user = User.builder()
-                .email("tjdtn123@naver.com")
-                .kakao(false)
-                .nickname("성게")
-                .profile("path/src")
-                .password("1q2w3e4r!")
-                .build();
-        doReturn(user).when(userRepository).findByEmail(emailDuplicateCheckRequest.getEmail());
-        //when
-        EmailDuplicateCheckResponse response = userService.emailDuplicateCheck(emailDuplicateCheckRequest);
-        //then
-        assertTrue(response.getIsDuplicate());
-    }
-    @Test
-    @DisplayName("[성공] - 존재하지 않는 이메일")
-    void notExistEmail(){
-        //given
-        final EmailDuplicateCheckRequest emailDuplicateCheckRequest = EmailDuplicateCheckRequest.builder()
-                .email("tjdtn123@naver.com").build();
-        doReturn(null).when(userRepository).findByEmail(emailDuplicateCheckRequest.getEmail());
-        //when
-        EmailDuplicateCheckResponse response = userService.emailDuplicateCheck(emailDuplicateCheckRequest);
-        //then
-        assertFalse(response.getIsDuplicate());
-    }
 }
