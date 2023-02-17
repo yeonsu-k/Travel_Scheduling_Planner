@@ -19,6 +19,11 @@ public class FriendService {
         if (user == null) {
             return UserSearchResponse.builder().isExist(false).build();
         }
-        return null;
+        return UserSearchResponse.builder()
+                .isExist(true)
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .profile(user.getProfile())
+                .build();
     }
 }

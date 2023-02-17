@@ -37,4 +37,27 @@ class FriendServiceTest {
         assertFalse(result.isExist());
     }
 
+    @Test
+    @DisplayName("[성공] - 사용자 있음")
+    void existUser() {
+        //given
+        final UserSearchRequest userSearchRequest = UserSearchRequest.builder()
+                .email("yunaghgh@naver.com")
+                .build();
+        final User user = User.builder()
+                .email("yunaghgh@naver.com")
+                .nickname("Kuuuna98")
+                .password("pwd1234")
+                .kakao(false)
+                .profile("path")
+                .withdraw(false)
+                .build();
+
+        doReturn(user).when(userRepository).findByEmail(userSearchRequest.getEmail());
+        //when
+        final UserSearchResponse result = friendService.searchUser(userSearchRequest);
+        //then
+        assertTrue(result.isExist());
+    }
+
 }
