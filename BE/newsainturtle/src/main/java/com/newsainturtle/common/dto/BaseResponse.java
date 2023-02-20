@@ -1,12 +1,12 @@
 package com.newsainturtle.common.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Getter
 @NoArgsConstructor
 public class BaseResponse {
