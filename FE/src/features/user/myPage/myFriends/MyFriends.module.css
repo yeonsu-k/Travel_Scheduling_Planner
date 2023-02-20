@@ -1,0 +1,78 @@
+/* MyFriends.tsx */
+
+.myFriends {
+  margin: 5vw;
+}
+
+.myFriendsTitle {
+  display: flex;
+}
+
+.addFriendsButton {
+  width: 8.5rem;
+  height: 2.5rem;
+  margin-left: auto;
+  margin-top: -0.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #98dde3;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.myFriendsList {
+  height: 15rem;
+  display: grid;
+  grid-template-rows: repeat(3, 33%);
+  grid-template-columns: 13% 25% 25% 13%;
+  grid-template-areas:
+    "profile friendEmail friendShareRoute ."
+    "profile friendNickname . ."
+    "profile . . deleteFriend";
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 4px 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 2%;
+  box-sizing: border-box;
+  justify-content: center;
+  column-gap: 5rem;
+}
+
+.friendInfo:nth-child(1) {
+  grid-area: profile;
+  border-radius: 70%;
+  overflow: hidden;
+}
+
+.profileImg {
+  width: 100%;
+  height: 100%;
+}
+
+.friendInfo {
+  display: flex;
+  align-items: center;
+}
+
+.friendInfo:nth-child(2) {
+  grid-area: friendEmail;
+}
+
+.friendInfo:nth-child(3) {
+  grid-area: friendNickname;
+}
+
+.friendInfo:nth-child(4) {
+  grid-area: friendShareRoute;
+}
+
+.friendInfo:nth-child(5) {
+  grid-area: deleteFriend;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.friendInfo:nth-child(5) > Button {
+  margin-left: auto;
+  width: 80%;
+  height: 100%;
+}
