@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "slices/mapSlice";
 import { rootState } from "app/store";
 
-function CreateLeft() {
+function CreateInfo() {
   const dispatch = useDispatch();
   const { place } = useSelector((state: rootState) => state.map);
   const [ModalOpen, setModalOpen] = React.useState(false);
@@ -28,7 +28,7 @@ function CreateLeft() {
 
   return (
     <div style={{ width: "100%", height: "100%", backgroundColor: "Azure" }}>
-      <Button text={place} onClick={showModal} />
+      <span onClick={showModal}>{place}</span>
       {ModalOpen && (
         <Modal title="지역선택" modalClose={() => setModalOpen(false)}>
           <Input placeholder="주소를 입력해주세요" onChange={(e) => choicePlace(e)} />
@@ -39,4 +39,4 @@ function CreateLeft() {
   );
 }
 
-export default CreateLeft;
+export default CreateInfo;
