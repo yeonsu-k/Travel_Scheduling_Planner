@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { rootState } from "app/store";
 import CreateInfo from "features/schedule/create/CreateInfo";
 import CreateSearch from "features/schedule/create/CreateSearch";
@@ -46,7 +46,7 @@ function MapPage() {
   return (
     <>
       <Grid container columns={6.3} style={{ width: "100%", height: "100%" }}>
-        <Grid item xs={1.2}>
+        <Grid item xs={1.1} mx={1}>
           <CreateInfo />
         </Grid>
         <Grid item xs={4}>

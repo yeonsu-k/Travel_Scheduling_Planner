@@ -17,7 +17,7 @@ function CreateInfo() {
   ];
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div className={styles.Container}>
       <Stack pt={3} alignItems="center">
         <InfoLocal />
         <InfoDate />
