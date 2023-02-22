@@ -22,8 +22,9 @@
 
 .periodDate {
   font-family: "Montserrat";
+  letter-spacing: -1px;
   font-size: 1.2rem;
-  color: #8a8a8a;
+  color: #696969;
   cursor: pointer;
 }
 
