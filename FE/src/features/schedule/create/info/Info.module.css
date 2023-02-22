@@ -1,0 +1,45 @@
+.content {
+  padding: 12px 0px;
+}
+
+.localText {
+  font-family: "Pretendard";
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.localText_en {
+  font-family: "Montserrat";
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #CECECE;
+}
+
+.rule_box {
+  width: 10px;
+  height: 1.5rem;
+}
+
+.periodDate {
+  font-family: "Montserrat";
+  font-size: 1.2rem;
+  color: #8a8a8a;
+  cursor: pointer;
+}
+
+.calendarSave_btn {
+  background: white;
+  color: black;
+  border: 1px solid #c9dcde;
+  box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  font-family: "Pretendard-Regular";
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.calendarSave_btn:hover {
+  background-color: #E1E7F0;
+}
