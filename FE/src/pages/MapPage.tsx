@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import { rootState } from "app/store";
-import CreateLeft from "features/schedule/create/CreateLeft";
-import CreateRight from "features/schedule/create/CreateRight";
+import CreateInfo from "features/schedule/create/CreateInfo";
+import CreateSearch from "features/schedule/create/CreateSearch";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -47,13 +47,13 @@ function MapPage() {
     <>
       <Grid container columns={6.3} style={{ width: "100%", height: "100%" }}>
         <Grid item xs={1.2}>
-          <CreateLeft />
+          <CreateInfo />
         </Grid>
         <Grid item xs={4}>
           <div id="map" style={{ width: "100%", height: "100%" }}></div>
         </Grid>
         <Grid item xs={1.1}>
-          <CreateRight />
+          <CreateSearch />
         </Grid>
       </Grid>
     </>
