@@ -4,7 +4,7 @@ import palette, { PaletteKeyTypes } from "styles/colorPalette";
 
 interface Props {
   value: string;
-  type?: "caption" | "text" | "groupTitle" | "textTitle" | "pageTitle" | "title";
+  type?: "smallText" | "caption" | "text" | "groupTitle" | "textTitle" | "pageTitle" | "title";
   bold?: boolean;
   color?: PaletteKeyTypes;
   en?: boolean;
