@@ -2,6 +2,8 @@ package com.newsainturtle.user.service;
 
 import com.newsainturtle.auth.dto.EmailDuplicateCheckRequest;
 import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
+import com.newsainturtle.user.dto.UserBasicInfoRequest;
+import com.newsainturtle.user.dto.UserBasicInfoResponse;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -61,4 +63,40 @@ class UserServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("JWT를 위한 사용자 이메일 체크")
+    class EmailCheck {
+        @Test
+        @DisplayName("[성공] - 사용자가 있음 ")
+        void existUser() {
+            //given
+            final UserBasicInfoRequest userBasicInfoRequest = UserBasicInfoRequest.builder()
+                    .email("yunaghgh@naver.com").build();
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            doReturn(user).when(userRepository).findByEmail(userBasicInfoRequest.getEmail());
+            //when
+            UserBasicInfoResponse result = userService.emailCheck(userBasicInfoRequest);
+            //then
+            assertEquals(result.getEmail(), user.getEmail());
+        }
+
+        @Test
+        @DisplayName("[성공] - 사용자가 없음 ")
+        void notExistUser() {
+            //given
+            final UserBasicInfoRequest userBasicInfoRequest = UserBasicInfoRequest.builder()
+                    .email("yunaghgh@naver.com").build();
+            //when
+            UserBasicInfoResponse result = userService.emailCheck(userBasicInfoRequest);
+            //then
+            assertNull(result);
+        }
+    }
 }
