@@ -55,7 +55,7 @@ function Header() {
       <div
         className={styles.wrapper}
         style={
-          location.pathname === "/map"
+          location.pathname === "/schedule/create" || location.pathname === "/schedule/edit"
             ? {
                 backgroundColor: "white",
                 position: "static",

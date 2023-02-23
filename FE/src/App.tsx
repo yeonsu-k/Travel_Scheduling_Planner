@@ -5,7 +5,7 @@ import Header from "components/Header";
 import MainPage from "pages/MainPage";
 import MapPage from "pages/MapPage";
 import Mypage from "pages/MyPage";
-import MyFriends from "features/user/myPage/myFriends/MyFriends";
+import ScheduleRouter from "features/schedule/ScheduleRouter";
 
 function App() {
   const location = useLocation();
@@ -17,7 +17,7 @@ function App() {
         style={
           location.pathname === "/mypage"
             ? { paddingTop: "53px" }
-            : location.pathname === "/map"
+            : location.pathname === "/schedule/create" || location.pathname === "/schedule/edit"
             ? {
                 height: `calc(100vh - 53px)`,
               }
@@ -28,8 +28,7 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/mypage" element={<Mypage />} />
-          {/* 임시 route. 추후 삭제 예정. */}
-          <Route path="/friend" element={<MyFriends />}></Route>
+          <Route path="/schedule/*" element={<ScheduleRouter />} />
         </Routes>
       </div>
     </>
