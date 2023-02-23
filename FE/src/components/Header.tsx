@@ -78,7 +78,8 @@ function Header() {
               style={{
                 fontFamily: "Montserrat",
                 fontWeight: "400",
-                fontSize: "0.75rem",
+                fontSize: "0.7rem",
+                letterSpacing: "0.12rem",
               }}
             >
               MAKE YOUR ROUTE OPTIMIZED

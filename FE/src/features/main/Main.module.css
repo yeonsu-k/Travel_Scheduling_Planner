@@ -15,7 +15,7 @@
 }
 
 .containerInner {
-  width: 80%;
+  width: 85%;
   text-align: center;
 }
 
@@ -97,6 +97,7 @@
 
 .mainTitleText {
   font-size: 1.8rem;
+  color: black;
 }
 
 .mainSubTitleText {
@@ -108,26 +109,80 @@
 
 /* Carousel */
 .carouselContainer {
-  padding: 11px 25px 39px 25px;
-  overflow: hidden;
+  padding-bottom: 80px;
 }
 
-.window {
-  background-color: lightgray;
-  width: 1240px;
-  height: 400px;
-  overflow: hidden;
+.carouselBtnLeft {
+  position: absolute;
+  top: 190px;
+  left: 40px;
+  /* width: 100px; */
+  cursor: pointer;
+  z-index: 100;
 }
 
-.flexBox {
-  display: flex;
+.carouselBtnRight {
+  position: absolute;
+  top: 190px;
+  right: 40px;
+  /* width: 100px; */
+  cursor: pointer;
+  z-index: 100;
 }
 
-.flexBoxImg > img {
-  width: 600px;
-  height: 400px;
-  object-fit: contain;
+.carouselCard {
+  height: 420px;
+  width: 100%;
+  padding: 10px 20px 10px 20px;
+  box-sizing: border-box;
 }
+
+.carouselImg {
+  object-fit: fill;
+  height: 100%;
+  width: 100%;
+  filter: brightness(80%);
+}
+
+.dotsCss {
+  display: inline-block;
+  vertical-align: middle;
+  margin: auto 0;
+  padding: 0;
+}
+
+.dotsCss li {
+  list-style: none;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 6px;
+  padding: 0;
+}
+
+.dotsCss li button {
+  border: 1px solid #d1d1d1;
+  background-color: transparent;
+  color: transparent;
+  cursor: pointer;
+  display: block;
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.dotsCss li button:hover {
+  background: rgba(102, 102, 102, 0.6);
+}
+
+.dotsCss :global(li.slick-active) button {
+  list-style: none;
+  background: rgba(102, 102, 102, 0.6);
+}
+
+/*-----/*-----*/
+/*-----/*-----*/
 
 .mainInputContainer {
   display: flex;
