@@ -28,7 +28,10 @@ function InfoCalendar() {
         mapActions.setDate({
           date: {
             start: format(state[0].startDate, "yyyy-MM-dd"),
-            end: format(state[0].endDate, "yyyy-MM-dd"),
+            end:
+              state[0].startDate === state[0].endDate
+                ? format(addDays(state[0].endDate, 1), "yyyy-MM-dd")
+                : format(state[0].endDate, "yyyy-MM-dd"),
           },
         }),
       );
