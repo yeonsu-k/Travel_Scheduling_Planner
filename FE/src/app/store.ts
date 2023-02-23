@@ -3,18 +3,17 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
+import mapReducer from "slices/mapSlice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "dashboard"],
+  whitelist: ["auth"],
 };
 
 const rootReducer = combineReducers({
   // auth: authReducer,
-  // posts: postReducer,
-  // setting: settingReducer,
-  // dashboard: dashboardReducer,
+  map: mapReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

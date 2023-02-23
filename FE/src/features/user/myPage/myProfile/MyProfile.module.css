@@ -1,0 +1,64 @@
+/* MyProfile.tsx */
+
+.myProfile {
+  display: grid;
+  place-items: center;
+  grid-template-rows: 13vh 7vh 7vh 20vh;
+  grid-template-columns: 12vw 12vw;
+  grid-template-areas:
+    "profileImg profileImg"
+    "nickname nickname"
+    "profileEditBtn profileEditBtn"
+    "mySchedule myFriends";
+  row-gap: 2.5vh;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 15vh;
+}
+
+.myProfileInfo:nth-child(1) {
+  grid-area: profileImg;
+  width: 15vh;
+  height: 15vh;
+  border-radius: 70%;
+  overflow: hidden;
+}
+
+.profileImg {
+  width: 100%;
+  height: 100%;
+}
+
+.myProfileInfo:nth-child(2) {
+  grid-area: nickname;
+}
+
+.myProfileInfo:nth-child(3) {
+  grid-area: profileEditBtn;
+  width: 45%;
+  height: 100%;
+  border: 1px solid #dcdcdc;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.myProfileInfo:nth-child(4) {
+  grid-area: mySchedule;
+  width: 90%;
+  height: 100%;
+  border: 1.5px solid #f9f9f9;
+  padding-top: 12%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.myProfileInfo:nth-child(5) {
+  grid-area: myFriends;
+  width: 90%;
+  height: 100%;
+  border: 1.5px solid #f9f9f9;
+  padding-top: 12%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
