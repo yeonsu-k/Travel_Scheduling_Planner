@@ -23,31 +23,26 @@ function InfoListHotel() {
 
   const size = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
   useEffect(() => {
-    setHotelDays(hotel);
-    if (hotel.length <= 0) {
-      for (let i = 0; i < size; i++) {
-        setHotelDays((hotelDays) => [
-          ...hotelDays,
-          {
-            id: i,
-            image: i.toString(),
-            name: "메종 글래드 제주" + i,
-          },
-        ]);
-      }
-    }
-  }, []);
+    setHotelDays([...hotel]);
+  }, [hotel]);
 
   const deleteHotel = (index: number) => {
     setCurrentDay(index);
-    hotelDays[index] = null;
-    setHotelDays([...hotelDays]);
-    dispatch(mapActions.setHotelList({ hotel: hotelDays }));
+    const copy = [...hotelDays];
+    copy[index] = null;
+    setHotelDays(copy);
+    dispatch(mapActions.setHotelList({ hotel: copy }));
+  };
+
+  const deleteHotelAll = () => {
+    setCurrentDay(0);
+    setHotelDays([]);
+    dispatch(mapActions.setHotelList({ hotel: [] }));
   };
 
   const rendering = () => {
     const result = [];
-    for (let index = 0; index < hotelDays.length; index++) {
+    for (let index = 0; index < size; index++) {
       result.push(
         <>
           <Box className={styles.flex} mb={1}>
@@ -107,7 +102,9 @@ function InfoListHotel() {
             en
           />
         </Box>
-        <button className={`${styles.btn} ${styles.delete_btn}`}>호텔전체삭제</button>
+        <button onClick={deleteHotelAll} className={`${styles.btn} ${styles.delete_btn}`}>
+          호텔전체삭제
+        </button>
         <Box my={0.5}>
           <p className={styles.explain}>숙소는 일정의 시작 지점과 종료 지점으로 설정됩니다.</p>
         </Box>
