@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
 
 interface mapConfig {
-  place: string;
+  local: string;
   date: {
     start: string;
     end: string;
@@ -10,8 +10,8 @@ interface mapConfig {
   hotel: ({ id: number; image: string; name: string } | null)[];
 }
 
-interface placeConfig {
-  place: string;
+interface LocalConfig {
+  local: string;
 }
 
 interface dateConfig {
@@ -26,7 +26,7 @@ interface hotelConfig {
 }
 
 const initialState: mapConfig = {
-  place: "부산",
+  local: "부산",
   date: {
     start: format(new Date(), "yyyy-MM-dd"),
     end: format(addDays(new Date(), 2), "yyyy-MM-dd"),
@@ -38,8 +38,8 @@ const mapSlice = createSlice({
   name: "map",
   initialState,
   reducers: {
-    setPlace: (state, action: PayloadAction<placeConfig>) => {
-      state.place = action.payload.place;
+    setPlace: (state, action: PayloadAction<LocalConfig>) => {
+      state.local = action.payload.local;
     },
     setDate: (state, action: PayloadAction<dateConfig>) => {
       state.date = action.payload.date;

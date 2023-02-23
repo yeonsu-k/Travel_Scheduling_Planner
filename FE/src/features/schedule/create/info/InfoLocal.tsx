@@ -11,7 +11,7 @@ import Text from "components/Text";
 
 function InfoLocal() {
   const dispatch = useDispatch();
-  const { place } = useSelector((state: rootState) => state.map);
+  const { local } = useSelector((state: rootState) => state.map);
   const [ModalOpen, setModalOpen] = React.useState(false);
   const [testPlace, setPlace] = React.useState("");
 
@@ -25,13 +25,13 @@ function InfoLocal() {
   };
 
   const savePlace = () => {
-    dispatch(mapActions.setPlace({ place: testPlace }));
+    dispatch(mapActions.setPlace({ local: testPlace }));
     setModalOpen(false);
   };
   return (
     <div className={styles.content}>
       <Stack alignItems="center" onClick={showModal} sx={{ cursor: "pointer" }}>
-        <span className={styles.localText}>{place}</span>
+        <span className={styles.localText}>{local}</span>
         <span className={styles.localText_en}>Busan</span>
       </Stack>
       {ModalOpen && (

@@ -14,7 +14,7 @@ declare global {
 const { kakao } = window;
 
 function MapPage() {
-  const { place } = useSelector((state: rootState) => state.map);
+  const { local } = useSelector((state: rootState) => state.map);
 
   function setMap() {
     const container = document.getElementById("map");
@@ -24,10 +24,10 @@ function MapPage() {
     };
     // 지도를 생성
     const map = new kakao.maps.Map(container, options);
-    map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
+    // map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
 
     const geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(place, function (result: any[], status: string) {
+    geocoder.addressSearch(local, function (result: any[], status: string) {
       // 정상적으로 검색이 완료됐으면
 
       if (status === kakao.maps.services.Status.OK) {
@@ -41,7 +41,7 @@ function MapPage() {
 
   useEffect(() => {
     setMap();
-  }, [place]);
+  }, [local]);
 
   return (
     <>
