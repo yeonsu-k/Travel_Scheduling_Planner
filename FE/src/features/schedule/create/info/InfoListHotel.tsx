@@ -3,9 +3,10 @@ import { Box } from "@mui/material";
 import styles from "./Info.module.css";
 import Text from "components/Text";
 import { rootState } from "app/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addDays, differenceInDays, format } from "date-fns";
 import { Close } from "@mui/icons-material";
+import { mapActions } from "slices/mapSlice";
 
 interface hotelConfig {
   id: number;
@@ -14,34 +15,35 @@ interface hotelConfig {
 }
 
 function InfoListHotel() {
+  const dispatch = useDispatch();
+  const { hotel } = useSelector((state: rootState) => state.map);
   const { date } = useSelector((state: rootState) => state.map);
   const [currentDay, setCurrentDay] = React.useState(0);
   const [hotelDays, setHotelDays] = React.useState<(hotelConfig | null)[]>([]);
 
-  useEffect(() => {
-    hotelDays;
-  }, [hotelDays.length]);
-
-  const deleteHotel = (index: number) => {
-    hotelDays[index] = null;
-    setCurrentDay(index);
-    setHotelDays([...hotelDays]);
-  };
-
   const size = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
   useEffect(() => {
-    setHotelDays([]);
-    for (let i = 0; i < size; i++) {
-      setHotelDays((hotelDays) => [
-        ...hotelDays,
-        {
-          id: i,
-          image: i.toString(),
-          name: "메종 글래드 제주" + i,
-        },
-      ]);
+    setHotelDays(hotel);
+    if (hotel.length <= 0) {
+      for (let i = 0; i < size; i++) {
+        setHotelDays((hotelDays) => [
+          ...hotelDays,
+          {
+            id: i,
+            image: i.toString(),
+            name: "메종 글래드 제주" + i,
+          },
+        ]);
+      }
     }
-  }, [size]);
+  }, []);
+
+  const deleteHotel = (index: number) => {
+    setCurrentDay(index);
+    hotelDays[index] = null;
+    setHotelDays([...hotelDays]);
+    dispatch(mapActions.setHotelList({ hotel: hotelDays }));
+  };
 
   const rendering = () => {
     const result = [];
