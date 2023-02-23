@@ -41,7 +41,7 @@ function InfoCalendar() {
     setState([
       {
         startDate: start,
-        endDate: differenceInDays(end, start) > 10 ? addDays(start, 10) : end,
+        endDate: differenceInDays(end, start) > 10 ? addDays(start, 9) : end,
         key: "selection",
       },
     ]);
