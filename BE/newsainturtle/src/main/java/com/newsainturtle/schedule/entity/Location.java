@@ -22,9 +22,10 @@ public abstract class Location {
     @JoinColumn(name = "region_id")
     private Region region;
 
-    @Column(name = "location_name")
+    @Column(name = "location_name", length = 20)
     private String locationName;
 
+    @Column(length = 50)
     private String address;
 
     private double longitude;
