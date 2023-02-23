@@ -8,6 +8,12 @@ interface mapConfig {
     end: string;
   };
   hotel: ({ id: number; image: string; name: string } | null)[];
+  place: ({
+    id: number;
+    image: string;
+    name: string;
+    time: Date;
+  } | null)[];
 }
 
 interface LocalConfig {
@@ -25,6 +31,15 @@ interface hotelConfig {
   hotel: ({ id: number; image: string; name: string } | null)[];
 }
 
+interface placeConfig {
+  place: ({
+    id: number;
+    image: string;
+    name: string;
+    time: Date;
+  } | null)[];
+}
+
 const initialState: mapConfig = {
   local: "부산",
   date: {
@@ -32,6 +47,7 @@ const initialState: mapConfig = {
     end: format(addDays(new Date(), 2), "yyyy-MM-dd"),
   },
   hotel: [],
+  place: [],
 };
 
 const mapSlice = createSlice({
@@ -46,6 +62,9 @@ const mapSlice = createSlice({
     },
     setHotelList: (state, action: PayloadAction<hotelConfig>) => {
       state.hotel = action.payload.hotel;
+    },
+    setPlaceList: (state, action: PayloadAction<placeConfig>) => {
+      state.place = action.payload.place;
     },
   },
 });
