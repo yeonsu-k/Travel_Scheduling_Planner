@@ -26,7 +26,8 @@ function InfoListHotel() {
     setHotelDays([...hotel]);
   }, [hotel]);
 
-  const deleteHotel = (index: number) => {
+  const deleteHotel = (id: number | undefined) => {
+    const index = hotelDays.findIndex((hotelDays) => hotelDays?.id === id);
     setCurrentDay(index);
     const copy = [...hotelDays];
     copy[index] = null;
@@ -61,7 +62,7 @@ function InfoListHotel() {
               <div className={styles.card}>
                 {hotelDays[index] ? (
                   <>
-                    <img src="" alt={hotelDays[index]?.image} />
+                    <img src={hotelDays[index]?.image} />
                     <div>
                       <span className={styles.cardText}>
                         {hotelDays[index]?.name}
@@ -69,7 +70,7 @@ function InfoListHotel() {
                         <small>Maison Glad Jeju</small>
                       </span>
                       <div className={styles.cardDelete}>
-                        <button onClick={() => deleteHotel(index)}>
+                        <button onClick={() => deleteHotel(hotelDays[index]?.id)}>
                           <Close fontSize="small" color="error" />
                         </button>
                       </div>
