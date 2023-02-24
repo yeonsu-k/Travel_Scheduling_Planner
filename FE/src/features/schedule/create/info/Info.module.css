@@ -175,14 +175,13 @@
 
 .placeTimer {
   display: flex;
-  width: 100%;
   align-items: center;
 }
 
 .placeTimer>input {
   font-size: 1rem;
   color: #FF9C00;
-  max-width: 2.2rem;
+  width: 2rem;
   border: 0;
   outline: none;
 }
