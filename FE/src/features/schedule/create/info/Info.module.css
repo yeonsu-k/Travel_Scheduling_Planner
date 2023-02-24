@@ -121,8 +121,11 @@
 }
 
 .card>img {
-  width: 30%;
-  min-height: 100%;
+  width: 60px;
+  min-width: 60px;
+  height: 60px;
+  min-height: 60px;
+  object-fit: cover;
   background-color: white;
   border: 1px solid #CECECE;
 }
@@ -141,11 +144,45 @@
 .cardDelete {
   display: flex;
   justify-content: flex-end;
-  padding-right: 5px;
+  padding-right: 3px;
+  background: none;
+  border: 0px;
+  cursor: pointer;
 }
 
 .cardDelete>button {
   background: none;
   border: 0px;
   cursor: pointer;
+}
+
+/* InfoListPlace */
+.flexRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.placeCard {
+  display: flex;
+  justify-content: space-around;
+}
+
+.placeStart {
+  font-size: 0.7rem;
+  color: #9e9e9e;
+}
+
+.placeTimer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.placeTimer>input {
+  font-size: 1rem;
+  color: #FF9C00;
+  max-width: 2.2rem;
+  border: 0;
+  outline: none;
 }
