@@ -12,7 +12,7 @@ interface mapConfig {
     id: number;
     image: string;
     name: string;
-    time: Date;
+    time: string;
   } | null)[];
 }
 
@@ -36,7 +36,7 @@ interface placeConfig {
     id: number;
     image: string;
     name: string;
-    time: Date;
+    time: string;
   } | null)[];
 }
 
