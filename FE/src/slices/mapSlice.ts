@@ -54,7 +54,7 @@ const mapSlice = createSlice({
   name: "map",
   initialState,
   reducers: {
-    setPlace: (state, action: PayloadAction<LocalConfig>) => {
+    setLocal: (state, action: PayloadAction<LocalConfig>) => {
       state.local = action.payload.local;
     },
     setDate: (state, action: PayloadAction<dateConfig>) => {

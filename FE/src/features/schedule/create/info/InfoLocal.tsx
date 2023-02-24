@@ -25,7 +25,7 @@ function InfoLocal() {
   };
 
   const savePlace = () => {
-    dispatch(mapActions.setPlace({ local: testPlace }));
+    dispatch(mapActions.setLocal({ local: testPlace }));
     setModalOpen(false);
   };
   return (
