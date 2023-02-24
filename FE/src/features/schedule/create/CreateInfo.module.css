@@ -1,6 +1,23 @@
 .Container {
   width: 100%;
   height: 100%;
+  max-height: calc(100vh - 53px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.Container::-webkit-scrollbar {
+  display: block !important;
+  width: 5px;
+}
+
+.Container::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 50px;
+}
+
+.Container::-webkit-scrollbar-thumb:hover {
+  background: #a9a9a9;
 }
 
 .InfoMenu {
