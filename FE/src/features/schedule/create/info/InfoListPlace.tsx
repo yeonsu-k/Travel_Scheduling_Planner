@@ -1,11 +1,10 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import styles from "./Info.module.css";
 import Text from "components/Text";
 import { Close, Timer } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "app/store";
-import Input from "components/Input";
 import { mapActions } from "slices/mapSlice";
 
 interface placeConfig {
@@ -123,55 +122,67 @@ function InfoListPlace() {
         <button onClick={deletePlaceAll} className={`${styles.btn} ${styles.delete_btn}`}>
           장소전체삭제
         </button>
-        <Box my={0.5}>
-          <p className={styles.explain}>일자별 여행 시작 장소와 종료 장소 설정할 수 있습니다.</p>
-          <span className={styles.explain}>일자별 장소는 숙소 다음 일정으로 시작됩니다.</span>
-        </Box>
-        {placeTimes.map((placeCard, index) => (
-          <div className={styles.cardList} key={index}>
-            <div className={styles.card}>
-              <img src={placeCard?.image} alt={""} />
-              <div className={styles.placeCard}>
-                <div className={styles.flexRow}>
-                  <span className={styles.cardText}>{placeCard?.name}</span>
-                  <span className={`${styles.placeStart}`}>시작일</span>
-                </div>
-                <div className={styles.flexRow}>
-                  <div className={styles.placeTimer}>
-                    <Timer fontSize="small" />
-                    <input
-                      name="hour"
-                      value={timer[index].hour}
-                      id="placeTime"
-                      type="number"
-                      dir="rtl"
-                      min="0"
-                      max="23"
-                      onBlur={(e) => onBurCheck(index, e)}
-                      onChange={(e) => onChangeAccount(index, e)}
-                    />
-                    시간
-                    <input
-                      name="minute"
-                      value={timer[index].minute}
-                      id="placeTime"
-                      type="number"
-                      dir="rtl"
-                      min="0"
-                      max="59"
-                      onBlur={(e) => onBurCheck(index, e)}
-                      onChange={(e) => onChangeAccount(index, e)}
-                    />
-                    분
+        {placeTimes.length > 0 ? (
+          <>
+            <Box my={0.5}>
+              <p className={styles.explain}>일자별 여행 시작 장소와 종료 장소 설정할 수 있습니다.</p>
+              <span className={styles.explain}>일자별 장소는 숙소 다음 일정으로 시작됩니다.</span>
+            </Box>
+            {placeTimes.map((placeCard, index) => (
+              <div className={styles.cardList} key={index}>
+                <div className={styles.card}>
+                  <img src={placeCard?.image} alt={""} />
+                  <div className={styles.placeCard}>
+                    <div className={styles.flexRow}>
+                      <span className={styles.cardText}>{placeCard?.name}</span>
+                      <span className={`${styles.placeStart}`}>시작일</span>
+                    </div>
+                    <div className={styles.flexRow}>
+                      <div className={styles.placeTimer}>
+                        <Timer fontSize="small" />
+                        <input
+                          name="hour"
+                          value={timer[index].hour}
+                          id="placeTime"
+                          type="number"
+                          dir="rtl"
+                          min="0"
+                          max="23"
+                          onBlur={(e) => onBurCheck(index, e)}
+                          onChange={(e) => onChangeAccount(index, e)}
+                        />
+                        시간
+                        <input
+                          name="minute"
+                          value={timer[index].minute}
+                          id="placeTime"
+                          type="number"
+                          dir="rtl"
+                          min="0"
+                          max="59"
+                          onBlur={(e) => onBurCheck(index, e)}
+                          onChange={(e) => onChangeAccount(index, e)}
+                        />
+                        분
+                      </div>
+                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard?.id)}>
+                        <Close fontSize="small" color="error" />
+                      </button>
+                    </div>
                   </div>
-                  <button className={styles.cardDelete} onClick={() => deletePlace(placeCard?.id)}>
-                    <Close fontSize="small" color="error" />
-                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))}
+          </>
+        ) : (
+          <>
+            <Box my={0.5}>
+              <p className={styles.explain}>가고 싶은 장소들을 검색하여 추가해주세요.</p>
+              <p className={styles.explain}>설정하신 일자별 여행시간 내에서</p>
+              <p className={styles.explain}>하루 평균 최대 8개 장소까지 선택 가능합니다.</p>
+            </Box>
+          </>
+        )}
       </div>
     </>
   );
