@@ -1,0 +1,102 @@
+.container {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.loginContainer {
+  min-height: 500px;
+  min-width: 350px;
+}
+
+.btnContainer {
+  margin: 25px 0 25px 0;
+}
+
+.textContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.textTitle {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: center;
+  color: #000000;
+}
+
+.smallText {
+  font-size: 12px;
+  text-align: center;
+  color: #616161;
+  letter-spacing: 1px;
+  padding-top: 20px;
+}
+
+.inputTextContainer {
+  margin: 18px 0 18px 0;
+}
+
+.inputText {
+  font-size: 14px;
+  color: #616161;
+}
+
+.dividerContainer {
+  position: relative;
+  text-align: center;
+  margin: 10px;
+}
+
+.divider {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1px;
+  width: 100%;
+  background-color: #e0e0e0;
+}
+
+.dividerContainer span {
+  display: inline-block;
+  position: relative;
+  width: 10vw;
+  background-color: #fff;
+  color: #616161;
+}
+
+.socialContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.socialContainer span {
+  font-size: 12px;
+  text-align: center;
+  color: #000;
+  letter-spacing: 1px;
+}
+
+.socialBtnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.socialBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  cursor: pointer;
+}
+
+.socialBtn img {
+  max-height: 48px !important;
+}

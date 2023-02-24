@@ -94,6 +94,9 @@ function Header() {
           <NavLink to="/" className={styles.link}>
             여행지
           </NavLink>
+          <NavLink to="/login" className={styles.link}>
+            로그인
+          </NavLink>
           <IconButton sx={{ color: "black" }} disableRipple>
             <Badge color="error" overlap="circular" badgeContent={1} variant="dot">
               <Notifications />
