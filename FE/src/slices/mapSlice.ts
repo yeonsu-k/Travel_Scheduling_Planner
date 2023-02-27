@@ -8,12 +8,12 @@ interface mapConfig {
     end: string;
   };
   hotel: ({ id: number; image: string; name: string } | null)[];
-  place: ({
+  place: {
     id: number;
     image: string;
     name: string;
     time: string;
-  } | null)[];
+  }[];
 }
 
 interface LocalConfig {
@@ -32,12 +32,12 @@ interface hotelConfig {
 }
 
 interface placeConfig {
-  place: ({
+  place: {
     id: number;
     image: string;
     name: string;
     time: string;
-  } | null)[];
+  }[];
 }
 
 const initialState: mapConfig = {
@@ -65,6 +65,16 @@ const mapSlice = createSlice({
     },
     setPlaceList: (state, action: PayloadAction<placeConfig>) => {
       state.place = action.payload.place;
+    },
+    setPlaceTime: (
+      state,
+      action: PayloadAction<{
+        index: number;
+        time: string;
+      }>,
+    ) => {
+      const changedIdx = action.payload.index;
+      state.place[changedIdx].time = action.payload.time;
     },
   },
 });
