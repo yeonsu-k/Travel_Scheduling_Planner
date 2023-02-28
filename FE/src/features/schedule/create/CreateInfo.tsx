@@ -18,7 +18,7 @@ function CreateInfo() {
 
   return (
     <div className={styles.Container}>
-      <Stack pt={3} alignItems="center" mr={0.5}>
+      <Stack pt={2.5} alignItems="center" mr={0.5}>
         <InfoLocal />
         <InfoDate />
         <Box py={3}>
