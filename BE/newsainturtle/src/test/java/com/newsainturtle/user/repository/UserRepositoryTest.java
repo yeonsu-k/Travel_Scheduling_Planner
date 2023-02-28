@@ -1,5 +1,6 @@
 package com.newsainturtle.user.repository;
 
+import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.user.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -51,6 +52,25 @@ class UserRepositoryTest {
             Optional<User> result = Optional.ofNullable(userRepository.findByEmail(trialEmail));
             //then
             assertFalse(result.isPresent());
+        }
+        @Test
+        @DisplayName("[성공] - 회원가입 성공")
+        void joinUser(){
+            //given
+            final User user = User.builder()
+                    .email("test1234@email.com")
+                    .profile("")
+                    .kakao(false)
+                    .nickname("별명")
+                    .withdraw(false)
+                    .password("1234")
+                    .build();
+            //when
+            final User result = userRepository.save(user);
+            //then
+            assertNotNull(result);
+            assertEquals(result.getUserId(), user.getUserId());
+            assertEquals(result.getEmail(), user.getEmail());
         }
     }
 }
