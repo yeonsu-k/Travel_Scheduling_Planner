@@ -1,12 +1,11 @@
 package com.newsainturtle.friend.dto;
 
-import com.newsainturtle.common.dto.BaseResponse;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
-@SuperBuilder
-public class UserSearchResponse extends BaseResponse {
+@Builder
+public class UserSearchResponse {
     private boolean isExist;
     private String profile;
     private String email;
