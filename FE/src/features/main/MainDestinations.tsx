@@ -1,8 +1,16 @@
 import React from "react";
 import styles from "../main/Main.module.css";
-import MainCarousel from "./MainCarousel";
+import MainCarouselTest from "./MainCarousel";
 
 const MainDestinations = () => {
+  const images = [
+    { src: "https://www.myro.co.kr/myro_image/city/gyeongju.jpg" },
+    { src: "https://www.myro.co.kr/myro_image/city/seoul.jpg" },
+    { src: "https://www.myro.co.kr/myro_image/city/gangneung.jpg" },
+    { src: "https://www.myro.co.kr/myro_image/city/yeosu.jpg" },
+    { src: "https://www.myro.co.kr/myro_image/city/jeju.jpg" },
+    { src: "https://www.myro.co.kr/myro_image/city/busan.jpg" },
+  ];
   return (
     <div>
       <div className={styles.mainTextContainer}>
@@ -10,7 +18,7 @@ const MainDestinations = () => {
         <div className={styles.mainSubTitleText}>POPULAR DESTINATIONS</div>
       </div>
       <div>
-        <MainCarousel />
+        <MainCarouselTest type="destination" images={images} />
       </div>
     </div>
   );

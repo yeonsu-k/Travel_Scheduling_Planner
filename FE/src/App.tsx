@@ -6,6 +6,9 @@ import MainPage from "pages/MainPage";
 import MapPage from "pages/MapPage";
 import Mypage from "pages/MyPage";
 import MyFriends from "features/user/myPage/myFriends/MyFriends";
+import LoginPage from "pages/LoginPage";
+import RegistPage from "pages/RegistPage";
+import MyProfileEdit from "features/user/myPage/myProfile/MyProfileEdit";
 
 function App() {
   const location = useLocation();
@@ -28,8 +31,11 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/profile" element={<MyProfileEdit />} />
           {/* 임시 route. 추후 삭제 예정. */}
-          <Route path="/friend" element={<MyFriends />}></Route>
+          <Route path="/friend" element={<MyFriends />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/regist" element={<RegistPage />} />
         </Routes>
       </div>
     </>

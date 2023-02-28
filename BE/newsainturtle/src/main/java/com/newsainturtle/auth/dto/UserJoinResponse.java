@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class EmailDuplicateCheckResponse {
-    private boolean DuplicateCheck;
-
+public class UserJoinResponse {
+    private String email;
+    private String nickname;
 }
