@@ -1,4 +1,4 @@
-package com.newsainturtle.common;
+package com.newsainturtle.common.constant;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
