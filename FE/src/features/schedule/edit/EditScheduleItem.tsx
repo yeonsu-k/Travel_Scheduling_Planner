@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Edit.module.css";
 import Text from "components/Text";
+import { height } from "@mui/system";
 
 const EditScheduleItem = () => {
   return (
@@ -12,8 +13,8 @@ const EditScheduleItem = () => {
       </div>
 
       <div className={styles.scheduleItemInfo}>
-        <Text value={`10:00`} type="smallText" color="white" en /> <br />
-        <div style={{ fontSize: "0.01rem", color: "white", height: "10%" }}>-</div>
+        <Text value={`10:00`} type="smallText" color="white" en />
+        <div style={{ fontSize: "0.2rem", color: "white", height: "1%" }}>¯</div>
         <Text value={`11:00`} type="smallText" color="white" en />
       </div>
 
