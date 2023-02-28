@@ -14,6 +14,10 @@ interface mapConfig {
     name: string;
     time: string;
   }[];
+  pointPlace: {
+    start: { id: number; image: string; name: string } | null;
+    end: { id: number; image: string; name: string } | null;
+  };
 }
 
 interface LocalConfig {
@@ -40,6 +44,12 @@ interface placeConfig {
   }[];
 }
 
+interface placePointConfig {
+  id: number;
+  image: string;
+  name: string;
+}
+
 const initialState: mapConfig = {
   local: "부산",
   date: {
@@ -48,6 +58,10 @@ const initialState: mapConfig = {
   },
   hotel: [],
   place: [],
+  pointPlace: {
+    start: null,
+    end: null,
+  },
 };
 
 const mapSlice = createSlice({
@@ -75,6 +89,14 @@ const mapSlice = createSlice({
     ) => {
       const changedIdx = action.payload.index;
       state.place[changedIdx].time = action.payload.time;
+    },
+    deletePointPlaceList: (state, action: PayloadAction<{ position: number; value: placePointConfig | null }>) => {
+      const changedPosition = action.payload.position;
+      if (changedPosition === 0) {
+        state.pointPlace.start = action.payload.value;
+      } else {
+        state.pointPlace.end = action.payload.value;
+      }
     },
   },
 });
