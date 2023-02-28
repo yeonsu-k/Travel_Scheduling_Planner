@@ -136,6 +136,22 @@ class UserServiceTest {
             assertThat(result.getEmail()).isEqualTo(userJoinRequest.getEmail());
             assertThat(result.getNickname()).isEqualTo(userJoinRequest.getNickname());
         }
+        @Test
+        @DisplayName("[실패] - 이메일 중복 검사가 완료되지 않음")
+        void noEmailCheck(){
+            //given
+            final UserJoinRequest userJoinRequest = UserJoinRequest.builder()
+                    .email("test1234@email.com")
+                    .nickname("별명")
+                    .duplicatedCheck(false)
+                    .password("1234")
+                    .build();
+            //when
+            final NoEmailCheckException result = assertThrows(NoEmailCheckException.class,
+                    () -> userService.joinUser(userJoinRequest));
+            //then
+            assertThat(result.getMessage()).isEqualTo(AuthConstant.NO_EMAIL_CHECK_ERROR_MESSAGE);
+        }
 
 
         private User user(){
