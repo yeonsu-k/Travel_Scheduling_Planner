@@ -42,6 +42,29 @@ class FriendServiceTest {
         }
 
         @Test
+        @DisplayName("[성공] - 사용자 없음(탈퇴한 사용자)")
+        void WithdrawUser() {
+            //given
+            final UserSearchRequest userSearchRequest = UserSearchRequest.builder()
+                    .email("yunaghgh@naver.com")
+                    .build();
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(true)
+                    .build();
+
+            doReturn(user).when(userRepository).findByEmail(userSearchRequest.getEmail());
+            //when
+            final UserSearchResponse result = friendService.searchUser(userSearchRequest);
+            //then
+            assertFalse(result.isExist());
+        }
+
+        @Test
         @DisplayName("[성공] - 사용자 있음")
         void existUser() {
             //given
