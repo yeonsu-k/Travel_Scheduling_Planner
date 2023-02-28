@@ -2,7 +2,10 @@ package com.newsainturtle.user.entity;
 
 import com.newsainturtle.friend.entity.Friend;
 import com.newsainturtle.notification.entity.Notification;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,7 +26,7 @@ public class User {
     private String email;
     @Column(length = 20)
     private String nickname;
-    @Column(length = 20)
+    @Column(length = 60)
     private String password;
     private boolean kakao;
     private String profile;
