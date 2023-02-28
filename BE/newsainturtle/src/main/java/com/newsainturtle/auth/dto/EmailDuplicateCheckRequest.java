@@ -1,12 +1,18 @@
 package com.newsainturtle.auth.dto;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@Builder
+
 @Getter
+@NoArgsConstructor
 public class EmailDuplicateCheckRequest {
     private String email;
+
+    @Builder
+    public EmailDuplicateCheckRequest(String email) {
+        this.email = email;
+    }
 }
