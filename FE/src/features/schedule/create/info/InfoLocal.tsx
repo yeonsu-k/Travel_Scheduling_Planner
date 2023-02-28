@@ -1,14 +1,17 @@
 import React from "react";
+import styles from "./Info.module.css";
 import Modal from "components/Modal";
 import Button from "components/Button";
 import Input from "components/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "slices/mapSlice";
 import { rootState } from "app/store";
+import { Stack } from "@mui/system";
+import Text from "components/Text";
 
-function CreateLeft() {
+function InfoLocal() {
   const dispatch = useDispatch();
-  const { place } = useSelector((state: rootState) => state.map);
+  const { local } = useSelector((state: rootState) => state.map);
   const [ModalOpen, setModalOpen] = React.useState(false);
   const [testPlace, setPlace] = React.useState("");
 
@@ -22,13 +25,15 @@ function CreateLeft() {
   };
 
   const savePlace = () => {
-    dispatch(mapActions.setPlace({ place: testPlace }));
+    dispatch(mapActions.setLocal({ local: testPlace }));
     setModalOpen(false);
   };
-
   return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "Azure" }}>
-      <Button text={place} onClick={showModal} />
+    <div className={styles.content}>
+      <Stack alignItems="center" onClick={showModal} sx={{ cursor: "pointer" }}>
+        <span className={styles.localText}>{local}</span>
+        <span className={styles.localText_en}>Busan</span>
+      </Stack>
       {ModalOpen && (
         <Modal title="지역선택" modalClose={() => setModalOpen(false)}>
           <Input placeholder="주소를 입력해주세요" onChange={(e) => choicePlace(e)} />
@@ -39,4 +44,4 @@ function CreateLeft() {
   );
 }
 
-export default CreateLeft;
+export default InfoLocal;
