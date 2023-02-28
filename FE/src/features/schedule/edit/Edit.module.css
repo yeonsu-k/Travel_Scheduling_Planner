@@ -1,3 +1,22 @@
+/* ScheduleEditPage */
+.map {
+  position: relative;
+}
+
+.keepPlaces {
+  position: absolute;
+  width: 16.5vw;
+  height: 25vh;
+  cursor: pointer;
+  text-align: center;
+  background-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 8px 17px 2px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px,
+    rgba(0, 0, 0, 0.2) 0px 5px 5px -3px;
+  border-radius: 0.25rem;
+  padding: 1.2rem;
+  box-sizing: border-box;
+}
+
 /* EditDayList */
 
 .editDayList {
