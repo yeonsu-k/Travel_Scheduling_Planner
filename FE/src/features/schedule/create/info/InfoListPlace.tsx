@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import styles from "./Info.module.css";
 import Text from "components/Text";
 import { Close, Timer } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "app/store";
 import { mapActions } from "slices/mapSlice";
+import { Stack } from "@mui/system";
 
 function InfoListPlace() {
   const dispatch = useDispatch();
   const { place } = useSelector((state: rootState) => state.map);
+  const { pointPlace } = useSelector((state: rootState) => state.map);
   const [timer, setTimer] = React.useState(
     place.map((val: { time: string }) => {
       const time = val.time.split(":");
@@ -29,7 +31,7 @@ function InfoListPlace() {
       minute: sumMinute,
     };
   });
-  // const [startDate, setStartDate] = React.useState<number | null>();
+  const [currentDay, setCurrentDay] = React.useState(-1);
 
   useEffect(() => {
     getTimer();
@@ -68,6 +70,10 @@ function InfoListPlace() {
 
   const deletePlaceAll = () => {
     dispatch(mapActions.setPlaceList({ place: [] }));
+  };
+
+  const deletePointPlace = (id: number) => {
+    dispatch(mapActions.deletePointPlaceList({ position: id, value: null }));
   };
 
   const onChangeAccount = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,19 +127,79 @@ function InfoListPlace() {
         </button>
         {place.length > 0 ? (
           <>
-            <Box my={0.5}>
-              <p className={styles.explain}>일자별 여행 시작 장소와 종료 장소 설정할 수 있습니다.</p>
-              <span className={styles.explain}>일자별 장소는 숙소 다음 일정으로 시작됩니다.</span>
-            </Box>
+            <Stack className={styles.flex} my={1} spacing={0.5}>
+              <div className={` ${styles.flexRow} ${styles.placeDrop}`}>
+                <small>여행 시작 장소</small>
+              </div>
+              {pointPlace.start === null ? (
+                <>
+                  <div
+                    className={
+                      currentDay === 0 ? `${styles.place_explain} ${styles.explain_focused}` : `${styles.place_explain}`
+                    }
+                    onClick={() => {
+                      currentDay === 0 ? setCurrentDay(-1) : setCurrentDay(0);
+                    }}
+                  >
+                    <p>이 곳을 누르고 시작 장소를 추가하세요</p>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.cardList}>
+                  <div className={styles.card}>
+                    <img src={pointPlace.start?.image} alt={""} />
+                    <div className={styles.placeCard}>
+                      <span className={styles.cardText}>{pointPlace.start?.name}</span>
+                      <div className={styles.flexRow}>
+                        <div className={styles.placeTimer} />
+                        <button className={styles.cardDelete} onClick={() => deletePointPlace(0)}>
+                          <Close fontSize="small" color="error" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className={` ${styles.flexRow} ${styles.placeDrop}`}>
+                <small>여행 끝 장소</small>
+              </div>
+              {pointPlace.end === null ? (
+                <>
+                  <div
+                    className={
+                      currentDay === 1 ? `${styles.place_explain} ${styles.explain_focused}` : `${styles.place_explain}`
+                    }
+                    onClick={() => {
+                      currentDay === 1 ? setCurrentDay(-1) : setCurrentDay(1);
+                    }}
+                  >
+                    <p>이 곳을 누르고 시작 장소를 추가하세요</p>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.cardList}>
+                  <div className={styles.card}>
+                    <img src={pointPlace.end?.image} alt={""} />
+                    <div className={styles.placeCard}>
+                      <span className={styles.cardText}>{pointPlace.end?.name}</span>
+                      <div className={styles.flexRow}>
+                        <div className={styles.placeTimer} />
+                        <button className={styles.cardDelete} onClick={() => deletePointPlace(1)}>
+                          <Close fontSize="small" color="error" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Stack>
+            <Divider className={styles.divider} />
             {place.map((placeCard, index) => (
               <div className={styles.cardList} key={index}>
                 <div className={styles.card}>
                   <img src={placeCard?.image} alt={""} />
                   <div className={styles.placeCard}>
-                    <div className={styles.flexRow}>
-                      <span className={styles.cardText}>{placeCard?.name}</span>
-                      <span className={`${styles.placeStart}`}>시작일</span>
-                    </div>
+                    <span className={styles.cardText}>{placeCard?.name}</span>
                     <div className={styles.flexRow}>
                       <div className={styles.placeTimer}>
                         <Timer fontSize="small" />
