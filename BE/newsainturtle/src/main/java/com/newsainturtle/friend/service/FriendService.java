@@ -16,7 +16,7 @@ public class FriendService {
 
     public UserSearchResponse searchUser(UserSearchRequest userSearchRequest) {
         User user = userRepository.findByEmail(userSearchRequest.getEmail());
-        if (user == null) {
+        if (user == null || user.isWithdraw()) {
             return UserSearchResponse.builder().isExist(false).build();
         }
         return UserSearchResponse.builder()
