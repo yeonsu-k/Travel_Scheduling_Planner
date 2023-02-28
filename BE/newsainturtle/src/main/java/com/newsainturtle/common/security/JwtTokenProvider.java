@@ -16,7 +16,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private static String secretKey;
+    private static String secretKey = "asdf1sdf3snct127d2sdf2d";
 
     @Value("${spring.jwt.secretKey}")
     private void setSecretKey(String secretKey) {
