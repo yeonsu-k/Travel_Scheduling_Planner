@@ -1,5 +1,13 @@
 package com.newsainturtle.auth.controller;
+import com.newsainturtle.auth.dto.LoginRequest;
+import com.newsainturtle.auth.dto.LoginResponse;
+import com.newsainturtle.auth.service.AuthService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
+import javax.validation.Valid;
+
+import static com.newsainturtle.auth.AuthConstant.*;
 import com.newsainturtle.auth.dto.EmailDuplicateCheckRequest;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.common.dto.BaseResponse;
@@ -18,6 +26,19 @@ import static com.newsainturtle.auth.constant.AuthConstant.SUCCESS_JOIN_USER_MES
 public class AuthController {
 
     private final UserService userService;
+
+    private final AuthService authService;
+
+    @PostMapping("/login")
+    @ApiOperation(value = "로그인", notes = "로그인")
+    public ResponseEntity<BaseResponse> login(@RequestBody @Valid @ApiParam(value = "로그인 정보", required = true) LoginRequest loginRequest) {
+        LoginResponse loginResponse = authService.login(loginRequest);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                LOGIN_SUCCESS_MESSAGE,
+                loginResponse)
+                , HttpStatus.OK);
+    }
 
     @GetMapping("/email")
     public ResponseEntity<BaseResponse> emailDuplicateCheck(@RequestBody final EmailDuplicateCheckRequest emailDuplicateCheckRequest){

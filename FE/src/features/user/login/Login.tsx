@@ -4,8 +4,15 @@ import Input from "../../../components/Input";
 import Text from "../../../components/Text";
 import Button from "../../../components/Button";
 import LoginSNS from "./LoginSocial";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const moveRegist = () => {
+    navigate("/regist");
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.loginContainer}>
@@ -32,7 +39,7 @@ const Login = () => {
         </div>
         <div className={styles.textContainer}>
           <Text value="회원이 아니세요?" type="caption" />
-          <div style={{ marginLeft: "5px", cursor: "pointer" }}>
+          <div style={{ marginLeft: "5px", cursor: "pointer" }} onClick={moveRegist}>
             <Text color="day_8" value="회원가입하기" type="caption" />
           </div>
         </div>

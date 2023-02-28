@@ -7,6 +7,7 @@ import MapPage from "pages/MapPage";
 import Mypage from "pages/MyPage";
 import MyFriends from "features/user/myPage/myFriends/MyFriends";
 import LoginPage from "pages/LoginPage";
+import RegistPage from "pages/RegistPage";
 
 function App() {
   const location = useLocation();
@@ -32,6 +33,7 @@ function App() {
           {/* 임시 route. 추후 삭제 예정. */}
           <Route path="/friend" element={<MyFriends />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/regist" element={<RegistPage />} />
         </Routes>
       </div>
     </>
