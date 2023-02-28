@@ -29,10 +29,6 @@ public class FriendController {
 
     @PostMapping("/search")
     @ApiOperation(value = "사용자 검색", notes = "친구 요청을 위한 사용자 검색")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "사용자 검색 성공", response = UserSearchResponse.class),
-            @ApiResponse(code = 400, message = "사용자 검색 실패")
-    })
     public ResponseEntity<BaseResponse> searchUser(@RequestBody @Valid @ApiParam(value = "사용자 이메일", required = true)final UserSearchRequest userSearchRequest){
         UserSearchResponse userSearchResponse = friendService.searchUser(userSearchRequest);
         return new ResponseEntity<>(BaseResponse.from(
