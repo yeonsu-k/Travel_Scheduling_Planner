@@ -13,7 +13,7 @@ const ScheduleEditPage = () => {
   const { place } = useAppSelector((state: rootState) => state.map);
 
   // 포함되지 않은 장소
-  const containerRef = useRef<HTMLDivElement>(null); // 드래그 할 영역 네모 박스 Ref
+  const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
   const dragComponentRef = useRef<HTMLDivElement>(null); //움직일 드래그 박스 Ref
   const [originPosition, setOriginPosition] = useState({ x: 0, y: 0 }); // 드래그 전 포지션 값 (e.target.offset의 상대 위치)
   const [clientPosition, setClientPosition] = useState({ x: 0, y: 0 }); // 실시간 커서 위치인 e.client를 갱신하는 값
@@ -52,7 +52,6 @@ const ScheduleEditPage = () => {
     const tempOriginPosition = { ...originPosition };
     tempOriginPosition["x"] = e.target.offsetLeft;
     tempOriginPosition["y"] = e.target.offsetTop;
-    console.log("tempOriginPosition : ", tempOriginPosition);
     setOriginPosition(tempOriginPosition); // 드래그 시작할 때 드래그 전 위치값을 저장
 
     const tempClientPosition = { ...clientPosition };
@@ -78,12 +77,24 @@ const ScheduleEditPage = () => {
   };
 
   const dragEndHandler = (e: any) => {
-    // if (!isInsideDragArea(e)) {
-    // const tempPosition = { ...position };
-    // tempPosition["left"] = originPosition.x;
-    // tempPosition["top"] = originPosition.y;
-    // setPosition(tempPosition);
-    // }
+    const isDragArea = (e: any) => {
+      if (
+        position.left < 0 ||
+        position.top < 0 ||
+        position.left > containerRef.current?.offsetWidth ||
+        position.top > containerRef.current.offsetHeight
+      ) {
+        return false;
+      }
+
+      return true;
+    };
+    if (!isDragArea(e)) {
+      const tempPosition = { ...position };
+      tempPosition["left"] = originPosition.x;
+      tempPosition["top"] = originPosition.y;
+      setPosition(tempPosition);
+    }
 
     // 캔버스 제거
     const canvases = document.getElementsByClassName("canvas");
