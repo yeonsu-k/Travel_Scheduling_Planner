@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.newsainturtle.auth.AuthConstant.UNAUTHORIZED_USER_ERROR_MESSAGE;
+import static com.newsainturtle.auth.constant.AuthConstant.UNAUTHORIZED_USER_ERROR_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doReturn;
