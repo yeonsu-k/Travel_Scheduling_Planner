@@ -1,4 +1,5 @@
 package com.newsainturtle.auth.controller;
+
 import com.newsainturtle.auth.dto.LoginRequest;
 import com.newsainturtle.auth.dto.LoginResponse;
 import com.newsainturtle.auth.service.AuthService;
@@ -7,7 +8,6 @@ import io.swagger.annotations.ApiParam;
 
 import javax.validation.Valid;
 
-import static com.newsainturtle.auth.AuthConstant.*;
 import com.newsainturtle.auth.dto.EmailDuplicateCheckRequest;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.common.dto.BaseResponse;
@@ -17,8 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.newsainturtle.auth.constant.AuthConstant.EMAIL_DUPLICATE_CHECK;
-import static com.newsainturtle.auth.constant.AuthConstant.SUCCESS_JOIN_USER_MESSAGE;
+import static com.newsainturtle.auth.constant.AuthConstant.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -41,15 +40,16 @@ public class AuthController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<BaseResponse> emailDuplicateCheck(@RequestBody final EmailDuplicateCheckRequest emailDuplicateCheckRequest){
+    public ResponseEntity<BaseResponse> emailDuplicateCheck(@RequestBody final EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 EMAIL_DUPLICATE_CHECK,
                 userService.emailDuplicateCheck(emailDuplicateCheckRequest))
                 , HttpStatus.OK);
     }
+
     @PostMapping("/join")
-    public ResponseEntity<BaseResponse> joinUser(@RequestBody final UserJoinRequest userJoinRequest){
+    public ResponseEntity<BaseResponse> joinUser(@RequestBody final UserJoinRequest userJoinRequest) {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 SUCCESS_JOIN_USER_MESSAGE,
