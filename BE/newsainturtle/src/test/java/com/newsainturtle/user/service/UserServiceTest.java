@@ -1,7 +1,11 @@
 package com.newsainturtle.user.service;
 
+import com.newsainturtle.auth.constant.AuthConstant;
 import com.newsainturtle.auth.dto.EmailDuplicateCheckRequest;
 import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
+import com.newsainturtle.auth.dto.UserJoinRequest;
+import com.newsainturtle.auth.dto.UserJoinResponse;
+import com.newsainturtle.auth.exception.NoEmailCheckException;
 import com.newsainturtle.user.dto.UserBasicInfoRequest;
 import com.newsainturtle.user.dto.UserBasicInfoResponse;
 import com.newsainturtle.user.entity.User;
@@ -13,12 +17,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 
 @ExtendWith(MockitoExtension.class)
+@Transactional
 @DisplayName("유저 서비스 테스트")
 class UserServiceTest {
 
@@ -26,6 +37,9 @@ class UserServiceTest {
     private UserService userService;
     @Mock
     private UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Nested
     @DisplayName("[이메일 중복 검사]")
@@ -47,7 +61,7 @@ class UserServiceTest {
             //when
             EmailDuplicateCheckResponse response = userService.emailDuplicateCheck(emailDuplicateCheckRequest);
             //then
-            assertTrue(response.getIsDuplicate());
+            assertTrue(response.isDuplicateCheck());
         }
         @Test
         @DisplayName("[성공] - 존재하지 않는 이메일")
@@ -59,7 +73,7 @@ class UserServiceTest {
             //when
             EmailDuplicateCheckResponse response = userService.emailDuplicateCheck(emailDuplicateCheckRequest);
             //then
-            assertFalse(response.getIsDuplicate());
+            assertFalse(response.isDuplicateCheck());
         }
     }
 
@@ -99,4 +113,42 @@ class UserServiceTest {
             assertNull(result);
         }
     }
+
+    @Nested
+    @DisplayName("회원가입")
+    class joinMember{
+        final String encodedPassword = new BCryptPasswordEncoder().encode("1234");
+
+        @Test
+        @DisplayName("[성공] - 회원가입 성공")
+        void joinUser() {
+            //given
+            final UserJoinRequest userJoinRequest = UserJoinRequest.builder()
+                    .email("test1234@email.com")
+                    .nickname("별명")
+                    .duplicatedCheck(true)
+                    .password("1234")
+                    .build();
+            doReturn(user()).when(userRepository).save(any(User.class));
+            //when
+            UserJoinResponse result = userService.joinUser(userJoinRequest);
+            //then
+            assertThat(result.getEmail()).isEqualTo(userJoinRequest.getEmail());
+            assertThat(result.getNickname()).isEqualTo(userJoinRequest.getNickname());
+        }
+
+
+        private User user(){
+            return User.builder()
+                    .email("test1234@email.com")
+                    .nickname("별명")
+                    .password(encodedPassword)
+                    .profile("")
+                    .withdraw(false)
+                    .kakao(false)
+                    .build();
+        }
+    }
+
+
 }
