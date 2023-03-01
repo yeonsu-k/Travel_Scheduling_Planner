@@ -96,8 +96,14 @@
   padding-left: 40px;
 }
 
+.scheduleTextTop,
+.scheduleTextBot {
+  display: flex;
+}
+
 .scheduleTextTop {
   padding-top: 20px;
+  align-items: center;
 }
 
 .scheduleTextBot {
@@ -110,6 +116,10 @@
 }
 
 .scheduleTextCont {
+  padding-left: 15px;
+}
+
+.scheduleTextInput > div {
   padding-left: 15px;
 }
 
