@@ -90,6 +90,30 @@
   letter-spacing: 5px;
 }
 
+.stepContainer {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  text-align: center;
+  background-color: white;
+}
+
+.stepDescTextTitle {
+  font-family: "Montserrat";
+  font-size: 1.2rem;
+  font-weight: bolder;
+  letter-spacing: 3px;
+}
+
+.stepDescTextCont {
+  /* justify-content: center; */
+  text-align: center;
+  margin-top: 20px;
+  letter-spacing: 3px;
+}
+
 .mainTextContainer {
   text-align: center;
   margin: 40px 0;
