@@ -3,3 +3,134 @@
 .mySchedule {
   margin: 5vw;
 }
+
+.schedule {
+  position: relative;
+}
+
+.scheduleDDAY {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #26dbe1;
+  color: #fff;
+  font-size: 0.8rem;
+  z-index: 100;
+}
+
+.scheduleContainer {
+  height: 16.5rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 4px 2px 8px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  margin: 2% 0 2% 0;
+  position: relative;
+}
+
+.scheduleImgContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.scheduleImg {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.scheduleInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.scheduleInfo > span {
+  padding-bottom: 20px;
+  color: #999;
+}
+
+.scheduleInfo > span {
+  padding-bottom: 10px;
+}
+
+.scheduleInfoRegion {
+  font-size: 14px;
+}
+
+.scheduleInfoEmail {
+  font-size: 13px;
+}
+
+.scheduleContContainer {
+  display: grid;
+  grid-template-rows: 1.8fr 1.2fr;
+}
+
+.scheduleContent {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.scheduleContTitle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* place-items: center; */
+  align-items: center;
+}
+
+.scheduleContTitle > div {
+  padding-left: 40px;
+}
+
+.scheduleTextTop,
+.scheduleTextBot {
+  display: flex;
+}
+
+.scheduleTextTop {
+  padding-top: 20px;
+  align-items: center;
+}
+
+.scheduleTextBot {
+  padding-bottom: 20px;
+}
+
+.scheduleTextTitle {
+  font-weight: 900;
+  color: #5dc9dd;
+}
+
+.scheduleTextCont {
+  padding-left: 15px;
+}
+
+.scheduleTextInput > div {
+  padding-left: 15px;
+}
+
+.scheduleBtn {
+  padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+}
+
+.scheduleBtn > Button {
+  height: 70%;
+  width: 60%;
+}
