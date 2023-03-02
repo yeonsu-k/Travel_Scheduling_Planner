@@ -4,7 +4,7 @@ package com.newsainturtle.user.controller;
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
 import com.newsainturtle.user.dto.ModifyProfileRequest;
-import com.newsainturtle.user.dto.ModifyScheduleName;
+import com.newsainturtle.user.dto.ModifyScheduleNameRequest;
 import com.newsainturtle.user.dto.ModifyUserInfoRequest;
 import com.newsainturtle.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -56,8 +56,8 @@ public class UserController {
                 , HttpStatus.OK);
     }
     @PostMapping("/{schedule_id}")
-    public ResponseEntity<BaseResponse> modifyScheduleName(@ApiIgnore Authentication authentication, @RequestBody final ModifyScheduleName modifyScheduleName, @PathVariable("schedule_id") Long schedule_id) {
-        userService.modifyScheduleName(modifyScheduleName.getSchedule_name(),schedule_id);
+    public ResponseEntity<BaseResponse> modifyScheduleName(@ApiIgnore Authentication authentication, @RequestBody final ModifyScheduleNameRequest modifyScheduleNameRequest, @PathVariable("schedule_id") Long schedule_id) {
+        userService.modifyScheduleName(modifyScheduleNameRequest.getSchedule_name(),schedule_id);
         return new ResponseEntity<>(
                 BaseResponse.from(true, MODIFY_SCHEDULE_NAME_SUCCESS_MESSAGE),
                 HttpStatus.OK);
