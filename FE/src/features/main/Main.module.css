@@ -312,3 +312,58 @@
   font-weight: 400;
   margin-bottom: 5px;
 }
+
+/* Modal */
+.mainModalContainer {
+  width: 1400px;
+  height: 455px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.imgContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.imgContainer img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.contContainer {
+  padding: 80px;
+}
+
+.contTextTitle {
+  font-family: "Montserrat";
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.contTextContents {
+  height: 100px;
+  margin: 20px 0;
+}
+
+.contTextContents span {
+  line-height: 1.5;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
+  background-color: white;
+  cursor: pointer;
+}
