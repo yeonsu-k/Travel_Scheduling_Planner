@@ -23,6 +23,10 @@
   background: #a9a9a9;
 }
 
+.center {
+  text-align: center;
+}
+
 .InfoMenu {
   position: relative;
   width: 100%;
