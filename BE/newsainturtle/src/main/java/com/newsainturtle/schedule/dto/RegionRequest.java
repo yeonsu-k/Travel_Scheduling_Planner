@@ -6,4 +6,6 @@ import lombok.Getter;
 public class RegionRequest {
 
     private String regionName;
+
+    private String regionImageURL;
 }
