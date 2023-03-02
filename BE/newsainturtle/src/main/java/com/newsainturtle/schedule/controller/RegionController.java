@@ -12,7 +12,7 @@ import static com.newsainturtle.schedule.constant.ScheduleSuccessConstant.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/main")
+@RequestMapping("/api/schedule/main")
 public class RegionController {
 
     private final RegionService regionService;
