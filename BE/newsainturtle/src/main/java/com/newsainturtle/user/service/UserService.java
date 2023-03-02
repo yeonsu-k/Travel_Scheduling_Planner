@@ -5,6 +5,7 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
+import com.newsainturtle.user.dto.ProfileResponse;
 import com.newsainturtle.user.dto.UserBasicInfoRequest;
 import com.newsainturtle.user.dto.UserBasicInfoResponse;
 import com.newsainturtle.user.dto.UserInfoResponse;
@@ -69,5 +70,12 @@ public class UserService {
                 nickname(user.getNickname()).
                 profile(user.getProfile()).
                 build();
+    }
+    @Transactional
+    public ProfileResponse ModifyProfile(String email, String path){
+        User user = userRepository.findByEmail(email);
+        user.setProfile(path);
+        userRepository.save(user);
+        return ProfileResponse.builder().path(path).build();
     }
 }
