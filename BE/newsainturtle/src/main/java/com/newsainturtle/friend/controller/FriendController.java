@@ -2,6 +2,7 @@ package com.newsainturtle.friend.controller;
 
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
+import com.newsainturtle.friend.dto.FriendFollowRequest;
 import com.newsainturtle.friend.dto.UserSearchRequest;
 import com.newsainturtle.friend.dto.UserSearchResponse;
 import com.newsainturtle.friend.service.FriendService;
@@ -19,6 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
+import static com.newsainturtle.friend.constant.FriendConstant.FRIEND_FOLLOW_SUCCESS_MESSAGE;
 import static com.newsainturtle.friend.constant.FriendConstant.FRIEND_SEARCH_SUCCESS_MESSAGE;
 
 @RestController
@@ -39,6 +41,19 @@ public class FriendController {
                 true,
                 FRIEND_SEARCH_SUCCESS_MESSAGE,
                 userSearchResponse)
+                , HttpStatus.OK);
+    }
+
+    @PostMapping("")
+    @ApiOperation(value = "친구 요청", notes = "친구 요청")
+    public ResponseEntity<BaseResponse> followFriend(@ApiIgnore Authentication authentication,
+                                                   @RequestBody @Valid @ApiParam(value = "사용자 이메일", required = true)final FriendFollowRequest friendFollowRequest){
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        friendService.followUser(email, friendFollowRequest);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                FRIEND_FOLLOW_SUCCESS_MESSAGE)
                 , HttpStatus.OK);
     }
 
