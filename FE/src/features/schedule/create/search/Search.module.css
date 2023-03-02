@@ -112,3 +112,113 @@
 .add_icon {
   color: black;
 }
+
+/* cardModal */
+
+.background {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  z-index: 99;
+  text-align: center;
+  overflow: hidden;
+}
+
+.background::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2px);
+}
+
+.inDiv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+}
+
+p {
+  white-space: pre-line
+}
+
+/* Modal */
+.mainModalContainer {
+  width: 60vw;
+  height: 40vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background: #ffffff;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.imgContainer {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.imgContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.socialBtnContainer {
+  position: absolute;
+  bottom: 5%;
+  left: 15%;
+}
+
+.socialBtnContainer>div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.socialBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18%;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.socialBtn img {
+  max-height: 48px !important;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: repeat(5, 1fr);
+  row-gap: 10px;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 2%;
+  right: 1%;
+  transform: translate(-1%, -2%);
+  background-color: white;
+  cursor: pointer;
+}
