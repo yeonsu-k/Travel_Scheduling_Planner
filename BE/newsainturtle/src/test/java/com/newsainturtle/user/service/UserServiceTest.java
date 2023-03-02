@@ -8,6 +8,7 @@ import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
 import com.newsainturtle.user.dto.UserBasicInfoRequest;
 import com.newsainturtle.user.dto.UserBasicInfoResponse;
+import com.newsainturtle.user.dto.UserInfoResponse;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -165,6 +166,30 @@ class UserServiceTest {
                     .build();
         }
     }
+
+    @Nested
+    @DisplayName("마이페이지 조회")
+    class getMyPageInfo{
+        @Test
+        @DisplayName("[성공] - 마이페이지 조회(유저 기본 정보)")
+        void getUserInfo(){
+            String email = "test123@naver.com";
+            //given
+            final User user = User.builder()
+                    .email(email)
+                    .nickname("별명")
+                    .profile("")
+                    .build();
+            doReturn(user).when(userRepository).findByEmail(email);
+            //when
+            UserInfoResponse result = userService.getUserInfo(email);
+            //then
+            assertEquals(result.getEmail(), user.getEmail());
+            assertEquals(result.getNickname(), user.getNickname());
+            assertEquals(result.getProfile(), user.getProfile());
+        }
+    }
+
 
 
 }
