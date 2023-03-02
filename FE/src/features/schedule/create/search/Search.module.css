@@ -1,3 +1,7 @@
+.center {
+  text-align: center;
+}
+
 .searchRadio {
   display: flex;
   background-color: #fafafa;
@@ -28,4 +32,40 @@
 .radio_label input[type="radio"]:checked+span {
   background: #98dde3;
   color: #fff;
+}
+
+.search_container {
+  display: flex;
+}
+
+.search_input {
+  width: 100%;
+}
+
+.search_input input[type="text"] {
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  box-shadow: none;
+  box-sizing: content-box;
+  transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.search_button {
+  color: #98dde3;
+  background-color: white;
+  min-height: 26px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close_button {
+  color: #9e9e9e;
 }

@@ -1,12 +1,15 @@
 import React from "react";
 import styles from "./CreateInfo.module.css";
 import SearchRadioBtn from "./search/SearchRadioBtn";
+import SearchInput from "./search/SearchInput";
+import { Stack } from "@mui/material";
 
 function CreateRight() {
   return (
-    <div className={styles.Container}>
+    <Stack className={styles.Container} spacing={1}>
       <SearchRadioBtn />
-    </div>
+      <SearchInput />
+    </Stack>
   );
 }
 
