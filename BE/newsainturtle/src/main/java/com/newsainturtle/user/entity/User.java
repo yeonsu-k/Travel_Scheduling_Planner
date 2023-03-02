@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -49,5 +50,11 @@ public class User {
     }
     public void setProfile(String path){
         this.profile = path;
+    }
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+    public void setPassword(String password){
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 }
