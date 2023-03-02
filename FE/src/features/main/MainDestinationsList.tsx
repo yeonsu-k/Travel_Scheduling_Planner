@@ -1,15 +1,18 @@
 import React from "react";
 import styles from "./Main.module.css";
+import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
+import Text from "components/Text";
+import Button from "components/Button";
 
 const MainDestinationsList = () => {
   return (
     <div>
-      <div className={styles.mainTextContainer}>
-        <div className={styles.mainTitleText}>
-          <b>어디로 여행을 떠나시나요?</b>
-        </div>
-        <div className={styles.mainSubTitleText}>여행지를 검색하거나 목록에서 직접 선택해주세요.</div>
+      <div className={styles.mainTitleText}>
+        <Text value="어디로 여행을 떠나시나요?" bold type="pageTitle" />
+      </div>
+      <div className={styles.mainSubTitleTextK}>
+        <Text value="여행지를 검색하거나 목록에서 직접 선택해주세요." type="caption" color="lightgray" />
       </div>
       <div className={styles.container}>
         <div className={styles.mainInputContainer}>
@@ -22,8 +25,24 @@ const MainDestinationsList = () => {
           <input className={styles.mainInput} />
         </div>
       </div>
-      <div>추천순</div>
-      <MainDestinationItem />
+      <div className={styles.mainFilterContainer}>
+        <MainDestinationsFilter />
+      </div>
+      <div className={styles.mainDestinationContainer}>
+        <div className={styles.mainDestinationItem}>
+          <MainDestinationItem />
+          <MainDestinationItem />
+          <MainDestinationItem />
+          <MainDestinationItem />
+          <MainDestinationItem />
+          <MainDestinationItem />
+          <MainDestinationItem />
+          <MainDestinationItem />
+        </div>
+      </div>
+      <div className={styles.upBtn}>
+        <Button height="100%" text="여행지 선택화면으로 돌아가기" />
+      </div>
     </div>
   );
 };

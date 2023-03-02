@@ -90,6 +90,30 @@
   letter-spacing: 5px;
 }
 
+.stepContainer {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  text-align: center;
+  background-color: white;
+}
+
+.stepDescTextTitle {
+  font-family: "Montserrat";
+  font-size: 1.2rem;
+  font-weight: bolder;
+  letter-spacing: 3px;
+}
+
+.stepDescTextCont {
+  /* justify-content: center; */
+  text-align: center;
+  margin-top: 20px;
+  letter-spacing: 3px;
+}
+
 .mainTextContainer {
   text-align: center;
   margin: 40px 0;
@@ -104,6 +128,12 @@
   font-family: "Montserrat";
   font-size: 0.875rem;
   line-height: 1.4;
+  color: #999;
+}
+
+.mainSubTitleTextK {
+  margin: 20px 0;
+  font-size: 0.875rem;
   color: #999;
 }
 
@@ -190,7 +220,7 @@
   border: 1px solid #e0e0e0;
   width: 600px;
   height: 4rem;
-  margin-bottom: 20px;
+  margin: 10px 0;
 }
 
 .mainInput {
@@ -208,33 +238,58 @@
   padding-right: 0.8rem;
 }
 
+.mainFilterContainer {
+  display: flex;
+  justify-content: end;
+  padding-right: 100px;
+}
+
+.mainDestinationContainer {
+  width: 90%;
+  margin: auto;
+}
+
+.mainDestinationItem {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 /* Card List */
 
 .card {
   width: 15.7rem;
   height: 23rem;
+  /* display: flex;
+  flex-direction: column; */
   display: grid;
-  grid-template-rows: 1fr 2fr;
-
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* position: relative; */
+  grid-template-rows: 2.2fr 0.8fr;
   box-shadow: rgb(31 38 135 / 20%) 0px 8px 32px 0px;
   backdrop-filter: blur(4px);
   background: rgba(255, 255, 255, 0.25);
   border-radius: 2px;
-  /* border-width: initial; */
-  /* border-style: none; */
-  /* border-color: initial; */
-  /* border-image: initial; */
   margin: 16px;
+  cursor: pointer;
 }
 
-.cardImg {
+.cardImgContainer {
   width: 100%;
-  height: 100%;
-  object-fit: fill;
+  overflow: hidden;
+}
+
+.cardImgContainer img {
+  width: 100%;
   /* object-fit: contain; */
+  overflow: hidden;
+  /* object-fit: fill; */
+  transform: scale(1);
+  transition: all 200ms ease-in-out;
+  backface-visibility: hidden;
+}
+
+.card > div > img:hover {
+  transform: scale(1.5); /* 이미지 확대 */
+  transition: all 200ms ease-in-out;
 }
 
 .cardContent {
@@ -242,7 +297,9 @@
   flex-direction: column;
   text-align: start;
   justify-content: center;
+  justify-items: center;
   padding-left: 25px;
+  box-sizing: border-box;
 }
 
 .cardTitle {
@@ -254,4 +311,64 @@
   font-size: 1.2rem;
   font-weight: 400;
   margin-bottom: 5px;
+}
+
+/* Modal */
+.mainModalContainer {
+  width: 1400px;
+  height: 455px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.imgContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.imgContainer img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.contContainer {
+  padding: 80px;
+}
+
+.contTextTitle {
+  font-family: "Montserrat";
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.contTextContents {
+  height: 100px;
+  margin: 20px 0;
+}
+
+.contTextContents span {
+  line-height: 1.5;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.upBtn {
+  margin: 20px 0;
+  height: 50px;
 }
