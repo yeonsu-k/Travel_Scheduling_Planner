@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "schedule_member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ScheduleMember {
