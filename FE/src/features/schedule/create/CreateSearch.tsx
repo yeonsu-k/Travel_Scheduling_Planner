@@ -1,9 +1,11 @@
 import React from "react";
+import styles from "./CreateInfo.module.css";
+import SearchRadioBtn from "./search/SearchRadioBtn";
 
 function CreateRight() {
   return (
-    <div style={{ width: "100%", height: "100%", backgroundColor: "Ivory" }}>
-      <div>CreateRight</div>
+    <div className={styles.Container}>
+      <SearchRadioBtn />
     </div>
   );
 }
