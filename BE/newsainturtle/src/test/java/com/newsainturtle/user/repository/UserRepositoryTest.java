@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @DisplayName("유저 레포지토리 테스트")
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
 
     @Autowired
@@ -24,10 +24,10 @@ class UserRepositoryTest {
 
     @Nested
     @DisplayName("이메일 중복 검사")
-    class EmailDuplicateCheck{
+    class EmailDuplicateCheck {
         @Test
         @DisplayName("[성공] - 이미 존재하는 이메일")
-        void alreadyExistEmail(){
+        void alreadyExistEmail() {
             //given
             final String trialEmail = "tjdtn123@naver.com";
             final User user = User.builder()
@@ -43,9 +43,10 @@ class UserRepositoryTest {
             //then
             assertNotNull(result);
         }
+
         @Test
         @DisplayName("[성공] - 가입 가능한 이메일")
-        void notExistEmail(){
+        void notExistEmail() {
             //given
             final String trialEmail = "tjdtn123@naver.com";
             //when
@@ -53,9 +54,15 @@ class UserRepositoryTest {
             //then
             assertFalse(result.isPresent());
         }
+
+    }
+
+    @Nested
+    @DisplayName("회원가입")
+    class Join {
         @Test
         @DisplayName("[성공] - 회원가입 성공")
-        void joinUser(){
+        void joinUser() {
             //given
             final User user = User.builder()
                     .email("test1234@email.com")
@@ -71,6 +78,28 @@ class UserRepositoryTest {
             assertNotNull(result);
             assertEquals(result.getUserId(), user.getUserId());
             assertEquals(result.getEmail(), user.getEmail());
+        }
+    }
+
+    @Nested
+    @DisplayName("마이페이지 조회")
+    class GetMyPageInfo {
+        @Test
+        @DisplayName("[성공] - 마이페이지 조회(유저 기본 정보)")
+        void getUserInfo() {
+            final String email = "test@1234.com";
+            //given
+            final User user = User.builder()
+                    .email(email)
+                    .nickname("별명")
+                    .profile("").build();
+            userRepository.save(user);
+            //when
+            User result = userRepository.findByEmail(email);
+            //then
+            assertEquals(result.getEmail(), user.getEmail());
+            assertEquals(result.getNickname(), user.getNickname());
+            assertEquals(result.getProfile(), user.getProfile());
         }
     }
 }
