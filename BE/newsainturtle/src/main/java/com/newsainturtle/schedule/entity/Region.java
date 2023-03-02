@@ -1,6 +1,7 @@
 package com.newsainturtle.schedule.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,9 @@ public class Region {
 
     @Column(name = "region_name", length = 20)
     private String regionName;
+
+    @Builder
+    public Region(String regionName) {
+        this.regionName = regionName;
+    }
 }
