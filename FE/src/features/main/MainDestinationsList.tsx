@@ -1,8 +1,9 @@
-import Text from "components/Text";
 import React from "react";
 import styles from "./Main.module.css";
 import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
+import Text from "components/Text";
+import Button from "components/Button";
 
 const MainDestinationsList = () => {
   return (
@@ -38,6 +39,9 @@ const MainDestinationsList = () => {
           <MainDestinationItem />
           <MainDestinationItem />
         </div>
+      </div>
+      <div className={styles.upBtn}>
+        <Button height="100%" text="여행지 선택화면으로 돌아가기" />
       </div>
     </div>
   );

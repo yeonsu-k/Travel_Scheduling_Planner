@@ -367,3 +367,8 @@
   background-color: white;
   cursor: pointer;
 }
+
+.upBtn {
+  margin: 20px 0;
+  height: 50px;
+}
