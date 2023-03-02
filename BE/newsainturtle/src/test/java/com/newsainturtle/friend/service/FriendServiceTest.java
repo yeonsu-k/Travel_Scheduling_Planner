@@ -1,6 +1,7 @@
 package com.newsainturtle.friend.service;
 
 import com.newsainturtle.friend.dto.FriendFollowRequest;
+import com.newsainturtle.friend.dto.FriendListResponse;
 import com.newsainturtle.friend.dto.UserSearchRequest;
 import com.newsainturtle.friend.dto.UserSearchResponse;
 import com.newsainturtle.friend.entity.Friend;
@@ -15,6 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.newsainturtle.friend.constant.FriendConstant.FRIEND_FOLLOW_FAIL_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
@@ -339,6 +343,47 @@ class FriendServiceTest {
             friendService.followUser(email, friendFollowRequest);
             //then
 
+        }
+    }
+
+    @Nested
+    @DisplayName("친구 목록 조회 테스트")
+    class SelectFriendListTest {
+        @Test
+        @DisplayName("[성공] - 친구 목록 조회")
+        void 친구목록조회() {
+            final String email = "yunaghgh@naver.com";
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User friendUser1 = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final Friend friend = Friend.builder()
+                    .isAccept(true)
+                    .receiveUser(user)
+                    .requestUser(friendUser1)
+                    .build();
+            List<Friend> friendList = new ArrayList<>();
+            friendList.add(friend);
+
+            doReturn(user).when(userRepository).findByEmail(email);
+            doReturn(friendList).when(friendRepository).findByFriendList(user);
+
+            //when
+            FriendListResponse result = friendService.selectFriendList(email);
+            //then
+            assertEquals(result.getFriends().size(),1);
         }
     }
 }
