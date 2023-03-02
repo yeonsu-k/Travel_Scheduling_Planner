@@ -2,36 +2,38 @@ import React, { useState } from "react";
 import styles from "./Search.module.css";
 import { Close, Search } from "@mui/icons-material";
 
-function SearchInput() {
-  const [searchInput, setSearch] = useState("");
+interface searchType {
+  value: string;
+  getValue: (str: string) => void;
+  searchBtnClick: () => void;
+  cancleBtnClick: () => void;
+}
 
-  const searchSpotsOrHotels = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
-
-  const searchCancel = () => {
-    setSearch("");
-  };
-
+function SearchInput({ value, getValue, searchBtnClick, cancleBtnClick }: searchType) {
   return (
     <div className={styles.search_container}>
       <div className={styles.search_input}>
         <input
           type="text"
           placeholder="검색어를 입력하세요."
-          value={searchInput}
-          onChange={(e) => searchSpotsOrHotels(e)}
+          onFocus={(e) => {
+            e.target.placeholder = "";
+          }}
+          onBlur={(e) => {
+            e.target.placeholder = "검색어를 입력하세요.";
+          }}
+          value={value}
+          onChange={(e) => getValue(e.target.value)}
         />
       </div>
-      {searchInput.length >= 2 ? (
-        <button className={`${styles.close_button} ${styles.search_button}`} onClick={() => searchCancel()}>
+      {value.length > 0 && (
+        <button className={`${styles.close_button} ${styles.search_button}`} onClick={() => cancleBtnClick()}>
           <Close fontSize="small" />
         </button>
-      ) : (
-        <button className={styles.search_button}>
-          <Search />
-        </button>
       )}
+      <button className={styles.search_button} onClick={() => searchBtnClick()}>
+        <Search />
+      </button>
     </div>
   );
 }

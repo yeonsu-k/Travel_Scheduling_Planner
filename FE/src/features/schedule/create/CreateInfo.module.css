@@ -93,3 +93,8 @@
     transform: translateX(0);
   }
 }
+
+.searchWarning {
+  color: #a9a9a9;
+  font-size: 0.875rem;
+}
