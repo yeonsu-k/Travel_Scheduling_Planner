@@ -102,4 +102,30 @@ class UserRepositoryTest {
             assertEquals(result.getProfile(), user.getProfile());
         }
     }
+
+    @Nested
+    @DisplayName("유저 정보 수정")
+    class ModifyUserInfo {
+        @Test
+        @DisplayName("[성공] - 프로필 사진 수정")
+        void modifyProfile() {
+            final String email = "test@1234.com";
+            final String path = "default/path";
+            final String newPath = "new/path";
+            //given
+            final User user = User.builder()
+                    .email(email)
+                    .nickname("별명")
+                    .profile(path).build();
+            userRepository.save(user);
+            //when
+            User result = userRepository.findByEmail(email);
+            result.setProfile(newPath);
+            userRepository.save(result);
+            //then
+            assertEquals(result.getUserId(), user.getUserId());
+            assertEquals(result.getEmail(), user.getEmail());
+            assertEquals(result.getProfile(), newPath);
+        }
+    }
 }
