@@ -1,5 +1,6 @@
 package com.newsainturtle.schedule.service;
 
+import com.newsainturtle.schedule.dto.RegionRequest;
 import com.newsainturtle.schedule.exception.DuplicateException;
 import com.newsainturtle.schedule.dto.RegionResponse;
 import com.newsainturtle.schedule.entity.Region;
@@ -17,13 +18,14 @@ public class RegionService {
 
     private final RegionRepository regionRepository;
 
-    public String createRegion(String regionName) {
-        isNullRegion(regionName);
-        validateDuplicateRegion(regionName);
+    public String createRegion(RegionRequest regionRequest) {
+        isNullRegion(regionRequest.getRegionName());
+        validateDuplicateRegion(regionRequest.getRegionName());
         regionRepository.save(Region.builder()
-                .regionName(regionName)
+                .regionName(regionRequest.getRegionName())
+                .regionImageURL(regionRequest.getRegionImageURL())
                 .build());
-        return regionName;
+        return regionRequest.getRegionName();
     }
 
     public List<RegionResponse> findRegion() {
@@ -32,6 +34,7 @@ public class RegionService {
         return regions.stream()
                 .map(region -> RegionResponse.builder()
                         .regionName(region.getRegionName())
+                        .regionImageURL(region.getRegionImageURL())
                         .build()
                 ).collect(Collectors.toList());
     }
