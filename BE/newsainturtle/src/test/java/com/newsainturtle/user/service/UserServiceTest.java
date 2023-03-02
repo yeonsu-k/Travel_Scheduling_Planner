@@ -6,11 +6,10 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
-import com.newsainturtle.user.dto.ProfileResponse;
-import com.newsainturtle.user.dto.UserBasicInfoRequest;
-import com.newsainturtle.user.dto.UserBasicInfoResponse;
-import com.newsainturtle.user.dto.UserInfoResponse;
+import com.newsainturtle.user.constant.UserConstant;
+import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
+import com.newsainturtle.user.exception.NotEqualsPasswordException;
 import com.newsainturtle.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -196,7 +195,7 @@ class UserServiceTest {
     class ModifyMypage{
         @Test
         @DisplayName("[성공] - 프로필 사진 수정")
-        void ModifyProfile(){
+        void modifyProfile(){
             String email = "test123@naver.com";
             final String path = "default/path";
             final String newPath = "new/path";
@@ -209,11 +208,70 @@ class UserServiceTest {
             doReturn(user).when(userRepository).findByEmail(email);
             user.setProfile(newPath);
             //when
-            ProfileResponse result = userService.ModifyProfile(email, newPath);
+            ProfileResponse result = userService. modifyProfile(email, newPath);
             //then
             assertEquals(result.getPath(), user.getProfile());
             assertEquals(result.getPath(), newPath);
         }
+
+        @Test
+        @DisplayName("[성공] - 회원 정보 수정")
+        void modifyUserInfo(){
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
+            String email = "test123@naver.com";
+            final String nickname = "기본별명";
+            final String password = "1q2w3r4w!";
+            final String newNickName = "변경된 별명";
+            final String newPassword = "2w3a4d";
+            ModifyUserInfoRequest modifyUserInfoRequest = ModifyUserInfoRequest.builder()
+                    .nickname(newNickName)
+                    .newPassword(newPassword)
+                    .build();
+            //given
+            final User user = User.builder()
+                    .email(email)
+                    .nickname(nickname)
+                    .password(password)
+                    .build();
+            doReturn(user).when(userRepository).findByEmail(email);
+            user.setPassword(password);
+            user.setNickname(nickname);
+            //when
+            userService.modifyUserInfo(email, modifyUserInfoRequest);
+            //then
+            assertEquals(user.getNickname(),newNickName);
+            assertTrue(encoder.matches(newPassword,user.getPassword()));
+        }
+
+        @Test
+        @DisplayName("[실패] - 기존의 비밀번호와 일치하지 않음")
+        void noEmailCheck(){
+            String email = "test123@naver.com";
+            final String nickname = "기본별명";
+            final String password = "1q2w3r4w!";
+            final String invalidPw = "eroor123";
+            final String newNickName = "변경된 별명";
+            final String newPassword = "2w3a4d";
+            final User user = User.builder()
+                    .email(email)
+                    .password(password)
+                    .nickname(nickname)
+                    .profile("")
+                    .build();
+            //given
+            ModifyUserInfoRequest modifyUserInfoRequest = ModifyUserInfoRequest.builder()
+                    .password(invalidPw)
+                    .nickname(newNickName)
+                    .newPassword(newPassword)
+                    .build();
+            doReturn(user).when(userRepository).findByEmail(email);
+            //when
+            final NotEqualsPasswordException result = assertThrows(NotEqualsPasswordException.class,
+                    () -> userService.modifyUserInfo(email, modifyUserInfoRequest));
+            //then
+            assertThat(result.getMessage()).isEqualTo(UserConstant.NOT_EQUALS_PASSWORD_MESSAGE);
+        }
+
     }
 
 }
