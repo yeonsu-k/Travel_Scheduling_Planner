@@ -74,7 +74,6 @@ public class UserService {
     public ProfileResponse modifyProfile(String email, String path){
         User user = userRepository.findByEmail(email);
         user.setProfile(path);
-        userRepository.save(user);
         return ProfileResponse.builder().path(path).build();
     }
 
@@ -87,6 +86,5 @@ public class UserService {
         }
         user.setPassword(modifyUserInfoRequest.getNewPassword());
         user.setNickname(modifyUserInfoRequest.getNickname());
-        userRepository.save(user);
     }
 }
