@@ -6,6 +6,7 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
+import com.newsainturtle.user.dto.ProfileResponse;
 import com.newsainturtle.user.dto.UserBasicInfoRequest;
 import com.newsainturtle.user.dto.UserBasicInfoResponse;
 import com.newsainturtle.user.dto.UserInfoResponse;
@@ -190,6 +191,29 @@ class UserServiceTest {
         }
     }
 
-
+    @Nested
+    @DisplayName("유저 정보 수정")
+    class ModifyMypage{
+        @Test
+        @DisplayName("[성공] - 프로필 사진 수정")
+        void ModifyProfile(){
+            String email = "test123@naver.com";
+            final String path = "default/path";
+            final String newPath = "new/path";
+            //given
+            final User user = User.builder()
+                    .email(email)
+                    .nickname("별명")
+                    .profile(path)
+                    .build();
+            doReturn(user).when(userRepository).findByEmail(email);
+            user.setProfile(newPath);
+            //when
+            ProfileResponse result = userService.ModifyProfile(email, newPath);
+            //then
+            assertEquals(result.getPath(), user.getProfile());
+            assertEquals(result.getPath(), newPath);
+        }
+    }
 
 }
