@@ -1,10 +1,10 @@
 import React from "react";
+import styles from "./CreateInfo.module.css";
 import InfoLocal from "./info/InfoLocal";
 import InfoDate from "./info/InfoDate";
 import { Stack } from "@mui/system";
 import Text from "components/Text";
 import { Box } from "@mui/material";
-import styles from "./CreateInfo.module.css";
 import InfoListHotel from "./info/InfoListHotel";
 import InfoListPlace from "./info/InfoListPlace";
 
@@ -17,7 +17,7 @@ function CreateInfo() {
   ];
 
   return (
-    <div className={styles.Container}>
+    <div className={`${styles.Container} ${styles.scroll}`}>
       <Stack pt={2.5} alignItems="center" mr={0.5}>
         <InfoLocal />
         <InfoDate />
