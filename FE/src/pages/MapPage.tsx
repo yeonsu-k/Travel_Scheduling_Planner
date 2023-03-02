@@ -45,14 +45,14 @@ function MapPage() {
 
   return (
     <>
-      <Grid container columns={6.3} style={{ width: "100%", height: "100%" }}>
-        <Grid item xs={1.1} ml={0.5}>
+      <Grid container columns={6.5} style={{ width: "100%", height: "100%" }}>
+        <Grid item xs={1.11} ml={0.5}>
           <CreateInfo />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={4.3}>
           <div id="map" style={{ width: "100%", height: "100%" }}></div>
         </Grid>
-        <Grid item xs={1.1}>
+        <Grid item xs={1.07}>
           <CreateSearch />
         </Grid>
       </Grid>
