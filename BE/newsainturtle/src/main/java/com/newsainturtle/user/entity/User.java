@@ -47,4 +47,7 @@ public class User {
         this.profile = profile;
         this.withdraw = withdraw;
     }
+    public void setProfile(String path){
+        this.profile = path;
+    }
 }
