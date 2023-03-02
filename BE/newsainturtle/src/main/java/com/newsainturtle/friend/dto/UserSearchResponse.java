@@ -10,4 +10,5 @@ public class UserSearchResponse {
     private String profile;
     private String email;
     private String nickname;
+    private String status;
 }
