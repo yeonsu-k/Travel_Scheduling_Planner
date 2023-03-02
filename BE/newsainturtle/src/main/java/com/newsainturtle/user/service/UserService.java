@@ -7,6 +7,7 @@ import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
 import com.newsainturtle.user.dto.UserBasicInfoRequest;
 import com.newsainturtle.user.dto.UserBasicInfoResponse;
+import com.newsainturtle.user.dto.UserInfoResponse;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,5 +62,12 @@ public class UserService {
                 .nickname(result.getNickname()).build();
     }
 
-
+    public UserInfoResponse getUserInfo(String email) {
+        User user = userRepository.findByEmail(email);
+        return UserInfoResponse.builder().
+                email(user.getEmail()).
+                nickname(user.getNickname()).
+                profile(user.getProfile()).
+                build();
+    }
 }
