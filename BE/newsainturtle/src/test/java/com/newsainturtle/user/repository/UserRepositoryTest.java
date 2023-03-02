@@ -124,7 +124,6 @@ class UserRepositoryTest {
             //when
             User result = userRepository.findByEmail(email);
             result.setProfile(newPath);
-            userRepository.save(result);
             //then
             assertEquals(result.getUserId(), user.getUserId());
             assertEquals(result.getEmail(), user.getEmail());
@@ -150,7 +149,6 @@ class UserRepositoryTest {
             User result = userRepository.findByEmail(email);
             result.setPassword(newPassword);
             result.setNickname(newNickName);
-            userRepository.save(result);
             //then
             assertEquals(result.getUserId(), user.getUserId());
             assertEquals(result.getNickname(), user.getNickname());
