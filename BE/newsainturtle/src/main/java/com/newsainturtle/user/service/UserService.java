@@ -5,6 +5,8 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
+import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.exception.NotEqualsPasswordException;
@@ -15,12 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public EmailDuplicateCheckResponse emailDuplicateCheck(EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         User user = userRepository.findByEmail(emailDuplicateCheckRequest.getEmail());
@@ -86,5 +91,11 @@ public class UserService {
         }
         user.setPassword(modifyUserInfoRequest.getNewPassword());
         user.setNickname(modifyUserInfoRequest.getNickname());
+    }
+
+    @Transactional
+    public void modifyScheduleName(String schedule_name, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        schedule.ifPresent(value -> value.setScheduleName(schedule_name));
     }
 }

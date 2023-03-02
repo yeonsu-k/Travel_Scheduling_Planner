@@ -1,8 +1,9 @@
 package com.newsainturtle.user.repository;
 
-import com.newsainturtle.auth.dto.UserJoinRequest;
+
+import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.entity.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,8 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     @Nested
     @DisplayName("이메일 중복 검사")
@@ -131,7 +133,7 @@ class UserRepositoryTest {
         }
         @Test
         @DisplayName("[성공] - 회원 정보 수정")
-        void modifyUserInfo(){
+        void modifyUserInfo() {
             PasswordEncoder encoder = new BCryptPasswordEncoder();
             final String email = "test@1234.com";
             final String nickname = "기본별명";
@@ -152,7 +154,29 @@ class UserRepositoryTest {
             //then
             assertEquals(result.getUserId(), user.getUserId());
             assertEquals(result.getNickname(), user.getNickname());
-            assertTrue(encoder.matches(newPassword,result.getPassword()));
+            assertTrue(encoder.matches(newPassword, result.getPassword()));
+        }
+    }
+
+    @Nested
+    @DisplayName("스케줄 수정")
+    class ModifySchedule {
+        @Test
+        @DisplayName("[성공] - 여행 이름 수정")
+        void modifyScheduleName() {
+            final String name = "제주도 여행";
+            final String newName = "일본여행";
+            //given
+            final Schedule schedule = Schedule.builder()
+                    .scheduleName(name)
+                    .build();
+            scheduleRepository.save(schedule);
+            //when
+            Optional<Schedule> result = scheduleRepository.findById(schedule.getScheduleId());
+            result.ifPresent(value -> value.setScheduleName(newName));
+            //then
+            assertEquals(result.get().getScheduleId(), schedule.getScheduleId());
+            assertEquals(result.get().getScheduleName(), schedule.getScheduleName());
         }
     }
 }

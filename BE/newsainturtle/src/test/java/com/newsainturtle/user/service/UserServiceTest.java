@@ -6,6 +6,8 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
+import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.constant.UserConstant;
 import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
@@ -23,6 +25,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +42,8 @@ class UserServiceTest {
     private UserService userService;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private ScheduleRepository scheduleRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -274,4 +280,24 @@ class UserServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("일정 정보 수정")
+    class ModifySchedule{
+        @Test
+        @DisplayName("[성공] - 일정 이름 수정")
+        void modifyScheduleName(){
+            final String name = "제주도 여행";
+            final String newName = "일본여행";
+            //given
+            final Schedule schedule = Schedule.builder()
+                    .scheduleName(name)
+                    .build();
+            doReturn(Optional.of(schedule)).when(scheduleRepository).findById(schedule.getScheduleId());
+            schedule.setScheduleName(newName);
+            //when
+            userService.modifyScheduleName(newName, schedule.getScheduleId());
+            //then
+            assertEquals(schedule.getScheduleName(), newName);
+        }
+    }
 }
