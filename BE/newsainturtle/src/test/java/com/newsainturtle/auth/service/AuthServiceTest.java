@@ -109,7 +109,6 @@ class AuthServiceTest {
             //then
             assertAll(
                     () -> assertEquals(result.getNickname(), user.getNickname()),
-                    () -> assertTrue(encoder.matches(loginRequest.getPassword(), user.getPassword())),
                     () -> assertTrue(encoder.matches(loginRequest.getPassword(), user.getPassword()))
             );
         }

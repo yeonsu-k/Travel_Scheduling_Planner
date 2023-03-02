@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+
 
     @Nested
     @DisplayName("이메일 중복 검사")
@@ -121,11 +124,35 @@ class UserRepositoryTest {
             //when
             User result = userRepository.findByEmail(email);
             result.setProfile(newPath);
-            userRepository.save(result);
             //then
             assertEquals(result.getUserId(), user.getUserId());
             assertEquals(result.getEmail(), user.getEmail());
             assertEquals(result.getProfile(), newPath);
+        }
+        @Test
+        @DisplayName("[성공] - 회원 정보 수정")
+        void modifyUserInfo(){
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
+            final String email = "test@1234.com";
+            final String nickname = "기본별명";
+            final String password = "1q2w3r4w!";
+            final String newNickName = "변경된 별명";
+            final String newPassword = "2w3a4d";
+            //given
+            final User user = User.builder()
+                    .email(email)
+                    .password(password)
+                    .nickname(nickname)
+                    .profile("").build();
+            userRepository.save(user);
+            //when
+            User result = userRepository.findByEmail(email);
+            result.setPassword(newPassword);
+            result.setNickname(newNickName);
+            //then
+            assertEquals(result.getUserId(), user.getUserId());
+            assertEquals(result.getNickname(), user.getNickname());
+            assertTrue(encoder.matches(newPassword,result.getPassword()));
         }
     }
 }

@@ -4,6 +4,7 @@ package com.newsainturtle.user.controller;
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
 import com.newsainturtle.user.dto.ModifyProfileRequest;
+import com.newsainturtle.user.dto.ModifyUserInfoRequest;
 import com.newsainturtle.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import static com.newsainturtle.user.constant.UserConstant.GET_USER_INFO_SUCCESS_MESSAGE;
-import static com.newsainturtle.user.constant.UserConstant.MODIFY_USER_PROFILE_SUCCESS_MESSAGE;
+import static com.newsainturtle.user.constant.UserConstant.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -32,15 +32,27 @@ public class UserController {
                 , HttpStatus.OK);
 
     }
+    @PostMapping
+    public ResponseEntity<BaseResponse> modifyUserInfo(@ApiIgnore Authentication authentication, @RequestBody final ModifyUserInfoRequest modifyUserInfoRequest) throws Exception {
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        userService.modifyUserInfo(email, modifyUserInfoRequest);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                MODIFY_USER_INFO_SUCCESS_MESSAGE)
+                , HttpStatus.OK);
+
+    }
 
     @PostMapping("/profile")
-    public ResponseEntity<BaseResponse> ModifyProfile(@ApiIgnore Authentication authentication, @RequestBody final ModifyProfileRequest modifyProfileRequest) throws Exception {
+    public ResponseEntity<BaseResponse> modifyProfile(@ApiIgnore Authentication authentication, @RequestBody final ModifyProfileRequest modifyProfileRequest) throws Exception {
         UserDetails userDetails = (UserDetails) authentication.getDetails();
         String email = userDetails.getUsername();
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 MODIFY_USER_PROFILE_SUCCESS_MESSAGE,
-                userService.ModifyProfile(email, modifyProfileRequest.getPath()))
+                userService.modifyProfile(email, modifyProfileRequest.getPath()))
                 , HttpStatus.OK);
     }
+
 }

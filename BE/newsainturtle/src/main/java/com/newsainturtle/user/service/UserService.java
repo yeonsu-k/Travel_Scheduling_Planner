@@ -5,14 +5,13 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
-import com.newsainturtle.user.dto.ProfileResponse;
-import com.newsainturtle.user.dto.UserBasicInfoRequest;
-import com.newsainturtle.user.dto.UserBasicInfoResponse;
-import com.newsainturtle.user.dto.UserInfoResponse;
+import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
+import com.newsainturtle.user.exception.NotEqualsPasswordException;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,10 +71,20 @@ public class UserService {
                 build();
     }
     @Transactional
-    public ProfileResponse ModifyProfile(String email, String path){
+    public ProfileResponse modifyProfile(String email, String path){
         User user = userRepository.findByEmail(email);
         user.setProfile(path);
-        userRepository.save(user);
         return ProfileResponse.builder().path(path).build();
+    }
+
+    @Transactional
+    public void modifyUserInfo(String email, ModifyUserInfoRequest modifyUserInfoRequest) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = userRepository.findByEmail(email);
+        if(!encoder.matches(modifyUserInfoRequest.getPassword(), user.getPassword())){
+            throw new NotEqualsPasswordException();
+        }
+        user.setPassword(modifyUserInfoRequest.getNewPassword());
+        user.setNickname(modifyUserInfoRequest.getNickname());
     }
 }
