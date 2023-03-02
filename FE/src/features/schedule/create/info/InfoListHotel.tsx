@@ -45,48 +45,46 @@ function InfoListHotel() {
     const result = [];
     for (let index = 0; index < size; index++) {
       result.push(
-        <>
-          <Box className={styles.flex} mb={1}>
-            <button
-              className={currentDay === index ? `${styles.days_btn} ${styles.days_focused}` : `${styles.days_btn}`}
-              onClick={() => setCurrentDay(index)}
-            >
-              DAY{index + 1}
-              &nbsp;&nbsp;
-              <small>
-                {format(addDays(new Date(date.start), index), "MM.dd")}-{" "}
-                {format(addDays(new Date(date.start), index + 1), "MM.dd")}
-              </small>
-            </button>
-            <div className={styles.cardList}>
-              <div className={styles.card}>
-                {hotelDays[index] ? (
-                  <>
-                    <img src={hotelDays[index]?.image} />
-                    <div>
-                      <span className={styles.cardText}>
-                        {hotelDays[index]?.name}
-                        <br />
-                        <small>Maison Glad Jeju</small>
-                      </span>
-                      <div className={styles.cardDelete}>
-                        <button onClick={() => deleteHotel(hotelDays[index]?.id)}>
-                          <Close fontSize="small" color="error" />
-                        </button>
-                      </div>
+        <Box className={styles.flex} mb={1} key={index}>
+          <button
+            className={currentDay === index ? `${styles.days_btn} ${styles.days_focused}` : `${styles.days_btn}`}
+            onClick={() => setCurrentDay(index)}
+          >
+            DAY{index + 1}
+            &nbsp;&nbsp;
+            <small>
+              {format(addDays(new Date(date.start), index), "MM.dd")}-{" "}
+              {format(addDays(new Date(date.start), index + 1), "MM.dd")}
+            </small>
+          </button>
+          <div className={styles.cardList}>
+            <div className={styles.card}>
+              {hotelDays[index] ? (
+                <>
+                  <img src={hotelDays[index]?.image} />
+                  <div>
+                    <span className={styles.cardText}>
+                      {hotelDays[index]?.name}
+                      <br />
+                      <small>Maison Glad Jeju</small>
+                    </span>
+                    <div className={styles.cardDelete}>
+                      <button onClick={() => deleteHotel(hotelDays[index]?.id)}>
+                        <Close fontSize="small" color="error" />
+                      </button>
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <Box my={0.5}>
-                      <p className={styles.explain}>일자 버튼을 누르고 호텔을 추가하세요.</p>
-                    </Box>
-                  </>
-                )}
-              </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Box my={0.5}>
+                    <p className={styles.explain}>일자 버튼을 누르고 호텔을 추가하세요.</p>
+                  </Box>
+                </>
+              )}
             </div>
-          </Box>
-        </>,
+          </div>
+        </Box>,
       );
     }
     return result;
