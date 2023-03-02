@@ -20,8 +20,12 @@ public class Region {
     @Column(name = "region_name", length = 20)
     private String regionName;
 
+    @Column(name = "region_image_url")
+    private String regionImageURL;
+
     @Builder
-    public Region(String regionName) {
+    public Region(String regionName, String regionImageURL) {
         this.regionName = regionName;
+        this.regionImageURL = regionImageURL;
     }
 }
