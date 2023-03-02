@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -184,6 +186,85 @@ class FriendRepositoryTest {
                     ()-> assertNull(result1),
                     ()-> assertNotNull(result2),
                     ()-> assertTrue(result2.isAccept())
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("친구 목록 확인")
+    class SelectFriendList {
+        @Test
+        @DisplayName("[성공] - 친구가 없는 경우")
+        void 친구가없는경우(){
+            //given
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            userRepository.save(user);
+
+            //when
+            List<Friend> result = friendRepository.findByFriendList(user);
+
+            //then
+            assertEquals(result.size(), 0);
+        }
+
+        @Test
+        @DisplayName("[성공] - 친구가 있는 경우")
+        void 친구가있는경우(){
+            //given
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User friendUser1 = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User friendUser2 = User.builder()
+                    .email("mark127@naver.com")
+                    .nickname("mark")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final Friend friend1 = Friend.builder()
+                    .isAccept(true)
+                    .receiveUser(user)
+                    .requestUser(friendUser1)
+                    .build();
+            final Friend friend2 = Friend.builder()
+                    .isAccept(true)
+                    .receiveUser(user)
+                    .requestUser(friendUser2)
+                    .build();
+            userRepository.save(user);
+            userRepository.save(friendUser1);
+            userRepository.save(friendUser2);
+            friendRepository.save(friend1);
+            friendRepository.save(friend2);
+
+            //when
+            List<Friend> result = friendRepository.findByFriendList(user);
+
+            //then
+            assertAll(
+                    ()-> assertNotNull(result),
+                    ()-> assertEquals(result.size(), 2)
             );
         }
     }
