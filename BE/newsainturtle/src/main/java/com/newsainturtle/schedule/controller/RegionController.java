@@ -22,7 +22,7 @@ public class RegionController {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 CREATE_REGION_SUCCESS_MESSAGE,
-                regionService.createRegion(regionRequest.getRegionName()))
+                regionService.createRegion(regionRequest))
                 , HttpStatus.OK);
     }
 
