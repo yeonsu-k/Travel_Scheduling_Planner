@@ -8,8 +8,11 @@ public class RegionResponse {
 
     private String regionName;
 
+    private String regionImageURL;
+
     @Builder
-    public RegionResponse(String regionName) {
+    public RegionResponse(String regionName, String regionImageURL) {
         this.regionName = regionName;
+        this.regionImageURL = regionImageURL;
     }
 }
