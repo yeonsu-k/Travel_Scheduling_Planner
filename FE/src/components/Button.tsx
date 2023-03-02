@@ -1,10 +1,10 @@
 import React from "react";
-import palette from "styles/colorPalette";
+import palette, { PaletteKeyTypes } from "styles/colorPalette";
 import Button from "@mui/material/Button";
 
 interface Props {
   text: string;
-  color?: "main" | "pink";
+  color?: PaletteKeyTypes;
   radius?: boolean;
   width?: string;
   height?: string;
@@ -14,8 +14,8 @@ interface Props {
 
 export const ButtonStyled = ({ text, color, radius, width, height, ...rest }: Props) => {
   const style = {
-    background: color === "main" ? palette.main : color === "pink" ? palette.pink : palette.white,
-    color: color === "main" ? palette.white : color === "pink" ? palette.black : "#666",
+    background: color && palette[color],
+    color: color ? (color === "pink" ? palette.black : color === "white" ? "#666" : palette.white) : "#666",
     border: color ? "" : "1px solid #efefef",
     borderRadius: radius ? "5px" : "0px",
     padding: color ? "0.3rem 0.8rem" : "0.5rem 1.4rem",
@@ -34,7 +34,7 @@ export const ButtonStyled = ({ text, color, radius, width, height, ...rest }: Pr
 
 ButtonStyled.defaultProps = {
   text: "BUTTON",
-  color: "",
+  color: "white",
   width: "",
   height: "",
   radius: false,
