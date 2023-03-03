@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import mapReducer from "slices/mapSlice";
+import scheduleEditReducer from "slices/scheduleEditSlice";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   // auth: authReducer,
   map: mapReducer,
+  scheduleEdit: scheduleEditReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
