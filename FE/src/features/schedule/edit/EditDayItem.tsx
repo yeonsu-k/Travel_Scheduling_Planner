@@ -3,7 +3,7 @@ import styles from "./Edit.module.css";
 import Text from "components/Text";
 
 interface EditDayItemProps {
-  day: string;
+  day: string | number;
 }
 
 const EditDayItem = ({ day }: EditDayItemProps) => {
