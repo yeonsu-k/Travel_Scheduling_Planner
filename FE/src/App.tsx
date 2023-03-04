@@ -6,6 +6,9 @@ import MainPage from "pages/MainPage";
 import MapPage from "pages/MapPage";
 import Mypage from "pages/MyPage";
 import ScheduleRouter from "features/schedule/ScheduleRouter";
+import LoginPage from "pages/LoginPage";
+import RegistPage from "pages/RegistPage";
+import MyProfileEdit from "features/user/myPage/myProfile/MyProfileEdit";
 
 function App() {
   const location = useLocation();
@@ -29,6 +32,9 @@ function App() {
           <Route path="/map" element={<MapPage />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/schedule/*" element={<ScheduleRouter />} />
+          <Route path="/profile" element={<MyProfileEdit />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/regist" element={<RegistPage />} />
         </Routes>
       </div>
     </>

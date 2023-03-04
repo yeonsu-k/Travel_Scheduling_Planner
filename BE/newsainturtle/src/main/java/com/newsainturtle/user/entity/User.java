@@ -2,7 +2,11 @@ package com.newsainturtle.user.entity;
 
 import com.newsainturtle.friend.entity.Friend;
 import com.newsainturtle.notification.entity.Notification;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,11 +23,11 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(length = 30)
+    @Column(length = 30, unique = true)
     private String email;
     @Column(length = 20)
     private String nickname;
-    @Column(length = 20)
+    @Column(length = 60)
     private String password;
     private boolean kakao;
     private String profile;
@@ -43,5 +47,14 @@ public class User {
         this.kakao = kakao;
         this.profile = profile;
         this.withdraw = withdraw;
+    }
+    public void setProfile(String path){
+        this.profile = path;
+    }
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+    public void setPassword(String password){
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 }

@@ -6,13 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class EmailDuplicateCheckResponse {
-    private boolean isDuplicate;
+    private boolean DuplicateCheck;
 
-    public EmailDuplicateCheckResponse(boolean isDuplicate) {
-        this.isDuplicate = isDuplicate;
-    }
-
-    public boolean getIsDuplicate() {
-        return this.isDuplicate;
-    }
 }

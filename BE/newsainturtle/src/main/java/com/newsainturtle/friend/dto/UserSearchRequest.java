@@ -2,12 +2,18 @@ package com.newsainturtle.friend.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Email;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class UserSearchRequest {
-    @NotBlank
+    @Email
     private String email;
+
+    @Builder
+    public UserSearchRequest(String email) {
+        this.email = email;
+    }
 }

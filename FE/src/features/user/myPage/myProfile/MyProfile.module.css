@@ -62,3 +62,94 @@
   box-sizing: border-box;
   cursor: pointer;
 }
+
+/* MyProfileEdit.tsx */
+
+.profileWrapper {
+  padding: 100px 30px;
+}
+
+.profileContainer {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.profileTopContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.profileBotContainer {
+  height: 100%;
+}
+
+.profileImgContainer {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: black;
+  margin: 16px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileImgText {
+  color: white;
+  font-size: 1.4rem;
+}
+
+.profileUser {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px;
+  color: black;
+}
+
+.profileTopContainer .text {
+  font-size: 12px;
+  color: #616161;
+  letter-spacing: 1px;
+  padding: 8px;
+}
+
+.profileLeave {
+  color: #2962ff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.profileInfoContainer {
+  width: 600px;
+  margin: 32px 0;
+}
+
+.profileInfoTitleContainer {
+  border-left: 5px solid #98dde3;
+  /* margin-left: 8px; */
+  margin-bottom: 50px;
+}
+
+.profileInfoTitle {
+  margin-left: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.profileBtnContainer {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.profileBtn {
+  width: 120px;
+  height: 50px;
+  margin: 0 10px 0 10px;
+}

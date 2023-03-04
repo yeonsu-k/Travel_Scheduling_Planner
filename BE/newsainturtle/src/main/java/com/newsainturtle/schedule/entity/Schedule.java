@@ -67,4 +67,7 @@ public class Schedule {
         this.scheduleEndLocation = scheduleEndLocation;
         this.vehicle = vehicle;
     }
+    public void setScheduleName(String scheduleName) {
+        this.scheduleName = scheduleName;
+    }
 }

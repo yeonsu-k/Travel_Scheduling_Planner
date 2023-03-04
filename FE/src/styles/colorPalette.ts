@@ -16,6 +16,8 @@ export const colorPalette = {
   day_10: "#607D8B",
   black: "#000000",
   white: "#FFFFFF",
+  darkgray: "#666666",
+  lightgray: "#999999",
 };
 
 export type PaletteKeyTypes = keyof typeof colorPalette;

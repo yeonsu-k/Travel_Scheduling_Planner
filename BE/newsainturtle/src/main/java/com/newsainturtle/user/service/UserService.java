@@ -2,11 +2,22 @@ package com.newsainturtle.user.service;
 
 import com.newsainturtle.auth.dto.EmailDuplicateCheckRequest;
 import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
+import com.newsainturtle.auth.dto.UserJoinRequest;
+import com.newsainturtle.auth.dto.UserJoinResponse;
+import com.newsainturtle.auth.exception.NoEmailCheckException;
+import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.repository.ScheduleRepository;
+import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
+import com.newsainturtle.user.exception.NotEqualsPasswordException;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,14 +25,77 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public EmailDuplicateCheckResponse emailDuplicateCheck(EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         User user = userRepository.findByEmail(emailDuplicateCheckRequest.getEmail());
         //중복 x -> 가입 가능함
-        if(user == null){
-            return new EmailDuplicateCheckResponse(false);
+        if (user == null) {
+            return EmailDuplicateCheckResponse.builder().DuplicateCheck(true).build();
         }
         //중복 o -> 가입 불가능함
-        return new EmailDuplicateCheckResponse(true);
+        return EmailDuplicateCheckResponse.builder().DuplicateCheck(false).build();
+    }
+
+    public UserBasicInfoResponse emailCheck(UserBasicInfoRequest userBasicInfoRequest) {
+        User user = userRepository.findByEmail(userBasicInfoRequest.getEmail());
+        if (user == null) {
+            return null;
+        }
+        return UserBasicInfoResponse.builder()
+                .email(user.getEmail())
+                .build();
+    }
+
+    @Transactional
+    public UserJoinResponse joinUser(UserJoinRequest userJoinRequest) {
+        if (!userJoinRequest.isDuplicatedCheck()) {
+            throw new NoEmailCheckException();
+        }
+        final String encodedPassword = new BCryptPasswordEncoder().encode(userJoinRequest.getPassword());
+        final User user = User.builder()
+                .email(userJoinRequest.getEmail())
+                .nickname(userJoinRequest.getNickname())
+                .password(encodedPassword)
+                .profile("")
+                .withdraw(false)
+                .kakao(false)
+                .build();
+        final User result = userRepository.save(user);
+        return UserJoinResponse.builder()
+                .email(result.getEmail())
+                .nickname(result.getNickname()).build();
+    }
+
+    public UserInfoResponse getUserInfo(String email) {
+        User user = userRepository.findByEmail(email);
+        return UserInfoResponse.builder().
+                email(user.getEmail()).
+                nickname(user.getNickname()).
+                profile(user.getProfile()).
+                build();
+    }
+    @Transactional
+    public ProfileResponse modifyProfile(String email, String path){
+        User user = userRepository.findByEmail(email);
+        user.setProfile(path);
+        return ProfileResponse.builder().path(path).build();
+    }
+
+    @Transactional
+    public void modifyUserInfo(String email, ModifyUserInfoRequest modifyUserInfoRequest) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = userRepository.findByEmail(email);
+        if(!encoder.matches(modifyUserInfoRequest.getPassword(), user.getPassword())){
+            throw new NotEqualsPasswordException();
+        }
+        user.setPassword(modifyUserInfoRequest.getNewPassword());
+        user.setNickname(modifyUserInfoRequest.getNickname());
+    }
+
+    @Transactional
+    public void modifyScheduleName(String schedule_name, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        schedule.ifPresent(value -> value.setScheduleName(schedule_name));
     }
 }
