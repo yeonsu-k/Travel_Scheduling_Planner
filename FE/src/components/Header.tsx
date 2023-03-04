@@ -57,7 +57,7 @@ function Header() {
         <div
           className={styles.wrapper}
           style={
-            location.pathname === "/map"
+            location.pathname === "/schedule/create" || location.pathname === "/schedule/edit"
               ? {
                   backgroundColor: "white",
                   position: "static",
@@ -65,6 +65,7 @@ function Header() {
               : { position: "fixed" }
           }
         >
+
           <NavLink to="/" className={styles.link}>
             <Stack direction="row" spacing={1} alignItems="baseline">
               <span

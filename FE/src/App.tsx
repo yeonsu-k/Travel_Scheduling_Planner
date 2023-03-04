@@ -5,7 +5,7 @@ import Header from "components/Header";
 import MainPage from "pages/MainPage";
 import MapPage from "pages/MapPage";
 import Mypage from "pages/MyPage";
-import MyFriends from "features/user/myPage/myFriends/MyFriends";
+import ScheduleRouter from "features/schedule/ScheduleRouter";
 import LoginPage from "pages/LoginPage";
 import RegistPage from "pages/RegistPage";
 import MyProfileEdit from "features/user/myPage/myProfile/MyProfileEdit";
@@ -20,7 +20,7 @@ function App() {
         style={
           location.pathname === "/mypage"
             ? { paddingTop: "53px" }
-            : location.pathname === "/map"
+            : location.pathname === "/schedule/create" || location.pathname === "/schedule/edit"
             ? {
                 height: `calc(100vh - 53px)`,
               }
@@ -31,9 +31,8 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/schedule/*" element={<ScheduleRouter />} />
           <Route path="/profile" element={<MyProfileEdit />} />
-          {/* 임시 route. 추후 삭제 예정. */}
-          <Route path="/friend" element={<MyFriends />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/regist" element={<RegistPage />} />
         </Routes>
