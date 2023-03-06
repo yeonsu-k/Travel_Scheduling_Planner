@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
 
-interface noticeListConfig {
+export interface noticeListConfig {
   noticeType: string;
   noticeProfile: string;
   noticeContent: string;
@@ -33,11 +33,15 @@ const noticeSlice = createSlice({
     setNoticeList: (state, { payload }) => {
       state.noticeList = payload;
     },
+    resetNoticeList: (state) => {
+      const tmp: noticeListConfig[] = [];
+      state.noticeList = [...tmp];
+    },
   },
 });
 
-export const { setNoticeList } = noticeSlice.actions;
+export const { setNoticeList, resetNoticeList } = noticeSlice.actions;
 
-export const selectNoticeSlice = (state: rootState) => state.notice.noticeList;
+export const selectNoticeList = (state: rootState) => state.notice.noticeList;
 
 export default noticeSlice.reducer;

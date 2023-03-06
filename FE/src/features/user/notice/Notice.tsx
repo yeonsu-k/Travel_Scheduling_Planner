@@ -2,16 +2,22 @@ import React from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import NoticeItem from "./NoticeItem";
-import { useAppSelector } from "app/hooks";
-import { selectNoticeList } from "slices/noticeSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { resetNoticeList, selectNoticeList } from "slices/noticeSlice";
 
 const Notice = () => {
+  const dispatch = useAppDispatch();
+
   const noticeList = useAppSelector(selectNoticeList);
+
+  const onClickClearBtn = () => {
+    dispatch(resetNoticeList());
+  };
 
   return (
     <div className={styles.notice}>
       <div className={styles.clearBtn}>
-        <Button text="전체 삭제" color="main" radius width="8vw" height="4vh" />
+        <Button text="전체 삭제" color="main" radius width="8vw" height="4vh" onClick={onClickClearBtn} />
       </div>
 
       {noticeList.map((value, key) => (
