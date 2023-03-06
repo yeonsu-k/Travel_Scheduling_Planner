@@ -1,12 +1,24 @@
 import Input from "components/Input";
 import Button from "components/Button";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Regist.module.css";
-import { Checkbox, FormControlLabel } from "@mui/material";
-import { display } from "@mui/system";
-import Text from "components/Text";
 
-const Regist = () => {
+const Regist = (e: any) => {
+  const [email, setEmail] = useState("");
+
+  const emailCheck = () => {
+    const rep = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (rep.test(email)) {
+      alert("사용 가능한 이메일입니다.");
+    } else {
+      alert("이메일 형식이 올바르지 않습니다.");
+    }
+  };
+
+  const confirm = () => {
+    console.log("really?");
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.registContainer}>
@@ -19,9 +31,9 @@ const Regist = () => {
         </div>
         <div className={styles.inputEmailContainer}>
           <div style={{ width: "80%" }}>
-            <Input type="text" name="email" placeholder="" />
+            <Input type="text" name="email" placeholder="" onChange={(e: any) => setEmail(e.target.value)} />
           </div>
-          <Button color="main" text="확인" />
+          <Button color="main" text="확인" onClick={emailCheck} />
         </div>
 
         <div className={styles.inputTextContainer}>
@@ -117,7 +129,7 @@ const Regist = () => {
 
         <div className={styles.registButton}>
           <div className={styles.registConfirm}>
-            <Button color="main" text="회원가입" width="100%" radius />
+            <Button color="main" text="회원가입" width="100%" radius onClick={confirm} />
           </div>
           <div className={styles.registBack}>
             <Button color="main" text="뒤로가기" width="100%" radius />
