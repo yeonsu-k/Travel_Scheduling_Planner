@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Divider } from "@mui/material";
 import styles from "./Info.module.css";
 import Text from "components/Text";
 import { Close, Timer } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "app/store";
 import { mapActions } from "slices/mapSlice";
 import { Stack } from "@mui/system";
@@ -12,16 +12,16 @@ function InfoListPlace() {
   const dispatch = useDispatch();
   const { place } = useSelector((state: rootState) => state.map);
   const { pointPlace } = useSelector((state: rootState) => state.map);
-  const [timer, setTimer] = React.useState(
-    place.map((val: { time: string }) => {
+  const timer = useMemo(() => {
+    return place.map((val: { time: string }) => {
       const time = val.time.split(":");
       return {
         hour: Number(time[0]),
         minute: Number(time[1]),
       };
-    }),
-  );
-  const [totalTime, setTotalTime] = React.useState(() => {
+    });
+  }, [place]);
+  const totalTime = useMemo(() => {
     const hourArr = place.map((val) => val?.time.split(":")[0]).map((i) => Number(i));
     const minuteArr = place.map((val) => val?.time.split(":")[1]).map((i) => Number(i));
     const sumHour = hourArr.reduce((accumulator, current) => accumulator + current, 0);
@@ -30,38 +30,9 @@ function InfoListPlace() {
       hour: sumHour,
       minute: sumMinute,
     };
-  });
+  }, [place, timer]);
+
   const [currentDay, setCurrentDay] = React.useState(-1);
-
-  useEffect(() => {
-    getTimer();
-    getTotileTime();
-  }, [place]);
-
-  useEffect(() => {
-    getTotileTime();
-  }, [timer]);
-
-  const getTimer = () => {
-    setTimer(
-      place.map((val) => {
-        const time = val.time.split(":");
-        return {
-          hour: Number(time[0]),
-          minute: Number(time[1]),
-        };
-      }),
-    );
-  };
-
-  const getTotileTime = () => {
-    const sumHour = timer.map((val) => val.hour).reduce((accumulator, current) => accumulator + current, 0);
-    const sumMinute = timer.map((val) => val.minute).reduce((accumulator, current) => accumulator + current, 0);
-    setTotalTime({
-      hour: sumHour,
-      minute: sumMinute,
-    });
-  };
 
   const deletePlace = (id: number) => {
     const newPlaceList = place.filter((value) => value.id !== id);
