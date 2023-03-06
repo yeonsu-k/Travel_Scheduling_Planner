@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 
 interface Props {
   text: string;
-  color?: "main" | "pink";
+  color?: "main" | "pink" | "gray";
   radius?: boolean;
   width?: string;
   height?: string;
@@ -14,7 +14,8 @@ interface Props {
 
 export const ButtonStyled = ({ text, color, radius, width, height, ...rest }: Props) => {
   const style = {
-    background: color === "main" ? palette.main : color === "pink" ? palette.pink : palette.white,
+    background:
+      color === "main" ? palette.main : color === "pink" ? palette.pink : color === "gray" ? "#EDEDED" : palette.white,
     color: color === "main" ? palette.white : color === "pink" ? palette.black : "#666",
     border: color ? "" : "1px solid #efefef",
     borderRadius: radius ? "5px" : "0px",
