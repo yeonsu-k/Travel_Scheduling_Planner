@@ -8,6 +8,7 @@ import Button from "components/Button";
 interface modalProps {
   place: { id: number; image: string; name: string };
   setModalOpen: () => void;
+  InfoAddClick: () => void;
 }
 
 interface searchType {
@@ -27,7 +28,12 @@ function searchInWeb({ site, searchKeyword, x, y }: searchType) {
   window.open(searchUrl);
 }
 
-function SearchCardInfoModal({ place, setModalOpen }: modalProps) {
+function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) {
+  const listAdd = () => {
+    InfoAddClick();
+    setModalOpen();
+  };
+
   return (
     <div className={styles.mainModalContainer}>
       <div className={styles.imgContainer}>
@@ -86,10 +92,10 @@ function SearchCardInfoModal({ place, setModalOpen }: modalProps) {
         </div>
         <Stack direction="row" justifyContent="flex-end" spacing={1}>
           <Button text="리뷰보기 (0)" color="black" width="25%" />
-          <Button text="목록에 추가" color="main" width="25%" />
+          <Button text="목록에 추가" color="main" width="25%" onClick={listAdd} />
         </Stack>
       </Stack>
-      <div className={styles.closeBtn} onClick={() => setModalOpen()}>
+      <div className={styles.closeBtn} onClick={setModalOpen}>
         <Close />
       </div>
     </div>

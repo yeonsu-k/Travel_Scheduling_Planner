@@ -73,7 +73,7 @@ function CreateRight() {
             <Text value={"추천 " + select} bold />
           </Box>
           <div className={styles.scroll}>
-            <SearchList />
+            <SearchList select={select} />
           </div>
         </>
       )}
