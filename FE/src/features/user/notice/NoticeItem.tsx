@@ -2,14 +2,27 @@ import React from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import Text from "components/Text";
-import { noticeListConfig } from "slices/noticeSlice";
+import { noticeListConfig, selectNoticeList, setNoticeList } from "slices/noticeSlice";
 import sampleImg from "asset/sample/cat.png";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 
 interface NoticeItemProps {
+  key: number;
   noticeValue: noticeListConfig;
 }
 
-const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
+const NoticeItem = ({ key, noticeValue }: NoticeItemProps) => {
+  const dispatch = useAppDispatch();
+
+  const noticeList = useAppSelector(selectNoticeList);
+
+  const onClickDeleteBtn = () => {
+    const tmp = [...noticeList];
+    tmp.splice(key, 1);
+
+    dispatch(setNoticeList([...tmp]));
+  };
+
   if (noticeValue.noticeType === "schedule") {
     return (
       <div className={styles.noticeItem}>
@@ -31,7 +44,7 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
           <Button text="거절" color="gray" radius width="7vw" height="3vh" />
         </div>
 
-        <div className={styles.noticeInfo}>
+        <div className={styles.noticeInfo} onClick={onClickDeleteBtn}>
           <Text value="X" type="groupTitle" color="lightgray" />
         </div>
       </div>
@@ -57,7 +70,7 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
           <Button text="거절" color="gray" radius width="7vw" height="3vh" />
         </div>
 
-        <div className={styles.noticeInfo}>
+        <div className={styles.noticeInfo} onClick={onClickDeleteBtn}>
           <Text value="X" type="groupTitle" color="lightgray" />
         </div>
       </div>
