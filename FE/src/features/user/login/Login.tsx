@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Login.module.css";
 import Input from "../../../components/Input";
 import Text from "../../../components/Text";
 import Button from "../../../components/Button";
-import LoginSNS from "./LoginSocial";
+import LoginSocial from "./LoginSocial";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isEmail, setIsEmail] = useState(false);
+
+  const emailCheck = (e: any) => {
+    const rep = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (!rep.test(e.target.value)) {
+      setIsEmail(false);
+    } else {
+      setIsEmail(true);
+    }
+  };
+
+  const confirm = () => {
+    if (!isEmail) {
+      alert("잘못된 이메일 형식입니다.");
+    } else {
+      alert("넘어감!");
+    }
+  };
 
   const moveRegist = () => {
     navigate("/regist");
@@ -23,7 +41,7 @@ const Login = () => {
             이메일
           </label>
         </div>
-        <Input type="text" name="email" placeholder="" />
+        <Input type="text" name="email" placeholder="" onChange={(e) => emailCheck(e)} />
 
         <div className={styles.inputTextContainer}>
           <label className={styles.inputText} htmlFor="name">
@@ -31,11 +49,11 @@ const Login = () => {
           </label>
         </div>
         <Input type="text" name="email" placeholder="" />
-        <div style={{ marginTop: "10px", cursor: "pointer" }}>
+        {/* <div style={{ marginTop: "10px", cursor: "pointer" }}>
           <Text color="day_8" value="비밀번호를 잊으셨나요?" type="caption" />
-        </div>
+        </div> */}
         <div className={styles.btnContainer}>
-          <Button color="main" text="로그인" width="100%" height="45px" radius />
+          <Button color="main" text="로그인" width="100%" height="45px" radius onClick={confirm} />
         </div>
         <div className={styles.textContainer}>
           <Text value="회원이 아니세요?" type="caption" />
@@ -47,7 +65,7 @@ const Login = () => {
           <div className={styles.divider}></div>
           <span>or</span>
         </div>
-        <LoginSNS />
+        <LoginSocial />
       </div>
     </div>
   );

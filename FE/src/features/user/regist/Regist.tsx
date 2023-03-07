@@ -5,6 +5,9 @@ import styles from "./Regist.module.css";
 
 const Regist = (e: any) => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isPassword, setIsPassword] = useState(false);
+  const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
 
   const emailCheck = () => {
     const rep = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -15,7 +18,26 @@ const Regist = (e: any) => {
     }
   };
 
+  const passwordCheck = (e: any) => {
+    setPassword(e.target.value);
+    const rep = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{9,25}$/;
+    if (rep.test(password)) {
+      setIsPassword(true);
+    } else {
+      setIsPassword(false);
+    }
+  };
+
+  const passwordConfirm = (e: any) => {
+    if (e.target.value === password) {
+      setIsPasswordConfirm(true);
+    } else {
+      setIsPasswordConfirm(false);
+    }
+  };
+
   const confirm = () => {
+    console.log(isPasswordConfirm);
     console.log("really?");
   };
 
@@ -55,14 +77,19 @@ const Regist = (e: any) => {
             비밀번호
           </label>
         </div>
-        <Input type="text" name="email" placeholder="비밀번호(문자, 숫자, 특수문자 포함 10~20자)" />
+        <Input
+          type="password"
+          name="email"
+          placeholder="비밀번호(문자, 숫자, 특수문자 포함 10~20자)"
+          onChange={(e: any) => passwordCheck(e)}
+        />
 
         <div className={styles.inputTextContainer}>
           <label className={styles.inputText} htmlFor="name">
             비밀번호 확인
           </label>
         </div>
-        <Input type="text" name="email" placeholder="비밀번호 재입력" />
+        <Input type="password" name="email" placeholder="비밀번호 재입력" onChange={(e: any) => passwordConfirm(e)} />
 
         {/* <div style={{ display: "flex", flexDirection: "column" }}>
           <FormControlLabel
