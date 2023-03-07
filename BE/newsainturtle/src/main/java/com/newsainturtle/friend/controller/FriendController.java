@@ -3,6 +3,7 @@ package com.newsainturtle.friend.controller;
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
 import com.newsainturtle.friend.dto.FriendFollowRequest;
+import com.newsainturtle.friend.dto.FriendListResponse;
 import com.newsainturtle.friend.dto.UserSearchRequest;
 import com.newsainturtle.friend.dto.UserSearchResponse;
 import com.newsainturtle.friend.service.FriendService;
@@ -12,16 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
-import static com.newsainturtle.friend.constant.FriendConstant.FRIEND_FOLLOW_SUCCESS_MESSAGE;
-import static com.newsainturtle.friend.constant.FriendConstant.FRIEND_SEARCH_SUCCESS_MESSAGE;
+import static com.newsainturtle.friend.constant.FriendConstant.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,13 +44,26 @@ public class FriendController {
     @PostMapping("")
     @ApiOperation(value = "친구 요청", notes = "친구 요청")
     public ResponseEntity<BaseResponse> followFriend(@ApiIgnore Authentication authentication,
-                                                   @RequestBody @Valid @ApiParam(value = "사용자 이메일", required = true)final FriendFollowRequest friendFollowRequest){
+                                                     @RequestBody @Valid @ApiParam(value = "사용자 이메일", required = true)final FriendFollowRequest friendFollowRequest){
         UserDetails userDetails = (UserDetails) authentication.getDetails();
         String email = userDetails.getUsername();
         friendService.followUser(email, friendFollowRequest);
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 FRIEND_FOLLOW_SUCCESS_MESSAGE)
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    @ApiOperation(value = "친구 목록 조회", notes = "자신의 친구 목록 조회")
+    public ResponseEntity<BaseResponse> followFriend(@ApiIgnore Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        FriendListResponse friends = friendService.selectFriendList(email);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                SELECT_FRIEND_LIST_SUCCESS_MESSAGE,
+                friends)
                 , HttpStatus.OK);
     }
 
