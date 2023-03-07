@@ -7,6 +7,8 @@ import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
 import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.entity.ScheduleMember;
+import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.constant.UserConstant;
 import com.newsainturtle.user.dto.*;
@@ -25,6 +27,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -44,6 +48,8 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private ScheduleRepository scheduleRepository;
+    @Mock
+    private ScheduleMemberRepository scheduleMemberRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -299,5 +305,44 @@ class UserServiceTest {
             //then
             assertEquals(schedule.getScheduleName(), newName);
         }
+    }
+
+    @Nested
+    @DisplayName("일정 목록 조회")
+    class GetScheduleList{
+        @Test
+        @DisplayName("[성공] - 일정 목록 조회")
+        void getScheduleList(){
+            final String email = "test@1234.com";
+            final String email2 = "pika@1234.com";
+            //given
+            final Schedule schedule = Schedule.builder()
+                    .scheduleName("부산여행")
+                    .scheduleStartDay("2022-03-07")
+                    .scheduleEndDay("2022-03-11")
+                    .scheduleRegion("부산")
+                    .isPrivate(false)
+                    .hostEmail(email2)
+                    .build();
+            final Schedule schedule2 = Schedule.builder()
+                    .scheduleName("서울여행")
+                    .scheduleStartDay("2022-03-07")
+                    .scheduleEndDay("2022-03-11")
+                    .scheduleRegion("서울")
+                    .isPrivate(true)
+                    .hostEmail(email)
+                    .build();
+
+            doReturn(Arrays.asList(
+                    ScheduleMember.builder().userEmail(email).schedule(schedule.getScheduleId()).build(),
+                    ScheduleMember.builder().userEmail(email).schedule(schedule2.getScheduleId()).build()
+            )).when(scheduleMemberRepository).findAllByUserEmail(email);
+            //when
+            final List<ScheduleListResponse> result = userService.getScheduleList(email);
+            //then
+            assertThat(result.size()).isEqualTo(2);
+
+        }
+
     }
 }
