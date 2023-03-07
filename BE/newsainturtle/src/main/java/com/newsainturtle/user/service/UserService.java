@@ -116,4 +116,10 @@ public class UserService {
         }
         return result;
     }
+
+    @Transactional
+    public void modifyScheduleIsPrivate(Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        schedule.ifPresent(Schedule::changeIsPrivate);
+    }
 }
