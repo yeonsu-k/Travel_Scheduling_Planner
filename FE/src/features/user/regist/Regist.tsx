@@ -1,12 +1,46 @@
 import Input from "components/Input";
 import Button from "components/Button";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Regist.module.css";
-import { Checkbox, FormControlLabel } from "@mui/material";
-import { display } from "@mui/system";
-import Text from "components/Text";
 
-const Regist = () => {
+const Regist = (e: any) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isPassword, setIsPassword] = useState(false);
+  const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
+
+  const emailCheck = () => {
+    const rep = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (rep.test(email)) {
+      alert("사용 가능한 이메일입니다.");
+    } else {
+      alert("이메일 형식이 올바르지 않습니다.");
+    }
+  };
+
+  const passwordCheck = (e: any) => {
+    setPassword(e.target.value);
+    const rep = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{9,25}$/;
+    if (rep.test(password)) {
+      setIsPassword(true);
+    } else {
+      setIsPassword(false);
+    }
+  };
+
+  const passwordConfirm = (e: any) => {
+    if (e.target.value === password) {
+      setIsPasswordConfirm(true);
+    } else {
+      setIsPasswordConfirm(false);
+    }
+  };
+
+  const confirm = () => {
+    console.log(isPasswordConfirm);
+    console.log("really?");
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.registContainer}>
@@ -19,9 +53,9 @@ const Regist = () => {
         </div>
         <div className={styles.inputEmailContainer}>
           <div style={{ width: "80%" }}>
-            <Input type="text" name="email" placeholder="" />
+            <Input type="text" name="email" placeholder="" onChange={(e: any) => setEmail(e.target.value)} />
           </div>
-          <Button color="main" text="확인" />
+          <Button color="main" text="확인" onClick={emailCheck} />
         </div>
 
         <div className={styles.inputTextContainer}>
@@ -43,14 +77,19 @@ const Regist = () => {
             비밀번호
           </label>
         </div>
-        <Input type="text" name="email" placeholder="비밀번호(문자, 숫자, 특수문자 포함 10~20자)" />
+        <Input
+          type="password"
+          name="email"
+          placeholder="비밀번호(문자, 숫자, 특수문자 포함 10~20자)"
+          onChange={(e: any) => passwordCheck(e)}
+        />
 
         <div className={styles.inputTextContainer}>
           <label className={styles.inputText} htmlFor="name">
             비밀번호 확인
           </label>
         </div>
-        <Input type="text" name="email" placeholder="비밀번호 재입력" />
+        <Input type="password" name="email" placeholder="비밀번호 재입력" onChange={(e: any) => passwordConfirm(e)} />
 
         {/* <div style={{ display: "flex", flexDirection: "column" }}>
           <FormControlLabel
@@ -117,7 +156,7 @@ const Regist = () => {
 
         <div className={styles.registButton}>
           <div className={styles.registConfirm}>
-            <Button color="main" text="회원가입" width="100%" radius />
+            <Button color="main" text="회원가입" width="100%" radius onClick={confirm} />
           </div>
           <div className={styles.registBack}>
             <Button color="main" text="뒤로가기" width="100%" radius />
