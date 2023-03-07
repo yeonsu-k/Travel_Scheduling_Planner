@@ -33,38 +33,40 @@ class NotificationRepositoryTest {
         void 알림목록조회() {
             //given
             final User user = User.builder()
-                    .email("yunaghgh@naver.com")
+                    .email("test@naver.com")
                     .nickname("Kuuuna98")
                     .password("pwd1234")
                     .kakao(false)
                     .profile("path")
                     .withdraw(false)
                     .build();
+            final User sender = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
             final Notification friendNotification1 = FriendNotification.builder()
                     .receiveUser(user)
-                    .sendUserId(1L)
-                    .isAccept(false)
-                    .build();
-            final Notification friendNotification2 = FriendNotification.builder()
-                    .receiveUser(user)
-                    .sendUserId(1L)
-                    .isAccept(true)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(Notification.Status.ACCEPT)
                     .build();
             final Notification scheduleNotification1 = ScheduleNotification.builder()
                     .receiveUser(user)
-                    .sendUserId(1L)
-                    .isAccept(false)
-                    .notificationId(1L)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(Notification.Status.NO_RESPONSE)
+                    .scheduleId(1L)
                     .build();
             final Notification scheduleNotification2 = ScheduleNotification.builder()
                     .receiveUser(user)
-                    .sendUserId(1L)
-                    .isAccept(true)
-                    .notificationId(2L)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(Notification.Status.REJECT)
+                    .scheduleId(2L)
                     .build();
             userRepository.save(user);
             notificationRepository.save(friendNotification1);
-            notificationRepository.save(friendNotification2);
             notificationRepository.save(scheduleNotification1);
             notificationRepository.save(scheduleNotification2);
 
@@ -72,7 +74,7 @@ class NotificationRepositoryTest {
             List<Notification> result = notificationRepository.findByReceiveUser(user);
 
             //then
-            assertEquals(result.size(), 4);
+            assertEquals(result.size(), 3);
         }
     }
 }
