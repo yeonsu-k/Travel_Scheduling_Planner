@@ -29,10 +29,6 @@ public abstract class Notification {
     private Long sendUserId;
 
     @Column(name = "notification_status")
-    private Status notificationStatus;
-
-    public enum Status{
-        NO_RESPONSE, ACCEPT, REJECT
-    }
+    private NotificationStatus notificationStatus;
 
 }
