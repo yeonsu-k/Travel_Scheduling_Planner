@@ -7,12 +7,12 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import ko from "date-fns/locale/ko";
 import colorPalette from "styles/colorPalette";
 import styles from "./Info.module.css";
-import { mapActions } from "slices/mapSlice";
+import { scheduleActions } from "slices/scheduleCreateSlice";
 import { addDays, differenceInDays, format } from "date-fns";
 
 function InfoCalendar() {
   const dispatch = useDispatch();
-  const { date } = useSelector((state: rootState) => state.map);
+  const { date } = useSelector((state: rootState) => state.scheduleCreate);
 
   const [state, setState] = React.useState([
     {
@@ -25,7 +25,7 @@ function InfoCalendar() {
   const saveDate = () => {
     if (typeof state[0] != undefined) {
       dispatch(
-        mapActions.setDate({
+        scheduleActions.setDate({
           date: {
             start: format(state[0].startDate, "yyyy-MM-dd"),
             end:

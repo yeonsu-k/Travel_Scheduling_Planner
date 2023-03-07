@@ -11,7 +11,7 @@ import colorPalette from "styles/colorPalette";
 import { differenceInDays } from "date-fns";
 
 function InfoDate() {
-  const { date } = useSelector((state: rootState) => state.map);
+  const { date } = useSelector((state: rootState) => state.scheduleCreate);
   const [ModalOpen, setModalOpen] = React.useState(false);
 
   useEffect(() => {

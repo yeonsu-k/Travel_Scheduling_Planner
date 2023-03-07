@@ -20,7 +20,7 @@ const { kakao } = window;
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
 
-  const { place } = useAppSelector((state: rootState) => state.map);
+  const { place } = useAppSelector((state: rootState) => state.scheduleCreate);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref

@@ -7,7 +7,7 @@ import EditDayScheduleList from "./EditDayScheduleList";
 import { selectFullScheduleList } from "slices/scheduleEditSlice";
 
 const EditFullScheduleList = () => {
-  const { place } = useAppSelector((state: rootState) => state.map);
+  const { place } = useAppSelector((state: rootState) => state.scheduleCreate);
 
   const fullScheduleList = useAppSelector(selectFullScheduleList);
 

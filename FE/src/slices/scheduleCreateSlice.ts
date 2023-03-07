@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
 
-interface mapConfig {
+interface scheduleCreateConfig {
   local: string;
   date: {
     start: string;
@@ -50,7 +50,7 @@ interface placePointConfig {
   name: string;
 }
 
-const initialState: mapConfig = {
+const initialState: scheduleCreateConfig = {
   local: "부산",
   date: {
     start: format(new Date(), "yyyy-MM-dd"),
@@ -64,8 +64,8 @@ const initialState: mapConfig = {
   },
 };
 
-const mapSlice = createSlice({
-  name: "map",
+const scheduleCreateSlice = createSlice({
+  name: "scheduleCreate",
   initialState,
   reducers: {
     setLocal: (state, action: PayloadAction<LocalConfig>) => {
@@ -101,6 +101,6 @@ const mapSlice = createSlice({
   },
 });
 
-export const mapActions = mapSlice.actions;
+export const scheduleActions = scheduleCreateSlice.actions;
 
-export default mapSlice.reducer;
+export default scheduleCreateSlice.reducer;

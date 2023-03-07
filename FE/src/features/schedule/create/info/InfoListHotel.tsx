@@ -6,7 +6,7 @@ import { rootState } from "app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addDays, differenceInDays, format } from "date-fns";
 import { Close } from "@mui/icons-material";
-import { mapActions } from "slices/mapSlice";
+import { scheduleActions } from "slices/scheduleCreateSlice";
 
 interface hotelConfig {
   id: number;
@@ -16,8 +16,8 @@ interface hotelConfig {
 
 function InfoListHotel() {
   const dispatch = useDispatch();
-  const { hotel } = useSelector((state: rootState) => state.map);
-  const { date } = useSelector((state: rootState) => state.map);
+  const { hotel } = useSelector((state: rootState) => state.scheduleCreate);
+  const { date } = useSelector((state: rootState) => state.scheduleCreate);
   const [currentDay, setCurrentDay] = React.useState(0);
   const [hotelDays, setHotelDays] = React.useState<(hotelConfig | null)[]>([]);
 
@@ -32,13 +32,13 @@ function InfoListHotel() {
     const copy = [...hotelDays];
     copy[index] = null;
     setHotelDays(copy);
-    dispatch(mapActions.setHotelList({ hotel: copy }));
+    dispatch(scheduleActions.setHotelList({ hotel: copy }));
   };
 
   const deleteHotelAll = () => {
     setCurrentDay(0);
     setHotelDays([]);
-    dispatch(mapActions.setHotelList({ hotel: [] }));
+    dispatch(scheduleActions.setHotelList({ hotel: [] }));
   };
 
   const rendering = () => {

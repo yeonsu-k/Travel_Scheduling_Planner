@@ -5,13 +5,13 @@ import styles from "./Info.module.css";
 import Text from "components/Text";
 import { Close, Timer } from "@mui/icons-material";
 import { rootState } from "app/store";
-import { mapActions } from "slices/mapSlice";
 import { Stack } from "@mui/system";
+import { scheduleActions } from "slices/scheduleCreateSlice";
 
 function InfoListPlace() {
   const dispatch = useDispatch();
-  const { place } = useSelector((state: rootState) => state.map);
-  const { pointPlace } = useSelector((state: rootState) => state.map);
+  const { place } = useSelector((state: rootState) => state.scheduleCreate);
+  const { pointPlace } = useSelector((state: rootState) => state.scheduleCreate);
   const timer = useMemo(() => {
     return place.map((val: { time: string }) => {
       const time = val.time.split(":");
@@ -36,15 +36,15 @@ function InfoListPlace() {
 
   const deletePlace = (id: number) => {
     const newPlaceList = place.filter((value) => value.id !== id);
-    dispatch(mapActions.setPlaceList({ place: newPlaceList }));
+    dispatch(scheduleActions.setPlaceList({ place: newPlaceList }));
   };
 
   const deletePlaceAll = () => {
-    dispatch(mapActions.setPlaceList({ place: [] }));
+    dispatch(scheduleActions.setPlaceList({ place: [] }));
   };
 
   const deletePointPlace = (id: number) => {
-    dispatch(mapActions.deletePointPlaceList({ position: id, value: null }));
+    dispatch(scheduleActions.deletePointPlaceList({ position: id, value: null }));
   };
 
   const onChangeAccount = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ function InfoListPlace() {
       } else newTime[index].minute = parseInt(value.replace(/^([0-5][0-9])$/, value));
     }
     const timeToString = timer[index].hour + ":" + timer[index].minute;
-    dispatch(mapActions.setPlaceTime({ index: index, time: timeToString === "0:0" ? "0:1" : timeToString }));
+    dispatch(scheduleActions.setPlaceTime({ index: index, time: timeToString === "0:0" ? "0:1" : timeToString }));
   };
 
   const onBurCheck = (index: number, e: React.FocusEvent<HTMLInputElement, Element>) => {
@@ -73,7 +73,7 @@ function InfoListPlace() {
         newTime[index].minute = 30;
       }
       const timeToString = timer[index].hour + ":" + timer[index].minute;
-      dispatch(mapActions.setPlaceTime({ index: index, time: timeToString === "0:0" ? "0:1" : timeToString }));
+      dispatch(scheduleActions.setPlaceTime({ index: index, time: timeToString === "0:0" ? "0:1" : timeToString }));
     }
   };
 

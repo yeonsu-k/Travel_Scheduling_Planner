@@ -1,13 +1,13 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import MapPage from "pages/MapPage";
+import ScheduleCreatePage from "pages/ScheduleCreatePage";
 import ScheduleEditPage from "pages/ScheduleEditPage";
 
 const ScheduleRouter = () => {
   return (
     <>
       <Routes>
-        <Route path="create" element={<MapPage />} />
+        <Route path="create" element={<ScheduleCreatePage />} />
         <Route path="edit" element={<ScheduleEditPage />} />
       </Routes>
     </>

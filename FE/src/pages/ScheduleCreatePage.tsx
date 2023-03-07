@@ -13,8 +13,8 @@ declare global {
 
 const { kakao } = window;
 
-function MapPage() {
-  const { local } = useSelector((state: rootState) => state.map);
+function ScheduleCreatePage() {
+  const { local } = useSelector((state: rootState) => state.scheduleCreate);
 
   function setMap() {
     const container = document.getElementById("map");
@@ -60,4 +60,4 @@ function MapPage() {
   );
 }
 
-export default MapPage;
+export default ScheduleCreatePage;
