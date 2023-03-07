@@ -5,6 +5,8 @@ import com.newsainturtle.notification.dto.NotificationResponse;
 import com.newsainturtle.notification.entity.FriendNotification;
 import com.newsainturtle.notification.entity.Notification;
 import com.newsainturtle.notification.entity.ScheduleNotification;
+import com.newsainturtle.notification.exception.NoResponseNotificationException;
+import com.newsainturtle.notification.exception.NotUserOwnNotificationException;
 import com.newsainturtle.notification.repository.NotificationRepository;
 import com.newsainturtle.schedule.entity.Schedule;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
@@ -59,5 +61,17 @@ public class NotificationService {
                     .build());
         }
         return NotificationListResponse.builder().notifications(notificationResponses).build();
+    }
+
+    public void removeNotification(String email, Long notificationId) {
+        User user = userRepository.findByEmail(email);
+        Notification notification = notificationRepository.findByNotificationIdAndReceiveUser(notificationId, user);
+        if (notification == null) {
+            throw new NotUserOwnNotificationException();
+        }
+        if (notification.getNotificationStatus() == Notification.Status.NO_RESPONSE) {
+            throw new NoResponseNotificationException();
+        }
+        notificationRepository.deleteByNotificationIdAndReceiveUser(notificationId, user);
     }
 }
