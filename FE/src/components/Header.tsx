@@ -7,6 +7,8 @@ import Text from "./Text";
 import styles from "./css/Header.module.css";
 import palette from "styles/colorPalette";
 import { useDispatch, useSelector } from "react-redux";
+import Notice from "features/user/notice/Notice";
+import Modal from "./Modal";
 // import { rootState } from "app/store";
 // import api from "api/Api";
 // import Axios from "api/JsonAxios";
@@ -25,8 +27,10 @@ function Header() {
 
   // const { login, githubId, githubImage } = useSelector((state: rootState) => state.auth);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [noticeOpen, setNoticeOpen] = useState(false);
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNotice, setAnchorElNotice] = React.useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -50,6 +54,16 @@ function Header() {
     navigate("/");
   };
 
+  const handleOpenNotice = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNotice(event.currentTarget);
+    setNoticeOpen(true);
+  };
+
+  const handleCloseNotice = () => {
+    setAnchorElNotice(null);
+    setNoticeOpen(false);
+  };
+
   if (location.pathname == "/login" || location.pathname == "/regist") return null;
   else
     return (
@@ -65,7 +79,6 @@ function Header() {
               : { position: "fixed" }
           }
         >
-
           <NavLink to="/" className={styles.link}>
             <Stack direction="row" spacing={1} alignItems="baseline">
               <span
@@ -100,11 +113,70 @@ function Header() {
             <NavLink target={"_blank"} to="/login" className={styles.link}>
               로그인
             </NavLink>
-            <IconButton sx={{ color: "black" }} disableRipple>
-              <Badge color="error" overlap="circular" badgeContent={1} variant="dot">
-                <Notifications />
-              </Badge>
-            </IconButton>
+
+            <Box sx={{ flexGrow: 0 }}>
+              <ButtonBase onClick={handleOpenNotice} disableRipple>
+                <IconButton sx={{ color: "black" }} disableRipple>
+                  <Badge color="error" overlap="circular" badgeContent={1} variant="dot">
+                    <Notifications />
+                  </Badge>
+                </IconButton>
+              </ButtonBase>
+              <Menu
+                sx={{
+                  cursor: "pointer",
+                  "& .MuiList-root": {
+                    pt: 0,
+                    pb: 0,
+                  },
+                }}
+                anchorEl={anchorElNotice}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                    mt: 1,
+                    ml: 0,
+                    "& .MuiAvatar-root": {
+                      width: 32,
+                      height: 32,
+                      mr: 1,
+                    },
+                    "&:before": {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      top: 0,
+                      right: 10,
+                      width: 10,
+                      height: 10,
+                      bgcolor: "background.paper",
+                      transform: "translateY(-50%)  rotate(45deg)",
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                open={Boolean(anchorElNotice)}
+                onClose={handleCloseNotice}
+              >
+                <MenuItem onClick={handleCloseNotice}>
+                  {/* <Modal title="알림" modalClose={handleCloseNotice}> */}
+                  <Notice />
+                  {/* </Modal> */}
+                </MenuItem>
+              </Menu>
+            </Box>
+
             {
               // login ? (
               <>

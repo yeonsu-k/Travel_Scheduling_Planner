@@ -1,0 +1,69 @@
+/* Notice.tsx */
+.notice {
+  width: 23vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.clearBtn {
+  margin-left: auto;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+/* NoticeItem.tsx */
+
+.noticeItem {
+  width: 100%;
+  height: 12vh;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-rows: 57% 15%;
+  grid-template-columns: 25% 30% 30% 5%;
+  grid-template-areas:
+    "noticeImg noticeContent noticeContent deleteBtn"
+    "noticeImg acceptBtn refuseBtn deleteBtn";
+  box-sizing: border-box;
+  column-gap: 0.7rem;
+  margin: 0.5rem 0 0.5rem;
+}
+
+.noticeInfo:nth-child(1) {
+  grid-area: noticeImg;
+  display: flex;
+  /* width: 4vw;
+  height: 4vw; */
+  justify-content: center;
+  align-items: center;
+  border-radius: 70%;
+  overflow: hidden;
+}
+
+.noticeImg {
+  width: 100%;
+  height: 100%;
+}
+
+.noticeInfo:nth-child(2) {
+  grid-area: noticeContent;
+  line-height: 100%;
+  white-space: break-spaces;
+  margin-bottom: 0.5rem;
+}
+
+.noticeInfo:nth-child(3) {
+  grid-area: acceptBtn;
+}
+
+.noticeInfo:nth-child(4) {
+  display: flex;
+  margin-left: auto;
+  grid-area: refuseBtn;
+}
+
+.noticeInfo:nth-child(5) {
+  grid-area: deleteBtn;
+}
