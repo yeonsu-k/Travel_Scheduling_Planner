@@ -16,7 +16,6 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notification")
 public abstract class Notification {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
@@ -29,7 +28,11 @@ public abstract class Notification {
     @Column(name = "send_user_id")
     private Long sendUserId;
 
-    @Column(name = "is_accept")
-    private boolean isAccept;
+    @Column(name = "notification_status")
+    private Status notificationStatus;
+
+    public enum Status{
+        NO_RESPONSE, ACCEPT, REJECT
+    }
 
 }
