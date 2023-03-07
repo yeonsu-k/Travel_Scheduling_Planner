@@ -4,6 +4,8 @@ import com.newsainturtle.notification.dto.NotificationListResponse;
 import com.newsainturtle.notification.entity.FriendNotification;
 import com.newsainturtle.notification.entity.Notification;
 import com.newsainturtle.notification.entity.ScheduleNotification;
+import com.newsainturtle.notification.exception.NoResponseNotificationException;
+import com.newsainturtle.notification.exception.NotUserOwnNotificationException;
 import com.newsainturtle.notification.repository.NotificationRepository;
 import com.newsainturtle.schedule.entity.Schedule;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.newsainturtle.notification.constant.NotificationConstant.NOT_USER_OWN_NOTIFICATION_MESSAGE;
+import static com.newsainturtle.notification.constant.NotificationConstant.NO_RESPONSE_NOTIFICATION_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 
@@ -134,6 +138,119 @@ class NotificationServiceTest {
                     () -> assertNotNull(result.getNotifications()),
                     () -> assertEquals(result.getNotifications().size(), 3)
             );
+        }
+    }
+
+    @Nested
+    @DisplayName("알림 개별 삭제 테스트")
+    class RemoveNotificationItemTest {
+        @Test
+        @DisplayName("[실패] - 사용자 소유의 알림이 아님")
+        void 사용자소유의알림이아님() {
+            //given
+            final String email = "yunaghgh@naver.com";
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User sender = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final Notification friendNotification = FriendNotification.builder()
+                    .receiveUser(user)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(Notification.Status.ACCEPT)
+                    .build();
+
+            doReturn(user).when(userRepository).findByEmail(email);
+            doReturn(null).when(notificationRepository).findByNotificationIdAndReceiveUser(friendNotification.getNotificationId(), user);
+
+            //when
+            NotUserOwnNotificationException result = assertThrows(NotUserOwnNotificationException.class,
+                    () -> notificationService.removeNotification(email, friendNotification.getNotificationId()));
+            //then
+            assertEquals(NOT_USER_OWN_NOTIFICATION_MESSAGE, result.getMessage());
+        }
+
+        @Test
+        @DisplayName("[실패] - 응답하지않은 알림은 삭제할 수 없음")
+        void 응답하지않은알림() {
+            //given
+            final String email = "yunaghgh@naver.com";
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User sender = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final Notification friendNotification = FriendNotification.builder()
+                    .receiveUser(user)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(Notification.Status.NO_RESPONSE)
+                    .build();
+
+            doReturn(user).when(userRepository).findByEmail(email);
+            doReturn(friendNotification).when(notificationRepository).findByNotificationIdAndReceiveUser(friendNotification.getNotificationId(), user);
+
+            //when
+            NoResponseNotificationException result = assertThrows(NoResponseNotificationException.class,
+                    () -> notificationService.removeNotification(email, friendNotification.getNotificationId()));
+            //then
+            assertEquals(NO_RESPONSE_NOTIFICATION_MESSAGE, result.getMessage());
+        }
+
+        @Test
+        @DisplayName("[성공] - 알림 삭제")
+        void 알림삭제() {
+            //given
+            final String email = "yunaghgh@naver.com";
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User sender = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final Notification friendNotification = FriendNotification.builder()
+                    .receiveUser(user)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(Notification.Status.ACCEPT)
+                    .build();
+
+            doReturn(user).when(userRepository).findByEmail(email);
+            doReturn(friendNotification).when(notificationRepository).findByNotificationIdAndReceiveUser(friendNotification.getNotificationId(), user);
+
+            //when
+            notificationService.removeNotification(email, friendNotification.getNotificationId());
+            //then
         }
     }
 }
