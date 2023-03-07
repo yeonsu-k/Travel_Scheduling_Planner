@@ -45,7 +45,7 @@ const MyProfileEdit = () => {
                 이메일
               </label>
             </div>
-            <Input type="text" name="email" placeholder="" />
+            <Input type="text" name="email" placeholder="" disabled />
           </div>
         </div>
         <div className={styles.profileLeave}>회원탈퇴</div>
