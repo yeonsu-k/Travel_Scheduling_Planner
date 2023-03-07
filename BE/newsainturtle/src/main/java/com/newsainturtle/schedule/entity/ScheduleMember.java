@@ -16,8 +16,8 @@ public class ScheduleMember {
     @Column(name = "schedule_member_id")
     private Long scheduleMemberId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "user_email")
+    private Long userEmail;
 
     @Column(name = "schedule_id")
     private Long schedule;
