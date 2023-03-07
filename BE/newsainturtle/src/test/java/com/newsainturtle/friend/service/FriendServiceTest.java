@@ -1,11 +1,10 @@
 package com.newsainturtle.friend.service;
 
-import com.newsainturtle.friend.dto.FriendFollowRequest;
-import com.newsainturtle.friend.dto.FriendListResponse;
-import com.newsainturtle.friend.dto.UserSearchRequest;
-import com.newsainturtle.friend.dto.UserSearchResponse;
+import com.newsainturtle.friend.dto.*;
 import com.newsainturtle.friend.entity.Friend;
+import com.newsainturtle.friend.exception.NotFriendRelationException;
 import com.newsainturtle.friend.exception.UnableToRequestFriendFollowException;
+import com.newsainturtle.friend.exception.UnauthorizedFriendException;
 import com.newsainturtle.friend.repository.FriendRepository;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
@@ -20,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.newsainturtle.friend.constant.FriendConstant.FRIEND_FOLLOW_FAIL_MESSAGE;
+import static com.newsainturtle.friend.constant.FriendConstant.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 
@@ -337,7 +336,7 @@ class FriendServiceTest {
 
             doReturn(requestUser).when(userRepository).findByEmail(email);
             doReturn(receiveUser).when(userRepository).findByEmail(friendFollowRequest.getEmail());
-            doReturn(null).when(friendRepository).findByRequestUserAndReceiveUser(requestUser,receiveUser);
+            doReturn(null).when(friendRepository).findByRequestUserAndReceiveUser(requestUser, receiveUser);
             doReturn(friend).when(friendRepository).findByRequestUserAndReceiveUser(receiveUser, requestUser);
             //when
             friendService.followUser(email, friendFollowRequest);
@@ -383,7 +382,109 @@ class FriendServiceTest {
             //when
             FriendListResponse result = friendService.selectFriendList(email);
             //then
-            assertEquals(result.getFriends().size(),1);
+            assertEquals(result.getFriends().size(), 1);
+        }
+    }
+
+    @Nested
+    @DisplayName("친구 삭제 테스트")
+    class RemoveFriendTest {
+        @Test
+        @DisplayName("[실패] - 요청한 친구가 사용자가 아님")
+        void 친구가사용자가아닌경우() {
+            //given
+            final String email = "test127@naver.com";
+            final FriendRemoveRequest friendRemoveRequest = FriendRemoveRequest.builder()
+                    .email("yunaghgh@naver.com")
+                    .build();
+            final User user = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+
+            doReturn(user).when(userRepository).findByEmail(email);
+            doReturn(null).when(userRepository).findByEmail(friendRemoveRequest.getEmail());
+            //when
+            UnauthorizedFriendException result = assertThrows(UnauthorizedFriendException.class,
+                    () -> friendService.removeFriend(email, friendRemoveRequest));
+            //then
+            assertEquals(UNAUTHORIZED_FRIEND_ERROR_MESSAGE, result.getMessage());
+        }
+
+        @Test
+        @DisplayName("[실패] - 친구 사이 아님")
+        void 친구사이가아닌경우() {
+            //given
+            final String email = "test127@naver.com";
+            final FriendRemoveRequest friendRemoveRequest = FriendRemoveRequest.builder()
+                    .email("yunaghgh@naver.com")
+                    .build();
+            final User user = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User friendUser = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+
+            doReturn(user).when(userRepository).findByEmail(email);
+            doReturn(friendUser).when(userRepository).findByEmail(friendRemoveRequest.getEmail());
+            //when
+            NotFriendRelationException result = assertThrows(NotFriendRelationException.class,
+                    () -> friendService.removeFriend(email, friendRemoveRequest));
+            //then
+            assertEquals(NOT_FRIEND_RELATION_ERROR_MESSAGE, result.getMessage());
+        }
+
+        @Test
+        @DisplayName("[성공] - 친구 맞음 -> 친구 삭제")
+        void 친구삭제() {
+            //given
+            final String email = "test127@naver.com";
+            final FriendRemoveRequest friendRemoveRequest = FriendRemoveRequest.builder()
+                    .email("yunaghgh@naver.com")
+                    .build();
+            final User user = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User friendUser = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+
+            final Friend friend = Friend.builder()
+                    .isAccept(false)
+                    .receiveUser(user)
+                    .requestUser(friendUser)
+                    .build();
+            doReturn(user).when(userRepository).findByEmail(email);
+            doReturn(friendUser).when(userRepository).findByEmail(friendRemoveRequest.getEmail());
+            doReturn(friend).when(friendRepository).findByFriend(user, friendUser);
+
+            //when
+            friendService.removeFriend(email, friendRemoveRequest);
         }
     }
 }

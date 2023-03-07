@@ -10,4 +10,6 @@ public class FriendConstant {
     public static final String SELECT_FRIEND_LIST_SUCCESS_MESSAGE = "친구목록 조회에 성공했습니다.";
 
     public static final String FRIEND_FOLLOW_FAIL_MESSAGE = "친구 요청에 실패하였습니다.";
+    public static final String UNAUTHORIZED_FRIEND_ERROR_MESSAGE = "존재하지 않는 회원입니다.";
+    public static final String NOT_FRIEND_RELATION_ERROR_MESSAGE = "존재하지 않는 회원입니다.";
 }
