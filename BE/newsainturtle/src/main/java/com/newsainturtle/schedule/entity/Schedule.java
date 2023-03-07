@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,8 +22,8 @@ public class Schedule {
     @Column(name = "schedule_id")
     private Long scheduleId;
 
-    @Column(name = "host_id")
-    private Long hostId;
+    @Column(name = "host_email")
+    private String hostEmail;
 
     @Column(name = "schedule_region", length = 20)
     private String scheduleRegion;
@@ -54,10 +56,15 @@ public class Schedule {
     @Column(name = "modified_time")
     private LocalDateTime modifiedTime;
 
+    @ElementCollection
+    @CollectionTable(name = "schedule_location",
+            joinColumns = @JoinColumn(name = "schedule_location_id", referencedColumnName = "id"))
+    private List<ScheduleLocation> scheduleLocations = new ArrayList<>();
+
     @Builder
-    public Schedule(Long hostId, String scheduleRegion, String scheduleName, boolean isPrivate, String scheduleStartDay,
+    public Schedule(String hostEmail, String scheduleRegion, String scheduleName, boolean isPrivate, String scheduleStartDay,
                     String scheduleEndDay, String scheduleStartLocation, String scheduleEndLocation, String vehicle) {
-        this.hostId = hostId;
+        this.hostEmail = hostEmail;
         this.scheduleRegion = scheduleRegion;
         this.scheduleName = scheduleName;
         this.isPrivate = isPrivate;
