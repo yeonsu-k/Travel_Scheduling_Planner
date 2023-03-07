@@ -14,7 +14,7 @@ function InfoListHotel() {
   const [currentDay, setCurrentDay] = React.useState(0);
   const [hotelDays, setHotelDays] = React.useState<(basicConfig | null)[]>([]);
 
-  const size = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
+  const size = differenceInDays(new Date(date.end), new Date(date.start));
   useEffect(() => {
     setHotelDays([...hotel]);
   }, [hotel]);
@@ -46,7 +46,8 @@ function InfoListHotel() {
             DAY{index + 1}
             &nbsp;&nbsp;
             <small>
-              {format(addDays(new Date(date.start), index), "MM.dd")}-{" "}
+              {format(addDays(new Date(date.start), index), "MM.dd")}
+              {" - "}
               {format(addDays(new Date(date.start), index + 1), "MM.dd")}
             </small>
           </button>
