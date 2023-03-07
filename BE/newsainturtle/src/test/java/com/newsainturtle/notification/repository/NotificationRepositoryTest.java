@@ -2,6 +2,7 @@ package com.newsainturtle.notification.repository;
 
 import com.newsainturtle.notification.entity.FriendNotification;
 import com.newsainturtle.notification.entity.Notification;
+import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.entity.ScheduleNotification;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
@@ -51,18 +52,18 @@ class NotificationRepositoryTest {
             final Notification friendNotification1 = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.ACCEPT)
+                    .notificationStatus(NotificationStatus.ACCEPT)
                     .build();
             final Notification scheduleNotification1 = ScheduleNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.NO_RESPONSE)
+                    .notificationStatus(NotificationStatus.NO_RESPONSE)
                     .scheduleId(1L)
                     .build();
             final Notification scheduleNotification2 = ScheduleNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.REJECT)
+                    .notificationStatus(NotificationStatus.REJECT)
                     .scheduleId(2L)
                     .build();
             userRepository.save(user);
@@ -104,7 +105,7 @@ class NotificationRepositoryTest {
             final Notification friendNotification1 = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.ACCEPT)
+                    .notificationStatus(NotificationStatus.ACCEPT)
                     .build();
 
             userRepository.save(user);
@@ -140,18 +141,18 @@ class NotificationRepositoryTest {
             final Notification friendNotification1 = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.ACCEPT)
+                    .notificationStatus(NotificationStatus.ACCEPT)
                     .build();
             final Notification scheduleNotification1 = ScheduleNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.NO_RESPONSE)
+                    .notificationStatus(NotificationStatus.NO_RESPONSE)
                     .scheduleId(1L)
                     .build();
             final Notification scheduleNotification2 = ScheduleNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.REJECT)
+                    .notificationStatus(NotificationStatus.REJECT)
                     .scheduleId(2L)
                     .build();
             userRepository.save(user);
@@ -167,6 +168,63 @@ class NotificationRepositoryTest {
             assertAll(
                     () -> assertNotNull(result1),
                     () -> assertNull(result2)
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("알림 전체 삭제")
+    class DeleteNotificationALL {
+        @Test
+        @DisplayName("알림 전체 삭제")
+        void 알림전체삭제() {
+            //given
+            final User user = User.builder()
+                    .email("test@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User sender = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final Notification friendNotification1 = FriendNotification.builder()
+                    .receiveUser(user)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(NotificationStatus.ACCEPT)
+                    .build();
+            final Notification scheduleNotification1 = ScheduleNotification.builder()
+                    .receiveUser(user)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(NotificationStatus.NO_RESPONSE)
+                    .scheduleId(1L)
+                    .build();
+            final Notification scheduleNotification2 = ScheduleNotification.builder()
+                    .receiveUser(user)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(NotificationStatus.REJECT)
+                    .scheduleId(2L)
+                    .build();
+            userRepository.save(user);
+            notificationRepository.save(friendNotification1);
+            notificationRepository.save(scheduleNotification1);
+            notificationRepository.save(scheduleNotification2);
+
+            //when
+            List<Notification> result1 = notificationRepository.findByReceiveUser(user);
+            notificationRepository.deleteByReceiveUser(user);
+            List<Notification> result2 = notificationRepository.findByReceiveUser(user);
+            //then
+            assertAll(
+                    () -> assertEquals(result1.size(),3),
+                    () -> assertEquals(result2.size(),1)
             );
         }
     }
