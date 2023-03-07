@@ -73,5 +73,13 @@ public class UserController {
         ), HttpStatus.OK);
     }
 
+    @PostMapping("/open/{schedule_id}")
+    public ResponseEntity<BaseResponse> modifyIsPrivate(@ApiIgnore Authentication authentication, @PathVariable("schedule_id") Long schedule_id) {
+        userService.modifyScheduleIsPrivate(schedule_id);
+        return new ResponseEntity<>(
+                BaseResponse.from(true, MODIFY_SCHEDULE_IS_PRIVATE_SUCCESS_MESSAGE),
+                HttpStatus.OK);
+    }
+
 
 }

@@ -305,6 +305,21 @@ class UserServiceTest {
             //then
             assertEquals(schedule.getScheduleName(), newName);
         }
+        @Test
+        @DisplayName("[성공] - 일정 공개 여부 수정")
+        void modifyScheduleIsPrivate(){
+            final String name = "제주도 여행";
+            //given
+            final Schedule schedule = Schedule.builder()
+                    .scheduleName(name)
+                    .isPrivate(false)
+                    .build();
+            doReturn(Optional.of(schedule)).when(scheduleRepository).findById(schedule.getScheduleId());
+            //when
+            userService.modifyScheduleIsPrivate(schedule.getScheduleId());
+            //then
+            assertTrue(schedule.isPrivate());
+        }
     }
 
     @Nested
