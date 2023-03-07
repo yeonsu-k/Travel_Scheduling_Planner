@@ -1,8 +1,6 @@
 package com.newsainturtle.friend.service;
 
-import com.newsainturtle.friend.dto.FriendFollowRequest;
-import com.newsainturtle.friend.dto.UserSearchRequest;
-import com.newsainturtle.friend.dto.UserSearchResponse;
+import com.newsainturtle.friend.dto.*;
 import com.newsainturtle.friend.entity.Friend;
 import com.newsainturtle.friend.exception.UnableToRequestFriendFollowException;
 import com.newsainturtle.friend.repository.FriendRepository;
@@ -11,6 +9,9 @@ import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -78,5 +79,26 @@ public class FriendService {
             }
         }
         throw new UnableToRequestFriendFollowException();
+    }
+
+    @Transactional(readOnly = true)
+    public FriendListResponse selectFriendList(String email) {
+        User user = userRepository.findByEmail(email);
+        List<Friend> friendList = friendRepository.findByFriendList(user);
+        List<FriendInfoResponse> friendInfoResponseList = new ArrayList<>();
+        User friendUser;
+
+        for(Friend friend : friendList){
+            if(friend.getRequestUser().equals(user)){
+                friendUser = friend.getReceiveUser();
+            }else{
+                friendUser = friend.getRequestUser();
+            }
+            friendInfoResponseList.add(FriendInfoResponse.builder()
+                    .email(friendUser.getEmail())
+                    .nickname(friendUser.getNickname())
+                    .profile(friendUser.getProfile()).build());
+        }
+        return FriendListResponse.builder().friends(friendInfoResponseList).build();
     }
 }
