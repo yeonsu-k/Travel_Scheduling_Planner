@@ -12,8 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import static com.newsainturtle.notification.constant.NotificationConstant.REMOVE_NOTIFICATION_ITEM_SUCCESS_MESSAGE;
-import static com.newsainturtle.notification.constant.NotificationConstant.SELECT_NOTIFICATION_LIST_SUCCESS_MESSAGE;
+import static com.newsainturtle.notification.constant.NotificationConstant.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +44,18 @@ public class NotificationController {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 REMOVE_NOTIFICATION_ITEM_SUCCESS_MESSAGE)
+                , HttpStatus.OK);
+    }
+
+    @DeleteMapping("")
+    @ApiOperation(value = "알림 전체 삭제", notes = "사용자가 응답한 알림 전체 삭제")
+    public ResponseEntity<BaseResponse> removeNotificationAll(@ApiIgnore Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        notificationService.removeNotificationAll(email);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                REMOVE_NOTIFICATION_ALL_SUCCESS_MESSAGE)
                 , HttpStatus.OK);
     }
 }
