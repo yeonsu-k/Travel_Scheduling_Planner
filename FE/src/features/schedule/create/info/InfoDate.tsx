@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import styles from "./Info.module.css";
 import Modal from "components/Modal";
-import { useSelector } from "react-redux";
-import { rootState } from "app/store";
 import { Stack } from "@mui/system";
 import Text from "components/Text";
 import InfoCalendar from "./InfoCalendar";
 import { Box } from "@mui/material";
 import colorPalette from "styles/colorPalette";
 import { differenceInDays } from "date-fns";
+import { selectDate } from "slices/scheduleCreateSlice";
+import { useAppSelector } from "app/hooks";
 
 function InfoDate() {
-  const { date } = useSelector((state: rootState) => state.scheduleCreate);
+  const date = useAppSelector(selectDate);
   const [ModalOpen, setModalOpen] = React.useState(false);
 
   useEffect(() => {

@@ -1,16 +1,15 @@
 import React from "react";
+import { selectLocal, setLocal } from "slices/scheduleCreateSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Info.module.css";
 import Modal from "components/Modal";
 import Button from "components/Button";
 import Input from "components/Input";
-import { useDispatch, useSelector } from "react-redux";
-import { scheduleActions } from "slices/scheduleCreateSlice";
-import { rootState } from "app/store";
 import { Stack } from "@mui/system";
 
 function InfoLocal() {
-  const dispatch = useDispatch();
-  const { local } = useSelector((state: rootState) => state.scheduleCreate);
+  const dispatch = useAppDispatch();
+  const local = useAppSelector(selectLocal);
   const [ModalOpen, setModalOpen] = React.useState(false);
   const [testPlace, setPlace] = React.useState("");
 
@@ -24,7 +23,7 @@ function InfoLocal() {
   };
 
   const savePlace = () => {
-    dispatch(scheduleActions.setLocal({ local: testPlace }));
+    dispatch(setLocal(testPlace));
     setModalOpen(false);
   };
   return (

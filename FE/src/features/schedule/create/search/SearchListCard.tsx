@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { scheduleActions } from "slices/scheduleCreateSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { rootState } from "app/store";
+import { selectHotelList, selectPlaceList, setHotelList, setPlaceList } from "slices/scheduleCreateSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Search.module.css";
 import { Info, Add } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
@@ -15,16 +14,16 @@ interface SearchListCardType {
 }
 
 function SearchListCard({ cardInfo, select }: SearchListCardType) {
-  const dispatch = useDispatch();
-  const { hotel } = useSelector((state: rootState) => state.scheduleCreate);
-  const { place } = useSelector((state: rootState) => state.scheduleCreate);
+  const dispatch = useAppDispatch();
+  const hotel = useAppSelector(selectHotelList);
+  const place = useAppSelector(selectPlaceList);
   const [ModalOpen, setModalOpen] = useState(false);
 
   const InfoAddClick = () => {
     if (select === "호텔") {
       const hotelList = [...hotel];
       hotelList.push(cardInfo);
-      dispatch(scheduleActions.setHotelList({ hotel: [...hotelList] }));
+      dispatch(setHotelList([...hotelList]));
     }
     if (select === "장소") {
       const placeList = [...place];
@@ -34,7 +33,7 @@ function SearchListCard({ cardInfo, select }: SearchListCardType) {
         name: cardInfo.name,
         time: "2:00",
       });
-      dispatch(scheduleActions.setPlaceList({ place: [...placeList] }));
+      dispatch(setPlaceList([...placeList]));
     }
   };
 

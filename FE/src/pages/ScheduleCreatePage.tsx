@@ -1,9 +1,9 @@
-import { Box, Grid } from "@mui/material";
-import { rootState } from "app/store";
+import React, { useEffect } from "react";
+import { selectLocal } from "slices/scheduleCreateSlice";
+import { useAppSelector } from "app/hooks";
+import { Grid } from "@mui/material";
 import CreateInfo from "features/schedule/create/CreateInfo";
 import CreateSearch from "features/schedule/create/CreateSearch";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 declare global {
   interface Window {
@@ -14,7 +14,7 @@ declare global {
 const { kakao } = window;
 
 function ScheduleCreatePage() {
-  const { local } = useSelector((state: rootState) => state.scheduleCreate);
+  const local = useAppSelector(selectLocal);
 
   function setMap() {
     const container = document.getElementById("map");

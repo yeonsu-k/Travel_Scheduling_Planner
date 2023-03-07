@@ -1,5 +1,12 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { rootState } from "app/store";
 import { addDays, format } from "date-fns";
+
+export interface basicConfig {
+  id: number;
+  image: string;
+  name: string;
+}
 
 interface scheduleCreateConfig {
   local: string;
@@ -7,7 +14,7 @@ interface scheduleCreateConfig {
     start: string;
     end: string;
   };
-  hotel: ({ id: number; image: string; name: string } | null)[];
+  hotel: (basicConfig | null)[];
   place: {
     id: number;
     image: string;
@@ -15,39 +22,9 @@ interface scheduleCreateConfig {
     time: string;
   }[];
   pointPlace: {
-    start: { id: number; image: string; name: string } | null;
-    end: { id: number; image: string; name: string } | null;
+    start: basicConfig | null;
+    end: basicConfig | null;
   };
-}
-
-interface LocalConfig {
-  local: string;
-}
-
-interface dateConfig {
-  date: {
-    start: string;
-    end: string;
-  };
-}
-
-interface hotelConfig {
-  hotel: ({ id: number; image: string; name: string } | null)[];
-}
-
-interface placeConfig {
-  place: {
-    id: number;
-    image: string;
-    name: string;
-    time: string;
-  }[];
-}
-
-interface placePointConfig {
-  id: number;
-  image: string;
-  name: string;
 }
 
 const initialState: scheduleCreateConfig = {
@@ -68,39 +45,39 @@ const scheduleCreateSlice = createSlice({
   name: "scheduleCreate",
   initialState,
   reducers: {
-    setLocal: (state, action: PayloadAction<LocalConfig>) => {
-      state.local = action.payload.local;
+    setLocal: (state, { payload }) => {
+      state.local = payload;
     },
-    setDate: (state, action: PayloadAction<dateConfig>) => {
-      state.date = action.payload.date;
+    setDate: (state, { payload }) => {
+      state.date = payload;
     },
-    setHotelList: (state, action: PayloadAction<hotelConfig>) => {
-      state.hotel = action.payload.hotel;
+    setHotelList: (state, { payload }) => {
+      state.hotel = payload;
     },
-    setPlaceList: (state, action: PayloadAction<placeConfig>) => {
-      state.place = action.payload.place;
+    setPlaceList: (state, { payload }) => {
+      state.place = payload;
     },
-    setPlaceTime: (
-      state,
-      action: PayloadAction<{
-        index: number;
-        time: string;
-      }>,
-    ) => {
-      const changedIdx = action.payload.index;
-      state.place[changedIdx].time = action.payload.time;
+    setPlaceTime: (state, { payload }) => {
+      const changedIdx = payload.index;
+      state.place[changedIdx].time = payload.time;
     },
-    deletePointPlaceList: (state, action: PayloadAction<{ position: number; value: placePointConfig | null }>) => {
-      const changedPosition = action.payload.position;
+    deletePointPlaceList: (state, { payload }) => {
+      const changedPosition = payload.position;
       if (changedPosition === 0) {
-        state.pointPlace.start = action.payload.value;
+        state.pointPlace.start = payload.value;
       } else {
-        state.pointPlace.end = action.payload.value;
+        state.pointPlace.end = payload.value;
       }
     },
   },
 });
+export const { setLocal, setDate, setHotelList, setPlaceList, setPlaceTime, deletePointPlaceList } =
+  scheduleCreateSlice.actions;
 
-export const scheduleActions = scheduleCreateSlice.actions;
+export const selectLocal = (state: rootState) => state.scheduleCreate.local;
+export const selectDate = (state: rootState) => state.scheduleCreate.date;
+export const selectHotelList = (state: rootState) => state.scheduleCreate.hotel;
+export const selectPlaceList = (state: rootState) => state.scheduleCreate.place;
+export const selectPointPlace = (state: rootState) => state.scheduleCreate.pointPlace;
 
 export default scheduleCreateSlice.reducer;
