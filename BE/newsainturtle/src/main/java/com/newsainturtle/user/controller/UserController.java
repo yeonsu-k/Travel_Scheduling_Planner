@@ -62,6 +62,16 @@ public class UserController {
                 BaseResponse.from(true, MODIFY_SCHEDULE_NAME_SUCCESS_MESSAGE),
                 HttpStatus.OK);
     }
+    @GetMapping("/schedule_list")
+    public ResponseEntity<BaseResponse> getScheduleList(@ApiIgnore Authentication authentication) throws Exception{
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                GET_USER_SCHEDULE_LIST_SUCCESS_MESSAGE,
+                userService.getScheduleList(email)
+        ), HttpStatus.OK);
+    }
 
 
 }
