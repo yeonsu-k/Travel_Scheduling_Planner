@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Header from "components/Header";
 import MainPage from "pages/MainPage";
-import MapPage from "pages/MapPage";
 import Mypage from "pages/MyPage";
 import ScheduleRouter from "features/schedule/ScheduleRouter";
 import LoginPage from "pages/LoginPage";
@@ -29,7 +28,6 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/map" element={<MapPage />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/schedule/*" element={<ScheduleRouter />} />
           <Route path="/profile" element={<MyProfileEdit />} />

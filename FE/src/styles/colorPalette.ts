@@ -18,6 +18,7 @@ export const colorPalette = {
   white: "#FFFFFF",
   darkgray: "#666666",
   lightgray: "#999999",
+  gray: "#EDEDED",
 };
 
 export type PaletteKeyTypes = keyof typeof colorPalette;

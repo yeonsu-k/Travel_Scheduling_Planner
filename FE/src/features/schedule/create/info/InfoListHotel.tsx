@@ -1,25 +1,18 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
+import { basicConfig, selectDate, selectHotelList, setHotelList } from "slices/scheduleCreateSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Info.module.css";
 import Text from "components/Text";
-import { rootState } from "app/store";
-import { useDispatch, useSelector } from "react-redux";
+import { Box } from "@mui/material";
 import { addDays, differenceInDays, format } from "date-fns";
 import { Close } from "@mui/icons-material";
-import { mapActions } from "slices/mapSlice";
-
-interface hotelConfig {
-  id: number;
-  image: string;
-  name: string;
-}
 
 function InfoListHotel() {
-  const dispatch = useDispatch();
-  const { hotel } = useSelector((state: rootState) => state.map);
-  const { date } = useSelector((state: rootState) => state.map);
+  const dispatch = useAppDispatch();
+  const hotel = useAppSelector(selectHotelList);
+  const date = useAppSelector(selectDate);
   const [currentDay, setCurrentDay] = React.useState(0);
-  const [hotelDays, setHotelDays] = React.useState<(hotelConfig | null)[]>([]);
+  const [hotelDays, setHotelDays] = React.useState<(basicConfig | null)[]>([]);
 
   const size = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
   useEffect(() => {
@@ -32,13 +25,13 @@ function InfoListHotel() {
     const copy = [...hotelDays];
     copy[index] = null;
     setHotelDays(copy);
-    dispatch(mapActions.setHotelList({ hotel: copy }));
+    dispatch(setHotelList(copy));
   };
 
   const deleteHotelAll = () => {
     setCurrentDay(0);
     setHotelDays([]);
-    dispatch(mapActions.setHotelList({ hotel: [] }));
+    dispatch(setHotelList([]));
   };
 
   const rendering = () => {

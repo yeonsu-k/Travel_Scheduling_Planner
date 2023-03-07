@@ -1,18 +1,17 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { rootState } from "app/store";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { selectDate, setDate } from "slices/scheduleCreateSlice";
+import styles from "./Info.module.css";
+import colorPalette from "styles/colorPalette";
 import { DateRange, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import ko from "date-fns/locale/ko";
-import colorPalette from "styles/colorPalette";
-import styles from "./Info.module.css";
-import { mapActions } from "slices/mapSlice";
 import { addDays, differenceInDays, format } from "date-fns";
 
 function InfoCalendar() {
-  const dispatch = useDispatch();
-  const { date } = useSelector((state: rootState) => state.map);
+  const dispatch = useAppDispatch();
+  const date = useAppSelector(selectDate);
 
   const [state, setState] = React.useState([
     {
@@ -25,14 +24,12 @@ function InfoCalendar() {
   const saveDate = () => {
     if (typeof state[0] != undefined) {
       dispatch(
-        mapActions.setDate({
-          date: {
-            start: format(state[0].startDate, "yyyy-MM-dd"),
-            end:
-              state[0].startDate === state[0].endDate
-                ? format(addDays(state[0].endDate, 1), "yyyy-MM-dd")
-                : format(state[0].endDate, "yyyy-MM-dd"),
-          },
+        setDate({
+          start: format(state[0].startDate, "yyyy-MM-dd"),
+          end:
+            state[0].startDate === state[0].endDate
+              ? format(addDays(state[0].endDate, 1), "yyyy-MM-dd")
+              : format(state[0].endDate, "yyyy-MM-dd"),
         }),
       );
     }

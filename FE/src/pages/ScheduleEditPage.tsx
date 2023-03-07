@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "features/schedule/edit/Edit.module.css";
 import { useAppSelector } from "app/hooks";
-import { rootState } from "app/store";
 import EditDayList from "features/schedule/edit/EditDayList";
 import EditFullScheduleList from "features/schedule/edit/EditFullScheduleList";
 import Text from "components/Text";
@@ -14,13 +13,14 @@ import {
 } from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import EditScheduleItem from "features/schedule/edit/EditScheduleItem";
+import { selectPlaceList } from "slices/scheduleCreateSlice";
 
 const { kakao } = window;
 
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
 
-  const { place } = useAppSelector((state: rootState) => state.map);
+  const place = useAppSelector(selectPlaceList);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
