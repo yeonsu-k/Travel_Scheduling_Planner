@@ -1,6 +1,7 @@
 package com.newsainturtle.schedule.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,4 +25,14 @@ public class ScheduleLocation {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
+
+    @Builder
+    public ScheduleLocation(Long day, Long sequence, String startTime, String endTime,
+                            Location location) {
+        this.day = day;
+        this.sequence = sequence;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+    }
 }
