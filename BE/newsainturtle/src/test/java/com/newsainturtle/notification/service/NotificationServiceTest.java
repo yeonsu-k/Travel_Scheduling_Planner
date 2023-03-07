@@ -3,6 +3,7 @@ package com.newsainturtle.notification.service;
 import com.newsainturtle.notification.dto.NotificationListResponse;
 import com.newsainturtle.notification.entity.FriendNotification;
 import com.newsainturtle.notification.entity.Notification;
+import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.entity.ScheduleNotification;
 import com.newsainturtle.notification.exception.NoResponseNotificationException;
 import com.newsainturtle.notification.exception.NotUserOwnNotificationException;
@@ -91,18 +92,18 @@ class NotificationServiceTest {
             final Notification friendNotification1 = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.ACCEPT)
+                    .notificationStatus(NotificationStatus.ACCEPT)
                     .build();
             final Notification scheduleNotification1 = ScheduleNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.NO_RESPONSE)
+                    .notificationStatus(NotificationStatus.NO_RESPONSE)
                     .scheduleId(1L)
                     .build();
             final Notification scheduleNotification2 = ScheduleNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.REJECT)
+                    .notificationStatus(NotificationStatus.REJECT)
                     .scheduleId(2L)
                     .build();
             final Optional<Schedule> schedule1 = Optional.of(Schedule.builder()
@@ -168,7 +169,7 @@ class NotificationServiceTest {
             final Notification friendNotification = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.ACCEPT)
+                    .notificationStatus(NotificationStatus.ACCEPT)
                     .build();
 
             doReturn(user).when(userRepository).findByEmail(email);
@@ -205,7 +206,7 @@ class NotificationServiceTest {
             final Notification friendNotification = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.NO_RESPONSE)
+                    .notificationStatus(NotificationStatus.NO_RESPONSE)
                     .build();
 
             doReturn(user).when(userRepository).findByEmail(email);
@@ -242,7 +243,7 @@ class NotificationServiceTest {
             final Notification friendNotification = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
-                    .notificationStatus(Notification.Status.ACCEPT)
+                    .notificationStatus(NotificationStatus.ACCEPT)
                     .build();
 
             doReturn(user).when(userRepository).findByEmail(email);
@@ -250,6 +251,31 @@ class NotificationServiceTest {
 
             //when
             notificationService.removeNotification(email, friendNotification.getNotificationId());
+            //then
+        }
+    }
+
+    @Nested
+    @DisplayName("알림 전체 삭제 테스트")
+    class RemoveNotificationAllTest {
+
+        @Test
+        @DisplayName("[성공] - 알림 전체 삭제")
+        void 알림전체삭제() {
+            //given
+            final String email = "yunaghgh@naver.com";
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+
+            doReturn(user).when(userRepository).findByEmail(email);
+            //when
+            notificationService.removeNotificationAll(email);
             //then
         }
     }

@@ -4,6 +4,7 @@ import com.newsainturtle.notification.dto.NotificationListResponse;
 import com.newsainturtle.notification.dto.NotificationResponse;
 import com.newsainturtle.notification.entity.FriendNotification;
 import com.newsainturtle.notification.entity.Notification;
+import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.entity.ScheduleNotification;
 import com.newsainturtle.notification.exception.NoResponseNotificationException;
 import com.newsainturtle.notification.exception.NotUserOwnNotificationException;
@@ -69,9 +70,14 @@ public class NotificationService {
         if (notification == null) {
             throw new NotUserOwnNotificationException();
         }
-        if (notification.getNotificationStatus() == Notification.Status.NO_RESPONSE) {
+        if (notification.getNotificationStatus() == NotificationStatus.NO_RESPONSE) {
             throw new NoResponseNotificationException();
         }
         notificationRepository.deleteByNotificationIdAndReceiveUser(notificationId, user);
+    }
+
+    public void removeNotificationAll(String email) {
+        User user = userRepository.findByEmail(email);
+        notificationRepository.deleteByReceiveUser(user);
     }
 }
