@@ -268,4 +268,80 @@ class FriendRepositoryTest {
             );
         }
     }
+
+    @Nested
+    @DisplayName("친구 삭제")
+    class RemoveFriend {
+        @Test
+        @DisplayName("[실패] - 친구가 아닌 경우")
+        void 친구가아닌경우(){
+            //given
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User friendUser = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            userRepository.save(user);
+            userRepository.save(friendUser);
+
+            //when
+            Friend result = friendRepository.findByFriend(user,friendUser);
+            //then
+            assertNull(result);
+        }
+
+        @Test
+        @DisplayName("[성공] - 친구맞음->친구삭제")
+        void 친구삭제성공(){
+            //given
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User friendUser = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+
+            final Friend friend = Friend.builder()
+                    .isAccept(true)
+                    .receiveUser(user)
+                    .requestUser(friendUser)
+                    .build();
+
+            userRepository.save(user);
+            userRepository.save(friendUser);
+            friendRepository.save(friend);
+
+            //when
+            Friend resultBeforeDelete = friendRepository.findByFriend(user,friendUser);
+            friendRepository.deleteByFriend(user,friendUser);
+            Friend resultAfterDelete = friendRepository.findByFriend(user,friendUser);
+
+            //then
+            assertAll(
+                    ()-> assertNotNull(resultBeforeDelete),
+                    ()-> assertNull(resultAfterDelete)
+            );
+        }
+    }
 }
