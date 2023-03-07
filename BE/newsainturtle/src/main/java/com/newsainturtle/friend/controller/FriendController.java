@@ -2,10 +2,7 @@ package com.newsainturtle.friend.controller;
 
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
-import com.newsainturtle.friend.dto.FriendFollowRequest;
-import com.newsainturtle.friend.dto.FriendListResponse;
-import com.newsainturtle.friend.dto.UserSearchRequest;
-import com.newsainturtle.friend.dto.UserSearchResponse;
+import com.newsainturtle.friend.dto.*;
 import com.newsainturtle.friend.service.FriendService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -64,6 +61,19 @@ public class FriendController {
                 true,
                 SELECT_FRIEND_LIST_SUCCESS_MESSAGE,
                 friends)
+                , HttpStatus.OK);
+    }
+
+    @DeleteMapping("")
+    @ApiOperation(value = "친구 삭제", notes = "친구 삭제")
+    public ResponseEntity<BaseResponse> removeFriend(@ApiIgnore Authentication authentication,
+                                                     @RequestBody @Valid @ApiParam(value = "사용자 이메일", required = true)final FriendRemoveRequest friendRemoveRequest){
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        friendService.removeFriend(email, friendRemoveRequest);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                FRIEND_REMOVE_SUCCESS_MESSAGE)
                 , HttpStatus.OK);
     }
 

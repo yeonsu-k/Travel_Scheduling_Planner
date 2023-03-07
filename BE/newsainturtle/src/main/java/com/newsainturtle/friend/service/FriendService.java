@@ -2,7 +2,9 @@ package com.newsainturtle.friend.service;
 
 import com.newsainturtle.friend.dto.*;
 import com.newsainturtle.friend.entity.Friend;
+import com.newsainturtle.friend.exception.NotFriendRelationException;
 import com.newsainturtle.friend.exception.UnableToRequestFriendFollowException;
+import com.newsainturtle.friend.exception.UnauthorizedFriendException;
 import com.newsainturtle.friend.repository.FriendRepository;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
@@ -100,5 +102,20 @@ public class FriendService {
                     .profile(friendUser.getProfile()).build());
         }
         return FriendListResponse.builder().friends(friendInfoResponseList).build();
+    }
+
+    public void removeFriend(String email, FriendRemoveRequest friendRemoveRequest){
+        User user = userRepository.findByEmail(email);
+        User friendUser = userRepository.findByEmail(friendRemoveRequest.getEmail());
+        if(friendUser==null){
+            throw new UnauthorizedFriendException();
+        }
+
+        Friend friend = friendRepository.findByFriend(user,friendUser);
+        if(friend==null){
+            throw new NotFriendRelationException();
+        }
+
+        friendRepository.deleteByFriend(user, friendUser);
     }
 }
