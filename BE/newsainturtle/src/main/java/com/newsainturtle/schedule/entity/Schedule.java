@@ -58,12 +58,13 @@ public class Schedule {
 
     @ElementCollection
     @CollectionTable(name = "schedule_location",
-            joinColumns = @JoinColumn(name = "schedule_location_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "schedule_id"))
     private List<ScheduleLocation> scheduleLocations = new ArrayList<>();
 
     @Builder
     public Schedule(String hostEmail, String scheduleRegion, String scheduleName, boolean isPrivate, String scheduleStartDay,
-                    String scheduleEndDay, String scheduleStartLocation, String scheduleEndLocation, String vehicle) {
+                    String scheduleEndDay, String scheduleStartLocation, String scheduleEndLocation, String vehicle,
+                    List<ScheduleLocation> scheduleLocations) {
         this.hostEmail = hostEmail;
         this.scheduleRegion = scheduleRegion;
         this.scheduleName = scheduleName;
@@ -73,6 +74,7 @@ public class Schedule {
         this.scheduleStartLocation = scheduleStartLocation;
         this.scheduleEndLocation = scheduleEndLocation;
         this.vehicle = vehicle;
+        this.scheduleLocations = scheduleLocations;
     }
     public void setScheduleName(String scheduleName) {
         this.scheduleName = scheduleName;
