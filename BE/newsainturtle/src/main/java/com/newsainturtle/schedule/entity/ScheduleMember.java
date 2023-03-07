@@ -1,6 +1,7 @@
 package com.newsainturtle.schedule.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,8 +18,17 @@ public class ScheduleMember {
     private Long scheduleMemberId;
 
     @Column(name = "user_email")
-    private Long userEmail;
+    private String userEmail;
+
 
     @Column(name = "schedule_id")
     private Long schedule;
+
+    @Builder
+    public ScheduleMember(Long scheduleMemberId, String userEmail, Long schedule){
+        this.scheduleMemberId = scheduleMemberId;
+        this.userEmail = userEmail;
+        this.schedule = schedule;
+    }
+
 }
