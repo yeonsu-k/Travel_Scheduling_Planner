@@ -20,7 +20,6 @@ public class ScheduleMember {
     @Column(name = "user_email")
     private String userEmail;
 
-
     @Column(name = "schedule_id")
     private Long schedule;
 

@@ -11,4 +11,8 @@ public class NullException extends BadRequestException {
     public NullException() {
         super(ScheduleErrorConstant.NULL_ERROR_MESSAGE);
     }
+
+    public NullException(String message) {
+        super(message);
+    }
 }
