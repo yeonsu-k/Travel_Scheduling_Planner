@@ -36,6 +36,7 @@
 
 .search_container {
   display: flex;
+  background-color: #fafafa;
 }
 
 .search_input {
@@ -43,15 +44,13 @@
 }
 
 .search_input input[type="text"] {
-  margin: 0;
-  background-color: transparent;
+  background-color: white;
   border: none;
   outline: none;
+  height: 2.2rem;
   width: 100%;
-  box-shadow: none;
+  font-size: 0.875rem;
   box-sizing: content-box;
-  transition: box-shadow 0.3s, border 0.3s, -webkit-box-shadow 0.3s;
-  line-height: 1.15;
   text-align: center;
 }
 
