@@ -24,10 +24,10 @@ public class ScheduleService {
 
     private final LocationRepository locationRepository;
 
-    public String createSchedule(ScheduleRequest scheduleRequest) {
+    public String createSchedule(ScheduleRequest scheduleRequest, String email) {
         isNullScheduleLocation(scheduleRequest.getScheduleLocationRequestList());
         Schedule schedule = Schedule.builder()
-                .hostEmail(scheduleRequest.getHostEmail())
+                .hostEmail(email)
                 .scheduleRegion(scheduleRequest.getScheduleRegion())
                 .scheduleName(scheduleRequest.getScheduleName())
                 .isPrivate(scheduleRequest.isPrivate())
