@@ -104,7 +104,7 @@ function Header() {
           </NavLink>
 
           <Stack direction="row" spacing={3} alignItems="center">
-            <NavLink to="/map" className={styles.link}>
+            <NavLink to="/schedule/create" className={styles.link}>
               일정생성
             </NavLink>
             <NavLink to="/" className={styles.link}>

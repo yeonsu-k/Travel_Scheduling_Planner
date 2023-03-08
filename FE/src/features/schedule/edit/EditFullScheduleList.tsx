@@ -1,13 +1,13 @@
 import React from "react";
 import styles from "./Edit.module.css";
+import { selectFullScheduleList } from "slices/scheduleEditSlice";
+import { selectPlaceList } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
-import { rootState } from "app/store";
 import Text from "components/Text";
 import EditDayScheduleList from "./EditDayScheduleList";
-import { selectFullScheduleList } from "slices/scheduleEditSlice";
 
 const EditFullScheduleList = () => {
-  const { place } = useAppSelector((state: rootState) => state.map);
+  const place = useAppSelector(selectPlaceList);
 
   const fullScheduleList = useAppSelector(selectFullScheduleList);
 

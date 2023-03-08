@@ -79,4 +79,8 @@ public class Schedule {
     public void setScheduleName(String scheduleName) {
         this.scheduleName = scheduleName;
     }
+
+    public void changeIsPrivate() {
+        this.isPrivate = !(this.isPrivate);
+    }
 }

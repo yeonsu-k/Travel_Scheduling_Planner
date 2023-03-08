@@ -6,6 +6,8 @@ import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
 import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.entity.ScheduleMember;
+import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
@@ -17,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +30,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleMemberRepository scheduleMemberRepository;
 
     public EmailDuplicateCheckResponse emailDuplicateCheck(EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         User user = userRepository.findByEmail(emailDuplicateCheckRequest.getEmail());
@@ -97,5 +102,24 @@ public class UserService {
     public void modifyScheduleName(String schedule_name, Long schedule_id) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
         schedule.ifPresent(value -> value.setScheduleName(schedule_name));
+    }
+
+    public List<ScheduleListResponse> getScheduleList(String email) {
+        List<ScheduleMember> list = scheduleMemberRepository.findAllByUserEmail(email);
+        List<Optional<Schedule>> schedule_list = new ArrayList<>();
+        for (ScheduleMember scheduleMember : list) {
+            schedule_list.add(scheduleRepository.findById(scheduleMember.getSchedule()));
+        }
+        List<ScheduleListResponse> result = new ArrayList<>();
+        for (Optional<Schedule> schedule : schedule_list) {
+            result.add(ScheduleListResponse.of(schedule));
+        }
+        return result;
+    }
+
+    @Transactional
+    public void modifyScheduleIsPrivate(Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        schedule.ifPresent(Schedule::changeIsPrivate);
     }
 }
