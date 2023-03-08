@@ -8,8 +8,6 @@ import java.util.ArrayList;
 @Getter
 public class ScheduleRequest {
 
-    private String hostEmail;
-
     private String scheduleRegion;
 
     private String scheduleName;
