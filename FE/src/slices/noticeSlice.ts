@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
 
 export interface noticeListConfig {
+  notificationId: number;
   noticeType: string;
+  noticeStatus: string;
   noticeProfile: string;
   noticeContent: string;
 }
@@ -14,12 +16,16 @@ interface noticeConfig {
 const initialState: noticeConfig = {
   noticeList: [
     {
+      notificationId: 1,
       noticeType: "friend",
+      noticeStatus: "NO_RESPONSE",
       noticeProfile: "마이로",
       noticeContent: "친구 요청",
     },
     {
+      notificationId: 2,
       noticeType: "schedule",
+      noticeStatus: "ACCEPT",
       noticeProfile: "마이로",
       noticeContent: "강릉 여행",
     },
