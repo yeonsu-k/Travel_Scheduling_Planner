@@ -6,8 +6,9 @@ import { Box, Stack } from "@mui/material";
 import SearchList from "./search/SearchList";
 import Text from "components/Text";
 import { ErrorOutline } from "@mui/icons-material";
+import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
-function CreateRight() {
+function CreateRight(props: ScheduleCreatPropsType) {
   const [select, setSelect] = useState("호텔");
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState(false);
@@ -37,7 +38,7 @@ function CreateRight() {
 
   return (
     <Stack className={styles.Container}>
-      <Stack spacing={1}>
+      <Stack spacing={0.5} p={0.2}>
         <SearchRadioBtn keyword={select} getKeyWord={getKeyWord} />
         <SearchInput
           value={searchInput}
@@ -73,7 +74,7 @@ function CreateRight() {
             <Text value={"추천 " + select} bold />
           </Box>
           <div className={styles.scroll}>
-            <SearchList select={select} />
+            <SearchList select={select} scheduleCreatProps={props} />
           </div>
         </>
       )}

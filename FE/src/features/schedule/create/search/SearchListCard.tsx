@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { selectHotelList, selectPlaceList, setHotelList, setPlaceList } from "slices/scheduleCreateSlice";
+import {
+  selectHotelList,
+  selectPlaceList,
+  selectPointPlace,
+  setHotelList,
+  setPlaceList,
+  setPointPlace,
+} from "slices/scheduleCreateSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Search.module.css";
 import { Info, Add } from "@mui/icons-material";
@@ -7,33 +14,47 @@ import { IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Text from "components/Text";
 import SearchCardInfoModal from "./SearchCardInfoModal";
+import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
 interface SearchListCardType {
   cardInfo: { id: number; image: string; name: string };
   select: string;
+  scheduleCreatProps: ScheduleCreatPropsType;
 }
 
-function SearchListCard({ cardInfo, select }: SearchListCardType) {
+function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCardType) {
   const dispatch = useAppDispatch();
   const hotel = useAppSelector(selectHotelList);
   const place = useAppSelector(selectPlaceList);
+  const pointPlace = useAppSelector(selectPointPlace);
   const [ModalOpen, setModalOpen] = useState(false);
+  const { hotelCurrentDay, placeCurrentDay, setCurrentTab, setHotelCurrentDay, setPlaceCurrentDay } =
+    scheduleCreatProps;
 
   const InfoAddClick = () => {
+    setCurrentTab(select);
     if (select === "호텔") {
       const hotelList = [...hotel];
-      hotelList.push(cardInfo);
+      hotelList[hotelCurrentDay] = cardInfo;
+      setHotelCurrentDay(hotelCurrentDay + 1 == hotel.length ? 0 : hotelCurrentDay + 1);
       dispatch(setHotelList([...hotelList]));
     }
     if (select === "장소") {
-      const placeList = [...place];
-      placeList.push({
-        id: cardInfo.id,
-        image: cardInfo.image,
-        name: cardInfo.name,
-        time: "2:00",
-      });
-      dispatch(setPlaceList([...placeList]));
+      if (placeCurrentDay != -1) {
+        setPlaceCurrentDay(-1);
+        const pointPlaceList = [...pointPlace];
+        pointPlaceList[placeCurrentDay] = cardInfo;
+        dispatch(setPointPlace([...pointPlaceList]));
+      } else {
+        const placeList = [...place];
+        placeList.push({
+          id: cardInfo.id,
+          image: cardInfo.image,
+          name: cardInfo.name,
+          time: "2:00",
+        });
+        dispatch(setPlaceList([...placeList]));
+      }
     }
   };
 

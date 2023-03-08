@@ -1,46 +1,28 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { basicConfig, selectDate, selectHotelList, setdeleteHotel, setHotelList } from "slices/scheduleCreateSlice";
+import React from "react";
+import { selectDate, selectHotelList, setHotelList } from "slices/scheduleCreateSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Info.module.css";
 import Text from "components/Text";
 import { Box } from "@mui/material";
 import { addDays, differenceInDays, format } from "date-fns";
 import { Close } from "@mui/icons-material";
+import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
-function InfoListHotel() {
+function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
   const dispatch = useAppDispatch();
   const hotel = useAppSelector(selectHotelList);
   const date = useAppSelector(selectDate);
-  const [currentDay, setCurrentDay] = useState(0);
-  // const [hotelDays, setHotelDays] = useState<(basicConfig | null)[]>(() => {
-  //   const size = differenceInDays(new Date(date.end), new Date(date.start));
-  //   return Array.from({ length: size }, () => null);
-  // });
+  const { hotelCurrentDay, setHotelCurrentDay } = props.scheduleCreatProps;
 
-  // useEffect(() => {
-  //   setHotelDays([...hotel]);
-  // }, [hotel]);
-
-  useEffect(() => {
-    console.log(
-      hotel.map((hotels, index) => {
-        hotels;
-      }),
-    );
-  }, []);
-
-  const deleteHotel = (id: number | undefined) => {
-    // const index = hotelDays.findIndex((hotelDays) => hotelDays?.id === id);
-    // setCurrentDay(index);
-    // const copy = [...hotelDays];
-    // copy[index] = null;
-    // setHotelDays(copy);
-    dispatch(setdeleteHotel({ id: id }));
+  const deleteHotel = (id: number) => {
+    const hotelList = [...hotel];
+    const changedIdx = hotelList.findIndex((hotelList) => hotelList?.id === id);
+    hotelList[changedIdx] = null;
+    dispatch(setHotelList(hotelList));
   };
 
   const deleteHotelAll = () => {
-    setCurrentDay(0);
-    // setHotelDays([]);
+    setHotelCurrentDay(0);
     const size = differenceInDays(new Date(date.end), new Date(date.start));
     dispatch(setHotelList(Array.from({ length: size }, () => null)));
   };
@@ -50,7 +32,7 @@ function InfoListHotel() {
       <Box my={2.5}>
         <Text value={hotel.filter((element) => null != element).length.toString()} type="textTitle" color="yellow" en />
       </Box>
-      <button onClick={deleteHotelAll} className={`${styles.btn} ${styles.delete_btn}`}>
+      <button className={`${styles.btn} ${styles.delete_btn}`} onClick={deleteHotelAll}>
         호텔전체삭제
       </button>
       <Box my={0.5}>
@@ -60,8 +42,8 @@ function InfoListHotel() {
         {hotel.map((hotelCard, index) => (
           <Box className={styles.flex} mb={1} key={index}>
             <button
-              className={currentDay === index ? `${styles.days_btn} ${styles.days_focused}` : `${styles.days_btn}`}
-              onClick={() => setCurrentDay(index)}
+              className={hotelCurrentDay === index ? `${styles.days_btn} ${styles.days_focused}` : `${styles.days_btn}`}
+              onClick={() => setHotelCurrentDay(index)}
             >
               DAY{index + 1}
               &nbsp;&nbsp;
@@ -92,7 +74,7 @@ function InfoListHotel() {
                 ) : (
                   <>
                     <Box my={0.5}>
-                      <div onClick={() => setCurrentDay(index)} style={{ cursor: "pointer" }}>
+                      <div onClick={() => setHotelCurrentDay(index)} style={{ cursor: "pointer" }}>
                         <p className={styles.explain}>일자 버튼을 누르고 호텔을 추가하세요.</p>
                       </div>
                     </Box>
