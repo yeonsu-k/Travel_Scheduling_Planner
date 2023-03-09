@@ -6,6 +6,7 @@ import com.newsainturtle.friend.exception.NotFriendRelationException;
 import com.newsainturtle.friend.exception.UnableToRequestFriendFollowException;
 import com.newsainturtle.friend.exception.UnauthorizedFriendException;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.service.NotificationService;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,8 @@ class FriendServiceTest {
     private UserRepository userRepository;
     @Mock
     private FriendRepository friendRepository;
+    @Mock
+    private NotificationService notificationService;
 
     @Nested
     @DisplayName("사용자 검색 테스트")
