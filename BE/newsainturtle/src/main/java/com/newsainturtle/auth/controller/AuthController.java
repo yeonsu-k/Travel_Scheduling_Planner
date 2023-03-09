@@ -39,7 +39,7 @@ public class AuthController {
                 , HttpStatus.OK);
     }
 
-    @GetMapping("/email")
+    @PostMapping("/email")
     public ResponseEntity<BaseResponse> emailDuplicateCheck(@RequestBody final EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
