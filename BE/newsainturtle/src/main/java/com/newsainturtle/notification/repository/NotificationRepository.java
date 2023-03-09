@@ -16,6 +16,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Notification findByNotificationIdAndReceiveUser(Long notificationId, User user);
 
+    Notification findBySendUserIdAndReceiveUser(Long sendUserId, User user);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Notification n WHERE n.notificationId = ?1 AND n.receiveUser = ?2")
