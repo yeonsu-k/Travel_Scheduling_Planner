@@ -15,7 +15,13 @@ interface Props {
 export const ButtonStyled = ({ text, color, radius, width, height, ...rest }: Props) => {
   const style = {
     background: color && palette[color],
-    color: color ? (color === "pink" ? palette.black : color === "white" ? "#666" : palette.white) : "#666",
+    color: color
+      ? color === "pink" || color === "gray"
+        ? palette.black
+        : color === "white"
+        ? "#666"
+        : palette.white
+      : "#666",
     border: color ? "" : "1px solid #efefef",
     borderRadius: radius ? "5px" : "0px",
     padding: color ? "0.3rem 0.8rem" : "0.5rem 1.4rem",

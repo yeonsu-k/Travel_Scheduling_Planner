@@ -1,6 +1,6 @@
 /* Notice.tsx */
 .notice {
-  width: 23vw;
+  width: 20vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,49 +21,38 @@
   display: grid;
   justify-content: center;
   align-items: center;
-  grid-template-rows: 57% 15%;
-  grid-template-columns: 25% 30% 30% 5%;
+  grid-template-rows: 57% 25%;
+  grid-template-columns: 45% 45%;
   grid-template-areas:
-    "noticeImg noticeContent noticeContent deleteBtn"
-    "noticeImg acceptBtn refuseBtn deleteBtn";
+    "noticeContent noticeContent"
+    "leftBtn rightBtn";
   box-sizing: border-box;
   column-gap: 0.7rem;
-  margin: 0.5rem 0 0.5rem;
+  margin: 0 0 0.5rem;
+  border-bottom: 1px solid #c5c5c5;
 }
 
 .noticeInfo:nth-child(1) {
-  grid-area: noticeImg;
-  display: flex;
-  /* width: 4vw;
-  height: 4vw; */
-  justify-content: center;
-  align-items: center;
-  border-radius: 70%;
-  overflow: hidden;
-}
-
-.noticeImg {
-  width: 100%;
-  height: 100%;
-}
-
-.noticeInfo:nth-child(2) {
   grid-area: noticeContent;
   line-height: 100%;
   white-space: break-spaces;
   margin-bottom: 0.5rem;
 }
 
-.noticeInfo:nth-child(3) {
-  grid-area: acceptBtn;
+.noticeInfo:nth-child(2) {
+  grid-area: leftBtn;
+  display: flex;
+  margin-right: auto;
 }
 
-.noticeInfo:nth-child(4) {
+.noticeInfo:nth-child(3) {
+  grid-area: rightBtn;
   display: flex;
   margin-left: auto;
-  grid-area: refuseBtn;
 }
 
-.noticeInfo:nth-child(5) {
-  grid-area: deleteBtn;
+.borderButton {
+  border: 1.5px solid #98dde3;
+  border-radius: 5px;
+  overflow: hidden;
 }

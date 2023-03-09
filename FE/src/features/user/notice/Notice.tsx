@@ -24,8 +24,10 @@ const Notice = () => {
             <Button text="전체 삭제" color="main" radius width="8vw" height="4vh" onClick={onClickClearBtn} />
           </div>
 
+          <hr style={{ backgroundColor: "#c5c5c5", height: "1px", border: "0", width: "100%" }} />
+
           {noticeList.map((value, key) => (
-            <NoticeItem key={key} noticeValue={value} />
+            <NoticeItem key={key} index={key} noticeValue={value} />
           ))}
         </>
       )}
