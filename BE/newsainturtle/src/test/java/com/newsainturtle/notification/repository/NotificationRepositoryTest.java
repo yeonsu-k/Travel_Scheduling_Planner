@@ -223,9 +223,47 @@ class NotificationRepositoryTest {
             List<Notification> result2 = notificationRepository.findByReceiveUser(user);
             //then
             assertAll(
-                    () -> assertEquals(result1.size(),3),
-                    () -> assertEquals(result2.size(),1)
+                    () -> assertEquals(result1.size(), 3),
+                    () -> assertEquals(result2.size(), 1)
             );
+        }
+    }
+
+    @Nested
+    @DisplayName("알림 조회")
+    class SelectNotification {
+        @Test
+        @DisplayName("친구 요청 알림 조회")
+        void 알림조회() {
+            //given
+            final User user = User.builder()
+                    .email("test@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User sender = User.builder()
+                    .email("test1@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final Notification friendNotification = FriendNotification.builder()
+                    .receiveUser(user)
+                    .sendUserId(sender.getUserId())
+                    .notificationStatus(NotificationStatus.NO_RESPONSE)
+                    .build();
+            userRepository.save(user);
+            notificationRepository.save(friendNotification);
+
+            //when
+            Notification result = notificationRepository.findBySendUserIdAndReceiveUser(sender.getUserId(), user);
+            //then
+            assertNotNull(result);
         }
     }
 }
