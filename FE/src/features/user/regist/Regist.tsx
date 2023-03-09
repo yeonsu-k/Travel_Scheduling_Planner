@@ -2,23 +2,43 @@ import Input from "components/Input";
 import Button from "components/Button";
 import React, { useState } from "react";
 import styles from "./Regist.module.css";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
+import { useNavigate } from "react-router-dom";
 
-const Regist = (e: any) => {
+const Regist = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
+
+  const [duplEmail, setDuplEmail] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
 
-  const emailCheck = () => {
+  const emailCheck = async () => {
     const rep = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     if (rep.test(email)) {
-      alert("사용 가능한 이메일입니다.");
+      await Axios.post(api.auth.duplicatedCheck(), { email: email })
+        .then((res: any) => {
+          const response = res.data.data.duplicateCheck;
+          if (!response) {
+            setDuplEmail(false);
+            alert("사용 불가능한 이메일입니다.");
+          } else {
+            setDuplEmail(true);
+            alert("사용 가능한 이메일입니다.");
+          }
+        })
+        .catch((err: any) => {
+          console.error(err);
+        });
     } else {
       alert("이메일 형식이 올바르지 않습니다.");
     }
   };
 
-  const passwordCheck = (e: any) => {
+  const passwordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     const rep = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{9,25}$/;
     if (rep.test(password)) {
@@ -28,7 +48,7 @@ const Regist = (e: any) => {
     }
   };
 
-  const passwordConfirm = (e: any) => {
+  const passwordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === password) {
       setIsPasswordConfirm(true);
     } else {
@@ -36,10 +56,39 @@ const Regist = (e: any) => {
     }
   };
 
-  const confirm = () => {
-    console.log(isPasswordConfirm);
-    console.log("really?");
+  const confirm = async () => {
+    if (!isPassword) {
+      alert("비밀번호 형식을 확인해주세요.");
+    } else if (!isPasswordConfirm) {
+      alert("비밀번호를 확인해주세요.");
+    } else if (!duplEmail) {
+      alert("이메일을 확인해주세요.");
+    }
+
+    // 나이, 개인정보, 이용약관 동의 확인
+
+    if (isPassword && isPasswordConfirm && duplEmail) {
+      await Axios.post(api.auth.join(), {
+        email: email,
+        nickname: nickname,
+        password: password,
+        duplicatedCheck: duplEmail,
+      })
+        .then((res: any) => {
+          alert("회원가입이 완료되었습니다.");
+          navigate("/login");
+        })
+        .catch((err: any) => {
+          console.error(err);
+        });
+    }
   };
+
+  // const login = async () => {
+  //   await Axios.get(api.auth.join({
+
+  //   }));
+  // };
 
   return (
     <div className={styles.container}>
@@ -53,24 +102,18 @@ const Regist = (e: any) => {
         </div>
         <div className={styles.inputEmailContainer}>
           <div style={{ width: "80%" }}>
-            <Input type="text" name="email" placeholder="" onChange={(e: any) => setEmail(e.target.value)} />
+            <Input type="text" name="email" placeholder="" onChange={(e) => setEmail(e.target.value)} />
           </div>
           <Button color="main" text="확인" onClick={emailCheck} />
+          {/* <div onClick={duplicateCheck}>확인</div> */}
         </div>
-
-        <div className={styles.inputTextContainer}>
-          <label className={styles.inputText} htmlFor="name">
-            이름
-          </label>
-        </div>
-        <Input type="text" name="email" placeholder="" />
 
         <div className={styles.inputTextContainer}>
           <label className={styles.inputText} htmlFor="name">
             닉네임
           </label>
         </div>
-        <Input type="text" name="email" placeholder="" />
+        <Input type="text" name="email" placeholder="" onChange={(e) => setNickname(e.target.value)} />
 
         <div className={styles.inputTextContainer}>
           <label className={styles.inputText} htmlFor="name">
@@ -81,7 +124,7 @@ const Regist = (e: any) => {
           type="password"
           name="email"
           placeholder="비밀번호(문자, 숫자, 특수문자 포함 10~20자)"
-          onChange={(e: any) => passwordCheck(e)}
+          onChange={(e) => passwordCheck(e)}
         />
 
         <div className={styles.inputTextContainer}>
@@ -89,7 +132,7 @@ const Regist = (e: any) => {
             비밀번호 확인
           </label>
         </div>
-        <Input type="password" name="email" placeholder="비밀번호 재입력" onChange={(e: any) => passwordConfirm(e)} />
+        <Input type="password" name="email" placeholder="비밀번호 재입력" onChange={(e) => passwordConfirm(e)} />
 
         {/* <div style={{ display: "flex", flexDirection: "column" }}>
           <FormControlLabel
@@ -159,7 +202,7 @@ const Regist = (e: any) => {
             <Button color="main" text="회원가입" width="100%" radius onClick={confirm} />
           </div>
           <div className={styles.registBack}>
-            <Button color="main" text="뒤로가기" width="100%" radius />
+            <Button color="main" text="뒤로가기" width="100%" radius onClick={() => navigate("/login")} />
           </div>
         </div>
       </div>
