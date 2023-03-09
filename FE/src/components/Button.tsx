@@ -9,7 +9,7 @@ interface Props {
   width?: string;
   height?: string;
   disabled?: boolean;
-  onClick?: () => void | undefined;
+  onClick?: () => Promise<void> | void | undefined;
 }
 
 export const ButtonStyled = ({ text, color, radius, width, height, ...rest }: Props) => {
