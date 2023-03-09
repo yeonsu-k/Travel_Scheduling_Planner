@@ -5,8 +5,10 @@ import com.newsainturtle.schedule.dto.ScheduleRequest;
 import com.newsainturtle.schedule.entity.Location;
 import com.newsainturtle.schedule.entity.Schedule;
 import com.newsainturtle.schedule.entity.ScheduleLocation;
+import com.newsainturtle.schedule.entity.ScheduleMember;
 import com.newsainturtle.schedule.exception.NullException;
 import com.newsainturtle.schedule.repository.LocationRepository;
+import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     private final LocationRepository locationRepository;
+
+    private final ScheduleMemberRepository scheduleMemberRepository;
 
     public String createSchedule(ScheduleRequest scheduleRequest, String email) {
         isNullScheduleLocation(scheduleRequest.getScheduleLocationRequestList());
@@ -45,7 +49,11 @@ public class ScheduleService {
                                 .location(findLocationById(scheduleLocation.getLocationId()))
                                 .build()).collect(Collectors.toList()))
                 .build();
-        scheduleRepository.save(schedule);
+        Long id = scheduleRepository.save(schedule).getScheduleId();
+        scheduleMemberRepository.save(ScheduleMember.builder()
+                .userEmail(email)
+                .scheduleID(id)
+                .build());
         return schedule.getScheduleName();
     }
     private Location findLocationById(Long locationId) {
