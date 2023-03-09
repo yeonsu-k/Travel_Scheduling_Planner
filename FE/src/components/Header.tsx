@@ -13,7 +13,7 @@ import { rootState } from "app/store";
 // import { rootState } from "app/store";
 // import api from "api/Api";
 // import Axios from "api/JsonAxios";
-// import { authActions } from "slices/authSlice";
+import { setLogout } from "slices/authSlice";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -51,8 +51,8 @@ function Header() {
 
   const onLogout = () => {
     handleCloseUserMenu();
-    // dispatch(authActions.logout());
-    navigate("/");
+    dispatch(setLogout());
+    window.location.replace("/"); // 새로고침 하면서 로그아웃
   };
 
   const handleOpenNotice = (event: React.MouseEvent<HTMLElement>) => {
