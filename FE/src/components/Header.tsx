@@ -9,6 +9,7 @@ import palette from "styles/colorPalette";
 import { useDispatch, useSelector } from "react-redux";
 import Notice from "features/user/notice/Notice";
 import Modal from "./Modal";
+import { rootState } from "app/store";
 // import { rootState } from "app/store";
 // import api from "api/Api";
 // import Axios from "api/JsonAxios";
@@ -25,7 +26,7 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // const { login, githubId, githubImage } = useSelector((state: rootState) => state.auth);
+  const { login, nickname } = useSelector((state: rootState) => state.auth);
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeOpen, setNoticeOpen] = useState(false);
 
@@ -110,9 +111,6 @@ function Header() {
             <NavLink to="/" className={styles.link}>
               여행지
             </NavLink>
-            <NavLink target={"_blank"} to="/login" className={styles.link}>
-              로그인
-            </NavLink>
 
             <Box sx={{ flexGrow: 0 }}>
               <ButtonBase onClick={handleOpenNotice} disableRipple>
@@ -176,13 +174,11 @@ function Header() {
                 </MenuItem>
               </Menu>
             </Box>
-
-            {
-              // login ? (
+            {login ? (
               <>
                 <Box sx={{ flexGrow: 0 }}>
                   <ButtonBase onClick={handleOpenUserMenu} disableRipple>
-                    <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>K</AvatarStyled>
+                    <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{nickname.slice(0, 1)}</AvatarStyled>
                     {/* {menuOpen ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />} */}
                   </ButtonBase>
                   <Menu
@@ -243,13 +239,11 @@ function Header() {
                   </Menu>
                 </Box>
               </>
-              //)
-              // : (
-              // <GithubButton startIcon={<GitHub />} onClick={onLogin}>
-              //   Login
-              // </GithubButton>
-              // )
-            }
+            ) : (
+              <NavLink target={"_blank"} to="/login" className={styles.link}>
+                로그인
+              </NavLink>
+            )}
           </Stack>
         </div>
       </header>
