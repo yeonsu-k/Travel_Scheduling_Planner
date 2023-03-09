@@ -31,4 +31,8 @@ public abstract class Notification {
     @Column(name = "notification_status")
     private NotificationStatus notificationStatus;
 
+    public Notification setNotificationStatus(NotificationStatus notificationStatus){
+        this.notificationStatus = notificationStatus;
+        return this;
+    }
 }

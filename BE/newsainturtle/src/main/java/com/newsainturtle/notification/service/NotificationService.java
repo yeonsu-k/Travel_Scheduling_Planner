@@ -80,4 +80,18 @@ public class NotificationService {
         User user = userRepository.findByEmail(email);
         notificationRepository.deleteByReceiveUser(user);
     }
+
+    public void sendFriendNotification(Long senderId, User receiver) {
+        FriendNotification notification = FriendNotification.builder()
+                .receiveUser(receiver)
+                .sendUserId(senderId)
+                .notificationStatus(NotificationStatus.NO_RESPONSE)
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    public void changeFriendNotification(Long senderId, User receiver, NotificationStatus notificationStatus) {
+        FriendNotification notification = (FriendNotification) notificationRepository.findBySendUserIdAndReceiveUser(senderId, receiver);
+        notification.setNotificationStatus(notificationStatus);
+    }
 }
