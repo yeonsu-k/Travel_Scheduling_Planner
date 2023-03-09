@@ -279,4 +279,35 @@ class NotificationServiceTest {
             //then
         }
     }
+
+    @Nested
+    @DisplayName("친구 알림 생성 테스트")
+    class sendFriendNotificationTest {
+
+        @Test
+        @DisplayName("[성공] - 친구 알림 생성")
+        void 친구알림생성() {
+            //given
+            final User user = User.builder()
+                    .email("yunaghgh@naver.com")
+                    .nickname("Kuuuna98")
+                    .password("pwd1234")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+            final User sender = User.builder()
+                    .email("test127@naver.com")
+                    .nickname("johnny")
+                    .password("pwd127")
+                    .kakao(false)
+                    .profile("path")
+                    .withdraw(false)
+                    .build();
+
+            //when
+            notificationService.sendFriendNotification(user.getUserId(), sender);
+            //then
+        }
+    }
 }
