@@ -94,7 +94,7 @@ public class UserService {
         if(!encoder.matches(modifyUserInfoRequest.getPassword(), user.getPassword())){
             throw new NotEqualsPasswordException();
         }
-        user.setPassword(modifyUserInfoRequest.getNewPassword());
+        if(!modifyUserInfoRequest.getNewPassword().equals("")) user.setPassword(modifyUserInfoRequest.getNewPassword());
         user.setNickname(modifyUserInfoRequest.getNickname());
     }
 
