@@ -228,7 +228,7 @@ const ScheduleEditPage = () => {
                   className="keepPlaceList"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={{ width: "auto", height: "auto" }}
+                  style={{ width: "auto", minHeight: "10px" }}
                 >
                   {keepPlaceList.map((value, key) => (
                     <Draggable key={value.id} draggableId={value.id.toString()} index={key}>

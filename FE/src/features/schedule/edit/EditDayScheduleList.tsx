@@ -35,6 +35,7 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
             ref={provided.innerRef}
             style={{
               width: "100%",
+              minHeight: "10px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
