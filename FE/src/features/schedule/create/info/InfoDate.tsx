@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Info.module.css";
 import Modal from "components/Modal";
 import { Stack } from "@mui/system";
@@ -12,11 +12,7 @@ import { useAppSelector } from "app/hooks";
 
 function InfoDate() {
   const date = useAppSelector(selectDate);
-  const [ModalOpen, setModalOpen] = React.useState(false);
-
-  useEffect(() => {
-    setModalOpen(false);
-  }, [date]);
+  const [ModalOpen, setModalOpen] = useState(true);
 
   const showModal = () => {
     setModalOpen(true);
@@ -41,7 +37,7 @@ function InfoDate() {
             <Box className={styles.rule_box} sx={{ background: colorPalette.main }} />
             <Text value="*최대 10일까지 가능" type="caption" en />
           </Stack>
-          <InfoCalendar />
+          <InfoCalendar modalClose={() => setModalOpen(false)} />
         </Modal>
       )}
     </div>
