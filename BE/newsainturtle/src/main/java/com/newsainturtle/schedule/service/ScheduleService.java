@@ -52,7 +52,7 @@ public class ScheduleService {
         Long id = scheduleRepository.save(schedule).getScheduleId();
         scheduleMemberRepository.save(ScheduleMember.builder()
                 .userEmail(email)
-                .scheduleID(id)
+                .scheduleId(id)
                 .build());
         return schedule.getScheduleName();
     }

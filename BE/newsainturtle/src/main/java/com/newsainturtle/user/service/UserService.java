@@ -108,7 +108,7 @@ public class UserService {
         List<ScheduleMember> list = scheduleMemberRepository.findAllByUserEmail(email);
         List<Optional<Schedule>> schedule_list = new ArrayList<>();
         for (ScheduleMember scheduleMember : list) {
-            schedule_list.add(scheduleRepository.findById(scheduleMember.getScheduleID()));
+            schedule_list.add(scheduleRepository.findById(scheduleMember.getScheduleId()));
         }
         List<ScheduleListResponse> result = new ArrayList<>();
         for (Optional<Schedule> schedule : schedule_list) {
