@@ -3,6 +3,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
+import authReducer from "slices/authSlice";
 import scheduleCreateReducer from "slices/scheduleCreateSlice";
 import scheduleEditReducer from "slices/scheduleEditSlice";
 import noticeSliceReducer from "slices/noticeSlice";
@@ -14,7 +15,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  // auth: authReducer,
+  auth: authReducer,
   scheduleCreate: scheduleCreateReducer,
   scheduleEdit: scheduleEditReducer,
   notice: noticeSliceReducer,
