@@ -6,6 +6,8 @@ import com.newsainturtle.friend.exception.NotFriendRelationException;
 import com.newsainturtle.friend.exception.UnableToRequestFriendFollowException;
 import com.newsainturtle.friend.exception.UnauthorizedFriendException;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.entity.NotificationStatus;
+import com.newsainturtle.notification.service.NotificationService;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
 public class FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     public UserSearchResponse searchUser(String email, UserSearchRequest userSearchRequest) {
@@ -28,7 +31,7 @@ public class FriendService {
         if (user == null || user.isWithdraw()) {
             return UserSearchResponse.builder().isExist(false).build();
         }
-        String status = checkUserRelationships(email,user);
+        String status = checkUserRelationships(email, user);
         return UserSearchResponse.builder()
                 .isExist(true)
                 .email(user.getEmail())
@@ -38,18 +41,18 @@ public class FriendService {
                 .build();
     }
 
-    String checkUserRelationships(String email, User receiveUser){
-        if(receiveUser.getEmail().equals(email)){
-            return  "본인";
-        }else {
+    String checkUserRelationships(String email, User receiveUser) {
+        if (receiveUser.getEmail().equals(email)) {
+            return "본인";
+        } else {
             User requestUser = userRepository.findByEmail(email);
-            Friend friend = friendRepository.findByRequestUserAndReceiveUser(requestUser,receiveUser);
-            if(friend == null){
-                friend = friendRepository.findByRequestUserAndReceiveUser(receiveUser,requestUser);
-                if(friend == null || !friend.isAccept()){
+            Friend friend = friendRepository.findByRequestUserAndReceiveUser(requestUser, receiveUser);
+            if (friend == null) {
+                friend = friendRepository.findByRequestUserAndReceiveUser(receiveUser, requestUser);
+                if (friend == null || !friend.isAccept()) {
                     return "친구요청";
                 }
-            }else if(!friend.isAccept()){
+            } else if (!friend.isAccept()) {
                 return "요청완료";
             }
         }
@@ -62,21 +65,22 @@ public class FriendService {
             throw new UnableToRequestFriendFollowException();
         }
         User requestUser = userRepository.findByEmail(email);
-        Friend friend = friendRepository.findByRequestUserAndReceiveUser(requestUser,receiveUser);
-        if(friend == null){
-            friend = friendRepository.findByRequestUserAndReceiveUser(receiveUser,requestUser);
-            if(friend == null){
+        Friend friend = friendRepository.findByRequestUserAndReceiveUser(requestUser, receiveUser);
+        if (friend == null) {
+            friend = friendRepository.findByRequestUserAndReceiveUser(receiveUser, requestUser);
+            if (friend == null) {
                 Friend newFriend = Friend.builder()
                         .isAccept(false)
                         .requestUser(requestUser)
                         .receiveUser(receiveUser)
                         .build();
                 friendRepository.save(newFriend);
-                //상대방에게 알림 전송
+                //상대방에게 알림 전송 (실시간 처리 필요)
+                notificationService.sendFriendNotification(requestUser.getUserId(), receiveUser);
                 return;
-            }else if(!friend.isAccept()){
+            } else if (!friend.isAccept()) {
                 friend.updateIsAccept(true);
-                //나의 알림메세지 해제
+                notificationService.changeFriendNotification(receiveUser.getUserId(), requestUser, NotificationStatus.ACCEPT);
                 return;
             }
         }
@@ -90,10 +94,10 @@ public class FriendService {
         List<FriendInfoResponse> friendInfoResponseList = new ArrayList<>();
         User friendUser;
 
-        for(Friend friend : friendList){
-            if(friend.getRequestUser().equals(user)){
+        for (Friend friend : friendList) {
+            if (friend.getRequestUser().equals(user)) {
                 friendUser = friend.getReceiveUser();
-            }else{
+            } else {
                 friendUser = friend.getRequestUser();
             }
             friendInfoResponseList.add(FriendInfoResponse.builder()
@@ -104,15 +108,15 @@ public class FriendService {
         return FriendListResponse.builder().friends(friendInfoResponseList).build();
     }
 
-    public void removeFriend(String email, FriendRemoveRequest friendRemoveRequest){
+    public void removeFriend(String email, FriendRemoveRequest friendRemoveRequest) {
         User user = userRepository.findByEmail(email);
         User friendUser = userRepository.findByEmail(friendRemoveRequest.getEmail());
-        if(friendUser==null){
+        if (friendUser == null) {
             throw new UnauthorizedFriendException();
         }
 
-        Friend friend = friendRepository.findByFriend(user,friendUser);
-        if(friend==null){
+        Friend friend = friendRepository.findByFriend(user, friendUser);
+        if (friend == null) {
             throw new NotFriendRelationException();
         }
 
