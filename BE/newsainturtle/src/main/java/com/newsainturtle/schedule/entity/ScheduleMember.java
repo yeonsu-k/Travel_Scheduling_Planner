@@ -21,11 +21,11 @@ public class ScheduleMember {
     private String userEmail;
 
     @Column(name = "schedule_id")
-    private Long scheduleID;
+    private Long scheduleId;
 
     @Builder
-    public ScheduleMember(String userEmail, Long scheduleID){
+    public ScheduleMember(String userEmail, Long scheduleId){
         this.userEmail = userEmail;
-        this.scheduleID = scheduleID;
+        this.scheduleId = scheduleId;
     }
 }
