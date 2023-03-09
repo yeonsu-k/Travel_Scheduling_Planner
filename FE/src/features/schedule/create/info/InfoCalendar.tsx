@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { selectDate, setDate } from "slices/scheduleCreateSlice";
+import { selectDate, setDate, setHotelList } from "slices/scheduleCreateSlice";
 import styles from "./Info.module.css";
 import colorPalette from "styles/colorPalette";
 import { DateRange, RangeKeyDict } from "react-date-range";
@@ -13,7 +13,7 @@ function InfoCalendar() {
   const dispatch = useAppDispatch();
   const date = useAppSelector(selectDate);
 
-  const [state, setState] = React.useState([
+  const [state, setState] = useState([
     {
       startDate: new Date(date.start),
       endDate: new Date(date.end),
@@ -23,15 +23,15 @@ function InfoCalendar() {
 
   const saveDate = () => {
     if (typeof state[0] != undefined) {
+      const startDay = state[0].startDate;
+      const endDay = state[0].startDate === state[0].endDate ? addDays(state[0].endDate, 1) : state[0].endDate;
       dispatch(
         setDate({
-          start: format(state[0].startDate, "yyyy-MM-dd"),
-          end:
-            state[0].startDate === state[0].endDate
-              ? format(addDays(state[0].endDate, 1), "yyyy-MM-dd")
-              : format(state[0].endDate, "yyyy-MM-dd"),
+          start: format(startDay, "yyyy-MM-dd"),
+          end: format(endDay, "yyyy-MM-dd"),
         }),
       );
+      dispatch(setHotelList(Array.from({ length: differenceInDays(endDay, startDay) }, () => null)));
     }
   };
 

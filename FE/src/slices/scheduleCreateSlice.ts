@@ -21,10 +21,7 @@ interface scheduleCreateConfig {
     name: string;
     time: string;
   }[];
-  pointPlace: {
-    start: basicConfig | null;
-    end: basicConfig | null;
-  };
+  pointPlace: (basicConfig | null)[];
 }
 
 const initialState: scheduleCreateConfig = {
@@ -33,12 +30,9 @@ const initialState: scheduleCreateConfig = {
     start: format(new Date(), "yyyy-MM-dd"),
     end: format(addDays(new Date(), 2), "yyyy-MM-dd"),
   },
-  hotel: [],
+  hotel: Array.from({ length: 2 }, () => null),
   place: [],
-  pointPlace: {
-    start: null,
-    end: null,
-  },
+  pointPlace: Array.from({ length: 2 }, () => null),
 };
 
 const scheduleCreateSlice = createSlice({
@@ -61,17 +55,12 @@ const scheduleCreateSlice = createSlice({
       const changedIdx = payload.index;
       state.place[changedIdx].time = payload.time;
     },
-    deletePointPlaceList: (state, { payload }) => {
-      const changedPosition = payload.position;
-      if (changedPosition === 0) {
-        state.pointPlace.start = payload.value;
-      } else {
-        state.pointPlace.end = payload.value;
-      }
+    setPointPlace: (state, { payload }) => {
+      state.pointPlace = payload;
     },
   },
 });
-export const { setLocal, setDate, setHotelList, setPlaceList, setPlaceTime, deletePointPlaceList } =
+export const { setLocal, setDate, setHotelList, setPlaceList, setPlaceTime, setPointPlace } =
   scheduleCreateSlice.actions;
 
 export const selectLocal = (state: rootState) => state.scheduleCreate.local;

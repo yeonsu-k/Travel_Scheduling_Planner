@@ -7,13 +7,20 @@ import Text from "components/Text";
 import { Box } from "@mui/material";
 import InfoListHotel from "./info/InfoListHotel";
 import InfoListPlace from "./info/InfoListPlace";
+import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
-function CreateInfo() {
-  const [currentTab, setCurrentTab] = React.useState(0);
+function CreateInfo(props: ScheduleCreatPropsType) {
+  const { currentTab, setCurrentTab, setPlaceCurrentDay } = props;
 
   const TabArr = [
-    { name: "호텔", content: <InfoListHotel /> },
-    { name: "장소", content: <InfoListPlace /> },
+    {
+      name: "호텔",
+      content: <InfoListHotel scheduleCreatProps={props} />,
+    },
+    {
+      name: "장소",
+      content: <InfoListPlace scheduleCreatProps={props} />,
+    },
   ];
 
   return (
@@ -30,17 +37,19 @@ function CreateInfo() {
               return (
                 <li
                   key={index}
-                  className={currentTab === index ? `${styles.focused}` : ""}
-                  onClick={() => setCurrentTab(index)}
+                  className={currentTab === ele.name ? `${styles.focused}` : ""}
+                  onClick={() => {
+                    ele.name === "호텔" ? (setPlaceCurrentDay(-1), setCurrentTab(ele.name)) : setCurrentTab(ele.name);
+                  }}
                 >
                   {ele.name}
                 </li>
               );
             })}
           </ul>
-          <div className={currentTab === 0 ? styles.lineLeft : styles.lineRight} />
+          <div className={currentTab === "호텔" ? styles.lineLeft : styles.lineRight} />
         </div>
-        {TabArr[currentTab].content}
+        {TabArr[currentTab === "호텔" ? 0 : 1].content}
       </Stack>
     </div>
   );
