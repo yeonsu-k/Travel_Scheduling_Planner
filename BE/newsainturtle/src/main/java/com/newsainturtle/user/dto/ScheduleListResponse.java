@@ -12,6 +12,7 @@ import java.util.Optional;
 @Builder
 public class ScheduleListResponse {
 
+    private Long schedule_id;
     private String host;
     private String region_name;
     private String schedule_name;
@@ -22,6 +23,7 @@ public class ScheduleListResponse {
 
     public static ScheduleListResponse of(Optional<Schedule> schedule){
         return schedule.map(value -> ScheduleListResponse.builder()
+                .schedule_id(value.getScheduleId())
                 .host(value.getHostEmail())
                 .region_name(value.getScheduleRegion())
                 .schedule_name(value.getScheduleName())
