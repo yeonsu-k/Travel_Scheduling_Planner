@@ -13,7 +13,8 @@ import { rootState } from "app/store";
 // import { rootState } from "app/store";
 // import api from "api/Api";
 // import Axios from "api/JsonAxios";
-import { setLogout } from "slices/authSlice";
+import { setLogout, selectUserInfo } from "slices/authSlice";
+import { useAppSelector } from "app/hooks";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -26,7 +27,8 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { login, nickname } = useSelector((state: rootState) => state.auth);
+  const { login } = useSelector((state: rootState) => state.auth);
+  const userInfo = useAppSelector(selectUserInfo);
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeOpen, setNoticeOpen] = useState(false);
 
@@ -178,7 +180,7 @@ function Header() {
               <>
                 <Box sx={{ flexGrow: 0 }}>
                   <ButtonBase onClick={handleOpenUserMenu} disableRipple>
-                    <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{nickname.slice(0, 1)}</AvatarStyled>
+                    <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{userInfo.nickname.slice(0, 1)}</AvatarStyled>
                     {/* {menuOpen ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />} */}
                   </ButtonBase>
                   <Menu
