@@ -2,6 +2,7 @@ package com.newsainturtle.schedule.controller;
 
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
+import com.newsainturtle.schedule.dto.InviteFriendRequest;
 import com.newsainturtle.schedule.dto.*;
 import com.newsainturtle.schedule.service.ScheduleService;
 import io.swagger.annotations.Api;
@@ -70,6 +71,25 @@ public class ScheduleController {
                 MODIFY_SCHEDULE_VEHICLE_SUCCESS_MESSAGE)
                 , HttpStatus.OK);
     }
+    @PostMapping("/location")
+    @Operation(summary = "일정생성-1 장소검색", description = "일정에 추가할 장소를 검색합니다.")
+    public ResponseEntity<BaseResponse> searchLocation(@ApiIgnore Authentication authentication, @RequestBody LocationSearchRequest locationSearchRequest) {
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                SEARCH_LOCATION_SUCCESS_MESSAGE,scheduleService.searchLocation(locationSearchRequest))
+                , HttpStatus.OK);
+    }
+
+    @PostMapping("/hotel")
+    @Operation(summary = "일정생성-1 호텔검색", description = "일정에 추가할 호텔을 검색합니다.")
+    public ResponseEntity<BaseResponse> searchHotel(@ApiIgnore Authentication authentication, @RequestBody LocationSearchRequest locationSearchRequest) {
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                SEARCH_LOCATION_SUCCESS_MESSAGE,scheduleService.searchHotel(locationSearchRequest))
+                , HttpStatus.OK);
+    }
+
+
 
 
     @GetMapping("/{schedule_id}")

@@ -6,10 +6,7 @@ import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.entity.ScheduleNotification;
 import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
 import com.newsainturtle.schedule.dto.*;
-import com.newsainturtle.schedule.entity.Location;
-import com.newsainturtle.schedule.entity.Region;
-import com.newsainturtle.schedule.entity.Schedule;
-import com.newsainturtle.schedule.entity.ScheduleMember;
+import com.newsainturtle.schedule.entity.*;
 import com.newsainturtle.schedule.exception.NullException;
 import com.newsainturtle.schedule.exception.UnableToRequestFriendInviteException;
 import com.newsainturtle.schedule.exception.UninvitedUsersException;
@@ -28,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.NULL_SCHEDULE_LOCATION_MESSAGE;
+import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.*;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +85,17 @@ public class ScheduleService {
         }
     }
 
+    public List<LocationResponse> searchLocation(LocationSearchRequest locationSearchRequest) {
+        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
+        locationList.removeIf(Location::isHotel);
+        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
+    }
+
+    public List<LocationResponse> searchHotel(LocationSearchRequest locationSearchRequest) {
+        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
+        locationList.removeIf(location -> !location.isHotel());
+        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
+    }
     public ScheduleResponse findSchedule(Long scheduleId) {
         Schedule schedule = findScheduleById(scheduleId);
         return ScheduleResponse.builder()
@@ -129,7 +137,7 @@ public class ScheduleService {
     }
 
     private void isNullScheduleLocation(List<ScheduleLocationRequest> scheduleLocationRequestList) {
-        if (scheduleLocationRequestList.isEmpty()) {
+        if(scheduleLocationRequestList.isEmpty()) {
             throw new NullException(NULL_SCHEDULE_LOCATION_MESSAGE);
         }
     }
@@ -170,6 +178,7 @@ public class ScheduleService {
         throw new UnableToRequestFriendInviteException();
     }
 
+
     public FriendListResponse selectFriendList(String email, Long scheduleId) {
         User user = userRepository.findByEmail(email);
         ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
@@ -207,3 +216,4 @@ public class ScheduleService {
         return FriendListResponse.builder().friends(friendInfoResponseList).build();
     }
 }
+

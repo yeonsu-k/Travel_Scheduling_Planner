@@ -31,4 +31,6 @@ public abstract class Location {
     private double longitude;
 
     private double latitude;
+
+    private boolean isHotel;
 }
