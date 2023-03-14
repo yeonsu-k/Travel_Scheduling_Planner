@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "components/Input";
 import Text from "components/Text";
 import Button from "components/Button";
@@ -9,6 +9,10 @@ import { useAppSelector } from "app/hooks";
 
 const MyProfileEdit = () => {
   const userInfo = useAppSelector(selectUserInfo);
+
+  useEffect(() => {
+    console.log("이메일: ", userInfo.email);
+  }, []);
   return (
     <div className={styles.profileWrapper}>
       <div className={styles.profileContainer}>
@@ -28,14 +32,12 @@ const MyProfileEdit = () => {
                 <Text value="기본정보" type="text" bold />
               </div>
             </div>
-
             <div className={loginStyles.inputTextContainer}>
               <label className={loginStyles.inputText} style={{ color: "black" }} htmlFor="name">
                 닉네임
               </label>
             </div>
             <Input type="text" name="email" value={userInfo.nickname} />
-
             <div className={loginStyles.inputTextContainer}>
               <label className={loginStyles.inputText} style={{ color: "black" }} htmlFor="name">
                 이메일

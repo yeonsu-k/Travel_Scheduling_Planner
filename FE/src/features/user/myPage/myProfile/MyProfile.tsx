@@ -1,15 +1,13 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./MyProfile.module.css";
 import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
 import { useNavigate } from "react-router-dom";
 import { selectUserInfo, setUserInfo } from "slices/authSlice";
 import { useAppSelector } from "app/hooks";
-import axios from "axios";
 import api from "api/Api";
-import { useSelector } from "react-redux";
-import { rootState } from "app/store";
 import { useDispatch } from "react-redux";
+import Axios from "api/JsonAxios";
 
 interface MyProfileProps {
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
@@ -19,19 +17,16 @@ const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useAppSelector(selectUserInfo);
-  const { accessToken } = useSelector((state: rootState) => state.auth);
 
   const getUserInfo = async () => {
-    await axios
-      .get(api.user.user(), {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    await Axios.get(api.user.user())
       .then((res: any) => {
-        dispatch(setUserInfo(res.data.data.email));
         console.log(res.data.data.email);
+        dispatch(
+          setUserInfo({
+            email: res.data.data.email,
+          }),
+        );
       })
       .catch((err: any) => {
         console.error(err);
