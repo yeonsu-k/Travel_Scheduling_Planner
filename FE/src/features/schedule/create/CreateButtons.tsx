@@ -3,8 +3,8 @@ import { Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import React, { useState } from "react";
 import styles from "./Create.module.css";
 import { styled } from "@mui/material/styles";
-import ButtonsAddModal from "./buttons/ButtonsAddModal";
-import ButtonsCreateModal from "./buttons/ButtonsCreateModal";
+import PlaceAddModal from "./buttons/PlaceAddModal";
+import CreateScheduleModal from "./buttons/CreateScheduleModal";
 
 interface ScheduleCreatPropsType {
   currentMove: string;
@@ -59,9 +59,12 @@ function CreateButtons(props: ScheduleCreatPropsType) {
       <a className={styles.floatBtn} onClick={() => setCreateScheduleModal(true)}>
         일정생성
       </a>
-      {addPlaceModal && <ButtonsAddModal setAddPlaceModal={setAddPlaceModal} />}
+      {addPlaceModal && <PlaceAddModal setAddPlaceModal={setAddPlaceModal} />}
       {createScheduleModal && (
-        <ButtonsCreateModal scheduleCreateClick={scheduleCreateClick} setCreateScheduleModal={setCreateScheduleModal} />
+        <CreateScheduleModal
+          scheduleCreateClick={scheduleCreateClick}
+          setCreateScheduleModal={setCreateScheduleModal}
+        />
       )}
     </div>
   );
