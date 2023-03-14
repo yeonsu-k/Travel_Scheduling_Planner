@@ -41,14 +41,14 @@ function Toast({ message, open, onClose }: Props) {
 
   return (
     <>
-      open && (
-      <SnackbarStyle
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={open}
-        TransitionComponent={Zoom}
-        message={message}
-      />
-      )
+      {open && (
+        <SnackbarStyle
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={open}
+          TransitionComponent={Zoom}
+          message={message}
+        />
+      )}
     </>
   );
 }
