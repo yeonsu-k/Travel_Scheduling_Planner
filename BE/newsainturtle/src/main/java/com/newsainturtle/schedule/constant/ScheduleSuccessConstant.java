@@ -15,9 +15,11 @@ public class ScheduleSuccessConstant {
     public static final String CREATE_SCHEDULE_SUCCESS_MESSAGE = "일정 생성에 성공했습니다.";
 
     public static final String INVITE_FRIEND_SUCCESS_MESSAGE = "친구 초대가 완료되었습니다.";
-    
+
+    public static final String SELECT_FRIEND_LIST_SUCCESS_MESSAGE = "친구목록 조회에 성공했습니다.";
+
     public static final String MODIFY_SCHEDULE_PERIOD_SUCCESS_MESSAGE = "일정 기간 수정을 성공했습니다.";
-    public static final String MODIFY_SCHEDULE_START_END_DAY_SUCCESS_MESSAGE = "일정 시작/끝 날자 변경에 성공했습니다." ;
+    public static final String MODIFY_SCHEDULE_START_END_DAY_SUCCESS_MESSAGE = "일정 시작/끝 날자 변경에 성공했습니다.";
     public static final String MODIFY_SCHEDULE_VEHICLE_SUCCESS_MESSAGE = "일정 이동수단 변경에 성공했습니다.";
     public static final String SEARCH_LOCATION_SUCCESS_MESSAGE = "장소 검색에 성공했습니다.";
 }
