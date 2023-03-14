@@ -1,12 +1,23 @@
 package com.newsainturtle.schedule.service;
 
+import com.newsainturtle.friend.entity.Friend;
+import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.entity.NotificationStatus;
+import com.newsainturtle.notification.entity.ScheduleNotification;
+import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
 import com.newsainturtle.schedule.dto.*;
-import com.newsainturtle.schedule.entity.*;
+import com.newsainturtle.schedule.entity.Location;
+import com.newsainturtle.schedule.entity.Region;
+import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.entity.ScheduleMember;
 import com.newsainturtle.schedule.exception.NullException;
+import com.newsainturtle.schedule.exception.UnableToRequestFriendInviteException;
 import com.newsainturtle.schedule.repository.LocationRepository;
 import com.newsainturtle.schedule.repository.RegionRepository;
 import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
+import com.newsainturtle.user.entity.User;
+import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.*;
+import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.NULL_SCHEDULE_LOCATION_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +37,10 @@ public class ScheduleService {
 
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final RegionRepository regionRepository;
+
+    private final UserRepository userRepository;
+    private final ScheduleNotificationRepository scheduleNotificationRepository;
+    private final FriendRepository friendRepository;
 
     @Transactional
     public void createSchedule(ScheduleRequest scheduleRequest, String email) {
@@ -84,8 +99,44 @@ public class ScheduleService {
     }
 
     private void isNullScheduleLocation(List<ScheduleLocationRequest> scheduleLocationRequestList) {
-        if(scheduleLocationRequestList.isEmpty()) {
+        if (scheduleLocationRequestList.isEmpty()) {
             throw new NullException(NULL_SCHEDULE_LOCATION_MESSAGE);
         }
+    }
+
+    @Transactional
+    public void inviteFriend(String email, InviteFriendRequest inviteFriendEmailRequest) {
+        long scheduleId = inviteFriendEmailRequest.getScheduleId();
+        String friendEmail = inviteFriendEmailRequest.getEmail();
+        User receiveUser = userRepository.findByEmail(friendEmail);
+
+        if (receiveUser == null || receiveUser.isWithdraw() || receiveUser.getEmail().equals(email)) {
+            throw new UnableToRequestFriendInviteException();
+        }
+
+        User user = userRepository.findByEmail(email);
+        Friend friend = friendRepository.findByFriend(user, receiveUser);
+        ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
+        ScheduleMember scheduleMemberFriend = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, friendEmail);
+        if (friend != null && scheduleMemberUser != null && scheduleMemberFriend == null) {
+            ScheduleNotification scheduleNotification = scheduleNotificationRepository.findByScheduleIdAndReceiveUser(scheduleId, receiveUser);
+            if (scheduleNotification != null && scheduleNotification.getNotificationStatus() == NotificationStatus.REJECT) {
+                scheduleNotificationRepository.deleteByNotificationId(scheduleNotification.getNotificationId());
+            }
+            if (scheduleNotification == null) {
+                //상대방에게 알림 전송 (실시간 처리 필요)
+                ScheduleNotification newScheduleNotification = ScheduleNotification.builder()
+                        .sendUserId(user.getUserId())
+                        .receiveUser(receiveUser)
+                        .scheduleId(scheduleId)
+                        .notificationStatus(NotificationStatus.NO_RESPONSE)
+                        .build();
+
+                scheduleNotificationRepository.save(newScheduleNotification);
+                return;
+            }
+        }
+
+        throw new UnableToRequestFriendInviteException();
     }
 }
