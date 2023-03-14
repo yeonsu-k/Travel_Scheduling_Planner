@@ -2,7 +2,10 @@ package com.newsainturtle.schedule.controller;
 
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
+import com.newsainturtle.schedule.dto.SchedulePeriodRequest;
 import com.newsainturtle.schedule.dto.ScheduleRequest;
+import com.newsainturtle.schedule.dto.ScheduleStartEndLocationRequest;
+import com.newsainturtle.schedule.dto.ScheduleVehicleRequest;
 import com.newsainturtle.schedule.service.ScheduleService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +36,39 @@ public class ScheduleController {
                 CREATE_SCHEDULE_SUCCESS_MESSAGE)
                 , HttpStatus.OK);
     }
+    @PostMapping("/period/{schedule_id}")
+    @Operation(summary = "일정생성-1 여행 기간 설정", description = "일정의 시작 날짜와 끝 날짜를 저장합니다.")
+    public ResponseEntity<BaseResponse> modifySchedulePeriod(@ApiIgnore Authentication authentication, @RequestBody SchedulePeriodRequest schedulePeriodRequest ,@PathVariable Long schedule_id) {
+        UserDetails userDetails = (UserDetails)authentication.getDetails();
+        scheduleService.modifySchedulePeriod(userDetails.getUsername(), schedulePeriodRequest, schedule_id);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                MODIFY_SCHEDULE_PERIOD_SUCCESS_MESSAGE)
+                , HttpStatus.OK);
+    }
+
+    @PostMapping("/start/{schedule_id}")
+    @Operation(summary = "일정생성-1 여행 시작/도착지 설정", description = "일정의 시작 장소와 끝 장소를 저장합니다.")
+    public ResponseEntity<BaseResponse> modifyScheduleStartEndLocation(@ApiIgnore Authentication authentication, @RequestBody ScheduleStartEndLocationRequest scheduleStartEndLocationRequest , @PathVariable Long schedule_id) {
+        UserDetails userDetails = (UserDetails)authentication.getDetails();
+        scheduleService.modifyScheduleStartEndLocation(userDetails.getUsername(), scheduleStartEndLocationRequest, schedule_id);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                MODIFY_SCHEDULE_START_END_DAY_SUCCESS_MESSAGE)
+                , HttpStatus.OK);
+    }
+
+    @PostMapping("/vehicle/{schedule_id}")
+    @Operation(summary = "일정생성-1 이동수단 변경", description = "일정의 이동 수단을 저장합니다.")
+    public ResponseEntity<BaseResponse> modifyScheduleVehicle(@ApiIgnore Authentication authentication, @RequestBody ScheduleVehicleRequest scheduleVehicleRequest , @PathVariable Long schedule_id) {
+        UserDetails userDetails = (UserDetails)authentication.getDetails();
+        scheduleService.modifyScheduleVehicle(userDetails.getUsername(),scheduleVehicleRequest , schedule_id);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                MODIFY_SCHEDULE_VEHICLE_SUCCESS_MESSAGE)
+                , HttpStatus.OK);
+    }
+
 
     @GetMapping("/{schedule_id}")
     public ResponseEntity<BaseResponse> findSchedule(@PathVariable("schedule_id") Long scheduleId) {

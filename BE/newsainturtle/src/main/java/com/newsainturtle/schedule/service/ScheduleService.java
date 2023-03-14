@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.*;
@@ -41,6 +42,33 @@ public class ScheduleService {
                 .userEmail(email)
                 .build();
         scheduleMemberRepository.save(scheduleMember);
+    }
+
+    @Transactional
+    public void modifySchedulePeriod(String username, SchedulePeriodRequest schedulePeriodRequest, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if(schedule.isPresent()) {
+            final Schedule result = schedule.get();
+            result.updatePeriod(schedulePeriodRequest);
+        }
+    }
+
+    @Transactional
+    public void modifyScheduleStartEndLocation(String username, ScheduleStartEndLocationRequest scheduleStartEndLocationRequest, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if(schedule.isPresent()) {
+            final Schedule result = schedule.get();
+            result.updateStartEndLocation(scheduleStartEndLocationRequest);
+        }
+    }
+
+    @Transactional
+    public void modifyScheduleVehicle(String username, ScheduleVehicleRequest scheduleVehicleRequest, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if(schedule.isPresent()) {
+            final Schedule result = schedule.get();
+            result.updateVehicle(scheduleVehicleRequest);
+        }
     }
 
     public ScheduleResponse findSchedule(Long scheduleId) {
@@ -88,4 +116,5 @@ public class ScheduleService {
             throw new NullException(NULL_SCHEDULE_LOCATION_MESSAGE);
         }
     }
+
 }
