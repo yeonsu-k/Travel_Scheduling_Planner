@@ -1,8 +1,15 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import styles from "./MyProfile.module.css";
 import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
 import { useNavigate } from "react-router-dom";
+import { selectUserInfo, setUserInfo } from "slices/authSlice";
+import { useAppSelector } from "app/hooks";
+import axios from "axios";
+import api from "api/Api";
+import { useSelector } from "react-redux";
+import { rootState } from "app/store";
+import { useDispatch } from "react-redux";
 
 interface MyProfileProps {
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
@@ -10,6 +17,30 @@ interface MyProfileProps {
 
 const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userInfo = useAppSelector(selectUserInfo);
+  const { accessToken } = useSelector((state: rootState) => state.auth);
+
+  const getUserInfo = async () => {
+    await axios
+      .get(api.user.user(), {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res: any) => {
+        dispatch(setUserInfo(res.data.data.email));
+        console.log(res.data.data.email);
+      })
+      .catch((err: any) => {
+        console.error(err);
+      });
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   return (
     <div className={styles.myProfile}>
@@ -18,7 +49,7 @@ const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
       </div>
 
       <div className={styles.myProfileInfo}>
-        <Text value="kjy" type="pageTitle" bold />
+        <Text value={userInfo.nickname} type="pageTitle" bold />
       </div>
       <button className={styles.myProfileInfo} onClick={() => navigate("/profile")}>
         <Text value="프로필 수정" />

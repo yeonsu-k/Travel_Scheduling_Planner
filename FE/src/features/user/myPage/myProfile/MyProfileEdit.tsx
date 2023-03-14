@@ -4,17 +4,20 @@ import Text from "components/Text";
 import Button from "components/Button";
 import styles from "./MyProfile.module.css";
 import loginStyles from "../../login/Login.module.css";
+import { selectUserInfo } from "slices/authSlice";
+import { useAppSelector } from "app/hooks";
 
 const MyProfileEdit = () => {
+  const userInfo = useAppSelector(selectUserInfo);
   return (
     <div className={styles.profileWrapper}>
       <div className={styles.profileContainer}>
         <div className={styles.profileTopContainer}>
           <div className={styles.profileImgContainer}>
-            <div className={styles.profileImgText}>김</div>
+            <div className={styles.profileImgText}>{userInfo.nickname.slice(0, 1)}</div>
           </div>
           <div className={styles.profileUser}>
-            <Text value="김연수" type="pageTitle" bold />
+            <Text value={userInfo.nickname} type="pageTitle" bold />
           </div>
           <div className={styles.text}>님의 프로필</div>
         </div>
@@ -28,24 +31,17 @@ const MyProfileEdit = () => {
 
             <div className={loginStyles.inputTextContainer}>
               <label className={loginStyles.inputText} style={{ color: "black" }} htmlFor="name">
-                이름
-              </label>
-            </div>
-            <Input type="text" name="email" placeholder="" />
-
-            <div className={loginStyles.inputTextContainer}>
-              <label className={loginStyles.inputText} style={{ color: "black" }} htmlFor="name">
                 닉네임
               </label>
             </div>
-            <Input type="text" name="email" placeholder="" />
+            <Input type="text" name="email" value={userInfo.nickname} />
 
             <div className={loginStyles.inputTextContainer}>
               <label className={loginStyles.inputText} style={{ color: "black" }} htmlFor="name">
                 이메일
               </label>
             </div>
-            <Input type="text" name="email" placeholder="" disabled />
+            <Input type="text" name="email" value={userInfo.email} disabled />
           </div>
         </div>
         <div className={styles.profileLeave}>회원탈퇴</div>
