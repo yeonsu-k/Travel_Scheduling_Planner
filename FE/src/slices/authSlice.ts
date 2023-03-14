@@ -1,5 +1,6 @@
 import React from "react";
 import { createSlice } from "@reduxjs/toolkit";
+import { rootState } from "app/store";
 
 interface authConfig {
   accessToken: string;
@@ -21,6 +22,7 @@ const authSlice = createSlice({
       state.accessToken = accessToken;
       state.login = true;
       state.nickname = nickname;
+      sessionStorage.setItem("accessToken", accessToken);
     },
     setLogout: (state) => {
       state.accessToken = "";
@@ -31,4 +33,5 @@ const authSlice = createSlice({
 });
 
 export const { setLogin, setLogout } = authSlice.actions;
+
 export default authSlice.reducer;

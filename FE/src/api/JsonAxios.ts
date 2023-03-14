@@ -2,14 +2,19 @@ import baseAxios from "axios";
 
 export const baseURL = process.env.REACT_APP_API_BASE_URL;
 
-const accessToken = null;
-
 const Axios = baseAxios.create({
-  baseURL,
+  baseURL: baseURL,
   headers: {
-    "Content-Type": "application/json",
-    accessToken: accessToken,
+    "content-type": "application/json",
   },
+});
+
+Axios.interceptors.request.use((config) => {
+  const accessToken = sessionStorage.getItem("accessToken");
+
+  config.headers.Authorization = accessToken ? `Bearer ${accessToken}` : "";
+
+  return config;
 });
 
 export default Axios;
