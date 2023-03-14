@@ -1,7 +1,6 @@
 package com.newsainturtle.notification.repository;
 
 import com.newsainturtle.notification.entity.Notification;
-import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,8 +15,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Notification findByNotificationIdAndReceiveUser(Long notificationId, User user);
 
-    Notification findBySendUserIdAndReceiveUser(Long sendUserId, User user);
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Notification n WHERE n.notificationId = ?1 AND n.receiveUser = ?2")
@@ -27,5 +24,4 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Modifying
     @Query("DELETE FROM Notification n WHERE n.receiveUser = ?1 AND NOT n.notificationStatus = com.newsainturtle.notification.entity.NotificationStatus.NO_RESPONSE")
     void deleteByReceiveUser(User user);
-
 }
