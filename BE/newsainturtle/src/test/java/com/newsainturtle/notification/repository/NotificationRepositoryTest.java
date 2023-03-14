@@ -25,6 +25,8 @@ class NotificationRepositoryTest {
     private UserRepository userRepository;
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private FriendNotificationRepository friendNotificationRepository;
 
     @Nested
     @DisplayName("알림 목록 조회")
@@ -252,16 +254,16 @@ class NotificationRepositoryTest {
                     .profile("path")
                     .withdraw(false)
                     .build();
-            final Notification friendNotification = FriendNotification.builder()
+            final FriendNotification friendNotification = FriendNotification.builder()
                     .receiveUser(user)
                     .sendUserId(sender.getUserId())
                     .notificationStatus(NotificationStatus.NO_RESPONSE)
                     .build();
             userRepository.save(user);
-            notificationRepository.save(friendNotification);
+            friendNotificationRepository.save(friendNotification);
 
             //when
-            Notification result = notificationRepository.findBySendUserIdAndReceiveUser(sender.getUserId(), user);
+            Notification result = friendNotificationRepository.findBySendUserIdAndReceiveUser(sender.getUserId(), user);
             //then
             assertNotNull(result);
         }
