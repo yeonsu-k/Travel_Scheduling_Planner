@@ -6,12 +6,10 @@ import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.entity.ScheduleNotification;
 import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
 import com.newsainturtle.schedule.dto.*;
-import com.newsainturtle.schedule.entity.Location;
-import com.newsainturtle.schedule.entity.Region;
-import com.newsainturtle.schedule.entity.Schedule;
-import com.newsainturtle.schedule.entity.ScheduleMember;
+import com.newsainturtle.schedule.entity.*;
 import com.newsainturtle.schedule.exception.NullException;
 import com.newsainturtle.schedule.exception.UnableToRequestFriendInviteException;
+import com.newsainturtle.schedule.exception.UninvitedUsersException;
 import com.newsainturtle.schedule.repository.LocationRepository;
 import com.newsainturtle.schedule.repository.RegionRepository;
 import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
@@ -22,11 +20,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.NULL_SCHEDULE_LOCATION_MESSAGE;
+import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.*;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +61,7 @@ public class ScheduleService {
     @Transactional
     public void modifySchedulePeriod(String username, SchedulePeriodRequest schedulePeriodRequest, Long schedule_id) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        if(schedule.isPresent()) {
+        if (schedule.isPresent()) {
             final Schedule result = schedule.get();
             result.updatePeriod(schedulePeriodRequest);
         }
@@ -71,7 +70,7 @@ public class ScheduleService {
     @Transactional
     public void modifyScheduleStartEndLocation(String username, ScheduleStartEndLocationRequest scheduleStartEndLocationRequest, Long schedule_id) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        if(schedule.isPresent()) {
+        if (schedule.isPresent()) {
             final Schedule result = schedule.get();
             result.updateStartEndLocation(scheduleStartEndLocationRequest);
         }
@@ -80,12 +79,23 @@ public class ScheduleService {
     @Transactional
     public void modifyScheduleVehicle(String username, ScheduleVehicleRequest scheduleVehicleRequest, Long schedule_id) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        if(schedule.isPresent()) {
+        if (schedule.isPresent()) {
             final Schedule result = schedule.get();
             result.updateVehicle(scheduleVehicleRequest);
         }
     }
 
+    public List<LocationResponse> searchLocation(LocationSearchRequest locationSearchRequest) {
+        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
+        locationList.removeIf(Location::isHotel);
+        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
+    }
+
+    public List<LocationResponse> searchHotel(LocationSearchRequest locationSearchRequest) {
+        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
+        locationList.removeIf(location -> !location.isHotel());
+        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
+    }
     public ScheduleResponse findSchedule(Long scheduleId) {
         Schedule schedule = findScheduleById(scheduleId);
         return ScheduleResponse.builder()
@@ -127,7 +137,7 @@ public class ScheduleService {
     }
 
     private void isNullScheduleLocation(List<ScheduleLocationRequest> scheduleLocationRequestList) {
-        if (scheduleLocationRequestList.isEmpty()) {
+        if(scheduleLocationRequestList.isEmpty()) {
             throw new NullException(NULL_SCHEDULE_LOCATION_MESSAGE);
         }
     }
@@ -167,4 +177,43 @@ public class ScheduleService {
 
         throw new UnableToRequestFriendInviteException();
     }
+
+
+    public FriendListResponse selectFriendList(String email, Long scheduleId) {
+        User user = userRepository.findByEmail(email);
+        ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
+        if (scheduleMemberUser == null) {
+            throw new UninvitedUsersException();
+        }
+
+        List<Friend> friendList = friendRepository.findByFriendList(user);
+        List<FriendInfoResponse> friendInfoResponseList = new ArrayList<>();
+        User friendUser;
+
+        for (Friend friend : friendList) {
+            if (friend.getRequestUser().equals(user)) {
+                friendUser = friend.getReceiveUser();
+            } else {
+                friendUser = friend.getRequestUser();
+            }
+            String status = "초대";
+            ScheduleMember scheduleMemberFriend = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, friendUser.getEmail());
+            if (scheduleMemberFriend != null) {
+                status = "참여중";
+            } else {
+                ScheduleNotification scheduleNotification = scheduleNotificationRepository.findByScheduleIdAndReceiveUser(scheduleId, friendUser);
+                if (scheduleNotification != null && scheduleNotification.getNotificationStatus() == NotificationStatus.NO_RESPONSE) {
+                    status = "요청보냄";
+                }
+            }
+            friendInfoResponseList.add(FriendInfoResponse.builder()
+                    .email(friendUser.getEmail())
+                    .nickname(friendUser.getNickname())
+                    .profile(friendUser.getProfile())
+                    .status(status)
+                    .build());
+        }
+        return FriendListResponse.builder().friends(friendInfoResponseList).build();
+    }
 }
+
