@@ -27,8 +27,10 @@ public abstract class Location {
 
     @Column(length = 50)
     private String address;
-
     private double longitude;
-
     private double latitude;
+
+    private boolean isHotel;
+
+
 }
