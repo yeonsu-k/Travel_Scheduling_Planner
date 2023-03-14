@@ -2,12 +2,15 @@ package com.newsainturtle.schedule.controller;
 
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
+import com.newsainturtle.schedule.dto.InviteFriendRequest;
 import com.newsainturtle.schedule.dto.SchedulePeriodRequest;
 import com.newsainturtle.schedule.dto.ScheduleRequest;
 import com.newsainturtle.schedule.dto.ScheduleStartEndLocationRequest;
 import com.newsainturtle.schedule.dto.ScheduleVehicleRequest;
 import com.newsainturtle.schedule.service.ScheduleService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.Valid;
 
 import static com.newsainturtle.schedule.constant.ScheduleSuccessConstant.*;
 
@@ -29,8 +34,8 @@ public class ScheduleController {
     @PostMapping
     @Operation(summary = "메인페이지에서 일정 생성", description = "메인 페이지에서 지역을 선택해 일정을 생성합니다.")
     public ResponseEntity<BaseResponse> createSchedule(@ApiIgnore Authentication authentication, @RequestBody ScheduleRequest scheduleRequest) {
-        UserDetails userDetails = (UserDetails)authentication.getDetails();
-        scheduleService.createSchedule(scheduleRequest,userDetails.getUsername());
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        scheduleService.createSchedule(scheduleRequest, userDetails.getUsername());
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 CREATE_SCHEDULE_SUCCESS_MESSAGE)
@@ -76,6 +81,19 @@ public class ScheduleController {
                 true,
                 FIND_SCHEDULE_SUCCESS_MESSAGE,
                 scheduleService.findSchedule(scheduleId))
+                , HttpStatus.OK);
+    }
+
+    @PostMapping("/friend")
+    @ApiOperation(value = "일정 공유 - 친구 초대", notes = "일정 공유를 위한 친구 초대")
+    public ResponseEntity<BaseResponse> inviteFriend(@ApiIgnore Authentication authentication,
+                                                     @RequestBody @Valid @ApiParam(value = "초대하는 친구 이메일", required = true) final InviteFriendRequest inviteFriendEmailRequest) {
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        scheduleService.inviteFriend(email, inviteFriendEmailRequest);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                INVITE_FRIEND_SUCCESS_MESSAGE)
                 , HttpStatus.OK);
     }
 }
