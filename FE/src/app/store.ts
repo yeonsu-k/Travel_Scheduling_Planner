@@ -7,6 +7,7 @@ import authReducer from "slices/authSlice";
 import scheduleCreateReducer from "slices/scheduleCreateSlice";
 import scheduleEditReducer from "slices/scheduleEditSlice";
 import noticeSliceReducer from "slices/noticeSlice";
+import friendReducer from "slices/friendSlice";
 
 const persistConfig = {
   key: "root",
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   scheduleCreate: scheduleCreateReducer,
   scheduleEdit: scheduleEditReducer,
   notice: noticeSliceReducer,
+  friend: friendReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
