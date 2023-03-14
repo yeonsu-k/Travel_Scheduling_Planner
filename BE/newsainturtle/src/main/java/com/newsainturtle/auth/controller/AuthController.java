@@ -3,6 +3,7 @@ package com.newsainturtle.auth.controller;
 import com.newsainturtle.auth.dto.LoginRequest;
 import com.newsainturtle.auth.dto.LoginResponse;
 import com.newsainturtle.auth.service.AuthService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -12,6 +13,7 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckRequest;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import static com.newsainturtle.auth.constant.AuthConstant.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Api(description = "인증 관련 API")
 public class AuthController {
 
     private final UserService userService;
@@ -39,6 +42,8 @@ public class AuthController {
                 , HttpStatus.OK);
     }
 
+
+    @Operation(summary = "이메일 중복 검사", description = "이메일 중복 검사를 수행합니다.")
     @PostMapping("/email")
     public ResponseEntity<BaseResponse> emailDuplicateCheck(@RequestBody final EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         return new ResponseEntity<>(BaseResponse.from(
@@ -48,6 +53,7 @@ public class AuthController {
                 , HttpStatus.OK);
     }
 
+    @Operation(summary = "회원가입", description = "회원가입")
     @PostMapping("/join")
     public ResponseEntity<BaseResponse> joinUser(@RequestBody final UserJoinRequest userJoinRequest) {
         return new ResponseEntity<>(BaseResponse.from(

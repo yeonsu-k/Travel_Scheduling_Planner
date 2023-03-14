@@ -30,6 +30,7 @@ const authSlice = createSlice({
       state.accessToken = accessToken;
       state.login = true;
       state.userInfo.nickname = nickname;
+      sessionStorage.setItem("accessToken", accessToken);
     },
     setLogout: (state) => {
       state.accessToken = "";
