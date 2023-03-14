@@ -38,7 +38,6 @@ const Login = () => {
         password: password,
       })
         .then((res: any) => {
-          console.log(res.data.data.accessToken);
           dispatch(
             setLogin({
               accessToken: res.data.data.accessToken,
@@ -49,7 +48,10 @@ const Login = () => {
           navigate("/");
         })
         .catch((err: any) => {
-          console.error(err);
+          const result = err.request.status;
+          if (result === 401) {
+            alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+          }
         });
     }
   };
