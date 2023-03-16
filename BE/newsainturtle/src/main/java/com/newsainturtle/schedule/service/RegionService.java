@@ -24,6 +24,8 @@ public class RegionService {
         regionRepository.save(Region.builder()
                 .regionName(regionRequest.getRegionName())
                 .regionImageURL(regionRequest.getRegionImageURL())
+                .englishName(regionRequest.getEnglishName())
+                .contents(regionRequest.getContents())
                 .build());
         return regionRequest.getRegionName();
     }
@@ -35,6 +37,8 @@ public class RegionService {
                 .map(region -> RegionResponse.builder()
                         .regionName(region.getRegionName())
                         .regionImageURL(region.getRegionImageURL())
+                        .englishName(region.getEnglishName())
+                        .contents(region.getContents())
                         .build()
                 ).collect(Collectors.toList());
     }

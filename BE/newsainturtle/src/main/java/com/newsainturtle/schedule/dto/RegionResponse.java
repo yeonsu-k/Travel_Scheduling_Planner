@@ -10,9 +10,15 @@ public class RegionResponse {
 
     private String regionImageURL;
 
+    private String englishName;
+
+    private String contents;
+
     @Builder
-    public RegionResponse(String regionName, String regionImageURL) {
+    public RegionResponse(String regionName, String regionImageURL, String englishName, String contents) {
         this.regionName = regionName;
         this.regionImageURL = regionImageURL;
+        this.englishName = englishName;
+        this.contents = contents;
     }
 }
