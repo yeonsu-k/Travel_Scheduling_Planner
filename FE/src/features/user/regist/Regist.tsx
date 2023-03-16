@@ -6,6 +6,10 @@ import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useNavigate } from "react-router-dom";
 
+export const emailRep =
+  /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+export const passRep = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+
 const Regist = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -17,8 +21,7 @@ const Regist = () => {
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
 
   const emailCheck = async () => {
-    const rep = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    if (rep.test(email)) {
+    if (emailRep.test(email)) {
       await Axios.post(api.auth.duplicatedCheck(), { email: email })
         .then((res: any) => {
           const response = res.data.data.duplicateCheck;
@@ -40,8 +43,7 @@ const Regist = () => {
 
   const passwordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    const rep = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{9,25}$/;
-    if (rep.test(password)) {
+    if (passRep.test(password)) {
       setIsPassword(true);
     } else {
       setIsPassword(false);
