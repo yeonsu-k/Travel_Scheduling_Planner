@@ -155,7 +155,7 @@ const MyProfileEdit = () => {
 
         <div className={styles.profileBtnContainer}>
           <div className={styles.profileBtn}>
-            <Button width="100%" height="100%" text="취소하기" onClick={() => navigate("/mypage")} />
+            <Button width="100%" height="100%" text="취소하기" onClick={() => window.location.replace("/mypage")} />
           </div>
           <div className={styles.profileBtn}>
             <Button width="100%" height="100%" text="저장하기" onClick={saveInfo} />
