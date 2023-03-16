@@ -4,15 +4,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @NoArgsConstructor
-public class ScheduleRequest {
+public class LocationSearchRequest {
 
-    private String regionName;
+    private String keyword;
+
 
     @Builder
-    public ScheduleRequest(String regionName) {
-        this.regionName = regionName;
+    public LocationSearchRequest(String keyword) {
+        this.keyword = keyword;
     }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ScheduleMemberRepository extends JpaRepository<ScheduleMember,Long> {
     List<ScheduleMember> findAllByUserEmail(String email);
+
+    ScheduleMember findByScheduleIdAndUserEmail(Long scheduleId, String email);
 }

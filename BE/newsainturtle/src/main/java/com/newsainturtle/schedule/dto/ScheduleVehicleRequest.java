@@ -1,18 +1,18 @@
 package com.newsainturtle.schedule.dto;
 
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @NoArgsConstructor
-public class ScheduleRequest {
+public class ScheduleVehicleRequest {
 
-    private String regionName;
+    private String vehicle;
 
     @Builder
-    public ScheduleRequest(String regionName) {
-        this.regionName = regionName;
+    public ScheduleVehicleRequest(String vehicle) {
+        this.vehicle = vehicle;
     }
 }

@@ -6,8 +6,9 @@ import com.newsainturtle.friend.exception.NotFriendRelationException;
 import com.newsainturtle.friend.exception.UnableToRequestFriendFollowException;
 import com.newsainturtle.friend.exception.UnauthorizedFriendException;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.entity.FriendNotification;
 import com.newsainturtle.notification.entity.NotificationStatus;
-import com.newsainturtle.notification.service.NotificationService;
+import com.newsainturtle.notification.repository.FriendNotificationRepository;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.List;
 public class FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
-    private final NotificationService notificationService;
+    private final FriendNotificationRepository friendNotificationRepository;
 
     @Transactional(readOnly = true)
     public UserSearchResponse searchUser(String email, UserSearchRequest userSearchRequest) {
@@ -76,11 +77,17 @@ public class FriendService {
                         .build();
                 friendRepository.save(newFriend);
                 //상대방에게 알림 전송 (실시간 처리 필요)
-                notificationService.sendFriendNotification(requestUser.getUserId(), receiveUser);
+                FriendNotification notification = FriendNotification.builder()
+                        .receiveUser(receiveUser)
+                        .sendUserId(requestUser.getUserId())
+                        .notificationStatus(NotificationStatus.NO_RESPONSE)
+                        .build();
+                friendNotificationRepository.save(notification);
                 return;
             } else if (!friend.isAccept()) {
                 friend.updateIsAccept(true);
-                notificationService.changeFriendNotification(receiveUser.getUserId(), requestUser, NotificationStatus.ACCEPT);
+                FriendNotification notification = friendNotificationRepository.findBySendUserIdAndReceiveUser(receiveUser.getUserId(), requestUser);
+                notification.setNotificationStatus(NotificationStatus.ACCEPT);
                 return;
             }
         }

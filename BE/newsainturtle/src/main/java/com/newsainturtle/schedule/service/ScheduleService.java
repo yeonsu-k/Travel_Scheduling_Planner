@@ -1,19 +1,28 @@
 package com.newsainturtle.schedule.service;
 
-import com.newsainturtle.schedule.dto.ScheduleLocationRequest;
-import com.newsainturtle.schedule.dto.ScheduleRequest;
-import com.newsainturtle.schedule.entity.Location;
-import com.newsainturtle.schedule.entity.Schedule;
-import com.newsainturtle.schedule.entity.ScheduleLocation;
-import com.newsainturtle.schedule.entity.ScheduleMember;
+import com.newsainturtle.friend.entity.Friend;
+import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.entity.NotificationStatus;
+import com.newsainturtle.notification.entity.ScheduleNotification;
+import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
+import com.newsainturtle.schedule.dto.*;
+import com.newsainturtle.schedule.entity.*;
 import com.newsainturtle.schedule.exception.NullException;
+import com.newsainturtle.schedule.exception.UnableToRequestFriendInviteException;
+import com.newsainturtle.schedule.exception.UninvitedUsersException;
 import com.newsainturtle.schedule.repository.LocationRepository;
+import com.newsainturtle.schedule.repository.RegionRepository;
 import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
+import com.newsainturtle.user.entity.User;
+import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.*;
@@ -27,35 +36,101 @@ public class ScheduleService {
     private final LocationRepository locationRepository;
 
     private final ScheduleMemberRepository scheduleMemberRepository;
+    private final RegionRepository regionRepository;
 
-    public String createSchedule(ScheduleRequest scheduleRequest, String email) {
-        isNullScheduleLocation(scheduleRequest.getScheduleLocationRequestList());
-        Schedule schedule = Schedule.builder()
+    private final UserRepository userRepository;
+    private final ScheduleNotificationRepository scheduleNotificationRepository;
+    private final FriendRepository friendRepository;
+
+    @Transactional
+    public void createSchedule(ScheduleRequest scheduleRequest, String email) {
+        Region region = regionRepository.findByRegionName(scheduleRequest.getRegionName());
+        final Schedule schedule = Schedule.builder()
+                .isPrivate(false)
+                .scheduleRegion(region.getRegionName())
                 .hostEmail(email)
-                .scheduleRegion(scheduleRequest.getScheduleRegion())
-                .scheduleName(scheduleRequest.getScheduleName())
-                .isPrivate(scheduleRequest.isPrivate())
-                .scheduleStartDay(scheduleRequest.getScheduleStartDay())
-                .scheduleEndDay(scheduleRequest.getScheduleEndDay())
-                .scheduleStartLocation(scheduleRequest.getScheduleStartLocation())
-                .scheduleEndLocation(scheduleRequest.getScheduleEndLocation())
-                .vehicle(scheduleRequest.getVehicle())
-                .scheduleLocations(scheduleRequest.getScheduleLocationRequestList().stream()
-                        .map(scheduleLocation -> ScheduleLocation.builder()
+                .build();
+        scheduleRepository.save(schedule);
+        final ScheduleMember scheduleMember = ScheduleMember.builder()
+                .scheduleId(schedule.getScheduleId())
+                .userEmail(email)
+                .build();
+        scheduleMemberRepository.save(scheduleMember);
+    }
+
+    @Transactional
+    public void modifySchedulePeriod(String username, SchedulePeriodRequest schedulePeriodRequest, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if (schedule.isPresent()) {
+            final Schedule result = schedule.get();
+            result.updatePeriod(schedulePeriodRequest);
+        }
+    }
+
+    @Transactional
+    public void modifyScheduleStartEndLocation(String username, ScheduleStartEndLocationRequest scheduleStartEndLocationRequest, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if (schedule.isPresent()) {
+            final Schedule result = schedule.get();
+            result.updateStartEndLocation(scheduleStartEndLocationRequest);
+        }
+    }
+
+    @Transactional
+    public void modifyScheduleVehicle(String username, ScheduleVehicleRequest scheduleVehicleRequest, Long schedule_id) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if (schedule.isPresent()) {
+            final Schedule result = schedule.get();
+            result.updateVehicle(scheduleVehicleRequest);
+        }
+    }
+
+    public List<LocationResponse> searchLocation(LocationSearchRequest locationSearchRequest) {
+        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
+        locationList.removeIf(Location::isHotel);
+        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
+    }
+
+    public List<LocationResponse> searchHotel(LocationSearchRequest locationSearchRequest) {
+        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
+        locationList.removeIf(location -> !location.isHotel());
+        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
+    }
+    public ScheduleResponse findSchedule(Long scheduleId) {
+        Schedule schedule = findScheduleById(scheduleId);
+        return ScheduleResponse.builder()
+                .hostEmail(schedule.getHostEmail())
+                .scheduleRegion(schedule.getScheduleRegion())
+                .scheduleName(schedule.getScheduleName())
+                .isPrivate(schedule.isPrivate())
+                .scheduleStartDay(schedule.getScheduleStartDay())
+                .scheduleEndDay(schedule.getScheduleEndDay())
+                .scheduleStartLocation(schedule.getScheduleStartLocation())
+                .scheduleEndLocation(schedule.getScheduleEndLocation())
+                .vehicle(schedule.getVehicle())
+                .scheduleLocations(schedule.getScheduleLocations().stream()
+                        .map(scheduleLocation -> ScheduleLocationResponse.builder()
+                                .location(LocationResponse.builder()
+                                        .locationId(scheduleLocation.getLocation().getLocationId())
+                                        .regionId(scheduleLocation.getLocation().getRegion().getRegionId())
+                                        .locationName(scheduleLocation.getLocation().getLocationName())
+                                        .address(scheduleLocation.getLocation().getAddress())
+                                        .longitude(scheduleLocation.getLocation().getLongitude())
+                                        .latitude(scheduleLocation.getLocation().getLatitude()).build())
                                 .day(scheduleLocation.getDay())
                                 .sequence(scheduleLocation.getSequence())
                                 .startTime(scheduleLocation.getStartTime())
                                 .endTime(scheduleLocation.getEndTime())
-                                .location(findLocationById(scheduleLocation.getLocationId()))
                                 .build()).collect(Collectors.toList()))
                 .build();
-        Long id = scheduleRepository.save(schedule).getScheduleId();
-        scheduleMemberRepository.save(ScheduleMember.builder()
-                .userEmail(email)
-                .scheduleId(id)
-                .build());
-        return schedule.getScheduleName();
+
     }
+
+    private Schedule findScheduleById(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new NullException());
+    }
+
     private Location findLocationById(Long locationId) {
         return locationRepository.findById(locationId)
                 .orElseThrow(() -> new NullException());
@@ -66,4 +141,83 @@ public class ScheduleService {
             throw new NullException(NULL_SCHEDULE_LOCATION_MESSAGE);
         }
     }
+
+    @Transactional
+    public void inviteFriend(String email, InviteFriendRequest inviteFriendEmailRequest) {
+        long scheduleId = inviteFriendEmailRequest.getScheduleId();
+        String friendEmail = inviteFriendEmailRequest.getEmail();
+
+        User user = userRepository.findByEmail(email);
+        ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
+        if(scheduleMemberUser == null){
+            throw new UninvitedUsersException();
+        }
+
+        User receiveUser = userRepository.findByEmail(friendEmail);
+        if (receiveUser == null || receiveUser.isWithdraw() || receiveUser.getEmail().equals(email)) {
+            throw new UnableToRequestFriendInviteException();
+        }
+
+        Friend friend = friendRepository.findByFriend(user, receiveUser);
+        ScheduleMember scheduleMemberFriend = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, friendEmail);
+        if (friend != null && scheduleMemberFriend == null) {
+            ScheduleNotification scheduleNotification = scheduleNotificationRepository.findByScheduleIdAndReceiveUser(scheduleId, receiveUser);
+            if (scheduleNotification != null && scheduleNotification.getNotificationStatus() == NotificationStatus.REJECT) {
+                scheduleNotificationRepository.deleteByNotificationId(scheduleNotification.getNotificationId());
+            }
+            if (scheduleNotification == null) {
+                //상대방에게 알림 전송 (실시간 처리 필요)
+                ScheduleNotification newScheduleNotification = ScheduleNotification.builder()
+                        .sendUserId(user.getUserId())
+                        .receiveUser(receiveUser)
+                        .scheduleId(scheduleId)
+                        .notificationStatus(NotificationStatus.NO_RESPONSE)
+                        .build();
+
+                scheduleNotificationRepository.save(newScheduleNotification);
+                return;
+            }
+        }
+
+        throw new UnableToRequestFriendInviteException();
+    }
+
+
+    public FriendListResponse selectFriendList(String email, Long scheduleId) {
+        User user = userRepository.findByEmail(email);
+        ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
+        if (scheduleMemberUser == null) {
+            throw new UninvitedUsersException();
+        }
+
+        List<Friend> friendList = friendRepository.findByFriendList(user);
+        List<FriendInfoResponse> friendInfoResponseList = new ArrayList<>();
+        User friendUser;
+
+        for (Friend friend : friendList) {
+            if (friend.getRequestUser().equals(user)) {
+                friendUser = friend.getReceiveUser();
+            } else {
+                friendUser = friend.getRequestUser();
+            }
+            String status = "초대";
+            ScheduleMember scheduleMemberFriend = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, friendUser.getEmail());
+            if (scheduleMemberFriend != null) {
+                status = "참여중";
+            } else {
+                ScheduleNotification scheduleNotification = scheduleNotificationRepository.findByScheduleIdAndReceiveUser(scheduleId, friendUser);
+                if (scheduleNotification != null && scheduleNotification.getNotificationStatus() == NotificationStatus.NO_RESPONSE) {
+                    status = "요청보냄";
+                }
+            }
+            friendInfoResponseList.add(FriendInfoResponse.builder()
+                    .email(friendUser.getEmail())
+                    .nickname(friendUser.getNickname())
+                    .profile(friendUser.getProfile())
+                    .status(status)
+                    .build());
+        }
+        return FriendListResponse.builder().friends(friendInfoResponseList).build();
+    }
 }
+

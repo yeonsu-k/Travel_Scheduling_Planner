@@ -1,5 +1,8 @@
 package com.newsainturtle.schedule.entity;
 
+import com.newsainturtle.schedule.dto.SchedulePeriodRequest;
+import com.newsainturtle.schedule.dto.ScheduleStartEndLocationRequest;
+import com.newsainturtle.schedule.dto.ScheduleVehicleRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -84,5 +87,18 @@ public class Schedule {
 
     public void changeIsPrivate() {
         this.isPrivate = !(this.isPrivate);
+    }
+    public void updatePeriod(SchedulePeriodRequest schedulePeriodRequest){
+        this.scheduleStartDay = schedulePeriodRequest.getStart_day();
+        this.scheduleEndDay = schedulePeriodRequest.getEnd_day();
+    }
+
+    public void updateStartEndLocation(ScheduleStartEndLocationRequest scheduleStartEndLocationRequest) {
+        this.scheduleStartLocation = scheduleStartEndLocationRequest.getStartLocation();
+        this.scheduleEndLocation = scheduleStartEndLocationRequest.getEndLocation();
+    }
+
+    public void updateVehicle(ScheduleVehicleRequest scheduleVehicleRequest) {
+        this.vehicle = scheduleVehicleRequest.getVehicle();
     }
 }
