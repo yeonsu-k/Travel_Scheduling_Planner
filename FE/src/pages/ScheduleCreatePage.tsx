@@ -30,7 +30,7 @@ function ScheduleCreatePage() {
   return (
     <>
       <Grid container columns={6.5} style={{ width: "100%", height: "100%" }}>
-        <Grid item xs={1.11} ml={0.5}>
+        <Grid item xs ml={0.5}>
           <CreateInfo
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
@@ -48,7 +48,7 @@ function ScheduleCreatePage() {
           />
           <CreateMap />
         </Grid>
-        <Grid item xs={1.07}>
+        <Grid item xs={1}>
           <CreateSearch
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
