@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { selectLocal } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
+import styles from "./Create.module.css";
 
 declare global {
   interface Window {
@@ -17,7 +18,7 @@ function CreateMap() {
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 5,
+      level: 8,
     };
     // 지도를 생성
     const map = new kakao.maps.Map(container, options);
@@ -39,7 +40,7 @@ function CreateMap() {
     setMap();
   }, [local]);
 
-  return <div id="map" style={{ width: "100%", height: "100%" }}></div>;
+  return <div id="map" className={`${styles.Container} ${styles.map}`} />;
 }
 
 export default CreateMap;
