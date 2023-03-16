@@ -3,43 +3,36 @@ import styles from "./MyFriends.module.css";
 import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
 import Button from "components/Button";
+import { useAppSelector } from "app/hooks";
+import { selectSearchUser } from "slices/friendSlice";
 
-interface MyFriendsSearchItemProps {
-  searchData: searchDataProps;
-}
-
-export interface searchDataProps {
-  email: string;
-  exist: boolean;
-  nickname: string;
-  profile: string;
-  status: string;
-  success: boolean;
-}
-
-const MyFriendsSearchItem = ({ searchData }: MyFriendsSearchItemProps) => {
-  useEffect(() => {
-    console.log("searchItem searchData", searchData);
-  }, []);
+const MyFriendsSearchItem = () => {
+  const searchUser = useAppSelector(selectSearchUser);
 
   return (
-    <div className={styles.myFriendsSearchItem}>
-      <div className={styles.searchInfo}>
-        <img className={styles.searchImg} src={searchData.profile} />
-      </div>
+    <>
+      {searchUser.success ? (
+        <div className={styles.myFriendsSearchItem}>
+          <div className={styles.searchInfo}>
+            <img className={styles.searchImg} src={searchUser.profile} />
+          </div>
 
-      <div className={styles.searchInfo}>
-        <Text value={searchData.nickname} bold />
-      </div>
+          <div className={styles.searchInfo}>
+            <Text value={searchUser.nickname} bold />
+          </div>
 
-      <div className={styles.searchInfo}>
-        <Text value={searchData.email} />
-      </div>
+          <div className={styles.searchInfo}>
+            <Text value={searchUser.email} />
+          </div>
 
-      <div className={styles.searchInfo}>
-        <Button text="친구 요청" color="pink" radius />
-      </div>
-    </div>
+          <div className={styles.searchInfo}>
+            <Button text="친구 요청" color="pink" radius />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

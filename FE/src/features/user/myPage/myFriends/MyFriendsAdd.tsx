@@ -3,21 +3,16 @@ import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Input from "components/Input";
 import Button from "components/Button";
-import MyFriendsSearchItem, { searchDataProps } from "./MyFriendsSearchItem";
+import MyFriendsSearchItem from "./MyFriendsSearchItem";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import { useAppDispatch } from "app/hooks";
+import { setSearchUser } from "slices/friendSlice";
 
 const MyFriendsAdd = () => {
-  const [email, setEmail] = useState("");
+  const dispatch = useAppDispatch();
 
-  let searchData: searchDataProps = {
-    email: "",
-    exist: false,
-    nickname: "",
-    profile: "",
-    status: "",
-    success: false,
-  };
+  const [email, setEmail] = useState("");
 
   const onClickSearchUser = () => {
     console.log(email);
@@ -28,7 +23,7 @@ const MyFriendsAdd = () => {
       .then((res: any) => {
         console.log(res);
 
-        searchData = {
+        const searchData = {
           email: res.data.data.email,
           exist: res.data.data.exist,
           nickname: res.data.data.nickname,
@@ -36,16 +31,12 @@ const MyFriendsAdd = () => {
           status: res.data.data.status,
           success: res.data.success,
         };
-        console.log(searchData);
+        dispatch(setSearchUser(searchData));
       })
       .catch((err: any) => {
         console.log(err);
       });
   };
-
-  useEffect(() => {
-    console.log("searchData change");
-  }, [searchData]);
 
   return (
     <div className={styles.myFriendsAdd}>
@@ -61,8 +52,6 @@ const MyFriendsAdd = () => {
 
         <Button text="검색" color="main" radius onClick={onClickSearchUser} />
       </div>
-
-      <MyFriendsSearchItem searchData={searchData} />
     </div>
   );
 };
