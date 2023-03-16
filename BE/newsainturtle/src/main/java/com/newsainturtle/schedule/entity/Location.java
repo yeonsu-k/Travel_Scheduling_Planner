@@ -32,5 +32,6 @@ public abstract class Location {
 
     private double latitude;
 
+    @Column(name = "is_hotel")
     private boolean isHotel;
 }
