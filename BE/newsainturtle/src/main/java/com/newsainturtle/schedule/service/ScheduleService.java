@@ -146,17 +146,21 @@ public class ScheduleService {
     public void inviteFriend(String email, InviteFriendRequest inviteFriendEmailRequest) {
         long scheduleId = inviteFriendEmailRequest.getScheduleId();
         String friendEmail = inviteFriendEmailRequest.getEmail();
-        User receiveUser = userRepository.findByEmail(friendEmail);
 
+        User user = userRepository.findByEmail(email);
+        ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
+        if(scheduleMemberUser == null){
+            throw new UninvitedUsersException();
+        }
+
+        User receiveUser = userRepository.findByEmail(friendEmail);
         if (receiveUser == null || receiveUser.isWithdraw() || receiveUser.getEmail().equals(email)) {
             throw new UnableToRequestFriendInviteException();
         }
 
-        User user = userRepository.findByEmail(email);
         Friend friend = friendRepository.findByFriend(user, receiveUser);
-        ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
         ScheduleMember scheduleMemberFriend = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, friendEmail);
-        if (friend != null && scheduleMemberUser != null && scheduleMemberFriend == null) {
+        if (friend != null && scheduleMemberFriend == null) {
             ScheduleNotification scheduleNotification = scheduleNotificationRepository.findByScheduleIdAndReceiveUser(scheduleId, receiveUser);
             if (scheduleNotification != null && scheduleNotification.getNotificationStatus() == NotificationStatus.REJECT) {
                 scheduleNotificationRepository.deleteByNotificationId(scheduleNotification.getNotificationId());

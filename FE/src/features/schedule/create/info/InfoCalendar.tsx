@@ -41,7 +41,7 @@ function InfoCalendar({ modalClose }: { modalClose: () => void }) {
     setState([
       {
         startDate: start,
-        endDate: differenceInDays(end, start) > 10 ? addDays(start, 9) : end,
+        endDate: differenceInDays(end, start) > 9 ? addDays(start, 9) : end,
         key: "selection",
       },
     ]);
