@@ -14,6 +14,8 @@ import com.newsainturtle.notification.exception.NotUserOwnNotificationException;
 import com.newsainturtle.notification.exception.NotificationResponseBadRequestException;
 import com.newsainturtle.notification.repository.NotificationRepository;
 import com.newsainturtle.schedule.entity.Schedule;
+import com.newsainturtle.schedule.entity.ScheduleMember;
+import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
 import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
@@ -31,6 +33,7 @@ public class NotificationService {
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleMemberRepository scheduleMemberRepository;
     private final FriendRepository friendRepository;
 
     @Transactional(readOnly = true)
@@ -96,7 +99,7 @@ public class NotificationService {
                 responseFriendNotification((FriendNotification) notification, notificationResponseRequest.getIsAccept(), user, requestUser);
                 return;
             } else if (notificationResponseRequest.getType().equals("schedule")) {
-                //schedule
+                responseScheduleNotification((ScheduleNotification) notification, notificationResponseRequest.getIsAccept(), user);
                 return;
             }
         }
@@ -110,6 +113,19 @@ public class NotificationService {
             notification.setNotificationStatus(NotificationStatus.ACCEPT);
         } else {
             friendRepository.deleteRejectedUser(requestUser, user);
+            notification.setNotificationStatus(NotificationStatus.REJECT);
+        }
+    }
+
+    public void responseScheduleNotification(ScheduleNotification notification, boolean isAccept, User user) {
+        if (isAccept) {
+            ScheduleMember scheduleMember = ScheduleMember.builder()
+                    .scheduleId(notification.getScheduleId())
+                    .userEmail(user.getEmail())
+                    .build();
+            scheduleMemberRepository.save(scheduleMember);
+            notification.setNotificationStatus(NotificationStatus.ACCEPT);
+        } else {
             notification.setNotificationStatus(NotificationStatus.REJECT);
         }
     }
