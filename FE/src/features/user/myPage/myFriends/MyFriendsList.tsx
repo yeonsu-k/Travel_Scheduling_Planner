@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./MyFriends.module.css";
 import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
 import Button from "components/Button";
 import { useAppSelector } from "app/hooks";
 import { selectFriends } from "slices/friendSlice";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
 
 const MyFriendsList = () => {
   const friends = useAppSelector(selectFriends);
+
+  const onClickDeleteFriend = (email: string) => {
+    Axios.delete(api.friend.friend(), {
+      data: {
+        email: email,
+      },
+    })
+      .then((res: any) => {
+        console.log(res);
+        alert("삭제가 완료되었습니다");
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -35,7 +52,7 @@ const MyFriendsList = () => {
             <Text value="2" /> */}
           </div>
           <div className={styles.friendInfo}>
-            <Button text="친구 삭제" />
+            <Button text="친구 삭제" onClick={() => onClickDeleteFriend(value.email)} />
           </div>
         </div>
       ))}
