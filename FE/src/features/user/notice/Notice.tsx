@@ -13,7 +13,7 @@ const Notice = () => {
   const noticeList = useAppSelector(selectNoticeList);
 
   const onClickClearBtn = () => {
-    Axios.delete(api.notification.deleteAllNotification())
+    Axios.delete(api.notification.notification())
       .then((res: any) => {
         console.log(res);
         dispatch(resetNoticeList());
