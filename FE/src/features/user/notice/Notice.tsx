@@ -4,6 +4,8 @@ import Button from "components/Button";
 import NoticeItem from "./NoticeItem";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { resetNoticeList, selectNoticeList } from "slices/noticeSlice";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
 
 const Notice = () => {
   const dispatch = useAppDispatch();
@@ -11,7 +13,12 @@ const Notice = () => {
   const noticeList = useAppSelector(selectNoticeList);
 
   const onClickClearBtn = () => {
-    dispatch(resetNoticeList());
+    Axios.delete(api.notification.deleteAllNotification())
+      .then((res: any) => {
+        console.log(res);
+        dispatch(resetNoticeList());
+      })
+      .catch((err: any) => console.log(err));
   };
 
   return (
