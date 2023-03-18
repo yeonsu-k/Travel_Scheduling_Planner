@@ -36,16 +36,16 @@ const NoticeItem = ({ index, noticeValue }: NoticeItemProps) => {
     Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId))
       .then((res: any) => {
         console.log(res);
+
+        const tmp = [...noticeList];
+        console.log(index);
+        tmp.splice(index, 1);
+
+        dispatch(setNoticeList([...tmp]));
       })
       .catch((err: any) => {
         console.log(err);
       });
-
-    const tmp = [...noticeList];
-    console.log(index);
-    tmp.splice(index, 1);
-
-    dispatch(setNoticeList([...tmp]));
   };
 
   return (
