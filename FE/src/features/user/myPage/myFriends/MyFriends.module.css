@@ -34,6 +34,7 @@
   box-sizing: border-box;
   justify-content: center;
   column-gap: 5rem;
+  margin-bottom: 2%;
 }
 
 .friendInfo:nth-child(1) {
