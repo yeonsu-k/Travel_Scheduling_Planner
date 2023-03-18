@@ -52,6 +52,8 @@ const MyFriendsAdd = () => {
 
         <Button text="검색" color="main" radius onClick={onClickSearchUser} />
       </div>
+
+      <MyFriendsSearchItem />
     </div>
   );
 };
