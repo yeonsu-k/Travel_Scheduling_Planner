@@ -11,7 +11,6 @@ public class LocationResponse {
     private Long regionId;
     private String locationName;
     private String address;
-    private String profile;
     private double longitude;
     private double latitude;
     private boolean isHotel;
