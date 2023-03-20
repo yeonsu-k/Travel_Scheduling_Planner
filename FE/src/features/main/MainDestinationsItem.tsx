@@ -1,28 +1,39 @@
 import Modal from "@mui/material/Modal";
-import React, { useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import MainDestinationModal from "./Components/MainDestinationModal";
 import styles from "./Main.module.css";
+import { DestinationConfig } from "./MainDestinationsList";
 
-const MainDestinationItem = () => {
+const MainDestinationItem = (item: DestinationConfig) => {
   const [ModalOpen, setModalOpen] = useState(false);
+  const { regionName, regionImageURL, engName } = item;
   const showModal = () => {
     setModalOpen(true);
   };
+
+  const Bar = forwardRef((props: any, ref: any) => (
+    <span {...props} ref={ref}>
+      {props.children}
+    </span>
+  ));
+  Bar.displayName = "Bar";
 
   return (
     <div>
       <div className={styles.card} onClick={showModal}>
         <div className={styles.cardImgContainer}>
-          <img src="https://www.myro.co.kr/myro_image/city/jeju.jpg" />
+          <img src={regionImageURL} />
         </div>
         <div className={styles.cardContent}>
-          <div className={styles.cardEngTitle}>JEJU</div>
-          <div className={styles.cardTitle}>대한민국 제주도</div>
+          <div className={styles.cardEngTitle}>{engName}</div>
+          <div className={styles.cardTitle}>{regionName}</div>
         </div>
       </div>
       {ModalOpen ? (
         <Modal open={ModalOpen} onClose={() => setModalOpen(false)}>
-          <MainDestinationModal setModalOpen={setModalOpen} />
+          <Bar>
+            <MainDestinationModal item={item} setModalOpen={setModalOpen} />
+          </Bar>
         </Modal>
       ) : (
         <></>

@@ -7,9 +7,11 @@ import Button from "components/Button";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 
-interface DestinationConfig {
+export interface DestinationConfig {
   regionName: string;
   regionImageURL: string;
+  engName: string;
+  desc: string;
 }
 
 const MainDestinationsList = () => {
@@ -64,7 +66,7 @@ const MainDestinationsList = () => {
       <div className={styles.mainDestinationContainer}>
         <div className={styles.mainDestinationItem}>
           {filtered.map((item: DestinationConfig, i: number) => (
-            <MainDestinationItem key={i} name={item.regionName} img={item.regionImageURL} />
+            <MainDestinationItem key={i} {...item} />
           ))}
         </div>
       </div>
