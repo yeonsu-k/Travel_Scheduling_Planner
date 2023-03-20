@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import static com.newsainturtle.schedule.constant.ScheduleSuccessConstant.*;
@@ -45,6 +42,20 @@ public class LocationController {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 CREATE_CUSTOM_LOCATION_SUCCESS_MESSAGE)
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("/location/{is_hotel}/{region_id}")
+    @ApiOperation(value = "장소 조회", notes = "장소를 조회합니다.")
+    public ResponseEntity<BaseResponse> findLocation(@ApiIgnore Authentication authentication,
+                                                     @PathVariable("is_hotel") boolean isHotel,
+                                                     @PathVariable("region_id") Long regionId) {
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                FIND_LOCATION_SUCCESS_MESSAGE,
+                locationService.findLocation(regionId,email,isHotel))
                 , HttpStatus.OK);
     }
 }
