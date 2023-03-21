@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyFriendsList from "./MyFriendsList";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Modal from "components/Modal";
 import MyFriendsAdd from "./MyFriendsAdd";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { resetSearchUser, selectFriends, setFriends } from "slices/friendSlice";
 
 const MyFriends = () => {
+  const dispatch = useAppDispatch();
+
   const [openAddFriendModal, setOpenAddFriendModal] = useState(false);
 
   const showAddFriendModal = () => {
     setOpenAddFriendModal(true);
+    dispatch(resetSearchUser());
   };
+
+  useEffect(() => {
+    Axios.get(api.friend.friend())
+      .then((res: any) => {
+        console.log(res);
+        // dispatch(setFriends(res.data.data.friends));
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className={styles.myFriends}>
@@ -27,6 +45,7 @@ const MyFriends = () => {
           <></>
         )}
       </div>
+
       <MyFriendsList />
     </div>
   );

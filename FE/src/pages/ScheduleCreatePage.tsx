@@ -48,7 +48,7 @@ function ScheduleCreatePage() {
           />
           <CreateMap />
         </Grid>
-        <Grid item xs={1.07}>
+        <Grid item xs={1}>
           <CreateSearch
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}

@@ -33,7 +33,7 @@ interface apiInterface {
   };
   notification: {
     deleteOneNotification: (notification_id: number) => string; // 알림 개별 삭제
-    deleteAllNotification: () => string; // 알림 전체 삭제
+    notification: () => string; // 알림 조회, 알림 처리, 알림 전체 삭제
   };
   createSchedule: {
     schedule: () => string; // 여행 일정 생성 & 여행지 검색
@@ -84,7 +84,7 @@ const api: apiInterface = {
   },
   notification: {
     deleteOneNotification: (notification_id) => HOST + NOTIFICATION + notification_id,
-    deleteAllNotification: () => HOST + NOTIFICATION,
+    notification: () => HOST + NOTIFICATION,
   },
   createSchedule: {
     schedule: () => HOST + SCHEDULE,
