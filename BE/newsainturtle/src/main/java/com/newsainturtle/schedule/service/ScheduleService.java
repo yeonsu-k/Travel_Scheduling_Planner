@@ -2,9 +2,11 @@ package com.newsainturtle.schedule.service;
 
 import com.newsainturtle.friend.entity.Friend;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.dto.LiveNotificationResponse;
 import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.entity.ScheduleNotification;
 import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
+import com.newsainturtle.notification.service.NotificationService;
 import com.newsainturtle.schedule.dto.*;
 import com.newsainturtle.schedule.entity.*;
 import com.newsainturtle.schedule.exception.NullException;
@@ -40,6 +42,8 @@ public class ScheduleService {
     private final UserRepository userRepository;
     private final ScheduleNotificationRepository scheduleNotificationRepository;
     private final FriendRepository friendRepository;
+
+    private final NotificationService notificationService;
 
     @Transactional
     public void createSchedule(ScheduleRequest scheduleRequest, String email) {
@@ -127,15 +131,21 @@ public class ScheduleService {
                 scheduleNotificationRepository.deleteByNotificationId(scheduleNotification.getNotificationId());
             }
             if (scheduleNotification == null) {
-                //상대방에게 알림 전송 (실시간 처리 필요)
                 ScheduleNotification newScheduleNotification = ScheduleNotification.builder()
                         .sendUserId(user.getUserId())
                         .receiveUser(receiveUser)
                         .scheduleId(scheduleId)
                         .notificationStatus(NotificationStatus.NO_RESPONSE)
                         .build();
-
                 scheduleNotificationRepository.save(newScheduleNotification);
+                //상대방에게 알림 전송 (실시간 처리 필요)
+                Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+                notificationService.sendNewNotification(LiveNotificationResponse.builder()
+                        .email(friendEmail)
+                        .senderNickname(user.getNickname())
+                        .type("schedule")
+                        .content(schedule.getScheduleName())
+                        .build());
                 return;
             }
         }
