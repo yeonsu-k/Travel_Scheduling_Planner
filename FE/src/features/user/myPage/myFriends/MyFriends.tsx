@@ -6,8 +6,8 @@ import Modal from "components/Modal";
 import MyFriendsAdd from "./MyFriendsAdd";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { useAppDispatch, useAppSelector } from "app/hooks";
-import { resetSearchUser, selectFriends, setFriends } from "slices/friendSlice";
+import { useAppDispatch } from "app/hooks";
+import { resetSearchUser, setFriendNumber, setFriends } from "slices/friendSlice";
 
 const MyFriends = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +23,8 @@ const MyFriends = () => {
     Axios.get(api.friend.friend())
       .then((res: any) => {
         console.log(res);
-        // dispatch(setFriends(res.data.data.friends));
+        dispatch(setFriends(res.data.data.friends));
+        dispatch(setFriendNumber(res.data.data.friends.length));
       })
       .catch((err: any) => {
         console.log(err);
