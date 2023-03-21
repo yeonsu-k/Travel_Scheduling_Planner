@@ -224,6 +224,7 @@
 }
 
 .mainInput {
+  width: 100%;
   margin: 0;
   background-color: transparent;
   border-radius: 2px;
@@ -252,7 +253,7 @@
 .mainDestinationItem {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 /* Card List */
