@@ -23,7 +23,7 @@ public class JwtTokenProvider {
         this.secretKey = secretKey;
     }
 
-    private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L;
+    private static final long ACCESS_TOKEN_VALID_TIME = 30 * 600 * 1000L;
     private static final long REFRESH_TOKEN_VALID_TIME = 30 * 24 * 60 * 60 * 1000L;
 
     public static final String TOKEN_PREFIX = "Bearer ";

@@ -112,7 +112,7 @@ public class UserService {
         }
         List<ScheduleListResponse> result = new ArrayList<>();
         for (Optional<Schedule> schedule : schedule_list) {
-            result.add(ScheduleListResponse.of(schedule));
+            result.add(ScheduleListResponse.of(schedule, email));
         }
         return result;
     }

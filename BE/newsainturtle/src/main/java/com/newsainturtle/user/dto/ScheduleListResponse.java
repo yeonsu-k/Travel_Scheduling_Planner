@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Getter
@@ -20,8 +21,12 @@ public class ScheduleListResponse {
     private String end_day;
     private LocalDateTime modifiedTime;
     private boolean isPrivate;
+    private boolean isMine;
 
-    public static ScheduleListResponse of(Optional<Schedule> schedule){
+    public static ScheduleListResponse of(Optional<Schedule> schedule, String email){
+        boolean responseIsMine = false;
+        if(Objects.equals(schedule.get().getHostEmail(), email))  responseIsMine = true;
+        boolean finalResponseIsMine = responseIsMine;
         return schedule.map(value -> ScheduleListResponse.builder()
                 .schedule_id(value.getScheduleId())
                 .host(value.getHostEmail())
@@ -31,6 +36,7 @@ public class ScheduleListResponse {
                 .end_day(value.getScheduleEndDay())
                 .modifiedTime(value.getModifiedTime())
                 .isPrivate(value.isPrivate())
+                .isMine(finalResponseIsMine)
                 .build()).orElse(null);
     }
 
