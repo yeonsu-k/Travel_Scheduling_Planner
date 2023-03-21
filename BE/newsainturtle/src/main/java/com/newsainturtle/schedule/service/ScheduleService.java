@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.*;
@@ -58,44 +57,6 @@ public class ScheduleService {
         scheduleMemberRepository.save(scheduleMember);
     }
 
-    @Transactional
-    public void modifySchedulePeriod(String username, SchedulePeriodRequest schedulePeriodRequest, Long schedule_id) {
-        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        if (schedule.isPresent()) {
-            final Schedule result = schedule.get();
-            result.updatePeriod(schedulePeriodRequest);
-        }
-    }
-
-    @Transactional
-    public void modifyScheduleStartEndLocation(String username, ScheduleStartEndLocationRequest scheduleStartEndLocationRequest, Long schedule_id) {
-        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        if (schedule.isPresent()) {
-            final Schedule result = schedule.get();
-            result.updateStartEndLocation(scheduleStartEndLocationRequest);
-        }
-    }
-
-    @Transactional
-    public void modifyScheduleVehicle(String username, ScheduleVehicleRequest scheduleVehicleRequest, Long schedule_id) {
-        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        if (schedule.isPresent()) {
-            final Schedule result = schedule.get();
-            result.updateVehicle(scheduleVehicleRequest);
-        }
-    }
-
-    public List<LocationResponse> searchLocation(LocationSearchRequest locationSearchRequest) {
-        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
-        locationList.removeIf(Location::isHotel);
-        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
-    }
-
-    public List<LocationResponse> searchHotel(LocationSearchRequest locationSearchRequest) {
-        List<Location> locationList = locationRepository.findByLocationNameContains(locationSearchRequest.getKeyword());
-        locationList.removeIf(location -> !location.isHotel());
-        return locationList.stream().map(LocationResponse::of).collect(Collectors.toList());
-    }
     public ScheduleResponse findSchedule(Long scheduleId) {
         Schedule schedule = findScheduleById(scheduleId);
         return ScheduleResponse.builder()
@@ -112,7 +73,7 @@ public class ScheduleService {
                         .map(scheduleLocation -> ScheduleLocationResponse.builder()
                                 .location(LocationResponse.builder()
                                         .locationId(scheduleLocation.getLocation().getLocationId())
-                                        .regionId(scheduleLocation.getLocation().getRegion().getRegionId())
+                                        .regionId(scheduleLocation.getLocation().getRegionId())
                                         .locationName(scheduleLocation.getLocation().getLocationName())
                                         .address(scheduleLocation.getLocation().getAddress())
                                         .longitude(scheduleLocation.getLocation().getLongitude())

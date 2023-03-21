@@ -4,6 +4,8 @@ import Button from "components/Button";
 import Text from "components/Text";
 import { noticeListConfig, selectNoticeList, setNoticeList } from "slices/noticeSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
 
 interface NoticeItemProps {
   index: number;
@@ -15,43 +17,80 @@ const NoticeItem = ({ index, noticeValue }: NoticeItemProps) => {
 
   const noticeList = useAppSelector(selectNoticeList);
 
-  const onClickDeleteBtn = () => {
-    const tmp = [...noticeList];
-    console.log(index);
-    tmp.splice(index, 1);
+  const onClickHandlingNotification = (isAccept: boolean) => {
+    Axios.post(api.notification.notification(), {
+      notificationId: noticeValue.notificationId,
+      isAccept: isAccept,
+      type: noticeValue.type,
+    })
+      .then((res: any) => {
+        console.log(res);
+        alert("알림 처리 완료");
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
 
-    dispatch(setNoticeList([...tmp]));
+  const onClickDeleteBtn = () => {
+    Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId))
+      .then((res: any) => {
+        console.log(res);
+
+        const tmp = [...noticeList];
+        console.log(index);
+        tmp.splice(index, 1);
+
+        dispatch(setNoticeList([...tmp]));
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
   return (
     <div className={styles.noticeItem}>
       <div className={styles.noticeInfo}>
-        <Text value={`'${noticeValue.noticeProfile}'`} type="caption" bold />
+        <Text value={`'${noticeValue.senderNickname}'`} type="caption" bold />
         <Text value="님이 " type="caption" />
-        <Text value={`'${noticeValue.noticeContent}'`} type="caption" bold />
-        {noticeValue.noticeType === "schedule" ? (
+        <Text value={`'${noticeValue.content}'`} type="caption" bold />
+        {noticeValue.type === "schedule" ? (
           <Text value=" 일정을 공유했습니다." type="caption" />
         ) : (
           <Text value="을 보냈습니다." type="caption" />
         )}
       </div>
 
-      {noticeValue.noticeStatus === "NO_RESPONSE" ? (
+      {noticeValue.status === "NO_RESPONSE" ? (
         <>
           <div className={`${styles.noticeInfo} ${styles.borderButton}`}>
-            <Button text="수락" color="white" radius width="8.7vw" height="3.2vh" />
+            <Button
+              text="수락"
+              color="white"
+              radius
+              width="8.7vw"
+              height="3.2vh"
+              onClick={() => onClickHandlingNotification(true)}
+            />
           </div>
           <div className={`${styles.noticeInfo} ${styles.borderButton}`}>
-            <Button text="거절" color="white" radius width="8.7vw" height="3.2vh" />
+            <Button
+              text="거절"
+              color="white"
+              radius
+              width="8.7vw"
+              height="3.2vh"
+              onClick={() => onClickHandlingNotification(false)}
+            />
           </div>
         </>
       ) : (
         <>
           <div className={styles.noticeInfo}>
-            {noticeValue.noticeStatus === "ACCEPT" ? (
-              <Button text="수락됨" color="gray" radius width="8.7vw" height="3.5vh" />
+            {noticeValue.status === "ACCEPT" ? (
+              <Button text="수락됨" color="gray" radius width="8.7vw" height="3.5vh" disabled />
             ) : (
-              <Button text="거절됨" color="gray" radius width="8.7vw" height="3.5vh" />
+              <Button text="거절됨" color="gray" radius width="8.7vw" height="3.5vh" disabled />
             )}
           </div>
           <div className={styles.noticeInfo}>
