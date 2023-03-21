@@ -10,8 +10,8 @@ import api from "api/Api";
 export interface DestinationConfig {
   regionName: string;
   regionImageURL: string;
-  engName: string;
-  desc: string;
+  englishName: string;
+  contents: string;
 }
 
 const MainDestinationsList = () => {

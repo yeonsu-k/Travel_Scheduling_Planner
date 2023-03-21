@@ -6,7 +6,7 @@ import { DestinationConfig } from "./MainDestinationsList";
 
 const MainDestinationItem = (item: DestinationConfig) => {
   const [ModalOpen, setModalOpen] = useState(false);
-  const { regionName, regionImageURL, engName } = item;
+  const { regionName, regionImageURL, englishName } = item;
   const showModal = () => {
     setModalOpen(true);
   };
@@ -25,7 +25,7 @@ const MainDestinationItem = (item: DestinationConfig) => {
           <img src={regionImageURL} />
         </div>
         <div className={styles.cardContent}>
-          <div className={styles.cardEngTitle}>{engName}</div>
+          <div className={styles.cardEngTitle}>{englishName}</div>
           <div className={styles.cardTitle}>{regionName}</div>
         </div>
       </div>
