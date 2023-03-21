@@ -12,6 +12,8 @@ public class ScheduleSuccessConstant {
 
     public static final String FIND_SCHEDULE_SUCCESS_MESSAGE = "일정 조회에 성공했습니다.";
 
+    public static final String FIND_LOCATION_SUCCESS_MESSAGE = "장소 조회에 성공했습니다.";
+
     public static final String CREATE_SCHEDULE_SUCCESS_MESSAGE = "일정 생성에 성공했습니다.";
 
     public static final String CREATE_BASIC_LOCATION_SUCCESS_MESSAGE = "기본 장소 생성에 성공했습니다.";

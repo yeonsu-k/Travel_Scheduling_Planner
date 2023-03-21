@@ -1,10 +1,12 @@
 package com.newsainturtle.schedule.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class LocationResponse {
 
     private Long locationId;
