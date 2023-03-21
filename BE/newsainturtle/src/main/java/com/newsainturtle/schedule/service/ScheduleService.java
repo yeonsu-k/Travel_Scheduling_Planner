@@ -140,8 +140,7 @@ public class ScheduleService {
                 scheduleNotificationRepository.save(newScheduleNotification);
                 //상대방에게 알림 전송 (실시간 처리 필요)
                 Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
-                notificationService.sendNewNotification(LiveNotificationResponse.builder()
-                        .email(friendEmail)
+                notificationService.sendNewNotification(friendEmail, LiveNotificationResponse.builder()
                         .senderNickname(user.getNickname())
                         .type("schedule")
                         .content(schedule.getScheduleName())

@@ -21,7 +21,6 @@ import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +36,7 @@ public class NotificationService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final FriendRepository friendRepository;
-    private final SimpMessagingTemplate messageTemplate;
+    private final WebSocketService webSocketService;
 
     @Transactional(readOnly = true)
     public NotificationListResponse selectNotificationList(String email) {
@@ -133,7 +132,13 @@ public class NotificationService {
         }
     }
 
-    public void sendNewNotification(LiveNotificationResponse liveNotificationResponse){
-        messageTemplate.convertAndSend("/notification/message", liveNotificationResponse);
+    public void sendNewNotification(String email, LiveNotificationResponse liveNotificationResponse){
+        try {
+            System.out.println("메세지 보냄: "+email);
+            webSocketService.sendNewNotification(email, liveNotificationResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

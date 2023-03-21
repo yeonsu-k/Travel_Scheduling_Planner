@@ -22,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] PERMIT_ALL_URL_ARRAY = {
             "/api/auth/**",
+            "/socket/notification/**"
     };
     private static final String[] IGNORE_URL_ARRAY = {
             "/v2/api-docs/**",

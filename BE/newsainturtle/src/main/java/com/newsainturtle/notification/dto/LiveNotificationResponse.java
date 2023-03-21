@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class LiveNotificationResponse {
-    private String email;
     private String senderNickname;
     private String type;
     private String content;
