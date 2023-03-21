@@ -5,13 +5,17 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LocationResponse {
+public class BasicLocationRequest {
 
-    private Long locationId;
     private Long regionId;
+
     private String locationName;
+
     private String address;
-    private double longitude;
-    private double latitude;
+
+    private Double longitude;
+
+    private Double latitude;
+
     private boolean isHotel;
 }

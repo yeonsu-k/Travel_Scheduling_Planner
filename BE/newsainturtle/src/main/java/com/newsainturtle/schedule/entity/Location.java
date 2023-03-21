@@ -1,13 +1,16 @@
 package com.newsainturtle.schedule.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
@@ -18,9 +21,8 @@ public abstract class Location {
     @Column(name = "location_id")
     private Long locationId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id")
-    private Region region;
+    @Column(name = "region_id")
+    private Long regionId;
 
     @Column(name = "location_name", length = 20)
     private String locationName;
