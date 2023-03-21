@@ -6,11 +6,32 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import { resetNoticeList, selectNoticeList, setNoticeList } from "slices/noticeSlice";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import SockJS from "sockjs-client";
+import StompJs from "@stomp/stompjs";
 
 const Notice = () => {
   const dispatch = useAppDispatch();
 
+  const accessToken = sessionStorage.getItem("accessToken");
   const noticeList = useAppSelector(selectNoticeList);
+
+  if (accessToken) {
+    const webSocket = new WebSocket("ws://127.0.0.1:8080/ws-stomp");
+
+    webSocket.onopen = () => {
+      console.log("연결 성공");
+    };
+    webSocket.onerror = () => {
+      console.log("err");
+    };
+  }
+
+  // const client = new StompJs.Client({
+  //   brokerURL: "ws://localhost:8080/ws-stomp",
+  //   connectHeaders: {
+  //     Authorization: `Bearer ${accessToken}`,
+  //   },
+  // });
 
   const onClickClearBtn = () => {
     Axios.delete(api.notification.notification())
