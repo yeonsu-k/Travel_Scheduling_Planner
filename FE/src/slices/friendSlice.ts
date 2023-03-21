@@ -22,18 +22,7 @@ interface friendConfig {
 }
 
 const initialState: friendConfig = {
-  friends: [
-    {
-      profile: "",
-      email: "jyeon3930@naver.com",
-      nickname: "kjyeon",
-    },
-    {
-      profile: "",
-      email: "test@test.com",
-      nickname: "test",
-    },
-  ],
+  friends: [],
   searchUser: {
     email: "",
     exist: false,
