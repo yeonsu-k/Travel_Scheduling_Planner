@@ -46,6 +46,8 @@ interface apiInterface {
     selectPlace: (schedule_id: number) => string; // 선택 장소 저장 & 선택 장소 조회
     hotel: (schedule_id: number) => string; // 선택 호텔 조회
     vehicle: (schedule_id: number) => string; // 이동 수단 저장 & 이동 수단 조회
+    basiclocation: () => string; // 기본 장소 추가
+    customlocation: () => string; // 사용자 장소 추가
     searchLocation: () => string; // 장소 검색
     getRecommendHotel: () => string; // 추천 호텔 조회
     location: () => string; // 추천 장소 조회 & 장소 상세 조회
@@ -97,6 +99,8 @@ const api: apiInterface = {
     selectPlace: (schedule_id) => HOST + SCHEDULE + "select/" + schedule_id,
     hotel: (schedule_id) => HOST + SCHEDULE + "hotel/" + schedule_id,
     vehicle: (schedule_id) => HOST + SCHEDULE + "vehicle/" + schedule_id,
+    basiclocation: () => HOST + SCHEDULE + "basiclocation",
+    customlocation: () => HOST + SCHEDULE + "customlocation",
     searchLocation: () => HOST + SCHEDULE + "location",
     getRecommendHotel: () => HOST + SCHEDULE + "hotel",
     location: () => HOST + SCHEDULE + "location",
