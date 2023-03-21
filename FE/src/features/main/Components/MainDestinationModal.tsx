@@ -3,6 +3,9 @@ import styles from "../Main.module.css";
 import Text from "components/Text";
 import Button from "components/Button";
 import { DestinationConfig } from "../MainDestinationsList";
+import { useDispatch } from "react-redux";
+import { setLocal } from "slices/scheduleCreateSlice";
+import { useNavigate } from "react-router-dom";
 
 interface modalProps {
   setModalOpen: Dispatch<SetStateAction<boolean>>;
@@ -10,7 +13,14 @@ interface modalProps {
 }
 
 const MainDestinationModal = ({ setModalOpen, item }: modalProps) => {
-  const { regionName, regionImageURL, engName, desc } = item;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { regionName, regionImageURL, englishName, contents } = item;
+
+  const moveToCreate = () => {
+    dispatch(setLocal(regionName));
+    navigate("/schedule/create");
+  };
 
   return (
     <div className={styles.mainModalContainer}>
@@ -18,12 +28,12 @@ const MainDestinationModal = ({ setModalOpen, item }: modalProps) => {
         <img src={regionImageURL} />
       </div>
       <div className={styles.contContainer}>
-        <div className={styles.contTextTitle}>{engName}</div>
+        <div className={styles.contTextTitle}>{englishName}</div>
         <Text value={regionName} type="groupTitle" />
         <div className={styles.contTextContents}>
-          <Text value={desc} type="text" color="lightgray" />
+          <Text value={contents} type="text" color="lightgray" />
         </div>
-        <Button width="20%" text="일정 만들기" />
+        <Button width="20%" height="18%" text="일정 만들기" color="main" onClick={moveToCreate} />
       </div>
       <div className={styles.closeBtn} onClick={() => setModalOpen(false)}>
         <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
