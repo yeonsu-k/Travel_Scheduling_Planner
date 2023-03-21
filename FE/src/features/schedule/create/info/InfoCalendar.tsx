@@ -9,7 +9,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import ko from "date-fns/locale/ko";
 import { addDays, differenceInDays, format } from "date-fns";
 
-function InfoCalendar() {
+function InfoCalendar({ modalClose }: { modalClose: () => void }) {
   const dispatch = useAppDispatch();
   const date = useAppSelector(selectDate);
 
@@ -41,7 +41,7 @@ function InfoCalendar() {
     setState([
       {
         startDate: start,
-        endDate: differenceInDays(end, start) > 10 ? addDays(start, 9) : end,
+        endDate: differenceInDays(end, start) > 9 ? addDays(start, 9) : end,
         key: "selection",
       },
     ]);
@@ -62,7 +62,13 @@ function InfoCalendar() {
         monthDisplayFormat={"yyyy MMM"}
         locale={ko}
       />
-      <button className={styles.calendarSave_btn} onClick={saveDate}>
+      <button
+        className={styles.calendarSave_btn}
+        onClick={() => {
+          saveDate();
+          modalClose();
+        }}
+      >
         적용하기
       </button>
     </>

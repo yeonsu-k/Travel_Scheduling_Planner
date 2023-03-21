@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./CreateInfo.module.css";
+import styles from "./Create.module.css";
 import SearchRadioBtn from "./search/SearchRadioBtn";
 import SearchInput from "./search/SearchInput";
 import { Box, Stack } from "@mui/material";

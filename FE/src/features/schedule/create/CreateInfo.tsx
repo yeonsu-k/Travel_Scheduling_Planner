@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./CreateInfo.module.css";
+import styles from "./Create.module.css";
 import InfoLocal from "./info/InfoLocal";
 import InfoDate from "./info/InfoDate";
 import { Stack } from "@mui/system";
