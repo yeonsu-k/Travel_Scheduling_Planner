@@ -25,7 +25,7 @@ interface scheduleCreateConfig {
 }
 
 const initialState: scheduleCreateConfig = {
-  local: "부산",
+  local: "서울",
   date: {
     start: format(new Date(), "yyyy-MM-dd"),
     end: format(addDays(new Date(), 2), "yyyy-MM-dd"),
