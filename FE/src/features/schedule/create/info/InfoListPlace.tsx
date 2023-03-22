@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import {
+  selectMarker,
   selectPlaceList,
   selectPointPlace,
+  setMarker,
   setPlaceList,
   setPlaceTime,
   setPointPlace,
@@ -18,6 +20,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
   const dispatch = useAppDispatch();
   const place = useAppSelector(selectPlaceList);
   const pointPlace = useAppSelector(selectPointPlace);
+  const marker = useAppSelector(selectMarker);
   const timer = useMemo(() => {
     return place.map((val: { time: string }) => {
       const time = val.time.split(":");
@@ -40,19 +43,33 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
   const { placeCurrentDay, setPlaceCurrentDay } = props.scheduleCreatProps;
 
   const deletePlace = (id: number) => {
-    const newPlaceList = place.filter((value) => value.onePlace.id !== id);
-    dispatch(setPlaceList(newPlaceList));
+    const placeList = [...place];
+    let changedIdx = place.findIndex((value) => value.onePlace.id === id);
+    placeList.splice(changedIdx, 1);
+    dispatch(setPlaceList(placeList));
+
+    const markerList = [...marker];
+    changedIdx = markerList.findIndex((value) => value.info.id === id);
+    markerList.splice(changedIdx, 1);
+    dispatch(setMarker(markerList));
+  };
+
+  const deletePointPlace = (index: number) => {
+    const pointPlaceList = [...pointPlace];
+
+    const markerList = [...marker];
+    const changedIdx = markerList.findIndex((value) => value.info?.id === pointPlaceList[index]?.id);
+    markerList.splice(changedIdx, 1);
+    dispatch(setMarker(markerList));
+
+    pointPlaceList[index] = null;
+    dispatch(setPointPlace(pointPlaceList));
   };
 
   const deletePlaceAll = () => {
     dispatch(setPointPlace(Array.from({ length: 2 }, () => null)));
     dispatch(setPlaceList([]));
-  };
-
-  const deletePointPlace = (index: number) => {
-    const pointPlaceList = [...pointPlace];
-    pointPlaceList[index] = null;
-    dispatch(setPointPlace([...pointPlaceList]));
+    dispatch(setMarker(marker.filter((value) => value.type == "hotel")));
   };
 
   const onChangeAccount = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
