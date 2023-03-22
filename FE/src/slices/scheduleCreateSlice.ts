@@ -6,6 +6,9 @@ export interface basicConfig {
   id: number;
   image: string;
   name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
 }
 
 interface scheduleCreateConfig {
@@ -16,9 +19,7 @@ interface scheduleCreateConfig {
   };
   hotel: (basicConfig | null)[];
   place: {
-    id: number;
-    image: string;
-    name: string;
+    onePlace: basicConfig;
     time: string;
   }[];
   pointPlace: (basicConfig | null)[];

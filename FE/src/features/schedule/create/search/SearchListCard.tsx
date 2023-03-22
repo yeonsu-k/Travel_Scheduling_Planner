@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  basicConfig,
   selectHotelList,
   selectPlaceList,
   selectPointPlace,
@@ -17,7 +18,7 @@ import SearchCardInfoModal from "./SearchCardInfoModal";
 import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
 interface SearchListCardType {
-  cardInfo: { id: number; image: string; name: string };
+  cardInfo: basicConfig;
   select: string;
   scheduleCreatProps: ScheduleCreatPropsType;
 }
@@ -48,9 +49,7 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
       } else {
         const placeList = [...place];
         placeList.push({
-          id: cardInfo.id,
-          image: cardInfo.image,
-          name: cardInfo.name,
+          onePlace: cardInfo,
           time: "2:00",
         });
         dispatch(setPlaceList([...placeList]));

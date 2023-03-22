@@ -6,6 +6,7 @@ import api from "api/Api";
 import { Box } from "@mui/material";
 import Text from "components/Text";
 import defaultPhoto from "asset/defaultPhoto.jpg";
+import { basicConfig } from "slices/scheduleCreateSlice";
 
 interface SearchListType {
   select: string;
@@ -14,24 +15,36 @@ interface SearchListType {
   scheduleCreatProps: ScheduleCreatPropsType;
 }
 
-interface RecommendType {
-  id: number;
-  image: string;
-  name: string;
+interface getRecommendApiType {
+  locationId: number;
+  locationName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  hotel: boolean;
+  regionId: number;
 }
 
 function SearchList(props: SearchListType) {
   const { select, keyword, searchClick, scheduleCreatProps } = props;
-  const [list, setCardList] = useState<RecommendType[]>([]);
+  const [list, setCardList] = useState<basicConfig[]>([]);
 
   useEffect(() => {
     if (searchClick) {
       // 키워드 있는 검색 API
     } else {
       Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, 1)).then((res) => {
+        console.log(res.data.data);
         setCardList(
-          res.data.data.map((ele: { locationId: number; locationName: string }) => {
-            return { id: ele.locationId, image: defaultPhoto, name: ele.locationName };
+          res.data.data.map((ele: getRecommendApiType) => {
+            return {
+              id: ele.locationId,
+              image: defaultPhoto,
+              name: ele.locationName,
+              address: ele.address,
+              latitude: ele.latitude,
+              longitude: ele.longitude,
+            };
           }),
         );
       });

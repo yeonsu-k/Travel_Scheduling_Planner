@@ -40,7 +40,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
   const { placeCurrentDay, setPlaceCurrentDay } = props.scheduleCreatProps;
 
   const deletePlace = (id: number) => {
-    const newPlaceList = place.filter((value) => value.id !== id);
+    const newPlaceList = place.filter((value) => value.onePlace.id !== id);
     dispatch(setPlaceList(newPlaceList));
   };
 
@@ -152,9 +152,9 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
             {place.map((placeCard, index) => (
               <div className={styles.cardList} key={index}>
                 <div className={styles.card}>
-                  <img src={placeCard?.image} alt={""} />
+                  <img src={placeCard.onePlace.image} alt={""} />
                   <div className={styles.placeCard}>
-                    <span className={styles.cardText}>{placeCard?.name}</span>
+                    <span className={styles.cardText}>{placeCard.onePlace.name}</span>
                     <div className={styles.flexRow}>
                       <div className={styles.placeTimer}>
                         <Timer fontSize="small" />
@@ -183,7 +183,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
                         />
                         분
                       </div>
-                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard?.id)}>
+                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.onePlace.id)}>
                         <Close fontSize="small" color="error" />
                       </button>
                     </div>
