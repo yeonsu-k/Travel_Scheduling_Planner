@@ -107,14 +107,13 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
         <Stack className={styles.flex} my={1} spacing={0.5}>
           <Divider className={styles.divider} />
           {pointPlace.map((pointPlaceCard, index) => (
-            <>
+            <Box key={index} minWidth="100%">
               <div className={` ${styles.flexRow} ${styles.placeDrop}`}>
                 <small>{`${index == 0 ? "출발" : "종착"} 장소`}</small>
               </div>
               {pointPlaceCard === null ? (
                 <>
                   <div
-                    key={index}
                     className={
                       placeCurrentDay === index
                         ? `${styles.place_explain} ${styles.explain_focused}`
@@ -143,7 +142,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
                   </div>
                 </div>
               )}
-            </>
+            </Box>
           ))}
         </Stack>
         <Divider className={styles.divider} />
