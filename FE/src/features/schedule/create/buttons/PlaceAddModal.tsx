@@ -67,14 +67,9 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
         isHotel: addCurrentTab == "호텔" ? 1 : 0,
         regionId: 1, // 추후 수정 // 1(서울), 4(부산), 5(제주)
       };
-      Axios.post(api.createSchedule.customlocation(), data)
-        .then((res) => {
-          console.log("사용자 장소 추가 완료", res);
-          setAddPlaceModal(false);
-        })
-        .catch((err) => {
-          console.error("사용자 장소 추가 실패", err);
-        });
+      Axios.post(api.createSchedule.customlocation(), data).then((res) => {
+        setAddPlaceModal(false);
+      });
     }
   };
 

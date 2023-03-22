@@ -34,7 +34,6 @@ function SearchList(props: SearchListType) {
       // 키워드 있는 검색 API
     } else {
       Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, 1)).then((res) => {
-        console.log(res.data.data);
         setCardList(
           res.data.data.map((ele: getRecommendApiType) => {
             return {

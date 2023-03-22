@@ -31,7 +31,6 @@ function CreateRight(props: ScheduleCreatPropsType) {
   };
 
   const cancleBtnClick = () => {
-    if (search) console.log(select + " 추천 목록 보여주기");
     setSearchInput("");
     setSearch(false);
   };
