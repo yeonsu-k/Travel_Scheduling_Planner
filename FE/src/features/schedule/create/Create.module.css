@@ -99,6 +99,13 @@
   font-size: 0.875rem;
 }
 
+.againRecommend {
+  color: gray;
+  text-decoration: underline;
+  font-size: 0.675rem;
+  cursor: pointer;
+}
+
 .floatBtn {
   width: 100%;
   height: 56px;

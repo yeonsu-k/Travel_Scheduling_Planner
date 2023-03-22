@@ -47,36 +47,22 @@ function CreateRight(props: ScheduleCreatPropsType) {
           cancleBtnClick={cancleBtnClick}
         />
       </Stack>
-      {search ? (
-        searchInput.length < 2 ? (
-          <Box className={styles.center} my={1.5}>
-            <Text value={`${select}${select === "호텔" ? "을" : "를"} 검색하세요`} bold />
-            <Stack className={styles.searchWarning} my={2} spacing={0.5} justifyContent="center" alignItems="center">
-              <ErrorOutline />
-              <small>{select}명을 검색하세요.</small>
-              <small>검색어는 두 글자 이상 입력해주세요.</small>
-            </Stack>
+      {search && searchInput.length < 2 ? (
+        <Box className={styles.center} my={1.5}>
+          <Text value={`${select}${select === "호텔" ? "을" : "를"} 검색하세요`} bold />
+          <Stack className={styles.searchWarning} my={2} spacing={0.5} justifyContent="center" alignItems="center">
+            <ErrorOutline />
+            <small>{select}명을 검색하세요.</small>
+            <small>검색어는 두 글자 이상 입력해주세요.</small>
+          </Stack>
+          <Box component="p" mt={1} onClick={() => setSearch(false)} className={styles.againRecommend}>
+            다시 추천 {select} 보기
           </Box>
-        ) : (
-          <Box className={styles.center} my={1.5}>
-            <Box className={styles.center} my={1.5}>
-              <Text value={select + " 검색결과(3건)"} bold />
-            </Box>
-            <div className={styles.scroll}>
-              {/* 검색 결과 보여주기 */}
-              {/* <SearchList /> */}
-            </div>
-          </Box>
-        )
+        </Box>
       ) : (
-        <>
-          <Box className={styles.center} my={1.5}>
-            <Text value={"추천 " + select} bold />
-          </Box>
-          <div className={styles.scroll}>
-            <SearchList select={select} scheduleCreatProps={props} />
-          </div>
-        </>
+        <div className={styles.scroll}>
+          <SearchList select={select} searchClick={search} keyword={searchInput} scheduleCreatProps={props} />
+        </div>
       )}
     </Stack>
   );
