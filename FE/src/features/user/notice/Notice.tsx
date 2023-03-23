@@ -39,21 +39,22 @@ const Notice = () => {
     ws.current.onmessage = (event) => {
       console.log("메세지 옴: " + event.data);
 
-      console.log("data: ", event);
+      const data = JSON.parse(event.data);
 
-      if (event.data.type === "friend") {
+      console.log("data: ", data.type);
+
+      if (data.type === "friend") {
+        console.log("friend");
         fireNotification("MYRO", {
-          body: `${event.data.senderNickname}님이 ${event.data.content}을 보냈습니다.`,
+          body: `${data.senderNickname}님이 ${data.content}을 보냈습니다.`,
         });
-      } else if (event.data.type === "schedule") {
+      } else if (data.type === "schedule") {
         fireNotification("MYRO", {
-          body: `${event.data.senderNickname}님이 일정공유 요청을 보냈습니다.`,
-        });
-      } else {
-        fireNotification("MYRO", {
-          body: event.data,
+          body: `${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`,
         });
       }
+
+      getNotification();
     };
     ws.current.onclose = (event) => {
       console.log("disconnect from " + webSocketUrl);
@@ -74,7 +75,7 @@ const Notice = () => {
       .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
+  const getNotification = () => {
     Axios.get(api.notification.notification())
       .then((res) => {
         console.log(res);
@@ -83,6 +84,10 @@ const Notice = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    getNotification();
   }, []);
 
   return (
