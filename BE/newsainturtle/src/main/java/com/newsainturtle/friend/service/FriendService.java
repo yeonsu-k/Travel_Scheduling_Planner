@@ -6,9 +6,11 @@ import com.newsainturtle.friend.exception.NotFriendRelationException;
 import com.newsainturtle.friend.exception.UnableToRequestFriendFollowException;
 import com.newsainturtle.friend.exception.UnauthorizedFriendException;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.dto.LiveNotificationResponse;
 import com.newsainturtle.notification.entity.FriendNotification;
 import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.repository.FriendNotificationRepository;
+import com.newsainturtle.notification.service.NotificationService;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
     private final FriendNotificationRepository friendNotificationRepository;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     public UserSearchResponse searchUser(String email, UserSearchRequest userSearchRequest) {
@@ -76,13 +79,19 @@ public class FriendService {
                         .receiveUser(receiveUser)
                         .build();
                 friendRepository.save(newFriend);
-                //상대방에게 알림 전송 (실시간 처리 필요)
                 FriendNotification notification = FriendNotification.builder()
                         .receiveUser(receiveUser)
                         .sendUserId(requestUser.getUserId())
                         .notificationStatus(NotificationStatus.NO_RESPONSE)
                         .build();
                 friendNotificationRepository.save(notification);
+                //상대방에게 알림 전송 (실시간 처리 필요)
+                System.out.println("/상대방에게 알림 전송 (실시간 처리 필요)");
+                notificationService.sendNewNotification(friendFollowRequest.getEmail(), LiveNotificationResponse.builder()
+                        .senderNickname(requestUser.getNickname())
+                        .type("friend")
+                        .content("친구 요청")
+                        .build());
                 return;
             } else if (!friend.isAccept()) {
                 friend.updateIsAccept(true);
