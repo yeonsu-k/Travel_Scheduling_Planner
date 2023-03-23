@@ -32,10 +32,10 @@ public class ScheduleController {
     @Operation(summary = "메인페이지에서 일정 생성", description = "메인 페이지에서 지역을 선택해 일정을 생성합니다.")
     public ResponseEntity<BaseResponse> createSchedule(@ApiIgnore Authentication authentication, @RequestBody ScheduleRequest scheduleRequest) {
         UserDetails userDetails = (UserDetails) authentication.getDetails();
-        scheduleService.createSchedule(scheduleRequest, userDetails.getUsername());
         return new ResponseEntity<>(BaseResponse.from(
                 true,
-                CREATE_SCHEDULE_SUCCESS_MESSAGE)
+                CREATE_SCHEDULE_SUCCESS_MESSAGE,
+                scheduleService.createSchedule(scheduleRequest, userDetails.getUsername()))
                 , HttpStatus.OK);
     }
 
