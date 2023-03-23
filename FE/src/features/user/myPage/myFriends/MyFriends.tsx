@@ -21,12 +21,12 @@ const MyFriends = () => {
 
   useEffect(() => {
     Axios.get(api.friend.friend())
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
         dispatch(setFriends(res.data.data.friends));
         dispatch(setFriendNumber(res.data.data.friends.length));
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   }, []);

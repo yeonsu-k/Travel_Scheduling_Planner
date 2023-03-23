@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./MyFriends.module.css";
-import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
 import Button from "components/Button";
 import { useAppSelector } from "app/hooks";
@@ -17,11 +16,11 @@ const MyFriendsList = () => {
         email: email,
       },
     })
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
         alert("삭제가 완료되었습니다");
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   };
