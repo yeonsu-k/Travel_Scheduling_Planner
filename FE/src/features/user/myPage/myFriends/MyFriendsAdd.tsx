@@ -20,7 +20,7 @@ const MyFriendsAdd = () => {
     Axios.post(api.friend.searchUser(), {
       email: email,
     })
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
 
         const searchData = {
@@ -33,7 +33,7 @@ const MyFriendsAdd = () => {
         };
         dispatch(setSearchUser(searchData));
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   };
