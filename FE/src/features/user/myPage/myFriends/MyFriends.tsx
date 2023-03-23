@@ -3,7 +3,7 @@ import MyFriendsList from "./MyFriendsList";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Modal from "components/Modal";
-import MyFriendsAdd from "./MyFriendsAdd";
+import MyFriendsSearch from "./MyFriendsSearch";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useAppDispatch } from "app/hooks";
@@ -40,7 +40,7 @@ const MyFriends = () => {
         </button>
         {openAddFriendModal ? (
           <Modal title="친구 검색하기" modalClose={() => setOpenAddFriendModal(false)}>
-            <MyFriendsAdd />
+            <MyFriendsSearch />
           </Modal>
         ) : (
           <></>
