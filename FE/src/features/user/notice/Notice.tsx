@@ -15,8 +15,9 @@ export interface noticeListProps {
   status: string;
 }
 
+let noticeList: noticeListProps[] = [];
+
 const Notice = () => {
-  let noticeList: noticeListProps[] = [];
   const email = useAppSelector(selectUserInfo).email;
 
   const fireNotification = (title: string, options: any) => {
@@ -71,23 +72,14 @@ const Notice = () => {
     };
   }
 
-  const onClickClearBtn = () => {
-    Axios.delete(api.notification.notification())
+  const onClickClearBtn = async () => {
+    await Axios.delete(api.notification.notification())
       .then((res) => {
         console.log(res);
       })
       .catch((err) => console.log(err));
-  };
 
-  const getNotification = () => {
-    Axios.get(api.notification.notification())
-      .then((res) => {
-        console.log(res);
-        noticeList = [res.data.data.notifications];
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getNotification();
   };
 
   useEffect(() => {
@@ -116,3 +108,15 @@ const Notice = () => {
 };
 
 export default Notice;
+
+export const getNotification = async () => {
+  await Axios.get(api.notification.notification())
+    .then((res) => {
+      console.log(res);
+      noticeList = [...res.data.data.notifications];
+      console.log("list", noticeList);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

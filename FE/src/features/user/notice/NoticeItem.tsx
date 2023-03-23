@@ -4,15 +4,15 @@ import Button from "components/Button";
 import Text from "components/Text";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { noticeListProps } from "./Notice";
+import { getNotification, noticeListProps } from "./Notice";
 
 interface NoticeItemProps {
   noticeValue: noticeListProps;
 }
 
 const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
-  const onClickHandlingNotification = (isAccept: boolean) => {
-    Axios.post(api.notification.notification(), {
+  const onClickHandlingNotification = async (isAccept: boolean) => {
+    await Axios.post(api.notification.notification(), {
       notificationId: noticeValue.notificationId,
       isAccept: isAccept,
       type: noticeValue.type,
@@ -24,16 +24,20 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
       .catch((err) => {
         console.log(err);
       });
+
+    getNotification();
   };
 
-  const onClickDeleteBtn = () => {
-    Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId))
+  const onClickDeleteBtn = async () => {
+    await Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId))
       .then((res) => {
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
+
+    getNotification();
   };
 
   return (
