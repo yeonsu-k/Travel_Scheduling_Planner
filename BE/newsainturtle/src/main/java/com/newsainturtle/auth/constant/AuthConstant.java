@@ -10,7 +10,13 @@ public class AuthConstant {
     public static final String SUCCESS_JOIN_USER_MESSAGE = "회원 가입이 완료 되었습니다.";
     public static final String LOGIN_SUCCESS_MESSAGE = "로그인이 완료되었습니다.";
     public static final String VALID_TOKEN_SUCCESS_MESSAGE = "유효한 토큰입니다.";
+    public static final String KAKAO_CODE_URL_SUCCESS_MESSAGE = "카카오 로그인 관련 url 생성이 완료되었습니다.";
 
     public static final String UNAUTHORIZED_USER_ERROR_MESSAGE = "존재하지 않는 회원입니다.";
     public static final String INVALID_TOKEN_MESSAGE = "유효하지 않은 토큰입니다.";
+    public static final String UNAVAILABLE_EMAIL_MESSAGE = "해당 이메일로 가입할 수 없습니다.";
+    public static final String KAKAO_LOGIN_ERROR_MESSAGE = "카카오 로그인에 실패하였습니다.";
+
+    public static final String KAKAO_AUTH_URL = "https://kauth.kakao.com";
+    public static final String KAKAO_API_URL = "https://kapi.kakao.com";
 }
