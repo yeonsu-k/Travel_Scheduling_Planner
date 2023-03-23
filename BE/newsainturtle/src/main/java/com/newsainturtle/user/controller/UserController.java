@@ -111,5 +111,14 @@ public class UserController {
                 HttpStatus.OK);
     }
 
-
+    @Operation(summary = "회원 탈퇴", description = "유저가 서비스를 탈퇴합니다.")
+    @DeleteMapping
+    public ResponseEntity<BaseResponse> withdrawUser(@ApiIgnore Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        userService.withdrawUser(email);
+        return new ResponseEntity<>(
+                BaseResponse.from(true, WITHDRAW_USER_SUCCESS_MESSAGE),
+                HttpStatus.OK);
+    }
 }
