@@ -1,23 +1,22 @@
 package com.newsainturtle.auth.controller;
 
-import com.newsainturtle.auth.dto.LoginRequest;
-import com.newsainturtle.auth.dto.LoginResponse;
+import com.newsainturtle.auth.dto.*;
 import com.newsainturtle.auth.service.AuthService;
+import com.newsainturtle.common.dto.BaseResponse;
+import com.newsainturtle.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
-import javax.validation.Valid;
-
-import com.newsainturtle.auth.dto.EmailDuplicateCheckRequest;
-import com.newsainturtle.auth.dto.UserJoinRequest;
-import com.newsainturtle.common.dto.BaseResponse;
-import com.newsainturtle.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import static com.newsainturtle.auth.constant.AuthConstant.*;
 
@@ -62,4 +61,14 @@ public class AuthController {
                 userService.joinUser(userJoinRequest)), HttpStatus.OK);
     }
 
+    @PostMapping("/token")
+    @ApiOperation(value = "토큰 유효성 검사", notes = "새고로침 시 토큰 유효성 검사를 수행합니다.")
+    public ResponseEntity<BaseResponse> checkAccessToken(@RequestBody @Valid @ApiParam(value = "accessToken", required = true) TokenCheckRequest tokenCheckRequest) {
+        TokenCheckResponse tokenCheckResponse = authService.checkAccessToken(tokenCheckRequest);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                VALID_TOKEN_SUCCESS_MESSAGE,
+                tokenCheckResponse)
+                , HttpStatus.OK);
+    }
 }
