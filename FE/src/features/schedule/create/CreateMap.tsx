@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { selectLocal, selectMarker } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
 import styles from "./Create.module.css";
-import hotelImage from "asset/hotel.png";
-import placeImage from "asset/place.png";
-import pointImage from "asset/point.png";
+import hotelImage from "asset/markerHotel.png";
+import placeImage from "asset/markerPlace.png";
+import pointImage from "asset/markerPoint.png";
 
 declare global {
   interface Window {
