@@ -1,19 +1,33 @@
 package com.newsainturtle.auth.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.newsainturtle.auth.dto.LoginRequest;
-import com.newsainturtle.auth.dto.LoginResponse;
-import com.newsainturtle.auth.dto.TokenCheckRequest;
-import com.newsainturtle.auth.dto.TokenCheckResponse;
+import com.newsainturtle.auth.dto.*;
+import com.newsainturtle.auth.dto.kakao.KakaoInfoMapResponse;
+import com.newsainturtle.auth.dto.kakao.KakaoInfoResponse;
+import com.newsainturtle.auth.dto.KakaoLoginCodeUrlResponse;
+import com.newsainturtle.auth.dto.kakao.KakaoTokenResponse;
 import com.newsainturtle.auth.exception.InvalidTokenException;
+import com.newsainturtle.auth.exception.KakaoLoginException;
 import com.newsainturtle.auth.exception.UnauthorizedUserException;
+import com.newsainturtle.auth.exception.UnavailableEmailException;
 import com.newsainturtle.common.security.JwtTokenProvider;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+import static com.newsainturtle.auth.constant.AuthConstant.KAKAO_API_URL;
+import static com.newsainturtle.auth.constant.AuthConstant.KAKAO_AUTH_URL;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +36,15 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Value("${kakao.key.cliend-id}")
+    private String kakaoClientID;
+
+    @Value("${kakao.key.cliend-secret-code}")
+    private String kakaoClientSecretCode;
+
+    @Value("${kakao.key.redirect-url}")
+    private String redirectURL;
 
     @Transactional(readOnly = true)
     public LoginResponse login(LoginRequest loginRequest) {
@@ -47,4 +70,23 @@ public class AuthService {
         }
         throw new InvalidTokenException();
     }
+
+    @Transactional(readOnly = true)
+    public KakaoLoginCodeUrlResponse getKakaoAuthUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(KAKAO_AUTH_URL)
+                .append("/oauth/authorize?")
+                .append("client_id=")
+                .append(kakaoClientID)
+                .append("&")
+                .append("redirect_uri=")
+                .append(redirectURL)
+                .append("&response_type=code");
+        KakaoLoginCodeUrlResponse kakaoLoginCodeURLResponse = KakaoLoginCodeUrlResponse.builder()
+                .url(sb.toString())
+                .build();
+        return kakaoLoginCodeURLResponse;
+    }
+
+
 }
