@@ -2,48 +2,36 @@ import React from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import Text from "components/Text";
-import { noticeListConfig, selectNoticeList, setNoticeList } from "slices/noticeSlice";
-import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import { noticeListProps } from "./Notice";
 
 interface NoticeItemProps {
-  index: number;
-  noticeValue: noticeListConfig;
+  noticeValue: noticeListProps;
 }
 
-const NoticeItem = ({ index, noticeValue }: NoticeItemProps) => {
-  const dispatch = useAppDispatch();
-
-  const noticeList = useAppSelector(selectNoticeList);
-
+const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
   const onClickHandlingNotification = (isAccept: boolean) => {
     Axios.post(api.notification.notification(), {
       notificationId: noticeValue.notificationId,
       isAccept: isAccept,
       type: noticeValue.type,
     })
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
         alert("알림 처리 완료");
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
   const onClickDeleteBtn = () => {
     Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId))
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
-
-        const tmp = [...noticeList];
-        console.log(index);
-        tmp.splice(index, 1);
-
-        dispatch(setNoticeList([...tmp]));
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   };
