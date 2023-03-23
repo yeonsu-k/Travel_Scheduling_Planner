@@ -28,4 +28,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     @Query("DELETE FROM Friend f WHERE (f.requestUser = ?1 AND f.receiveUser = ?2 OR f.requestUser = ?2 AND f.receiveUser = ?1) AND f.isAccept = false")
     void deleteRejectedUser(User user, User friendUser);
 
+    void deleteAllByRequestUserOrReceiveUser(User requestUser, User receiveUser);
+
 }
