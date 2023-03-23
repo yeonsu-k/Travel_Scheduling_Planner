@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { selectLocal, selectMarker } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
 import styles from "./Create.module.css";
-import hotelImage from "asset/hotel.png";
-import placeImage from "asset/place.png";
-import pointImage from "asset/point.png";
+import hotelImage from "asset/markerHotel.png";
+import placeImage from "asset/markerPlace.png";
+import pointImage from "asset/markerPoint.png";
 
 declare global {
   interface Window {
@@ -41,7 +41,7 @@ function CreateMap() {
     // 마커 리스트에서 가장 마지막 위치를 기준으로 중심 좌표 바꿔주기
     if (marker.length != 0 && marker.length >= markerListSize) {
       const centerData = marker[marker.length - 1].info;
-      setCenterPos({ center: new kakao.maps.LatLng(centerData.latitude, centerData.longitude), level: 4 });
+      setCenterPos({ center: new kakao.maps.LatLng(centerData.latitude, centerData.longitude), level: 6 });
       setMarkerListSize(marker.length);
     }
   }, [marker]);
