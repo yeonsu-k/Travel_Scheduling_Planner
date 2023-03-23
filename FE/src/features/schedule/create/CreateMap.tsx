@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { selectLocal } from "slices/scheduleCreateSlice";
+import React, { useEffect, useRef } from "react";
+import { selectLocal, selectMarker } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
 import styles from "./Create.module.css";
 
@@ -13,6 +13,15 @@ const { kakao } = window;
 
 function CreateMap() {
   const local = useAppSelector(selectLocal);
+  const marker = useAppSelector(selectMarker);
+  const mainMap = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (mainMap.current) {
+      mainMap.current.innerHTML = "";
+      setMap();
+    }
+  }, [local]);
 
   function setMap() {
     const container = document.getElementById("map");
@@ -36,11 +45,8 @@ function CreateMap() {
       }
     });
   }
-  useEffect(() => {
-    setMap();
-  }, [local]);
 
-  return <div id="map" className={`${styles.Container} ${styles.map}`} />;
+  return <div id="map" ref={mainMap} className={`${styles.Container} ${styles.map}`} />;
 }
 
 export default CreateMap;
