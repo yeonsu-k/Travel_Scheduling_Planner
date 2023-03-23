@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface BasicLocationRepository extends JpaRepository<BasicLocation,Long> {
 
+    @Query(value = "SELECT c FROM BasicLocation c WHERE c.regionId = :regionId and c.locationName = :locationName and c.isHotel = :isHotel")
+    List<BasicLocation> findByRegionIdAndLocationNameAndIsHotel(@Param("regionId") Long RegionId,
+                                                                @Param("locationName") String locationName, @Param("isHotel") boolean isHotel);
+
     @Query(value = "SELECT c FROM BasicLocation c WHERE c.regionId = :regionId and c.isHotel = :isHotel")
     List<BasicLocation> findAllByRegionIdAndIsHotel(@Param("regionId") Long RegionId, @Param("isHotel") boolean isHotel);
 }
