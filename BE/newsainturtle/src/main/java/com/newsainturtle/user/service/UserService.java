@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -121,5 +122,19 @@ public class UserService {
     public void modifyScheduleIsPrivate(Long schedule_id) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
         schedule.ifPresent(Schedule::changeIsPrivate);
+    }
+
+    @Transactional
+    public void deleteSchedule(Long schedule_id, String email) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if(schedule.isPresent()){
+            if(Objects.equals(schedule.get().getHostEmail(), email)){
+                scheduleRepository.deleteById(schedule_id);
+                scheduleMemberRepository.deleteAllByScheduleId(schedule_id);
+            }
+            else{
+                scheduleMemberRepository.deleteByScheduleIdAndUserEmail(schedule_id, email);
+            }
+        }
     }
 }
