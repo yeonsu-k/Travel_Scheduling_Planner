@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Search.module.css";
 import { Close, Search } from "@mui/icons-material";
 
 interface searchType {
-  value: string;
-  getValue: (str: string) => void;
-  searchBtnClick: () => void;
-  cancleBtnClick: () => void;
+  select: string;
+  searchBtnClick: (str: string) => void;
+  keyWordClear: () => void;
 }
 
-function SearchInput({ value, getValue, searchBtnClick, cancleBtnClick }: searchType) {
+function SearchInput({ select, searchBtnClick, keyWordClear }: searchType) {
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    setInputValue("");
+  }, [select]);
+
+  const inputCancle = () => {
+    setInputValue("");
+    keyWordClear();
+  };
+
   return (
     <div className={styles.search_container}>
       <div className={styles.search_input}>
@@ -22,16 +32,21 @@ function SearchInput({ value, getValue, searchBtnClick, cancleBtnClick }: search
           onBlur={(e) => {
             e.target.placeholder = "검색어를 입력하세요.";
           }}
-          value={value}
-          onChange={(e) => getValue(e.target.value)}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.code === "Enter") {
+              searchBtnClick(inputValue);
+            }
+          }}
         />
       </div>
-      {value.length > 0 && (
-        <button className={`${styles.close_button} ${styles.search_button}`} onClick={() => cancleBtnClick()}>
+      {inputValue.length > 0 && (
+        <button className={`${styles.close_button} ${styles.search_button}`} onClick={inputCancle}>
           <Close fontSize="small" />
         </button>
       )}
-      <button className={styles.search_button} onClick={() => searchBtnClick()}>
+      <button className={styles.search_button} onClick={() => searchBtnClick(inputValue)}>
         <Search />
       </button>
     </div>
