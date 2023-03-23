@@ -80,4 +80,15 @@ public class AuthController {
                 kakaoCodeURLResponse)
                 , HttpStatus.OK);
     }
+
+    @GetMapping("/kakao/login")
+    @ApiOperation(value = "카카오 로그인", notes = "카카오 로그인하기")
+    public ResponseEntity<BaseResponse> getKakaoLogin(@RequestParam String code) {
+        LoginResponse loginResponse = authService.loginKakao(code);
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                LOGIN_SUCCESS_MESSAGE,
+                loginResponse)
+                , HttpStatus.OK);
+    }
 }
