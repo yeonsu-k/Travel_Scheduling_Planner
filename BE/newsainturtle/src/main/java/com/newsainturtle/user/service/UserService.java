@@ -5,6 +5,7 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
+import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
 import com.newsainturtle.schedule.entity.Schedule;
 import com.newsainturtle.schedule.entity.ScheduleMember;
 import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
@@ -33,6 +34,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMemberRepository scheduleMemberRepository;
+    private final ScheduleNotificationRepository scheduleNotificationRepository;
 
     public EmailDuplicateCheckResponse emailDuplicateCheck(EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         User user = userRepository.findByEmail(emailDuplicateCheckRequest.getEmail());
@@ -144,6 +146,7 @@ public class UserService {
             if(Objects.equals(schedule.get().getHostEmail(), email)){
                 scheduleRepository.deleteById(schedule_id);
                 scheduleMemberRepository.deleteAllByScheduleId(schedule_id);
+                scheduleNotificationRepository.deleteAllByScheduleId(schedule_id);
             }
             else{
                 scheduleMemberRepository.deleteByScheduleIdAndUserEmail(schedule_id, email);
