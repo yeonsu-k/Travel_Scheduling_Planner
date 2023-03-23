@@ -4,6 +4,7 @@ import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.common.security.UserDetails;
 import com.newsainturtle.schedule.dto.BasicLocationRequest;
 import com.newsainturtle.schedule.dto.CustomLocationRequest;
+import com.newsainturtle.schedule.dto.LocationRequest;
 import com.newsainturtle.schedule.service.LocationService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +46,21 @@ public class LocationController {
                 , HttpStatus.OK);
     }
 
+    @PostMapping("/location")
+    @ApiOperation(value = "장소 이름 조회", notes = "장소 이름을 조회합니다.")
+    public ResponseEntity<BaseResponse> findLocation(@ApiIgnore Authentication authentication,
+                                                     @RequestBody LocationRequest locationRequest) {
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                FIND_LOCATION_SUCCESS_MESSAGE,
+                locationService.findLocation(locationRequest,email))
+                , HttpStatus.OK);
+    }
+
     @GetMapping("/location/{is_hotel}/{region_id}")
-    @ApiOperation(value = "장소 조회", notes = "장소를 조회합니다.")
+    @ApiOperation(value = "추천 장소 조회", notes = "추천 장소를 조회합니다.")
     public ResponseEntity<BaseResponse> findLocation(@ApiIgnore Authentication authentication,
                                                      @PathVariable("is_hotel") boolean isHotel,
                                                      @PathVariable("region_id") Long regionId) {
@@ -55,7 +69,7 @@ public class LocationController {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 FIND_LOCATION_SUCCESS_MESSAGE,
-                locationService.findLocation(regionId,email,isHotel))
+                locationService.findRecommendLocationList(regionId,email,isHotel))
                 , HttpStatus.OK);
     }
 }
