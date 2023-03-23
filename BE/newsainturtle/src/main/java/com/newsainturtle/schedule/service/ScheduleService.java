@@ -37,7 +37,6 @@ public class ScheduleService {
     private final LocationRepository locationRepository;
 
     private final ScheduleMemberRepository scheduleMemberRepository;
-    private final RegionRepository regionRepository;
 
     private final UserRepository userRepository;
     private final ScheduleNotificationRepository scheduleNotificationRepository;
@@ -46,19 +45,29 @@ public class ScheduleService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void createSchedule(ScheduleRequest scheduleRequest, String email) {
-        Region region = regionRepository.findByRegionName(scheduleRequest.getRegionName());
-        final Schedule schedule = Schedule.builder()
-                .isPrivate(false)
-                .scheduleRegion(region.getRegionName())
+    public String createSchedule(ScheduleRequest scheduleRequest, String email) {
+        isNullScheduleLocation(scheduleRequest.getScheduleLocationRequestList());
+        Schedule schedule = Schedule.builder()
                 .hostEmail(email)
+                .scheduleRegion(scheduleRequest.getScheduleRegion())
+                .scheduleName(scheduleRequest.getScheduleName())
+                .isPrivate(scheduleRequest.isPrivate())
+                .scheduleStartDay(scheduleRequest.getScheduleStartDay())
+                .scheduleEndDay(scheduleRequest.getScheduleEndDay())
+                .scheduleStartLocation(scheduleRequest.getScheduleStartLocation())
+                .scheduleEndLocation(scheduleRequest.getScheduleEndLocation())
+                .vehicle(scheduleRequest.getVehicle())
+                .scheduleLocations(scheduleRequest.getScheduleLocationRequestList().stream()
+                        .map(scheduleLocation -> ScheduleLocation.builder()
+                                .day(scheduleLocation.getDay())
+                                .sequence(scheduleLocation.getSequence())
+                                .startTime(scheduleLocation.getStartTime())
+                                .endTime(scheduleLocation.getEndTime())
+                                .location(findLocationById(scheduleLocation.getLocationId()))
+                                .build()).collect(Collectors.toList()))
                 .build();
         scheduleRepository.save(schedule);
-        final ScheduleMember scheduleMember = ScheduleMember.builder()
-                .scheduleId(schedule.getScheduleId())
-                .userEmail(email)
-                .build();
-        scheduleMemberRepository.save(scheduleMember);
+        return schedule.getScheduleName();
     }
 
     public ScheduleResponse findSchedule(Long scheduleId) {
