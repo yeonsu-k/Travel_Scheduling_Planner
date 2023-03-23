@@ -9,4 +9,6 @@ public interface ScheduleMemberRepository extends JpaRepository<ScheduleMember,L
     List<ScheduleMember> findAllByUserEmail(String email);
 
     ScheduleMember findByScheduleIdAndUserEmail(Long scheduleId, String email);
+    ScheduleMember deleteByScheduleIdAndUserEmail(Long scheduleId, String email);
+    ScheduleMember deleteAllByScheduleId(Long scheduleId);
 }
