@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MyFriendsList from "./MyFriendsList";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Modal from "components/Modal";
 import MyFriendsSearch from "./MyFriendsSearch";
-import Axios from "api/JsonAxios";
-import api from "api/Api";
 import { useAppDispatch } from "app/hooks";
-import { resetSearchUser, setFriendNumber, setFriends } from "slices/friendSlice";
+import { resetSearchUser } from "slices/friendSlice";
 
 const MyFriends = () => {
   const dispatch = useAppDispatch();
@@ -18,18 +16,6 @@ const MyFriends = () => {
     setOpenAddFriendModal(true);
     dispatch(resetSearchUser());
   };
-
-  useEffect(() => {
-    Axios.get(api.friend.friend())
-      .then((res) => {
-        console.log(res);
-        dispatch(setFriends(res.data.data.friends));
-        dispatch(setFriendNumber(res.data.data.friends.length));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <div className={styles.myFriends}>

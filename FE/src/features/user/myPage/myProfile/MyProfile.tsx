@@ -8,7 +8,7 @@ import { useAppSelector } from "app/hooks";
 import api from "api/Api";
 import { useDispatch } from "react-redux";
 import Axios from "api/JsonAxios";
-import { selectFriendNumber } from "slices/friendSlice";
+import { selectFriendNumber, setFriendNumber, setFriends } from "slices/friendSlice";
 
 interface MyProfileProps {
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
@@ -35,8 +35,21 @@ const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
       });
   };
 
+  const getFriendNumber = async () => {
+    await Axios.get(api.friend.friend())
+      .then((res) => {
+        console.log(res);
+        dispatch(setFriends(res.data.data.friends));
+        dispatch(setFriendNumber(res.data.data.friends.length));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     getUserInfo();
+    getFriendNumber();
   }, []);
 
   return (
