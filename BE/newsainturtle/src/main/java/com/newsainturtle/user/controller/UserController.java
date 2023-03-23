@@ -68,7 +68,9 @@ public class UserController {
     @Operation(summary = "일정 이름 수정", description = "일정 이름을 수정합니다.")
     @PostMapping("/{schedule_id}")
     public ResponseEntity<BaseResponse> modifyScheduleName(@ApiIgnore Authentication authentication, @RequestBody final ModifyScheduleNameRequest modifyScheduleNameRequest, @PathVariable("schedule_id") Long schedule_id) {
-        userService.modifyScheduleName(modifyScheduleNameRequest.getSchedule_name(),schedule_id);
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        userService.modifyScheduleName(modifyScheduleNameRequest.getSchedule_name(),schedule_id, email);
         return new ResponseEntity<>(
                 BaseResponse.from(true, MODIFY_SCHEDULE_NAME_SUCCESS_MESSAGE),
                 HttpStatus.OK);
@@ -90,7 +92,9 @@ public class UserController {
     @Operation(summary = "일정 공개 여부 수정", description = "일정 공개 여부를 수정합니다.")
     @PostMapping("/open/{schedule_id}")
     public ResponseEntity<BaseResponse> modifyIsPrivate(@ApiIgnore Authentication authentication, @PathVariable("schedule_id") Long schedule_id) {
-        userService.modifyScheduleIsPrivate(schedule_id);
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        userService.modifyScheduleIsPrivate(schedule_id,email);
         return new ResponseEntity<>(
                 BaseResponse.from(true, MODIFY_SCHEDULE_IS_PRIVATE_SUCCESS_MESSAGE),
                 HttpStatus.OK);

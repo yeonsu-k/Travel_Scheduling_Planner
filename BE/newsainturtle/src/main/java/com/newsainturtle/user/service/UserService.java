@@ -12,6 +12,7 @@ import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.exception.NotEqualsPasswordException;
+import com.newsainturtle.user.exception.NotHostException;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -100,9 +101,15 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyScheduleName(String schedule_name, Long schedule_id) {
+    public void modifyScheduleName(String schedule_name, Long schedule_id, String email) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        schedule.ifPresent(value -> value.setScheduleName(schedule_name));
+        if(schedule.isPresent()){
+            if(schedule.get().getHostEmail().equals(email))   schedule.ifPresent(value -> value.setScheduleName(schedule_name));
+            else{
+                throw new NotHostException();
+            }
+        }
+
     }
 
     public List<ScheduleListResponse> getScheduleList(String email) {
@@ -119,9 +126,15 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyScheduleIsPrivate(Long schedule_id) {
+    public void modifyScheduleIsPrivate(Long schedule_id, String email) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        schedule.ifPresent(Schedule::changeIsPrivate);
+        if(schedule.isPresent()){
+            if(schedule.get().getHostEmail().equals(email)) schedule.ifPresent(Schedule::changeIsPrivate);
+            else{
+                throw new NotHostException();
+            }
+        }
+
     }
 
     @Transactional
