@@ -1,6 +1,7 @@
 package com.newsainturtle.auth.controller;
 
 import com.newsainturtle.auth.dto.*;
+import com.newsainturtle.auth.dto.KakaoCodeUrlResponse;
 import com.newsainturtle.auth.service.AuthService;
 import com.newsainturtle.common.dto.BaseResponse;
 import com.newsainturtle.user.service.UserService;
@@ -11,10 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -69,6 +67,17 @@ public class AuthController {
                 true,
                 VALID_TOKEN_SUCCESS_MESSAGE,
                 tokenCheckResponse)
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("/kakao/code")
+    @ApiOperation(value = "카카오 로그인을 위한 인가코드 url 받기", notes = "카카오 로그인을 위한 인가코드 url 받기")
+    public ResponseEntity<BaseResponse> getKakaoAuthUrl() {
+        KakaoCodeUrlResponse kakaoCodeURLResponse = authService.getKakaoAuthUrl();
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                LOGIN_SUCCESS_MESSAGE,
+                kakaoCodeURLResponse)
                 , HttpStatus.OK);
     }
 }
