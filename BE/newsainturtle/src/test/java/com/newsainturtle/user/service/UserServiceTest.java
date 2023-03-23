@@ -294,6 +294,7 @@ class UserServiceTest {
         void modifyScheduleName(){
             final String name = "제주도 여행";
             final String newName = "일본여행";
+            final String email = "test@naver.com";
             //given
             final Schedule schedule = Schedule.builder()
                     .scheduleName(name)
@@ -301,7 +302,7 @@ class UserServiceTest {
             doReturn(Optional.of(schedule)).when(scheduleRepository).findById(schedule.getScheduleId());
             schedule.setScheduleName(newName);
             //when
-            userService.modifyScheduleName(newName, schedule.getScheduleId());
+            userService.modifyScheduleName(newName, schedule.getScheduleId(),email);
             //then
             assertEquals(schedule.getScheduleName(), newName);
         }
@@ -309,6 +310,7 @@ class UserServiceTest {
         @DisplayName("[성공] - 일정 공개 여부 수정")
         void modifyScheduleIsPrivate(){
             final String name = "제주도 여행";
+            final String email = "test@naver.com";
             //given
             final Schedule schedule = Schedule.builder()
                     .scheduleName(name)
@@ -316,7 +318,7 @@ class UserServiceTest {
                     .build();
             doReturn(Optional.of(schedule)).when(scheduleRepository).findById(schedule.getScheduleId());
             //when
-            userService.modifyScheduleIsPrivate(schedule.getScheduleId());
+            userService.modifyScheduleIsPrivate(schedule.getScheduleId(),email);
             //then
             assertTrue(schedule.isPrivate());
         }
@@ -349,8 +351,8 @@ class UserServiceTest {
                     .build();
 
             doReturn(Arrays.asList(
-                    ScheduleMember.builder().userEmail(email).schedule(schedule.getScheduleId()).build(),
-                    ScheduleMember.builder().userEmail(email).schedule(schedule2.getScheduleId()).build()
+                    ScheduleMember.builder().userEmail(email).scheduleId(schedule.getScheduleId()).build(),
+                    ScheduleMember.builder().userEmail(email).scheduleId(schedule2.getScheduleId()).build()
             )).when(scheduleMemberRepository).findAllByUserEmail(email);
             //when
             final List<ScheduleListResponse> result = userService.getScheduleList(email);
