@@ -30,7 +30,6 @@ public class WebSocketService {
             users.add(session);
             userInfos.put(session.getId(), email);
             log.info("session open : {} - {}", session, email);
-            session.getBasicRemote().sendText("연결됐다아아아ㅏㅏ");
         } else {
             log.info("이미 연결된 session");
         }
@@ -39,7 +38,6 @@ public class WebSocketService {
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
         log.info("receive message : {}", message);
-
         for (Session s : users) {
             log.info("send data : {}", message);
             s.getBasicRemote().sendText(message);
