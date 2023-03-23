@@ -61,7 +61,7 @@ public class LocationController {
 
     @GetMapping("/location/{is_hotel}/{region_id}")
     @ApiOperation(value = "추천 장소 조회", notes = "추천 장소를 조회합니다.")
-    public ResponseEntity<BaseResponse> findLocation(@ApiIgnore Authentication authentication,
+    public ResponseEntity<BaseResponse> findRecommendLocation(@ApiIgnore Authentication authentication,
                                                      @PathVariable("is_hotel") boolean isHotel,
                                                      @PathVariable("region_id") Long regionId) {
         UserDetails userDetails = (UserDetails) authentication.getDetails();
@@ -70,6 +70,16 @@ public class LocationController {
                 true,
                 FIND_LOCATION_SUCCESS_MESSAGE,
                 locationService.findRecommendLocationList(regionId,email,isHotel))
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("location/{location_id}")
+    @ApiOperation(value = "장소 상세 조회", notes = "장소를 상세 조회합니다.")
+    public ResponseEntity<BaseResponse> findLocationInfo(@PathVariable("location_id") Long locationId) {
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                FIND_LOCATION_SUCCESS_MESSAGE,
+                locationService.findLocationInfo(locationId))
                 , HttpStatus.OK);
     }
 }
