@@ -17,23 +17,14 @@ interface searchUserConfig {
 }
 
 interface friendConfig {
+  friendNumber: number;
   friends: friendListConfig[];
   searchUser: searchUserConfig;
 }
 
 const initialState: friendConfig = {
-  friends: [
-    {
-      profile: "",
-      email: "jyeon3930@naver.com",
-      nickname: "kjyeon",
-    },
-    {
-      profile: "",
-      email: "test@test.com",
-      nickname: "test",
-    },
-  ],
+  friendNumber: 0,
+  friends: [],
   searchUser: {
     email: "",
     exist: false,
@@ -48,6 +39,9 @@ const friendSlice = createSlice({
   name: "friend",
   initialState,
   reducers: {
+    setFriendNumber: (state, { payload }) => {
+      state.friendNumber = payload;
+    },
     setFriends: (state, { payload }) => {
       state.friends = payload;
     },
@@ -67,8 +61,9 @@ const friendSlice = createSlice({
   },
 });
 
-export const { setFriends, setSearchUser, resetSearchUser } = friendSlice.actions;
+export const { setFriendNumber, setFriends, setSearchUser, resetSearchUser } = friendSlice.actions;
 
+export const selectFriendNumber = (state: rootState) => state.friend.friendNumber;
 export const selectFriends = (state: rootState) => state.friend.friends;
 export const selectSearchUser = (state: rootState) => state.friend.searchUser;
 

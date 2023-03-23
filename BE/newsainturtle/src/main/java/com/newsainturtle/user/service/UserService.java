@@ -5,6 +5,10 @@ import com.newsainturtle.auth.dto.EmailDuplicateCheckResponse;
 import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
+import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.repository.FriendNotificationRepository;
+import com.newsainturtle.notification.repository.NotificationRepository;
+import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
 import com.newsainturtle.schedule.entity.Schedule;
 import com.newsainturtle.schedule.entity.ScheduleMember;
 import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
@@ -12,6 +16,7 @@ import com.newsainturtle.schedule.repository.ScheduleRepository;
 import com.newsainturtle.user.dto.*;
 import com.newsainturtle.user.entity.User;
 import com.newsainturtle.user.exception.NotEqualsPasswordException;
+import com.newsainturtle.user.exception.NotHostException;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,6 +37,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMemberRepository scheduleMemberRepository;
+    private final FriendRepository friendRepository;
+    private final NotificationRepository notificationRepository;
+    private final ScheduleNotificationRepository scheduleNotificationRepository;
+    private final FriendNotificationRepository friendNotificationRepository;
+
 
     public EmailDuplicateCheckResponse emailDuplicateCheck(EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         User user = userRepository.findByEmail(emailDuplicateCheckRequest.getEmail());
@@ -99,9 +110,15 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyScheduleName(String schedule_name, Long schedule_id) {
+    public void modifyScheduleName(String schedule_name, Long schedule_id, String email) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        schedule.ifPresent(value -> value.setScheduleName(schedule_name));
+        if(schedule.isPresent()){
+            if(schedule.get().getHostEmail().equals(email))   schedule.ifPresent(value -> value.setScheduleName(schedule_name));
+            else{
+                throw new NotHostException();
+            }
+        }
+
     }
 
     public List<ScheduleListResponse> getScheduleList(String email) {
@@ -112,14 +129,44 @@ public class UserService {
         }
         List<ScheduleListResponse> result = new ArrayList<>();
         for (Optional<Schedule> schedule : schedule_list) {
-            result.add(ScheduleListResponse.of(schedule));
+            result.add(ScheduleListResponse.of(schedule, email));
         }
         return result;
     }
 
     @Transactional
-    public void modifyScheduleIsPrivate(Long schedule_id) {
+    public void modifyScheduleIsPrivate(Long schedule_id, String email) {
         Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
-        schedule.ifPresent(Schedule::changeIsPrivate);
+        if(schedule.isPresent()){
+            if(schedule.get().getHostEmail().equals(email)) schedule.ifPresent(Schedule::changeIsPrivate);
+            else{
+                throw new NotHostException();
+            }
+        }
+
+    }
+
+    @Transactional
+    public void deleteSchedule(Long schedule_id, String email) {
+        Optional<Schedule> schedule = scheduleRepository.findById(schedule_id);
+        if(schedule.isPresent()){
+            if(Objects.equals(schedule.get().getHostEmail(), email)){
+                scheduleRepository.deleteById(schedule_id);
+                scheduleMemberRepository.deleteAllByScheduleId(schedule_id);
+                scheduleNotificationRepository.deleteAllByScheduleId(schedule_id);
+            }
+            else{
+                scheduleMemberRepository.deleteByScheduleIdAndUserEmail(schedule_id, email);
+            }
+        }
+    }
+
+    @Transactional
+    public void withdrawUser(String email) {
+        User user = userRepository.findByEmail(email);
+        user.withDrawUser();
+        friendRepository.deleteAllByRequestUserOrReceiveUser(user, user);
+        notificationRepository.deleteByReceiveUser(user);
+        friendNotificationRepository.deleteAllBySendUserId(user.getUserId());
     }
 }

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useDispatch } from "react-redux";
-import { setLogin } from "slices/authSlice";
+import { setLogin, setUserInfo } from "slices/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,6 +45,7 @@ const Login = () => {
               login: true,
             }),
           );
+          dispatch(setUserInfo({ email: email }));
           navigate("/");
         })
         .catch((err: any) => {

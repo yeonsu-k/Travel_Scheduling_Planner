@@ -8,6 +8,7 @@ import { useAppSelector } from "app/hooks";
 import api from "api/Api";
 import { useDispatch } from "react-redux";
 import Axios from "api/JsonAxios";
+import { selectFriendNumber } from "slices/friendSlice";
 
 interface MyProfileProps {
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
@@ -17,6 +18,7 @@ const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useAppSelector(selectUserInfo);
+  const friendNumber = useAppSelector(selectFriendNumber);
 
   const getUserInfo = async () => {
     await Axios.get(api.user.user())
@@ -59,7 +61,7 @@ const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
       <div className={styles.myProfileInfo} onClick={() => setViewSchedule(false)}>
         <Text value="나의 친구" type="text" bold en />
         <div style={{ margin: "15%" }}></div>
-        <Text value="1" type="pageTitle" bold />
+        <Text value={friendNumber.toString()} type="pageTitle" bold />
         <br />
       </div>
     </div>

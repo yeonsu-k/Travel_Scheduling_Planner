@@ -1,3 +1,4 @@
+import MainFooter from "features/main/MainFooter";
 import React from "react";
 import styles from "../features/main/Main.module.css";
 import MainDestinations from "../features/main/MainDestinations";
@@ -16,6 +17,7 @@ function MainPage() {
           <MainDestinationsList />
         </div>
       </div>
+      <MainFooter />
     </div>
   );
 }

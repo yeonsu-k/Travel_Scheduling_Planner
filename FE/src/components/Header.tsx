@@ -242,7 +242,7 @@ function Header() {
                 </Box>
               </>
             ) : (
-              <NavLink target={"_blank"} to="/login" className={styles.link}>
+              <NavLink to="/login" className={styles.link}>
                 로그인
               </NavLink>
             )}

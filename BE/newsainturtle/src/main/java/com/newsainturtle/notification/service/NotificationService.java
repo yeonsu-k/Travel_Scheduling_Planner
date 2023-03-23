@@ -2,6 +2,7 @@ package com.newsainturtle.notification.service;
 
 import com.newsainturtle.friend.entity.Friend;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.dto.LiveNotificationResponse;
 import com.newsainturtle.notification.dto.NotificationListResponse;
 import com.newsainturtle.notification.dto.NotificationResponse;
 import com.newsainturtle.notification.dto.NotificationResponseRequest;
@@ -35,6 +36,7 @@ public class NotificationService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final FriendRepository friendRepository;
+    private final WebSocketService webSocketService;
 
     @Transactional(readOnly = true)
     public NotificationListResponse selectNotificationList(String email) {
@@ -128,5 +130,15 @@ public class NotificationService {
         } else {
             notification.setNotificationStatus(NotificationStatus.REJECT);
         }
+    }
+
+    public void sendNewNotification(String email, LiveNotificationResponse liveNotificationResponse){
+        try {
+            System.out.println("메세지 보냄: "+email);
+            webSocketService.sendNewNotification(email, liveNotificationResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

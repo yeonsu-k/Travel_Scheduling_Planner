@@ -2,9 +2,11 @@ package com.newsainturtle.schedule.service;
 
 import com.newsainturtle.friend.entity.Friend;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.dto.LiveNotificationResponse;
 import com.newsainturtle.notification.entity.NotificationStatus;
 import com.newsainturtle.notification.entity.ScheduleNotification;
 import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
+import com.newsainturtle.notification.service.NotificationService;
 import com.newsainturtle.schedule.dto.*;
 import com.newsainturtle.schedule.entity.*;
 import com.newsainturtle.schedule.exception.NullException;
@@ -35,26 +37,41 @@ public class ScheduleService {
     private final LocationRepository locationRepository;
 
     private final ScheduleMemberRepository scheduleMemberRepository;
-    private final RegionRepository regionRepository;
 
     private final UserRepository userRepository;
     private final ScheduleNotificationRepository scheduleNotificationRepository;
     private final FriendRepository friendRepository;
 
+    private final NotificationService notificationService;
+
     @Transactional
-    public void createSchedule(ScheduleRequest scheduleRequest, String email) {
-        Region region = regionRepository.findByRegionName(scheduleRequest.getRegionName());
-        final Schedule schedule = Schedule.builder()
-                .isPrivate(false)
-                .scheduleRegion(region.getRegionName())
+    public String createSchedule(ScheduleRequest scheduleRequest, String email) {
+        isNullScheduleLocation(scheduleRequest.getScheduleLocationRequestList());
+        Schedule schedule = Schedule.builder()
                 .hostEmail(email)
+                .scheduleRegion(scheduleRequest.getScheduleRegion())
+                .scheduleName(scheduleRequest.getScheduleName())
+                .isPrivate(scheduleRequest.isPrivate())
+                .scheduleStartDay(scheduleRequest.getScheduleStartDay())
+                .scheduleEndDay(scheduleRequest.getScheduleEndDay())
+                .scheduleStartLocation(scheduleRequest.getScheduleStartLocation())
+                .scheduleEndLocation(scheduleRequest.getScheduleEndLocation())
+                .vehicle(scheduleRequest.getVehicle())
+                .scheduleLocations(scheduleRequest.getScheduleLocationRequestList().stream()
+                        .map(scheduleLocation -> ScheduleLocation.builder()
+                                .day(scheduleLocation.getDay())
+                                .sequence(scheduleLocation.getSequence())
+                                .startTime(scheduleLocation.getStartTime())
+                                .endTime(scheduleLocation.getEndTime())
+                                .location(findLocationById(scheduleLocation.getLocationId()))
+                                .build()).collect(Collectors.toList()))
                 .build();
-        scheduleRepository.save(schedule);
-        final ScheduleMember scheduleMember = ScheduleMember.builder()
-                .scheduleId(schedule.getScheduleId())
+        Long id = scheduleRepository.save(schedule).getScheduleId();
+        scheduleMemberRepository.save(ScheduleMember.builder()
                 .userEmail(email)
-                .build();
-        scheduleMemberRepository.save(scheduleMember);
+                .scheduleId(id)
+                .build());
+        return schedule.getScheduleName();
     }
 
     public ScheduleResponse findSchedule(Long scheduleId) {
@@ -127,15 +144,20 @@ public class ScheduleService {
                 scheduleNotificationRepository.deleteByNotificationId(scheduleNotification.getNotificationId());
             }
             if (scheduleNotification == null) {
-                //상대방에게 알림 전송 (실시간 처리 필요)
                 ScheduleNotification newScheduleNotification = ScheduleNotification.builder()
                         .sendUserId(user.getUserId())
                         .receiveUser(receiveUser)
                         .scheduleId(scheduleId)
                         .notificationStatus(NotificationStatus.NO_RESPONSE)
                         .build();
-
                 scheduleNotificationRepository.save(newScheduleNotification);
+                //상대방에게 알림 전송 (실시간 처리 필요)
+                Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+                notificationService.sendNewNotification(friendEmail, LiveNotificationResponse.builder()
+                        .senderNickname(user.getNickname())
+                        .type("schedule")
+                        .content(schedule.getScheduleName())
+                        .build());
                 return;
             }
         }

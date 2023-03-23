@@ -1,14 +1,49 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Main.module.css";
 import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
 import Text from "components/Text";
 import Button from "components/Button";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
+
+export interface DestinationConfig {
+  regionName: string;
+  regionImageURL: string;
+  englishName: string;
+  contents: string;
+}
 
 const MainDestinationsList = () => {
+  const [destinations, setDestinations] = useState([]);
+  const [input, setInput] = useState("");
+  const upRef = useRef<HTMLDivElement>(null);
+
+  const moveToUp = () => {
+    if (upRef.current) upRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const getDestination = async () => {
+    await Axios.get(api.createSchedule.mainPlace())
+      .then((res) => {
+        setDestinations(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const filtered = destinations.filter((item: DestinationConfig) =>
+    item.regionName.replaceAll(" ", "").includes(input),
+  );
+
+  useEffect(() => {
+    getDestination();
+  }, []);
+
   return (
     <div>
-      <div className={styles.mainTitleText}>
+      <div ref={upRef} className={styles.mainTitleText}>
         <Text value="어디로 여행을 떠나시나요?" bold type="pageTitle" />
       </div>
       <div className={styles.mainSubTitleTextK}>
@@ -22,7 +57,7 @@ const MainDestinationsList = () => {
               <path fill="none" stroke="#999" strokeWidth="1.1" d="M14,14 L18,18 L14,14 Z"></path>
             </svg>
           </div>
-          <input className={styles.mainInput} />
+          <input className={styles.mainInput} onChange={(e) => setInput(e.target.value.replaceAll(" ", ""))} />
         </div>
       </div>
       <div className={styles.mainFilterContainer}>
@@ -30,18 +65,13 @@ const MainDestinationsList = () => {
       </div>
       <div className={styles.mainDestinationContainer}>
         <div className={styles.mainDestinationItem}>
-          <MainDestinationItem />
-          <MainDestinationItem />
-          <MainDestinationItem />
-          <MainDestinationItem />
-          <MainDestinationItem />
-          <MainDestinationItem />
-          <MainDestinationItem />
-          <MainDestinationItem />
+          {filtered.map((item: DestinationConfig, i: number) => (
+            <MainDestinationItem key={i} {...item} />
+          ))}
         </div>
       </div>
       <div className={styles.upBtn}>
-        <Button height="100%" text="여행지 선택화면으로 돌아가기" />
+        <Button height="100%" text="여행지 선택화면으로 돌아가기" onClick={moveToUp} />
       </div>
     </div>
   );

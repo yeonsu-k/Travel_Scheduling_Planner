@@ -57,4 +57,12 @@ public class User {
     public void setPassword(String password){
         this.password = new BCryptPasswordEncoder().encode(password);
     }
+    public void withDrawUser(){
+        this.nickname = null;
+        this.password = null;
+        this.profile = null;
+        this.withdraw = true;
+        this.friends.clear();
+        this.notifications.clear();
+    }
 }
