@@ -66,7 +66,11 @@ public class ScheduleService {
                                 .location(findLocationById(scheduleLocation.getLocationId()))
                                 .build()).collect(Collectors.toList()))
                 .build();
-        scheduleRepository.save(schedule);
+        Long id = scheduleRepository.save(schedule).getScheduleId();
+        scheduleMemberRepository.save(ScheduleMember.builder()
+                .userEmail(email)
+                .scheduleId(id)
+                .build());
         return schedule.getScheduleName();
     }
 
