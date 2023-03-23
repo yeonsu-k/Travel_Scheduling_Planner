@@ -6,6 +6,7 @@ import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
 import com.newsainturtle.friend.repository.FriendRepository;
+import com.newsainturtle.notification.repository.FriendNotificationRepository;
 import com.newsainturtle.notification.repository.NotificationRepository;
 import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
 import com.newsainturtle.schedule.entity.Schedule;
@@ -39,6 +40,8 @@ public class UserService {
     private final FriendRepository friendRepository;
     private final NotificationRepository notificationRepository;
     private final ScheduleNotificationRepository scheduleNotificationRepository;
+    private final FriendNotificationRepository friendNotificationRepository;
+
 
     public EmailDuplicateCheckResponse emailDuplicateCheck(EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         User user = userRepository.findByEmail(emailDuplicateCheckRequest.getEmail());
@@ -164,5 +167,6 @@ public class UserService {
         user.withDrawUser();
         friendRepository.deleteAllByRequestUserOrReceiveUser(user, user);
         notificationRepository.deleteByReceiveUser(user);
+        friendNotificationRepository.deleteAllBySendUserId(user.getUserId());
     }
 }
