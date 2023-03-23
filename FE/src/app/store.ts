@@ -3,14 +3,12 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "slices/authSlice";
 import scheduleCreateReducer from "slices/scheduleCreateSlice";
 import scheduleEditReducer from "slices/scheduleEditSlice";
-import noticeSliceReducer from "slices/noticeSlice";
 import friendReducer from "slices/friendSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   scheduleCreate: scheduleCreateReducer,
   scheduleEdit: scheduleEditReducer,
-  notice: noticeSliceReducer,
   friend: friendReducer,
 });
 
