@@ -45,11 +45,14 @@
 }
 
 .subtitleText {
-  /* font-family: "Pretendard-Regular"; */
   font-size: 1.4rem;
   text-align: center;
   letter-spacing: 3px;
   margin: 0 0 30px 0;
+}
+
+.pageTitle {
+  font-size: 2rem;
 }
 
 .button {
@@ -122,6 +125,7 @@
 .mainTitleText {
   font-size: 1.8rem;
   color: black;
+  text-align: center;
 }
 
 .mainSubTitleText {
@@ -135,33 +139,34 @@
   margin: 20px 0;
   font-size: 0.875rem;
   color: #999;
+  text-align: center;
 }
 
 /* Carousel */
 .carouselContainer {
+  max-width: 1400px;
   padding-bottom: 80px;
+  margin: 0 auto;
 }
 
 .carouselBtnLeft {
   position: absolute;
-  top: 190px;
+  top: 225px;
   left: 40px;
-  /* width: 100px; */
   cursor: pointer;
   z-index: 100;
 }
 
 .carouselBtnRight {
   position: absolute;
-  top: 190px;
+  top: 225px;
   right: 40px;
-  /* width: 100px; */
   cursor: pointer;
   z-index: 100;
 }
 
 .carouselCard {
-  height: 420px;
+  height: 450px;
   width: 100%;
   padding: 10px 20px 10px 20px;
   box-sizing: border-box;
@@ -246,23 +251,24 @@
 }
 
 .mainDestinationContainer {
-  width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1400px;
   margin: auto;
 }
 
 .mainDestinationItem {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
+  width: 25%;
 }
 
 /* Card List */
 
 .card {
-  width: 15.7rem;
-  height: 23rem;
-  /* display: flex;
-  flex-direction: column; */
+  position: relative;
+  width: 85%;
+  /* height: 100%; */
   display: grid;
   grid-template-rows: 2.2fr 0.8fr;
   box-shadow: rgb(31 38 135 / 20%) 0px 8px 32px 0px;
@@ -309,7 +315,7 @@
 
 .cardEngTitle {
   font-family: "Montserrat";
-  font-size: 1.2rem;
+  font-size: 1.2em;
   font-weight: 400;
   margin-bottom: 5px;
 }
@@ -372,4 +378,80 @@
 .upBtn {
   margin: 20px 0;
   height: 50px;
+  text-align: center;
+}
+
+/* 반응형: 모바일 */
+
+.mobileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 90px;
+  margin-bottom: 10px;
+}
+
+.mobileSubTitleText {
+  display: block;
+  font-size: 12px;
+  text-align: center;
+  margin: 8px;
+  color: #98dde3;
+  letter-spacing: 4px;
+}
+
+.mobileTitleText {
+  font-size: 2.4rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+@media screen and (min-width: 1200px) {
+  .mobileContainer {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 602px) and (max-width: 1199px) {
+  .mobileContainer {
+    display: none;
+  }
+
+  .mainDestinationItem {
+    width: 33%;
+  }
+}
+
+/* 모바일 */
+@media screen and (max-width: 601px) {
+  .mainDestinationItem {
+    width: 50%;
+  }
+
+  .cardContent {
+    padding-left: 10px;
+  }
+
+  #mainDisplay,
+  #travelLog,
+  #mainPopular {
+    display: none;
+  }
+
+  /* 어디로 여행 subtext, filter  삭제 */
+  .mainSubTitleTextK,
+  .mainFilterContainer {
+    display: none;
+  }
+
+  .pageTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .mainTitleText {
+    margin-bottom: 10px;
+  }
 }

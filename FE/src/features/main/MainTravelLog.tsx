@@ -12,7 +12,7 @@ const MainTravelLog = () => {
     { src: "https://www.myro.co.kr/myro_image/travelog/blog_005.jpg" },
   ];
   return (
-    <div>
+    <div id={styles.travelLog}>
       <div className={styles.mainTextContainer}>
         <div className={styles.mainTitleText}>여행기</div>
         <div className={styles.mainSubTitleText}>TRAVELOG</div>

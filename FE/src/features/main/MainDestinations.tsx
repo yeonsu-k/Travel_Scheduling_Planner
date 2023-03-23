@@ -12,7 +12,7 @@ const MainDestinations = () => {
     { src: "https://www.myro.co.kr/myro_image/city/busan.jpg" },
   ];
   return (
-    <div>
+    <div id={styles.mainPopular}>
       <div className={styles.mainTextContainer}>
         <div className={styles.mainTitleText}>인기 여행지</div>
         <div className={styles.mainSubTitleText}>POPULAR DESTINATIONS</div>

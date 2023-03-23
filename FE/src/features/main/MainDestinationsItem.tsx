@@ -19,7 +19,7 @@ const MainDestinationItem = (item: DestinationConfig) => {
   Bar.displayName = "Bar";
 
   return (
-    <div>
+    <div className={styles.mainDestinationItem}>
       <div className={styles.card} onClick={showModal}>
         <div className={styles.cardImgContainer}>
           <img src={regionImageURL} />
