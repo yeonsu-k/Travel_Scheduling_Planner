@@ -81,7 +81,14 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
         dispatch(setPlaceList([...placeList]));
         dispatch(
           setMarker([
-            ...marker,
+            ...marker.filter(
+              (ele) =>
+                JSON.stringify(ele) !=
+                JSON.stringify({
+                  info: cardInfo,
+                  type: "place",
+                }),
+            ),
             {
               info: cardInfo,
               type: "place",
