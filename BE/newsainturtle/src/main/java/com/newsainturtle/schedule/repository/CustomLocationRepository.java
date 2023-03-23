@@ -9,6 +9,11 @@ import java.util.List;
 
 public interface CustomLocationRepository extends JpaRepository<CustomLocation,Long> {
 
+    @Query("SELECT c FROM CustomLocation c WHERE c.regionId = :regionId and c.customHostEmail = :email and c.locationName = :locationName and c.isHotel = :isHotel")
+    List<CustomLocation> findByRegionIdAAndLocationNameAndHotel(@Param("regionId") Long RegionId, @Param("email") String email,
+                                                          @Param("locationName") String locationName, @Param("isHotel") boolean isHotel);
+
     @Query("SELECT c FROM CustomLocation c WHERE c.regionId = :regionId and c.customHostEmail = :email and c.isHotel = :isHotel")
-    List<CustomLocation> findAllByRegionIdAndIsHotel(@Param("regionId") Long RegionId,@Param("email") String email, @Param("isHotel") boolean isHotel);
+    List<CustomLocation> findAllByRegionIdAndIsHotel(@Param("regionId") Long RegionId,
+                                                     @Param("email") String email, @Param("isHotel") boolean isHotel);
 }
