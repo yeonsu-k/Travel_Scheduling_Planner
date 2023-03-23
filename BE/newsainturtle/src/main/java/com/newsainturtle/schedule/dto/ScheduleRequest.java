@@ -1,18 +1,31 @@
 package com.newsainturtle.schedule.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.*;
 
 
 @Getter
 @NoArgsConstructor
 public class ScheduleRequest {
 
-    private String regionName;
+    private String scheduleRegion;
 
-    @Builder
-    public ScheduleRequest(String regionName) {
-        this.regionName = regionName;
-    }
+    private String scheduleName;
+
+    private boolean isPrivate;
+
+    private String scheduleStartDay;
+
+    private String scheduleEndDay;
+
+    private String scheduleStartLocation;
+
+    private String scheduleEndLocation;
+
+    private String vehicle;
+
+    private List<ScheduleLocationRequest> scheduleLocationRequestList = new ArrayList<>();
+
 }
