@@ -15,4 +15,6 @@ public interface ScheduleNotificationRepository extends JpaRepository<ScheduleNo
     @Modifying
     @Query("DELETE FROM ScheduleNotification n WHERE n.notificationId = ?1")
     void deleteByNotificationId(Long notificationId);
+
+    void deleteAllByScheduleId(Long scheduleId);
 }

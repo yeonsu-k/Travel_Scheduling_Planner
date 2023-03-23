@@ -1,6 +1,5 @@
 package com.newsainturtle.common.security;
 
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.newsainturtle.common.exception.JwtException;
 import com.newsainturtle.user.dto.UserBasicInfoRequest;
@@ -49,9 +48,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     public Authentication getAuthentication(HttpServletRequest request) throws Exception {
         String token = request.getHeader(JwtTokenProvider.HEADER_STRING);
         if (token != null) {
-            JWTVerifier verifier = JwtTokenProvider.getVerifier();
-            JwtTokenProvider.handleError(token);
-            DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenProvider.TOKEN_PREFIX, ""));
+            DecodedJWT decodedJWT = JwtTokenProvider.handleError(token);
             String userEmail = decodedJWT.getSubject();
             if (userEmail != null) {
                 UserBasicInfoResponse user = userService.emailCheck(UserBasicInfoRequest.builder().email(userEmail).build());

@@ -6,8 +6,8 @@ import com.newsainturtle.auth.dto.UserJoinRequest;
 import com.newsainturtle.auth.dto.UserJoinResponse;
 import com.newsainturtle.auth.exception.NoEmailCheckException;
 import com.newsainturtle.friend.repository.FriendRepository;
-import com.newsainturtle.notification.repository.FriendNotificationRepository;
 import com.newsainturtle.notification.repository.NotificationRepository;
+import com.newsainturtle.notification.repository.ScheduleNotificationRepository;
 import com.newsainturtle.schedule.entity.Schedule;
 import com.newsainturtle.schedule.entity.ScheduleMember;
 import com.newsainturtle.schedule.repository.ScheduleMemberRepository;
@@ -38,7 +38,7 @@ public class UserService {
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final FriendRepository friendRepository;
     private final NotificationRepository notificationRepository;
-    private final FriendNotificationRepository friendNotificationRepository;
+    private final ScheduleNotificationRepository scheduleNotificationRepository;
 
     public EmailDuplicateCheckResponse emailDuplicateCheck(EmailDuplicateCheckRequest emailDuplicateCheckRequest) {
         User user = userRepository.findByEmail(emailDuplicateCheckRequest.getEmail());
@@ -150,6 +150,7 @@ public class UserService {
             if(Objects.equals(schedule.get().getHostEmail(), email)){
                 scheduleRepository.deleteById(schedule_id);
                 scheduleMemberRepository.deleteAllByScheduleId(schedule_id);
+                scheduleNotificationRepository.deleteAllByScheduleId(schedule_id);
             }
             else{
                 scheduleMemberRepository.deleteByScheduleIdAndUserEmail(schedule_id, email);
@@ -163,6 +164,5 @@ public class UserService {
         user.withDrawUser();
         friendRepository.deleteAllByRequestUserOrReceiveUser(user, user);
         notificationRepository.deleteByReceiveUser(user);
-        friendNotificationRepository.deleteAllBySendUserId(user.getUserId());
     }
 }
