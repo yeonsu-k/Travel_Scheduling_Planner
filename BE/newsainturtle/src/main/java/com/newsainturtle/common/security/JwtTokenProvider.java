@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -53,13 +54,12 @@ public class JwtTokenProvider {
         return new Date(now.getTime() + expirationTime);
     }
 
-    public static void handleError(String token) {
+    public static DecodedJWT handleError(String token) {
         JWTVerifier verifier = JWT
                 .require(Algorithm.HMAC512(secretKey.getBytes()))
                 .build();
-
         try {
-            verifier.verify(token.replace(TOKEN_PREFIX, ""));
+            return verifier.verify(token.replace(TOKEN_PREFIX, ""));
         } catch (AlgorithmMismatchException ex) {
             throw ex;
         } catch (InvalidClaimException ex) {
