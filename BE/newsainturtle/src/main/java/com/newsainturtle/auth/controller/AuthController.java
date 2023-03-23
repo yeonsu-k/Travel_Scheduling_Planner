@@ -76,7 +76,7 @@ public class AuthController {
         KakaoCodeUrlResponse kakaoCodeURLResponse = authService.getKakaoAuthUrl();
         return new ResponseEntity<>(BaseResponse.from(
                 true,
-                LOGIN_SUCCESS_MESSAGE,
+                KAKAO_CODE_URL_SUCCESS_MESSAGE,
                 kakaoCodeURLResponse)
                 , HttpStatus.OK);
     }
