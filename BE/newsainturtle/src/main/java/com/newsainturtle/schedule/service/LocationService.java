@@ -6,9 +6,12 @@ import com.newsainturtle.schedule.dto.LocationRequest;
 import com.newsainturtle.schedule.dto.LocationResponse;
 import com.newsainturtle.schedule.entity.BasicLocation;
 import com.newsainturtle.schedule.entity.CustomLocation;
+import com.newsainturtle.schedule.entity.Location;
+import com.newsainturtle.schedule.exception.NotFoundException;
 import com.newsainturtle.schedule.exception.NullException;
 import com.newsainturtle.schedule.repository.BasicLocationRepository;
 import com.newsainturtle.schedule.repository.CustomLocationRepository;
+import com.newsainturtle.schedule.repository.LocationRepository;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LocationService {
+
+    private final LocationRepository locationRepository;
 
     private final BasicLocationRepository basicLocationRepository;
 
@@ -67,6 +72,24 @@ public class LocationService {
         locationResponseList.addAll(findRecommendBasicLocationList(regionId,isHotel));
         locationResponseList.addAll(findRecommendCustomLocationList(regionId,email,isHotel));
         return locationResponseList;
+    }
+
+    public LocationResponse findLocationInfo(Long locationId) {
+        Location location = findLocationById(locationId);
+        return LocationResponse.builder()
+                .locationId(location.getLocationId())
+                .regionId(location.getRegionId())
+                .locationName(location.getLocationName())
+                .address(location.getAddress())
+                .longitude(location.getLongitude())
+                .latitude(location.getLatitude())
+                .isHotel(location.isHotel())
+                .build();
+    }
+
+    private Location findLocationById(Long locationId) {
+        return locationRepository.findById(locationId)
+                .orElseThrow(() -> new NotFoundException());
     }
 
     private void isNullUser(String email) {
