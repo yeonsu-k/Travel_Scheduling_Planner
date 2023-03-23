@@ -96,5 +96,16 @@ public class UserController {
                 HttpStatus.OK);
     }
 
+    @Operation(summary = "일정 삭제", description = "일정을 삭제합니다.")
+    @DeleteMapping("/{schedule_id}")
+    public ResponseEntity<BaseResponse> deleteSchedule(@ApiIgnore Authentication authentication, @PathVariable("schedule_id") Long schedule_id){
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        String email = userDetails.getUsername();
+        userService.deleteSchedule(schedule_id, email);
+        return new ResponseEntity<>(
+                BaseResponse.from(true, DELETE_SCHEDULE_SUCCESS_MESSAGE),
+                HttpStatus.OK);
+    }
+
 
 }
