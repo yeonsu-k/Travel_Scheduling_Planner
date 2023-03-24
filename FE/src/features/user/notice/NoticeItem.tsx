@@ -5,6 +5,7 @@ import Text from "components/Text";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { getNotification, noticeListProps } from "./Notice";
+import { getFriendInfo } from "pages/MyPage";
 
 interface NoticeItemProps {
   noticeValue: noticeListProps;
@@ -26,6 +27,7 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
       });
 
     getNotification();
+    getFriendInfo();
   };
 
   const onClickDeleteBtn = async () => {
