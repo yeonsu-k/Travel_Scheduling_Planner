@@ -66,7 +66,7 @@ function CreateMap() {
       point: new kakao.maps.MarkerImage(pointImage, imageSize),
     };
 
-    marker
+    const markers = marker
       .filter((arr, index, callback) => index === callback.findIndex((val) => val.info.id === arr.info.id))
       .map((value) => {
         const { info, type } = value;
@@ -75,11 +75,53 @@ function CreateMap() {
           position: new kakao.maps.LatLng(info.latitude, info.longitude), // 마커를 표시할 위치
           title: info.name, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
           image: type == "hotel" ? image.hotel : type == "place" ? image.place : image.point, // 마커 이미지
+          clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정
         });
       });
+
+    const infowindow = marker
+      .filter((arr, index, callback) => index === callback.findIndex((val) => val.info.id === arr.info.id))
+      .map((value) => {
+        const { info } = value;
+        new kakao.maps.InfoWindow({
+          map: map, // 마커를 표시할 지도
+          position: new kakao.maps.LatLng(info.latitude, info.longitude), // 마커를 표시할 위치
+          content: infoWindowElement(info.name),
+        });
+      });
+
+    const infoTitle = Array.from(document.querySelectorAll<HTMLElement>("span.infoStyle"));
+    infoTitle.forEach((e) => {
+      const w = e.offsetWidth + 10;
+      const ml = w / 2;
+      const ele = e.parentElement as HTMLElement;
+      const elePre = ele.previousSibling as HTMLElement;
+      const eleParent = ele.parentElement as HTMLElement;
+      ele.style.top = "-10px";
+      ele.style.left = "50%";
+      ele.style.marginLeft = -ml + "px";
+      ele.style.width = w + "px";
+      elePre.style.display = "none";
+      eleParent.style.border = "0px";
+      eleParent.style.background = "unset";
+    });
   }
 
-  return <div id="map" ref={mainMap} className={`${styles.Container} ${styles.map}`} />;
+  const cssInfoText =
+    "display: block; font-size:0.8rem; font-weight:600; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; color: black; text-align: center; border-radius: 4px; padding: 0px 10px;";
+  const infoWindowElement = (name: string) => {
+    const element = document.createElement("span");
+    element.className = "infoStyle";
+    element.textContent = name;
+    element.style.cssText = cssInfoText;
+    return element;
+  };
+
+  return (
+    <>
+      <div id="map" ref={mainMap} className={`${styles.Container} ${styles.map}`} />
+    </>
+  );
 }
 
 export default CreateMap;
