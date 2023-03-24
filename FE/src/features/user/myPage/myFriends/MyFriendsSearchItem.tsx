@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Button from "components/Button";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { selectSearchUser, setFriendNumber, setFriends, setSearchUser } from "slices/friendSlice";
+import { selectSearchUser, setSearchUser } from "slices/friendSlice";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 
