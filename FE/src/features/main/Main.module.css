@@ -477,4 +477,13 @@
   .mainTitleText {
     margin-bottom: 10px;
   }
+
+  .cardTitle {
+    font-size: 0.5rem;
+    color: gray;
+  }
+
+  .cardEngTitle {
+    font-size: 0.8rem;
+  }
 }
