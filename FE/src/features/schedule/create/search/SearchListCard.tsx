@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import {
+  basicConfig,
   selectHotelList,
+  selectMarker,
   selectPlaceList,
   selectPointPlace,
   setHotelList,
+  setMarker,
   setPlaceList,
   setPointPlace,
 } from "slices/scheduleCreateSlice";
@@ -17,7 +20,7 @@ import SearchCardInfoModal from "./SearchCardInfoModal";
 import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
 interface SearchListCardType {
-  cardInfo: { id: number; image: string; name: string };
+  cardInfo: basicConfig;
   select: string;
   scheduleCreatProps: ScheduleCreatPropsType;
 }
@@ -27,6 +30,7 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
   const hotel = useAppSelector(selectHotelList);
   const place = useAppSelector(selectPlaceList);
   const pointPlace = useAppSelector(selectPointPlace);
+  const marker = useAppSelector(selectMarker);
   const [ModalOpen, setModalOpen] = useState(false);
   const { hotelCurrentDay, placeCurrentDay, setCurrentTab, setHotelCurrentDay, setPlaceCurrentDay } =
     scheduleCreatProps;
@@ -35,6 +39,20 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
     setCurrentTab(select);
     if (select === "호텔") {
       const hotelList = [...hotel];
+      const markerList = [...marker];
+      if (hotelList[hotelCurrentDay] != null) {
+        const changedIdx = markerList.findIndex((value) => value.info?.id === hotelList[hotelCurrentDay]?.id);
+        markerList.splice(changedIdx, 1);
+      }
+      dispatch(
+        setMarker([
+          ...markerList,
+          {
+            info: cardInfo,
+            type: "hotel",
+          },
+        ]),
+      );
       hotelList[hotelCurrentDay] = cardInfo;
       setHotelCurrentDay(hotelCurrentDay + 1 == hotel.length ? 0 : hotelCurrentDay + 1);
       dispatch(setHotelList([...hotelList]));
@@ -45,15 +63,31 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
         const pointPlaceList = [...pointPlace];
         pointPlaceList[placeCurrentDay] = cardInfo;
         dispatch(setPointPlace([...pointPlaceList]));
+        dispatch(
+          setMarker([
+            ...marker,
+            {
+              info: cardInfo,
+              type: "point",
+            },
+          ]),
+        );
       } else {
         const placeList = [...place];
         placeList.push({
-          id: cardInfo.id,
-          image: cardInfo.image,
-          name: cardInfo.name,
+          onePlace: cardInfo,
           time: "2:00",
         });
         dispatch(setPlaceList([...placeList]));
+        dispatch(
+          setMarker([
+            ...marker,
+            {
+              info: cardInfo,
+              type: "place",
+            },
+          ]),
+        );
       }
     }
   };

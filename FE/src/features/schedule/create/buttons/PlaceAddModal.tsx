@@ -4,9 +4,13 @@ import Button from "components/Button";
 import Toast from "components/Toast";
 import searchStyles from "../search/Search.module.css";
 import { AccountBalance, Hotel } from "@mui/icons-material";
-import { Stack, TextField, Typography } from "@mui/material";
+import { Stack, TextField, Typography, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ImageMap from "./ImageMap";
+import { useAppSelector } from "app/hooks";
+import { selectLocal } from "slices/scheduleCreateSlice";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
 
 interface ButtonsAddModalType {
   setAddPlaceModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,8 +36,8 @@ const CssTextField = styled(TextField)({
 
 function ButtonsAddModal(props: ButtonsAddModalType) {
   const { setAddPlaceModal } = props;
+  const local = useAppSelector(selectLocal);
   const addressInfo = useRef<HTMLInputElement>(null);
-  // const placeNameInfo = useRef<HTMLInputElement>(null);
   const [addCurrentTab, setAddCurrentTab] = useState("장소");
   const [openAddToast, setOpenAddToast] = useState(false);
   const [openSeachToast, setOpenSeachToast] = useState(false);
@@ -55,14 +59,17 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
     if (!addSuccess) setOpenAddToast(true);
     else if (placeTitleValue.length == 0) setOpenTitleToast(true);
     else {
-      // 장소추가 API
       const data = {
-        location_name: placeTitleValue,
+        locationName: placeTitleValue,
         address: addressValue,
         latitude: gps.latitude,
         longitude: gps.longitude,
-        location_type: addCurrentTab,
+        isHotel: addCurrentTab == "호텔" ? 1 : 0,
+        regionId: 1, // 추후 수정 // 1(서울), 4(부산), 5(제주)
       };
+      Axios.post(api.createSchedule.customlocation(), data).then((res) => {
+        setAddPlaceModal(false);
+      });
     }
   };
 
@@ -70,7 +77,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
     // 장소 검색
     if (addressInfo.current) {
       setSearchBtnClick(true);
-      setAddressValue(addressInfo.current.value);
+      setAddressValue(local + " " + addressInfo.current.value);
     }
   };
 
@@ -129,7 +136,12 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
 
             <Stack spacing={1} pb={2}>
               <Stack direction="row" spacing={1} justifyContent="space-between">
-                <CssTextField inputRef={addressInfo} variant="filled" label="주소 검색" fullWidth />
+                <Stack direction="row" width="100%" alignItems="baseline">
+                  <Box width="10%" alignItems="left">
+                    {local}
+                  </Box>
+                  <CssTextField inputRef={addressInfo} variant="filled" label="주소 검색" fullWidth />
+                </Stack>
                 <Button text="검색" color="pink" width="10%" onClick={() => searchClick()} />
               </Stack>
 
@@ -141,7 +153,6 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
                   setPlaceTitleValue(e.target.value);
                 }}
               />
-              <CssTextField variant="filled" multiline label="설명사항(최대 100자, 생략 가능)" />
             </Stack>
           </Stack>
 

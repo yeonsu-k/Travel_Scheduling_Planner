@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Create.module.css";
 import SearchRadioBtn from "./search/SearchRadioBtn";
 import SearchInput from "./search/SearchInput";
@@ -10,45 +10,38 @@ import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
 function CreateRight(props: ScheduleCreatPropsType) {
   const [select, setSelect] = useState("호텔");
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [searchClick, setSearchClick] = useState(false);
+  const [searchView, setSearchView] = useState(false);
 
-  const getKeyWord = (keyWord: string) => {
-    setSelect(keyWord);
-    setSearchInput("");
-    setSearch(false);
+  useEffect(() => {
+    if (keyword.length >= 2) setSearchView(true);
+  }, [keyword]);
+
+  const getSelect = (radio: string) => {
+    setSelect(radio);
+    keyWordClear();
   };
 
-  const getInputValue = (str: string) => {
-    setSearchInput(str);
+  const searchBtnClick = (str: string) => {
+    setKeyword(str);
+    setSearchClick(true);
   };
 
-  const searchBtnClick = () => {
-    setSearch(true);
-    if (searchInput.length >= 2) {
-      // {select}목록 {searchInput} 단어 검색 API 연결
-    }
-  };
-
-  const cancleBtnClick = () => {
-    if (search) console.log(select + " 추천 목록 보여주기");
-    setSearchInput("");
-    setSearch(false);
+  const keyWordClear = () => {
+    setKeyword("");
+    setSearchClick(false);
+    setSearchView(false);
   };
 
   return (
     <Stack className={styles.Container}>
       <Stack spacing={0.5} p={0.2}>
-        <SearchRadioBtn keyword={select} getKeyWord={getKeyWord} />
-        <SearchInput
-          value={searchInput}
-          getValue={getInputValue}
-          searchBtnClick={searchBtnClick}
-          cancleBtnClick={cancleBtnClick}
-        />
+        <SearchRadioBtn select={select} getSelect={getSelect} />
+        <SearchInput select={select} searchBtnClick={searchBtnClick} keyWordClear={keyWordClear} />
       </Stack>
-      {search ? (
-        searchInput.length < 2 ? (
+      {searchClick ? (
+        !searchView ? (
           <Box className={styles.center} my={1.5}>
             <Text value={`${select}${select === "호텔" ? "을" : "를"} 검색하세요`} bold />
             <Stack className={styles.searchWarning} my={2} spacing={0.5} justifyContent="center" alignItems="center">
@@ -56,27 +49,21 @@ function CreateRight(props: ScheduleCreatPropsType) {
               <small>{select}명을 검색하세요.</small>
               <small>검색어는 두 글자 이상 입력해주세요.</small>
             </Stack>
+            <Box component="p" mt={1} onClick={() => setSearchClick(false)} className={styles.againRecommend}>
+              다시 추천 {select} 보기
+            </Box>
           </Box>
         ) : (
-          <Box className={styles.center} my={1.5}>
-            <Box className={styles.center} my={1.5}>
-              <Text value={select + " 검색결과(3건)"} bold />
-            </Box>
-            <div className={styles.scroll}>
-              {/* 검색 결과 보여주기 */}
-              {/* <SearchList /> */}
-            </div>
-          </Box>
+          // 키워드 검색
+          <div className={styles.scroll}>
+            <SearchList select={select} keyword={keyword} searchView={searchView} scheduleCreatProps={props} />
+          </div>
         )
       ) : (
-        <>
-          <Box className={styles.center} my={1.5}>
-            <Text value={"추천 " + select} bold />
-          </Box>
-          <div className={styles.scroll}>
-            <SearchList select={select} scheduleCreatProps={props} />
-          </div>
-        </>
+        // 추천 검색
+        <div className={styles.scroll}>
+          <SearchList select={select} keyword={keyword} searchView={searchView} scheduleCreatProps={props} />
+        </div>
       )}
     </Stack>
   );

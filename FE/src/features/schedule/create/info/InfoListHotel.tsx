@@ -1,5 +1,5 @@
 import React from "react";
-import { selectDate, selectHotelList, setHotelList } from "slices/scheduleCreateSlice";
+import { selectDate, selectHotelList, selectMarker, setHotelList, setMarker } from "slices/scheduleCreateSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Info.module.css";
 import Text from "components/Text";
@@ -10,14 +10,20 @@ import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 
 function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
   const dispatch = useAppDispatch();
+  const marker = useAppSelector(selectMarker);
   const hotel = useAppSelector(selectHotelList);
   const date = useAppSelector(selectDate);
   const { hotelCurrentDay, setHotelCurrentDay } = props.scheduleCreatProps;
 
-  const deleteHotel = (id: number) => {
+  const deleteHotel = (index: number) => {
     const hotelList = [...hotel];
-    const changedIdx = hotelList.findIndex((hotelList) => hotelList?.id === id);
-    hotelList[changedIdx] = null;
+
+    const markerList = [...marker];
+    const changedIdx = markerList.findIndex((value) => value.info?.id === hotelList[index]?.id);
+    markerList.splice(changedIdx, 1);
+    dispatch(setMarker(markerList));
+
+    hotelList[index] = null;
     dispatch(setHotelList(hotelList));
   };
 
@@ -25,6 +31,7 @@ function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
     setHotelCurrentDay(0);
     const size = differenceInDays(new Date(date.end), new Date(date.start));
     dispatch(setHotelList(Array.from({ length: size }, () => null)));
+    dispatch(setMarker(marker.filter((value) => value.type != "hotel")));
   };
 
   return (
@@ -65,7 +72,7 @@ function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
                         <small>Maison Glad Jeju</small>
                       </span>
                       <div className={styles.cardDelete}>
-                        <button onClick={() => deleteHotel(hotelCard.id)}>
+                        <button onClick={() => deleteHotel(index)}>
                           <Close fontSize="small" color="error" />
                         </button>
                       </div>

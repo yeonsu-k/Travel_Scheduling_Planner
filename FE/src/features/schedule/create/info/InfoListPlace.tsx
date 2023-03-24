@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import {
+  selectMarker,
   selectPlaceList,
   selectPointPlace,
+  setMarker,
   setPlaceList,
   setPlaceTime,
   setPointPlace,
@@ -18,6 +20,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
   const dispatch = useAppDispatch();
   const place = useAppSelector(selectPlaceList);
   const pointPlace = useAppSelector(selectPointPlace);
+  const marker = useAppSelector(selectMarker);
   const timer = useMemo(() => {
     return place.map((val: { time: string }) => {
       const time = val.time.split(":");
@@ -40,19 +43,33 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
   const { placeCurrentDay, setPlaceCurrentDay } = props.scheduleCreatProps;
 
   const deletePlace = (id: number) => {
-    const newPlaceList = place.filter((value) => value.id !== id);
-    dispatch(setPlaceList(newPlaceList));
+    const placeList = [...place];
+    let changedIdx = place.findIndex((value) => value.onePlace.id === id);
+    placeList.splice(changedIdx, 1);
+    dispatch(setPlaceList(placeList));
+
+    const markerList = [...marker];
+    changedIdx = markerList.findIndex((value) => value.info.id === id);
+    markerList.splice(changedIdx, 1);
+    dispatch(setMarker(markerList));
+  };
+
+  const deletePointPlace = (index: number) => {
+    const pointPlaceList = [...pointPlace];
+
+    const markerList = [...marker];
+    const changedIdx = markerList.findIndex((value) => value.info?.id === pointPlaceList[index]?.id);
+    markerList.splice(changedIdx, 1);
+    dispatch(setMarker(markerList));
+
+    pointPlaceList[index] = null;
+    dispatch(setPointPlace(pointPlaceList));
   };
 
   const deletePlaceAll = () => {
     dispatch(setPointPlace(Array.from({ length: 2 }, () => null)));
     dispatch(setPlaceList([]));
-  };
-
-  const deletePointPlace = (index: number) => {
-    const pointPlaceList = [...pointPlace];
-    pointPlaceList[index] = null;
-    dispatch(setPointPlace([...pointPlaceList]));
+    dispatch(setMarker(marker.filter((value) => value.type == "hotel")));
   };
 
   const onChangeAccount = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,14 +124,13 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
         <Stack className={styles.flex} my={1} spacing={0.5}>
           <Divider className={styles.divider} />
           {pointPlace.map((pointPlaceCard, index) => (
-            <>
+            <Box key={index} minWidth="100%">
               <div className={` ${styles.flexRow} ${styles.placeDrop}`}>
                 <small>{`${index == 0 ? "출발" : "종착"} 장소`}</small>
               </div>
               {pointPlaceCard === null ? (
                 <>
                   <div
-                    key={index}
                     className={
                       placeCurrentDay === index
                         ? `${styles.place_explain} ${styles.explain_focused}`
@@ -143,7 +159,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
                   </div>
                 </div>
               )}
-            </>
+            </Box>
           ))}
         </Stack>
         <Divider className={styles.divider} />
@@ -152,9 +168,9 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
             {place.map((placeCard, index) => (
               <div className={styles.cardList} key={index}>
                 <div className={styles.card}>
-                  <img src={placeCard?.image} alt={""} />
+                  <img src={placeCard.onePlace.image} alt={""} />
                   <div className={styles.placeCard}>
-                    <span className={styles.cardText}>{placeCard?.name}</span>
+                    <span className={styles.cardText}>{placeCard.onePlace.name}</span>
                     <div className={styles.flexRow}>
                       <div className={styles.placeTimer}>
                         <Timer fontSize="small" />
@@ -183,7 +199,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
                         />
                         분
                       </div>
-                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard?.id)}>
+                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.onePlace.id)}>
                         <Close fontSize="small" color="error" />
                       </button>
                     </div>
