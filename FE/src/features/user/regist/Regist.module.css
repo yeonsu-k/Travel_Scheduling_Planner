@@ -5,8 +5,8 @@
 }
 
 .registContainer {
-  min-height: 700px;
-  min-width: 350px;
+  height: 700px;
+  width: 350px;
 }
 
 .textTitle {
@@ -107,4 +107,10 @@
 .registBack > button {
   height: 45px;
   background-color: black !important;
+}
+
+@media screen and (max-width: 601px) {
+  .registContainer {
+    width: 80%;
+  }
 }

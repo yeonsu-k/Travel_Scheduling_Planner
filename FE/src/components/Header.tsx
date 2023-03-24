@@ -15,6 +15,8 @@ import { rootState } from "app/store";
 // import Axios from "api/JsonAxios";
 import { setLogout, selectUserInfo } from "slices/authSlice";
 import { useAppSelector } from "app/hooks";
+import HeaderMobile from "./HeaderMobile";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -31,6 +33,7 @@ function Header() {
   const userInfo = useAppSelector(selectUserInfo);
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeOpen, setNoticeOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [anchorElNotice, setAnchorElNotice] = React.useState<null | HTMLElement>(null);
@@ -67,6 +70,10 @@ function Header() {
     setNoticeOpen(false);
   };
 
+  const toggleDrawer = (open: boolean) => {
+    setDrawerOpen(open);
+  };
+
   if (location.pathname == "/login" || location.pathname == "/regist") return null;
   else
     return (
@@ -84,29 +91,19 @@ function Header() {
         >
           <NavLink to="/" className={styles.link}>
             <Stack direction="row" spacing={1} alignItems="baseline">
-              <span
-                style={{
-                  fontFamily: "Montserrat",
-                  fontWeight: "700",
-                  fontSize: "2.125rem",
-                }}
-              >
-                MYRO
-              </span>
-              <span
-                style={{
-                  fontFamily: "Montserrat",
-                  fontWeight: "400",
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.12rem",
-                }}
-              >
-                MAKE YOUR ROUTE OPTIMIZED
-              </span>
+              <span className={styles.title}>MYRO</span>
+              <span className={styles.subTitle}>MAKE YOUR ROUTE OPTIMIZED</span>
             </Stack>
           </NavLink>
 
-          <Stack direction="row" spacing={3} alignItems="center">
+          {/* 모바일 사이드메뉴 */}
+          <div id={styles.mobileDrawer}>
+            <MenuIcon className={styles.mobileBtn} onClick={() => toggleDrawer(true)} />
+            <HeaderMobile open={drawerOpen} setDrawerOpen={setDrawerOpen} />
+          </div>
+          {/* 모바일 사이드메뉴 */}
+
+          <Stack id={styles.nav} direction="row" spacing={3} alignItems="center">
             <NavLink to="/schedule/create" className={styles.link}>
               일정생성
             </NavLink>

@@ -44,7 +44,7 @@ const MainDestinationsList = () => {
   return (
     <div>
       <div ref={upRef} className={styles.mainTitleText}>
-        <Text value="어디로 여행을 떠나시나요?" bold type="pageTitle" />
+        <span className={styles.pageTitle}>어디로 여행을 떠나시나요?</span>
       </div>
       <div className={styles.mainSubTitleTextK}>
         <Text value="여행지를 검색하거나 목록에서 직접 선택해주세요." type="caption" color="lightgray" />
@@ -64,11 +64,9 @@ const MainDestinationsList = () => {
         <MainDestinationsFilter />
       </div>
       <div className={styles.mainDestinationContainer}>
-        <div className={styles.mainDestinationItem}>
-          {filtered.map((item: DestinationConfig, i: number) => (
-            <MainDestinationItem key={i} {...item} />
-          ))}
-        </div>
+        {filtered.map((item: DestinationConfig, i: number) => (
+          <MainDestinationItem key={i} {...item} />
+        ))}
       </div>
       <div className={styles.upBtn}>
         <Button height="100%" text="여행지 선택화면으로 돌아가기" onClick={moveToUp} />
