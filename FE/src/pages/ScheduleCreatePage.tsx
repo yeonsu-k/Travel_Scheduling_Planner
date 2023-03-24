@@ -5,6 +5,8 @@ import CreateSearch from "features/schedule/create/CreateSearch";
 import CreateMap from "features/schedule/create/CreateMap";
 import CreateButtons from "features/schedule/create/CreateButtons";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "app/hooks";
+import { setTotalList } from "slices/scheduleCreateSlice";
 
 export interface ScheduleCreatPropsType {
   currentTab: string;
@@ -16,6 +18,7 @@ export interface ScheduleCreatPropsType {
 }
 
 function ScheduleCreatePage() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("호텔");
   const [currentMove, setCurrentMove] = useState("car");
@@ -23,7 +26,8 @@ function ScheduleCreatePage() {
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
 
   const scheduleCreateClick = () => {
-    // 일정 생성 버튼 클릭시
+    // 일정 생성 버튼 클릭시 API
+    dispatch(setTotalList());
     navigate("/schedule/edit");
   };
 
