@@ -8,7 +8,7 @@ import Button from "components/Button";
 interface modalProps {
   place: { id: number; image: string; name: string };
   setModalOpen: () => void;
-  InfoAddClick: () => void;
+  InfoAddClick?: () => void;
 }
 
 interface searchType {
@@ -30,7 +30,7 @@ function searchInWeb({ site, searchKeyword, x, y }: searchType) {
 
 function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) {
   const listAdd = () => {
-    InfoAddClick();
+    if (InfoAddClick) InfoAddClick();
     setModalOpen();
   };
 
@@ -83,16 +83,12 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
         <div className={styles.contentGrid}>
           <span>영업시간</span>
           <span>보기</span>
-          <span>홈페이지</span>
-          <span></span>
           <span>주소</span>
-          <span></span>
-          <span>전화</span>
           <span></span>
         </div>
         <Stack direction="row" justifyContent="flex-end" spacing={1}>
           <Button text="리뷰보기 (0)" color="black" width="25%" />
-          <Button text="목록에 추가" color="main" width="25%" onClick={listAdd} />
+          {InfoAddClick && <Button text="목록에 추가" color="main" width="25%" onClick={listAdd} />}
         </Stack>
       </Stack>
       <div className={styles.closeBtn} onClick={setModalOpen}>
