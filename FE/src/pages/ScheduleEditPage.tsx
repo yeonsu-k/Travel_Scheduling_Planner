@@ -15,10 +15,26 @@ import {
 } from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import EditScheduleItem from "features/schedule/edit/EditScheduleItem";
-import { selectDate, selectPlaceList, selectPointPlace, selectTotalList } from "slices/scheduleCreateSlice";
+import {
+  selectDate,
+  selectLocal,
+  selectPlaceList,
+  selectPointPlace,
+  selectTotalList,
+} from "slices/scheduleCreateSlice";
 import { differenceInDays } from "date-fns";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
 
 const { kakao } = window;
+
+interface sendScheduleListProps {
+  locationId: number;
+  day: number;
+  sequence: number;
+  startTime: string;
+  endTime: string;
+}
 
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
@@ -36,6 +52,9 @@ const ScheduleEditPage = () => {
 
   const fullScheduleList = useAppSelector(selectFullScheduleList);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
+  const region = useAppSelector(selectLocal);
+  const pointPlace = useAppSelector(selectPointPlace);
+  const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
 
   const setMap = () => {
     const container = document.getElementById("map");
@@ -202,7 +221,6 @@ const ScheduleEditPage = () => {
 
     const list: fullScheduleListConfig[] = [];
 
-    const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
     for (let day = 1; day <= travelDays; day++) {
       list.push({
         day: day,
@@ -253,6 +271,45 @@ const ScheduleEditPage = () => {
     dispatch(setFullScheduleList([...list]));
   };
 
+  const onClickSaveSchedule = () => {
+    const scheduleList: sendScheduleListProps[] = [];
+
+    fullScheduleList.map((value, key) => {
+      for (let idx = 0; idx < value.dayList.length; idx++) {
+        const scheduleItem = {
+          locationId: value.dayList[idx].id,
+          day: value.day,
+          sequence: idx + 1,
+          startTime: "00:00",
+          endTime: "00:00",
+        };
+
+        console.log("scheduleItem", scheduleItem);
+        scheduleList.push(scheduleItem);
+      }
+    });
+
+    const sendData = {
+      scheduleRegion: region,
+      scheduleName: "",
+      isPrivate: true,
+      scheduleStartDay: date.start,
+      scheduleEndDay: date.end,
+      scheduleStartLocation: pointPlace[0]?.address,
+      scheduleEndLocation: pointPlace[1]?.address,
+      vehicle: "버스",
+      scheduleLocationRequestList: scheduleList,
+    };
+
+    Axios.post(api.createSchedule.schedule(), sendData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     setMap();
   }, [place]);
@@ -271,7 +328,9 @@ const ScheduleEditPage = () => {
         <div className={styles.map} ref={containerRef}>
           <div id="map" style={{ width: "100%", height: "100%", zIndex: "0" }}></div>
 
-          <a className={styles.saveScheduleBtn}>일정저장</a>
+          <a className={styles.saveScheduleBtn} onClick={onClickSaveSchedule}>
+            일정저장
+          </a>
 
           <div
             className={styles.keepPlaces}
