@@ -5,8 +5,8 @@
 }
 
 .loginContainer {
-  min-height: 500px;
-  min-width: 350px;
+  width: 350px;
+  height: 500px;
 }
 
 .btnContainer {
@@ -99,4 +99,10 @@
 
 .socialBtn img {
   max-height: 48px !important;
+}
+
+@media screen and (max-width: 601px) {
+  .loginContainer {
+    width: 80%;
+  }
 }
