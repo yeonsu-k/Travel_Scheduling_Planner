@@ -1,4 +1,4 @@
-import { Backdrop, Box, CircularProgress, Modal } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 import React from "react";
 
 const Loading = () => {
