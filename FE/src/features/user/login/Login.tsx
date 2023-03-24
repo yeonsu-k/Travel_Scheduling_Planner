@@ -1,21 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import Input from "../../../components/Input";
 import Text from "../../../components/Text";
 import Button from "../../../components/Button";
 import LoginSocial from "./LoginSocial";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useDispatch } from "react-redux";
 import { setLogin, setUserInfo } from "slices/authSlice";
+import Loading from "components/Loading";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isEmail, setIsEmail] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isEmail, setIsEmail] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const code = searchParams.get("code");
+  const error = searchParams.get("error");
+
+  const kakaoLogin = async () => {
+    if (code) {
+      console.log("kakao login code: " + code);
+      setLoading(true);
+      await Axios.get(`http://localhost:8080/api/auth/kakao/login?code=${code}`)
+        .then((res) => {
+          dispatch(
+            setLogin({
+              accessToken: res.data.data.accessToken,
+              nickname: res.data.data.nickname,
+              login: true,
+            }),
+          );
+          navigate("/");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else if (error) {
+      console.log("kakao login error: " + error);
+    }
+  };
 
   const emailCheck = (e: string) => {
     const rep = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -46,6 +75,7 @@ const Login = () => {
             }),
           );
           dispatch(setUserInfo({ email: email }));
+          setLoading(false);
           navigate("/");
         })
         .catch((err: any) => {
@@ -61,51 +91,58 @@ const Login = () => {
     navigate("/regist");
   };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.loginContainer}>
-        <div className={styles.textTitle}>LOG IN</div>
-        <div className={styles.smallText}>AI 여행 스케줄링 플래너 - MYRO</div>
-        <div className={styles.inputTextContainer}>
-          <label className={styles.inputText} htmlFor="name">
-            이메일
-          </label>
-        </div>
-        <Input
-          type="text"
-          name="email"
-          placeholder=""
-          onChange={(e) => {
-            setEmail(e.target.value);
-            emailCheck(e.target.value);
-          }}
-        />
+  useEffect(() => {
+    kakaoLogin();
+  }, []);
 
-        <div className={styles.inputTextContainer}>
-          <label className={styles.inputText} htmlFor="name">
-            비밀번호
-          </label>
-        </div>
-        <Input type="password" name="email" placeholder="" onChange={(e) => setPassword(e.target.value)} />
-        {/* <div style={{ marginTop: "10px", cursor: "pointer" }}>
-          <Text color="day_8" value="비밀번호를 잊으셨나요?" type="caption" />
-        </div> */}
-        <div className={styles.btnContainer}>
-          <Button color="main" text="로그인" width="100%" height="45px" radius onClick={confirm} />
-        </div>
-        <div className={styles.textContainer}>
-          <Text value="회원이 아니세요?" type="caption" />
-          <div style={{ marginLeft: "5px", cursor: "pointer" }} onClick={moveRegist}>
-            <Text color="day_8" value="회원가입하기" type="caption" />
+  return (
+    <>
+      {loading ? <Loading /> : null}
+      <div className={styles.container}>
+        <div className={styles.loginContainer}>
+          <div className={styles.textTitle}>LOG IN</div>
+          <div className={styles.smallText}>AI 여행 스케줄링 플래너 - MYRO</div>
+          <div className={styles.inputTextContainer}>
+            <label className={styles.inputText} htmlFor="name">
+              이메일
+            </label>
           </div>
+          <Input
+            type="text"
+            name="email"
+            placeholder=""
+            onChange={(e) => {
+              setEmail(e.target.value);
+              emailCheck(e.target.value);
+            }}
+          />
+
+          <div className={styles.inputTextContainer}>
+            <label className={styles.inputText} htmlFor="name">
+              비밀번호
+            </label>
+          </div>
+          <Input type="password" name="email" placeholder="" onChange={(e) => setPassword(e.target.value)} />
+          {/* <div style={{ marginTop: "10px", cursor: "pointer" }}>
+        <Text color="day_8" value="비밀번호를 잊으셨나요?" type="caption" />
+      </div> */}
+          <div className={styles.btnContainer}>
+            <Button color="main" text="로그인" width="100%" height="45px" radius onClick={confirm} />
+          </div>
+          <div className={styles.textContainer}>
+            <Text value="회원이 아니세요?" type="caption" />
+            <div style={{ marginLeft: "5px", cursor: "pointer" }} onClick={moveRegist}>
+              <Text color="day_8" value="회원가입하기" type="caption" />
+            </div>
+          </div>
+          <div className={styles.dividerContainer}>
+            <div className={styles.divider}></div>
+            <span>or</span>
+          </div>
+          <LoginSocial />
         </div>
-        <div className={styles.dividerContainer}>
-          <div className={styles.divider}></div>
-          <span>or</span>
-        </div>
-        <LoginSocial />
       </div>
-    </div>
+    </>
   );
 };
 

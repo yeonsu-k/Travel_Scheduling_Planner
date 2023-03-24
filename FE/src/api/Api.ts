@@ -16,6 +16,7 @@ interface apiInterface {
     kakaoLogin: () => string; // 카카오 로그인
     join: () => string; // 회원가입
     duplicatedCheck: () => string; // 이메일 중복확인
+    token: () => string; // 토큰 확인
   };
   user: {
     user: () => string; // 마이페이지 조회 & 회원정보 수정 & 회원탈퇴
@@ -70,6 +71,7 @@ const api: apiInterface = {
     kakaoLogin: () => HOST + AUTH + "kakao",
     join: () => HOST + AUTH + "join",
     duplicatedCheck: () => HOST + AUTH + "email",
+    token: () => HOST + AUTH + "token",
   },
   user: {
     user: () => HOST + "user",
