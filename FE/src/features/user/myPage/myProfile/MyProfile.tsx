@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import styles from "./MyProfile.module.css";
 import sampleImg from "asset/sample/cat.png";
 import Text from "components/Text";
@@ -8,17 +8,16 @@ import { useAppSelector } from "app/hooks";
 import api from "api/Api";
 import { useDispatch } from "react-redux";
 import Axios from "api/JsonAxios";
-import { selectFriendNumber, setFriendNumber, setFriends } from "slices/friendSlice";
 
 interface MyProfileProps {
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
+  friendNumber: number;
 }
 
-const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
+const MyProfile = ({ setViewSchedule, friendNumber }: MyProfileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useAppSelector(selectUserInfo);
-  const friendNumber = useAppSelector(selectFriendNumber);
 
   const getUserInfo = async () => {
     await Axios.get(api.user.user())
@@ -35,21 +34,8 @@ const MyProfile = ({ setViewSchedule }: MyProfileProps) => {
       });
   };
 
-  const getFriendNumber = async () => {
-    await Axios.get(api.friend.friend())
-      .then((res) => {
-        console.log(res);
-        dispatch(setFriends(res.data.data.friends));
-        dispatch(setFriendNumber(res.data.data.friends.length));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
     getUserInfo();
-    getFriendNumber();
   }, []);
 
   return (
