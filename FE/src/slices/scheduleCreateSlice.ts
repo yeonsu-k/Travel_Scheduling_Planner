@@ -27,6 +27,10 @@ interface scheduleCreateConfig {
     info: basicConfig;
     type: string;
   }[];
+  total: {
+    info: basicConfig;
+    time: string;
+  }[];
 }
 
 const initialState: scheduleCreateConfig = {
@@ -39,6 +43,7 @@ const initialState: scheduleCreateConfig = {
   place: [],
   pointPlace: Array.from({ length: 2 }, () => null),
   marker: [],
+  total: [],
 };
 
 const scheduleCreateSlice = createSlice({
@@ -73,10 +78,44 @@ const scheduleCreateSlice = createSlice({
       state.pointPlace = Array.from({ length: 2 }, () => null);
       state.marker = [];
     },
+    setTotalList: (state) => {
+      const { hotel, place, pointPlace } = state;
+      let temp = hotel.filter((ele) => ele !== null) as basicConfig[];
+      const newHotel = temp.map((val) => {
+        return {
+          info: val,
+          time: "0:0",
+        };
+      });
+      temp = pointPlace.filter((ele) => ele != null) as basicConfig[];
+      const newPointPlace = temp.map((val) => {
+        return {
+          info: val,
+          time: "0:0",
+        };
+      });
+      const newPlace = place.map((val) => {
+        return {
+          info: val.onePlace,
+          time: val.time,
+        };
+      });
+
+      state.total = [...newHotel, ...newPointPlace, ...newPlace];
+    },
   },
 });
-export const { setLocal, setDate, setHotelList, setPlaceList, setPlaceTime, setPointPlace, setMarker, setListClear } =
-  scheduleCreateSlice.actions;
+export const {
+  setLocal,
+  setDate,
+  setHotelList,
+  setPlaceList,
+  setPlaceTime,
+  setPointPlace,
+  setMarker,
+  setListClear,
+  setTotalList,
+} = scheduleCreateSlice.actions;
 
 export const selectLocal = (state: rootState) => state.scheduleCreate.local;
 export const selectDate = (state: rootState) => state.scheduleCreate.date;
@@ -84,5 +123,6 @@ export const selectHotelList = (state: rootState) => state.scheduleCreate.hotel;
 export const selectPlaceList = (state: rootState) => state.scheduleCreate.place;
 export const selectPointPlace = (state: rootState) => state.scheduleCreate.pointPlace;
 export const selectMarker = (state: rootState) => state.scheduleCreate.marker;
+export const selectTotalList = (state: rootState) => state.scheduleCreate.total;
 
 export default scheduleCreateSlice.reducer;
