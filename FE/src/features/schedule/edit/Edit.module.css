@@ -5,6 +5,28 @@
   height: 100%;
 }
 
+.saveScheduleBtn {
+  position: absolute;
+  width: 10vw;
+  height: 56px;
+  top: 1%;
+  left: 1%;
+  transform: translate(-1%, -1%);
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 12px !important;
+  cursor: pointer;
+  font-size: 0.875rem;
+  z-index: 2;
+}
+
 .keepPlaces {
   position: absolute;
   width: 18vw;
