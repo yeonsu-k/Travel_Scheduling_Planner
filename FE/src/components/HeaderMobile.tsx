@@ -1,20 +1,19 @@
 import React, { Dispatch, SetStateAction } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import styles from "./css/Header.module.css";
 import { Avatar } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import Text from "./Text";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { rootState } from "app/store";
+import { useDispatch } from "react-redux";
+import { setLogout } from "slices/authSlice";
 
 interface HeaderMobileProps {
   open: boolean;
@@ -23,20 +22,43 @@ interface HeaderMobileProps {
 
 const HeaderMobile = ({ open, setDrawerOpen }: HeaderMobileProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { login } = useSelector((state: rootState) => state.auth);
+
+  const onLogout = () => {
+    dispatch(setLogout());
+    window.location.replace("/"); // 새로고침 하면서 로그아웃
+  };
+
   return (
     <Drawer anchor="right" open={open} onClose={() => setDrawerOpen(false)}>
       <Box sx={{ width: "60vw" }}>
-        <Box className={styles.mobileProfile}>
-          <Avatar sx={{ width: 60, height: 60, bgcolor: deepPurple[500] }}>
-            <Text value="김" type="caption" color="white" />
-          </Avatar>
-          <Box sx={{ pt: 1 }}>
-            <Text value="연수" type="caption" color="black" />
+        {login ? (
+          <Box className={styles.mobileProfile}>
+            <Avatar sx={{ width: 60, height: 60, bgcolor: deepPurple[500] }}>
+              <Text value="김" type="caption" color="white" />
+            </Avatar>
+            <Box sx={{ pt: 1 }}>
+              <Text value="연수" type="caption" color="black" />
+            </Box>
+            <Box
+              onClick={onLogout}
+              sx={{ width: 65, textAlign: "center", backgroundColor: "#000", pt: 1, pb: 1, pl: 2, pr: 2, mt: 1 }}
+            >
+              <Text value="로그아웃" type="caption" color="white" />
+            </Box>
           </Box>
-          <Box sx={{ backgroundColor: "#000", pt: 1, pb: 1, pl: 2, pr: 2, mt: 1 }}>
-            <Text value="로그아웃" type="caption" color="white" />
+        ) : (
+          <Box className={styles.mobileProfile}>
+            <Avatar sx={{ width: 60, height: 60, bgcolor: deepPurple[500], mt: 2 }}></Avatar>
+            <Box
+              onClick={() => navigate("/login")}
+              sx={{ width: 65, textAlign: "center", backgroundColor: "#000", pt: 1, pb: 1, pl: 2, pr: 2, mt: 3 }}
+            >
+              <Text value="로그인" type="caption" color="white" />
+            </Box>
           </Box>
-        </Box>
+        )}
         <List>
           <ListItem
             onClick={() => {
