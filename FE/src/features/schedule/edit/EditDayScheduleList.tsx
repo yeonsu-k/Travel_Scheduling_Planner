@@ -42,7 +42,7 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
             }}
           >
             {fullScheduleList[day - 1].dayList.map((value, key) => (
-              <div key={value.placeName} style={{ width: "90%" }}>
+              <div key={value.name} style={{ width: "90%" }}>
                 <Draggable key={value.id} draggableId={value.id.toString()} index={key}>
                   {(provided) => (
                     <div
@@ -55,11 +55,11 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
                       }}
                     >
                       <EditScheduleItem
-                        img={value.img}
-                        placeName={value.placeName}
+                        img={value.image}
+                        placeName={value.name}
                         time={value.time}
-                        startTime={value.startTime}
-                        endTime={value.endTime}
+                        // startTime={value.startTime}
+                        // endTime={value.endTime}
                       />
                     </div>
                   )}
