@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Main.module.css";
 import MainMobileContainer from "./MainMobileContainer";
 
 const MainDisplay = () => {
+  /* 메인화면 애니메이션 잠정 보류 ... */
+  // const stepRef = useRef(null);
+  // useEffect(() => {
+  //   const options = {};
+  //   const callback = (entries: any, observer: any) => {
+  //     entries.forEach((entry: any) => {
+  //       if (entry.isIntersecting) {
+  //         observer.unobserve(entry.target);
+  //       }
+  //     });
+  //   };
+  //   const observer = new IntersectionObserver(callback, options);
+  //   if (stepRef.current) {
+  //     observer.observe(stepRef.current);
+  //   }
+  // }, []);
+
   return (
     <div>
       <div id={styles.mainDisplay}>
@@ -24,10 +41,12 @@ const MainDisplay = () => {
         </div>
         <div className={styles.steps}>
           <div className={styles.stepDesc}>
-            <div>
-              <div className={styles.stepDescText}>여행 일자, 숙소, 가고 싶은 장소만</div>
-              <div className={styles.stepDescText}>선택하면 일정이 자동으로 완성되는</div>
-              <div className={styles.stepDescText}>쉽고 간편한 여행 일정 플래너</div>
+            <div className={styles.stepDescLeft}>
+              <div className={styles.stepDescTextContainer}>
+                <div className={styles.stepDescText}>여행 일자, 숙소, 가고 싶은 장소만</div>
+                <div className={styles.stepDescText}>선택하면 일정이 자동으로 완성되는</div>
+                <div className={styles.stepDescText}>쉽고 간편한 여행 일정 플래너</div>
+              </div>
             </div>
             <div className={styles.stepContainer}>
               <div>
