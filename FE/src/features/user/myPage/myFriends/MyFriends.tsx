@@ -6,8 +6,13 @@ import Modal from "components/Modal";
 import MyFriendsSearch from "./MyFriendsSearch";
 import { useAppDispatch } from "app/hooks";
 import { resetSearchUser } from "slices/friendSlice";
+import { friendProps } from "pages/MyPage";
 
-const MyFriends = () => {
+export interface MyFriendsProps {
+  friendList: Array<friendProps>;
+}
+
+const MyFriends = ({ friendList }: MyFriendsProps) => {
   const dispatch = useAppDispatch();
 
   const [openAddFriendModal, setOpenAddFriendModal] = useState(false);
@@ -33,7 +38,9 @@ const MyFriends = () => {
         )}
       </div>
 
-      <MyFriendsList />
+      {friendList.map((value, key) => (
+        <MyFriendsList key={key} friendInfo={value} />
+      ))}
     </div>
   );
 };
