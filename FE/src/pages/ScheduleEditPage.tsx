@@ -6,6 +6,8 @@ import EditFullScheduleList from "features/schedule/edit/EditFullScheduleList";
 import Text from "components/Text";
 import { useDispatch } from "react-redux";
 import {
+  fullScheduleListConfig,
+  placeInfoConfig,
   selectFullScheduleList,
   selectKeepPlaceList,
   setFullScheduleList,
@@ -13,21 +15,24 @@ import {
 } from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import EditScheduleItem from "features/schedule/edit/EditScheduleItem";
-import { selectPlaceList } from "slices/scheduleCreateSlice";
+import { selectDate, selectPlaceList, selectPointPlace, selectTotalList } from "slices/scheduleCreateSlice";
+import { differenceInDays } from "date-fns";
 
 const { kakao } = window;
 
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
 
+  const date = useAppSelector(selectDate);
   const place = useAppSelector(selectPlaceList);
+  const totalList = useAppSelector(selectTotalList);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
   const dragComponentRef = useRef<HTMLDivElement>(null); //움직일 드래그 박스 Ref
   const [originPosition, setOriginPosition] = useState({ x: 0, y: 0 }); // 드래그 전 포지션 값 (e.target.offset의 상대 위치)
   const [clientPosition, setClientPosition] = useState({ x: 0, y: 0 }); // 실시간 커서 위치인 e.client를 갱신하는 값
-  const [position, setPosition] = useState({ left: 50, top: 50 }); //실제 드래그 할 요소가 위치하는 포지션 값
+  const [position, setPosition] = useState({ left: 20, top: 100 }); //실제 드래그 할 요소가 위치하는 포지션 값
 
   const fullScheduleList = useAppSelector(selectFullScheduleList);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
@@ -192,9 +197,69 @@ const ScheduleEditPage = () => {
     }
   };
 
+  const getSchedule = () => {
+    console.log("일정 생성 데이터 불러오기");
+
+    const list: fullScheduleListConfig[] = [];
+
+    const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
+    for (let day = 1; day <= travelDays; day++) {
+      list.push({
+        day: day,
+        dayList: [],
+      });
+    }
+
+    const dayPlaceCount = Math.floor(totalList.length / travelDays);
+
+    console.log("dayPlaceCount: ", dayPlaceCount);
+
+    let placeInfo: placeInfoConfig = {
+      id: 0,
+      image: "",
+      name: "",
+      address: "",
+      latitude: 0,
+      longitude: 0,
+      time: "",
+    };
+
+    let day = 0;
+    let dayPlace = 0;
+    totalList.map((value, key) => {
+      placeInfo = {
+        id: value.info.id,
+        image: value.info.image,
+        name: value.info.name,
+        address: value.info.address,
+        latitude: value.info.latitude,
+        longitude: value.info.longitude,
+        time: value.time,
+      };
+
+      list[day].dayList.push(placeInfo);
+      dayPlace++;
+      console.log("dayPlace: ", dayPlace);
+      if (dayPlace === dayPlaceCount && day < travelDays - 1) {
+        day++;
+        dayPlace = 0;
+        console.log("day: ", day);
+      }
+    });
+
+    console.log("list: ", list);
+    console.log(totalList);
+
+    dispatch(setFullScheduleList([...list]));
+  };
+
   useEffect(() => {
     setMap();
   }, [place]);
+
+  useEffect(() => {
+    getSchedule();
+  }, []);
 
   return (
     <div style={{ width: "100%", height: "100%", display: "flex" }}>
@@ -205,6 +270,8 @@ const ScheduleEditPage = () => {
 
         <div className={styles.map} ref={containerRef}>
           <div id="map" style={{ width: "100%", height: "100%", zIndex: "0" }}></div>
+
+          <a className={styles.saveScheduleBtn}>일정저장</a>
 
           <div
             className={styles.keepPlaces}
@@ -231,7 +298,7 @@ const ScheduleEditPage = () => {
                   style={{ width: "auto", minHeight: "10px" }}
                 >
                   {keepPlaceList.map((value, key) => (
-                    <Draggable key={value.id} draggableId={value.id.toString()} index={key}>
+                    <Draggable key={value.id} draggableId={value.id?.toString()} index={key}>
                       {(provided) => (
                         <div
                           {...provided.dragHandleProps}
@@ -244,11 +311,11 @@ const ScheduleEditPage = () => {
                           }}
                         >
                           <EditScheduleItem
-                            img={value.img}
-                            placeName={value.placeName}
+                            img={value.image}
+                            placeName={value.name}
                             time={value.time}
-                            startTime={value.startTime}
-                            endTime={value.endTime}
+                            // startTime={value.startTime}
+                            // endTime={value.endTime}
                           />
                         </div>
                       )}
