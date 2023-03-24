@@ -62,6 +62,8 @@ function CreateMap() {
     const options = centerPos;
     // 지도를 생성
     const map = new kakao.maps.Map(container, options);
+    map.setMinLevel(3);
+    map.setMaxLevel(9);
 
     const imageSize = new kakao.maps.Size(30, 30);
     const imageOption = { offset: new kakao.maps.Point(30, 30) };
@@ -85,6 +87,9 @@ function CreateMap() {
         kakao.maps.event.addListener(oneMarker, "click", function () {
           setMarkerInfo(info);
           setModalOpen(true);
+          const bounds = new kakao.maps.LatLngBounds();
+          bounds.extend(new kakao.maps.LatLng(info.latitude, info.longitude));
+          map.setBounds(bounds);
         });
       });
 
