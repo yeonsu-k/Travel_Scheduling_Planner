@@ -36,7 +36,7 @@ function SearchInput({ select, searchBtnClick, keyWordClear }: searchType) {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => {
             if (e.code === "Enter") {
-              searchBtnClick(inputValue);
+              searchBtnClick(inputValue.trim());
             }
           }}
         />
@@ -46,7 +46,7 @@ function SearchInput({ select, searchBtnClick, keyWordClear }: searchType) {
           <Close fontSize="small" />
         </button>
       )}
-      <button className={styles.search_button} onClick={() => searchBtnClick(inputValue)}>
+      <button className={styles.search_button} onClick={() => searchBtnClick(inputValue.trim())}>
         <Search />
       </button>
     </div>
