@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Input from "components/Input";
@@ -9,7 +9,7 @@ import api from "api/Api";
 import { useAppDispatch } from "app/hooks";
 import { setSearchUser } from "slices/friendSlice";
 
-const MyFriendsAdd = () => {
+const MyFriendsSearch = () => {
   const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ const MyFriendsAdd = () => {
     Axios.post(api.friend.searchUser(), {
       email: email,
     })
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
 
         const searchData = {
@@ -33,7 +33,7 @@ const MyFriendsAdd = () => {
         };
         dispatch(setSearchUser(searchData));
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -58,4 +58,4 @@ const MyFriendsAdd = () => {
   );
 };
 
-export default MyFriendsAdd;
+export default MyFriendsSearch;

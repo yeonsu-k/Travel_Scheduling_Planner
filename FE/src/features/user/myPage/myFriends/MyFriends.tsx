@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MyFriendsList from "./MyFriendsList";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Modal from "components/Modal";
-import MyFriendsAdd from "./MyFriendsAdd";
-import Axios from "api/JsonAxios";
-import api from "api/Api";
+import MyFriendsSearch from "./MyFriendsSearch";
 import { useAppDispatch } from "app/hooks";
-import { resetSearchUser, setFriendNumber, setFriends } from "slices/friendSlice";
+import { resetSearchUser } from "slices/friendSlice";
+import { friendProps } from "pages/MyPage";
 
-const MyFriends = () => {
+export interface MyFriendsProps {
+  friendList: Array<friendProps>;
+}
+
+const MyFriends = ({ friendList }: MyFriendsProps) => {
   const dispatch = useAppDispatch();
 
   const [openAddFriendModal, setOpenAddFriendModal] = useState(false);
@@ -18,18 +21,6 @@ const MyFriends = () => {
     setOpenAddFriendModal(true);
     dispatch(resetSearchUser());
   };
-
-  useEffect(() => {
-    Axios.get(api.friend.friend())
-      .then((res: any) => {
-        console.log(res);
-        dispatch(setFriends(res.data.data.friends));
-        dispatch(setFriendNumber(res.data.data.friends.length));
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <div className={styles.myFriends}>
@@ -40,14 +31,16 @@ const MyFriends = () => {
         </button>
         {openAddFriendModal ? (
           <Modal title="친구 검색하기" modalClose={() => setOpenAddFriendModal(false)}>
-            <MyFriendsAdd />
+            <MyFriendsSearch />
           </Modal>
         ) : (
           <></>
         )}
       </div>
 
-      <MyFriendsList />
+      {friendList.map((value, key) => (
+        <MyFriendsList key={key} friendInfo={value} />
+      ))}
     </div>
   );
 };

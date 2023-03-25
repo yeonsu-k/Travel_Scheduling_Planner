@@ -3,7 +3,6 @@ import { configureStore, combineReducers, getDefaultMiddleware } from "@reduxjs/
 import authReducer from "slices/authSlice";
 import scheduleCreateReducer from "slices/scheduleCreateSlice";
 import scheduleEditReducer from "slices/scheduleEditSlice";
-import noticeSliceReducer from "slices/noticeSlice";
 import friendReducer from "slices/friendSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
   auth: authReducer,
   scheduleCreate: scheduleCreateReducer,
   scheduleEdit: scheduleEditReducer,
-  notice: noticeSliceReducer,
   friend: friendReducer,
 });
 
