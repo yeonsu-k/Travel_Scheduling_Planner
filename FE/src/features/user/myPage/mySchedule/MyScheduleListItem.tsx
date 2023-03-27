@@ -45,6 +45,19 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
     }
   };
 
+  const deleteSchedule = async () => {
+    if (window.confirm("일정을 삭제하시겠습니까?")) {
+      await Axios.delete(api.user.schedule(item.schedule_id))
+        .then((res) => {
+          alert("일정이 삭제되었습니다.");
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <div className={styles.schedule}>
       <div className={styles.scheduleContainer}>
@@ -108,7 +121,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             <ButtonStyled text="일정 수정" />
             <ButtonStyled text="일정표" />
             <ButtonStyled text="일정 공유" />
-            <ButtonStyled text="일정 삭제" />
+            <ButtonStyled text="일정 삭제" onClick={deleteSchedule} />
           </div>
         </div>
         <div className={styles.scheduleDDAY}>D-18</div>
