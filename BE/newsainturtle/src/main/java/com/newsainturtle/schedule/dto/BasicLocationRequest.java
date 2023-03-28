@@ -18,4 +18,6 @@ public class BasicLocationRequest {
     private Double latitude;
 
     private boolean isHotel;
+
+    private String locationURL;
 }
