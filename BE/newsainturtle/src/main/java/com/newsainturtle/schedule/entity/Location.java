@@ -36,4 +36,7 @@ public abstract class Location {
 
     @Column(name = "is_hotel")
     private boolean isHotel;
+
+    @Column(name = "location_url")
+    private String locationURL;
 }
