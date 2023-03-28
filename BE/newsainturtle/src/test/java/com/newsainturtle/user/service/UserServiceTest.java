@@ -337,7 +337,7 @@ class UserServiceTest {
                     .scheduleName("부산여행")
                     .scheduleStartDay("2022-03-07")
                     .scheduleEndDay("2022-03-11")
-                    .scheduleRegion("부산")
+                    .regionId(1L)
                     .isPrivate(false)
                     .hostEmail(email2)
                     .build();
@@ -345,7 +345,7 @@ class UserServiceTest {
                     .scheduleName("서울여행")
                     .scheduleStartDay("2022-03-07")
                     .scheduleEndDay("2022-03-11")
-                    .scheduleRegion("서울")
+                    .regionId(2L)
                     .isPrivate(true)
                     .hostEmail(email)
                     .build();
