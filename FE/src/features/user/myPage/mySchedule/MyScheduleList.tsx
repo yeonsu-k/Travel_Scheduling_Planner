@@ -3,6 +3,7 @@ import MyScheduleListItem from "./MyScheduleListItem";
 import styles from "./MySchedule.module.css";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import Loading from "components/Loading";
 
 export interface MyScheduleConfig {
   schedule_id: number;
@@ -18,11 +19,14 @@ export interface MyScheduleConfig {
 
 const MyScheduleList = () => {
   const [mySchedule, setMySchedule] = useState<MyScheduleConfig[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getMySchedule = async () => {
+    setLoading(true);
     await Axios.get(api.user.getScheduleList())
       .then((res) => {
         setMySchedule(res.data.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -34,11 +38,14 @@ const MyScheduleList = () => {
   }, []);
 
   return (
-    <div className={styles.myScheduleContainer}>
-      {mySchedule.map((item: MyScheduleConfig, i: number) => (
-        <MyScheduleListItem key={i} {...item} />
-      ))}
-    </div>
+    <>
+      {loading ? <Loading /> : null}
+      <div className={styles.myScheduleContainer}>
+        {mySchedule.map((item: MyScheduleConfig, i: number) => (
+          <MyScheduleListItem key={i} {...item} />
+        ))}
+      </div>
+    </>
   );
 };
 
