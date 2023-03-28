@@ -15,6 +15,7 @@ export interface MyScheduleConfig {
   mine: boolean;
   private: boolean;
   modifiedTime: string;
+  regionId: number;
 }
 
 const MyScheduleList = () => {

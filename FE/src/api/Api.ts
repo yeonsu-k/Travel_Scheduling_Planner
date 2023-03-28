@@ -42,6 +42,7 @@ interface apiInterface {
     inviteFriend: (schedule_id: number) => string; // 일정공유 - 친구 초대하기
     getFullList: (schedule_id: number) => string; // 일정 내용 전체 조회
     mainPlace: () => string; // 메인 장소 저장 & 메인 장소 조회 & 메인 장소 리스트 조회
+    getRegion: (region_id: number) => string; // 특정 메인 장소 조회
     period: (schedule_id: number) => string; // 일정 기간 저장 & 일정 기간 조회
     startEndPlace: (schedule_id: number) => string; // 일정시작/끝장소 저장 & 일정시작/끝장소 조회
     selectPlace: (schedule_id: number) => string; // 선택 장소 저장 & 선택 장소 조회
@@ -97,6 +98,7 @@ const api: apiInterface = {
     inviteFriend: (schedule_id) => HOST + SCHEDULE + FRIEND + schedule_id,
     getFullList: (schedule_id) => HOST + SCHEDULE + schedule_id,
     mainPlace: () => HOST + SCHEDULE + "main",
+    getRegion: (region_id) => HOST + SCHEDULE + "main/" + region_id,
     period: (schedule_id) => HOST + SCHEDULE + "period/" + schedule_id,
     startEndPlace: (schedule_id) => HOST + SCHEDULE + "start/" + schedule_id,
     selectPlace: (schedule_id) => HOST + SCHEDULE + "select/" + schedule_id,
