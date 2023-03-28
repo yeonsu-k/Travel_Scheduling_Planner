@@ -30,7 +30,7 @@ public class RegionService {
         return regionRequest.getRegionName();
     }
 
-    public List<RegionResponse> findRegion() {
+    public List<RegionResponse> findRegionList() {
         List<Region> regions = regionRepository.findAll();
         isNullRegionList(regions);
         return regions.stream()
@@ -43,20 +43,35 @@ public class RegionService {
                 ).collect(Collectors.toList());
     }
 
-    public void validateDuplicateRegion(String regionName) {
+    public RegionResponse findRegion(Long regionId) {
+        Region region = isNullRegion(regionId);
+        return RegionResponse.builder()
+                .regionName(region.getRegionName())
+                .regionImageURL(region.getRegionImageURL())
+                .englishName(region.getEnglishName())
+                .contents(region.getContents())
+                .build();
+    }
+
+    private void validateDuplicateRegion(String regionName) {
         Region region = regionRepository.findByRegionName(regionName);
         if(region!=null) {
             throw new DuplicateException();
         }
     }
 
-    public void isNullRegionList(List<Region> regions) {
+    private Region isNullRegion(Long regionId) {
+        return regionRepository.findById(regionId)
+                .orElseThrow(() -> new NullException());
+    }
+
+    private void isNullRegionList(List<Region> regions) {
         if(regions.isEmpty()) {
             throw new NullException();
         }
     }
 
-    public void isNullRegion(String regionName) {
+    private void isNullRegion(String regionName) {
         if(regionName==null) {
             throw new NullException();
         }
