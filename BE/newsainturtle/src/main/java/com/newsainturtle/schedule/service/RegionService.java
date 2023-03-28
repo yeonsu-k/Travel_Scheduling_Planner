@@ -35,6 +35,7 @@ public class RegionService {
         isNullRegionList(regions);
         return regions.stream()
                 .map(region -> RegionResponse.builder()
+                        .regionId(region.getRegionId())
                         .regionName(region.getRegionName())
                         .regionImageURL(region.getRegionImageURL())
                         .englishName(region.getEnglishName())
@@ -46,6 +47,7 @@ public class RegionService {
     public RegionResponse findRegion(Long regionId) {
         Region region = isNullRegion(regionId);
         return RegionResponse.builder()
+                .regionId(region.getRegionId())
                 .regionName(region.getRegionName())
                 .regionImageURL(region.getRegionImageURL())
                 .englishName(region.getEnglishName())

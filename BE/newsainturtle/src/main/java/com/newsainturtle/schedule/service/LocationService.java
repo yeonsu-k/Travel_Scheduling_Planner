@@ -40,6 +40,7 @@ public class LocationService {
                 .longitude(basicLocationRequest.getLongitude())
                 .latitude(basicLocationRequest.getLatitude())
                 .isHotel(basicLocationRequest.isHotel())
+                .locationURL(basicLocationRequest.getLocationURL())
                 .build();
         basicLocationRepository.save(basicLocation);
     }
@@ -84,6 +85,7 @@ public class LocationService {
                 .longitude(location.getLongitude())
                 .latitude(location.getLatitude())
                 .isHotel(location.isHotel())
+                .lcoationURL(location.getLocationURL())
                 .build();
     }
 
@@ -109,6 +111,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
+                        .lcoationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }
@@ -124,6 +127,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
+                        .lcoationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }
@@ -139,6 +143,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
+                        .lcoationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }
@@ -153,6 +158,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
+                        .lcoationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }

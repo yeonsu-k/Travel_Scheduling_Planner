@@ -37,6 +37,7 @@ const authSlice = createSlice({
       state.login = false;
       state.userInfo.nickname = "";
       sessionStorage.clear();
+      localStorage.clear();
     },
     setUserInfo: (state, { payload: { email } }) => {
       state.userInfo.email = email;
