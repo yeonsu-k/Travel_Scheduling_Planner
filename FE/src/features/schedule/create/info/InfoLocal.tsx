@@ -1,5 +1,5 @@
 import React from "react";
-import { selectLocal, setLocal } from "slices/scheduleCreateSlice";
+import { selectRegion, setRegion } from "slices/scheduleCreateSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Info.module.css";
 import Modal from "components/Modal";
@@ -9,9 +9,12 @@ import { Stack } from "@mui/system";
 
 function InfoLocal() {
   const dispatch = useAppDispatch();
-  const local = useAppSelector(selectLocal);
+  const region = useAppSelector(selectRegion);
   const [ModalOpen, setModalOpen] = React.useState(false);
-  const [testPlace, setPlace] = React.useState("");
+  const [searchLocal, setSearchLocal] = React.useState({
+    id: 1,
+    name: "서울",
+  });
 
   const showModal = () => {
     setModalOpen(true);
@@ -19,17 +22,20 @@ function InfoLocal() {
 
   const choicePlace = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) return;
-    setPlace(e.target.value);
+    setSearchLocal({
+      id: 1, // 서울만 가능 추후 regionId로 수정
+      name: e.target.value,
+    });
   };
 
   const savePlace = () => {
-    dispatch(setLocal(testPlace));
+    dispatch(setRegion(searchLocal));
     setModalOpen(false);
   };
   return (
     <div className={styles.content}>
       <Stack alignItems="center" onClick={showModal} sx={{ cursor: "pointer" }}>
-        <span className={styles.localText}>{local}</span>
+        <span className={styles.localText}>{region.name}</span>
         <span className={styles.localText_en}>Busan</span>
       </Stack>
       {ModalOpen && (

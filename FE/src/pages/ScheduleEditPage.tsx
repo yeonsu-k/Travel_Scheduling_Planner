@@ -17,7 +17,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautif
 import EditScheduleItem from "features/schedule/edit/EditScheduleItem";
 import {
   selectDate,
-  selectLocal,
+  selectRegion,
   selectPlaceList,
   selectPointPlace,
   selectTotalList,
@@ -39,6 +39,7 @@ interface sendScheduleListProps {
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
 
+  const region = useAppSelector(selectRegion);
   const date = useAppSelector(selectDate);
   const place = useAppSelector(selectPlaceList);
   const totalList = useAppSelector(selectTotalList);
@@ -52,7 +53,6 @@ const ScheduleEditPage = () => {
 
   const fullScheduleList = useAppSelector(selectFullScheduleList);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
-  const region = useAppSelector(selectLocal);
   const pointPlace = useAppSelector(selectPointPlace);
   const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
 
@@ -288,9 +288,9 @@ const ScheduleEditPage = () => {
         scheduleList.push(scheduleItem);
       }
     });
-
+    // scheduleRegion: region,
     const sendData = {
-      scheduleRegion: region,
+      regionId: region.id,
       scheduleName: "",
       isPrivate: true,
       scheduleStartDay: date.start,

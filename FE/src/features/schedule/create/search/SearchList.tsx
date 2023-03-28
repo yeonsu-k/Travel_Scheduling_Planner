@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchListCard from "./SearchListCard";
 import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 import Axios from "api/JsonAxios";
@@ -6,7 +6,8 @@ import api from "api/Api";
 import { Box } from "@mui/material";
 import Text from "components/Text";
 import defaultPhoto from "asset/defaultPhoto.jpg";
-import { basicConfig } from "slices/scheduleCreateSlice";
+import { basicConfig, selectRegion } from "slices/scheduleCreateSlice";
+import { useAppSelector } from "app/hooks";
 
 interface SearchListType {
   select: string;
@@ -18,6 +19,7 @@ interface SearchListType {
 interface getRecommendApiType {
   locationId: number;
   locationName: string;
+  lcoationURL: string;
   address: string;
   latitude: number;
   longitude: number;
@@ -28,6 +30,7 @@ interface getRecommendApiType {
 function SearchList(props: SearchListType) {
   const { select, keyword, searchView, scheduleCreatProps } = props;
   const [list, setCardList] = useState<basicConfig[]>([]);
+  const region = useAppSelector(selectRegion);
 
   useEffect(() => {
     searchView ? keywordSearch() : recommends();
@@ -35,15 +38,16 @@ function SearchList(props: SearchListType) {
 
   const keywordSearch = async () => {
     await Axios.post(api.createSchedule.searchLocation(), {
-      regionId: 1,
+      regionId: region.id,
       locationName: keyword,
       isHotel: select === "호텔",
     }).then((res) => {
       setCardList(
         res.data.data.map((ele: getRecommendApiType) => {
+          console.log(ele);
           return {
             id: ele.locationId,
-            image: defaultPhoto,
+            image: ele.lcoationURL == null ? defaultPhoto : ele.lcoationURL,
             name: ele.locationName,
             address: ele.address,
             latitude: ele.latitude,
@@ -60,7 +64,7 @@ function SearchList(props: SearchListType) {
         res.data.data.map((ele: getRecommendApiType) => {
           return {
             id: ele.locationId,
-            image: defaultPhoto,
+            image: ele.lcoationURL == null ? defaultPhoto : ele.lcoationURL, // API변경시 사진으로 수정
             name: ele.locationName,
             address: ele.address,
             latitude: ele.latitude,

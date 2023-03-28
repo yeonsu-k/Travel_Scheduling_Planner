@@ -4,7 +4,7 @@ import Text from "components/Text";
 import Button from "components/Button";
 import { DestinationConfig } from "../MainDestinationsList";
 import { useDispatch } from "react-redux";
-import { setLocal } from "slices/scheduleCreateSlice";
+import { setRegion } from "slices/scheduleCreateSlice";
 import { useNavigate } from "react-router-dom";
 
 interface modalProps {
@@ -15,10 +15,15 @@ interface modalProps {
 const MainDestinationModal = ({ setModalOpen, item }: modalProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { regionName, regionImageURL, englishName, contents } = item;
+  const { regionId, regionName, regionImageURL, englishName, contents } = item;
 
   const moveToCreate = () => {
-    dispatch(setLocal(regionName));
+    dispatch(
+      setRegion({
+        id: regionId,
+        name: regionName,
+      }),
+    );
     navigate("/schedule/create");
   };
 

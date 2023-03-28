@@ -8,6 +8,7 @@ import Axios from "api/JsonAxios";
 import api from "api/Api";
 
 export interface DestinationConfig {
+  regionId: number;
   regionName: string;
   regionImageURL: string;
   englishName: string;
