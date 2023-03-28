@@ -6,7 +6,8 @@ COPY . .
 RUN npm run build
 #CMD ["npm","run","start"]
 
-FROM nginx:stable-alpine as production-stage
+#FROM nginx:stable-alpine as production-stage
+FROM nginx
 RUN mkdir /app
 WORKDIR /app
 #RUN mkdir ./dist
@@ -14,7 +15,7 @@ WORKDIR /app
 COPY ./nginx.conf /etc/nginx/conf.d
 
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g","daemon off;"]
 
