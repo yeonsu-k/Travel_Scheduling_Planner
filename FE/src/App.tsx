@@ -8,6 +8,7 @@ import ScheduleRouter from "features/schedule/ScheduleRouter";
 import LoginPage from "pages/LoginPage";
 import RegistPage from "pages/RegistPage";
 import MyProfileEdit from "features/user/myPage/myProfile/MyProfileEdit";
+import DataPage from "pages/DataPage";
 
 function App() {
   const location = useLocation();
@@ -33,6 +34,7 @@ function App() {
           <Route path="/profile" element={<MyProfileEdit />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/regist" element={<RegistPage />} />
+          <Route path="/data" element={<DataPage />} />
         </Routes>
       </div>
     </>
