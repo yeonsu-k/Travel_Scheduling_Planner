@@ -59,7 +59,7 @@ function SearchList(props: SearchListType) {
   };
 
   const recommends = async () => {
-    await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, 1)).then((res) => {
+    await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, region.id)).then((res) => {
       setCardList(
         res.data.data.map((ele: getRecommendApiType) => {
           return {
