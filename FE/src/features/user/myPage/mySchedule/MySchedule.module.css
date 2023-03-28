@@ -4,14 +4,39 @@
   margin: 5vw;
 }
 
+.myScheduleTitle {
+  margin-left: 1%;
+}
+
+.myScheduleContainer {
+  margin-top: 1em;
+}
+
 .schedule {
+  display: flex;
+  justify-content: center;
+}
+
+.scheduleContainer {
   position: relative;
+  height: 16.5rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 4px 2px 8px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  margin: 0.5em 0;
+}
+
+@media screen and (min-width: 1400px) {
+  .scheduleContainer {
+    width: 1380px;
+  }
 }
 
 .scheduleDDAY {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 5px;
+  left: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,18 +45,8 @@
   border-radius: 50%;
   background-color: #26dbe1;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   z-index: 100;
-}
-
-.scheduleContainer {
-  height: 16.5rem;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 4px 2px 8px rgba(0, 0, 0, 0.06);
-  box-sizing: border-box;
-  margin: 2% 0 2% 0;
-  position: relative;
 }
 
 .scheduleImgContainer {
@@ -123,10 +138,14 @@
   padding-left: 15px;
 }
 
+.scheduleEditNameBtn {
+  cursor: pointer;
+}
+
 .scheduleBtn {
   padding: 15px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   justify-items: center;
 }
 

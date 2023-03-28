@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import { Avatar, Box, Menu, MenuItem, Stack, Button, Link, ButtonBase, Badge, IconButton } from "@mui/material";
@@ -17,6 +17,8 @@ import { setLogout, selectUserInfo } from "slices/authSlice";
 import { useAppSelector } from "app/hooks";
 import HeaderMobile from "./HeaderMobile";
 import MenuIcon from "@mui/icons-material/Menu";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -29,7 +31,7 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { login } = useSelector((state: rootState) => state.auth);
+  const { login, accessToken } = useSelector((state: rootState) => state.auth);
   const userInfo = useAppSelector(selectUserInfo);
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeOpen, setNoticeOpen] = useState(false);
@@ -73,6 +75,25 @@ function Header() {
   const toggleDrawer = (open: boolean) => {
     setDrawerOpen(open);
   };
+
+  const checkToken = async () => {
+    if (login) {
+      await Axios.post(api.auth.token(), {
+        accessToken: accessToken,
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log("토큰 에러:", err);
+          navigate("/login");
+        });
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   if (location.pathname == "/login" || location.pathname == "/regist") return null;
   else

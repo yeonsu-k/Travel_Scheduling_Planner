@@ -15,15 +15,4 @@ Axios.interceptors.request.use((config) => {
   return config;
 });
 
-Axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    // 토큰 만료 시
-    console.log("interceptor", error);
-    return Promise.reject(error);
-  },
-);
-
 export default Axios;
