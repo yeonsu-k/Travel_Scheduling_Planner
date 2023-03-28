@@ -26,6 +26,7 @@ import {
 import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import { useNavigate } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -39,7 +40,7 @@ interface sendScheduleListProps {
 
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const region = useAppSelector(selectRegion);
   const vehicle = useAppSelector(selectVehicle);
   const date = useAppSelector(selectDate);
@@ -306,6 +307,7 @@ const ScheduleEditPage = () => {
     Axios.post(api.createSchedule.schedule(), sendData)
       .then((res) => {
         console.log(res);
+        navigate("/mypage");
       })
       .catch((err) => {
         console.log(err);
