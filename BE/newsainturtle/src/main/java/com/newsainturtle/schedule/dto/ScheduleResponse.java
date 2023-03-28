@@ -12,7 +12,7 @@ public class ScheduleResponse {
 
     private String hostEmail;
 
-    private String scheduleRegion;
+    private Long regionId;
 
     private String scheduleName;
 

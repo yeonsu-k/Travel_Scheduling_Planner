@@ -29,9 +29,9 @@ class ScheduleMemberRepositoryTest {
             final String email = "test1@naver.com";
             //given
             final ScheduleMember scheduleMember = ScheduleMember.builder()
-                    .userEmail(email).schedule(1L).build();
+                    .userEmail(email).scheduleId(1L).build();
             final ScheduleMember scheduleMember2 = ScheduleMember.builder()
-                    .userEmail(email).schedule(2L).build();
+                    .userEmail(email).scheduleId(2L).build();
             scheduleMemberRepository.save(scheduleMember);
             scheduleMemberRepository.save(scheduleMember2);
             //when

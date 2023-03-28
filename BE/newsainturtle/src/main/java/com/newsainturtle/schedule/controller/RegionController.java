@@ -29,12 +29,22 @@ public class RegionController {
     }
 
     @GetMapping
-    @Operation(summary = "메인 지역 검색", description = "메인 지역을 검색합니다.")
-    public ResponseEntity<BaseResponse> findRegion() {
+    @Operation(summary = "메인 지역 전체 조회", description = "메인 지역 전체를 조회합니다.")
+    public ResponseEntity<BaseResponse> findRegionList() {
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 FIND_REGION_SUCCESS_MESSAGE,
-                regionService.findRegion())
+                regionService.findRegionList())
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("/{region_id}")
+    @Operation(summary = "메인 지역 상세 조회", description = "메인 지역을 상세 조회 합니다.")
+    public ResponseEntity<BaseResponse> findRegion(@PathVariable("region_id") Long regionId) {
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                FIND_REGION_SUCCESS_MESSAGE,
+                regionService.findRegion(regionId))
                 , HttpStatus.OK);
     }
 }

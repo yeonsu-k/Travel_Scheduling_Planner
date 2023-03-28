@@ -10,7 +10,7 @@ import java.util.*;
 @NoArgsConstructor
 public class ScheduleRequest {
 
-    private String scheduleRegion;
+    private Long regionId;
 
     private String scheduleName;
 

@@ -49,7 +49,7 @@ public class ScheduleService {
         isNullScheduleLocation(scheduleRequest.getScheduleLocationRequestList());
         Schedule schedule = Schedule.builder()
                 .hostEmail(email)
-                .scheduleRegion(scheduleRequest.getScheduleRegion())
+                .regionId(scheduleRequest.getRegionId())
                 .scheduleName(scheduleRequest.getScheduleName())
                 .isPrivate(scheduleRequest.isPrivate())
                 .scheduleStartDay(scheduleRequest.getScheduleStartDay())
@@ -78,7 +78,7 @@ public class ScheduleService {
         Schedule schedule = findScheduleById(scheduleId);
         return ScheduleResponse.builder()
                 .hostEmail(schedule.getHostEmail())
-                .scheduleRegion(schedule.getScheduleRegion())
+                .regionId(schedule.getRegionId())
                 .scheduleName(schedule.getScheduleName())
                 .isPrivate(schedule.isPrivate())
                 .scheduleStartDay(schedule.getScheduleStartDay())
