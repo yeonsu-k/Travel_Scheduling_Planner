@@ -15,7 +15,7 @@ public class ScheduleListResponse {
 
     private Long schedule_id;
     private String host;
-    private String region_name;
+    private Long regionId;
     private String schedule_name;
     private String start_day;
     private String end_day;
@@ -30,7 +30,7 @@ public class ScheduleListResponse {
         return schedule.map(value -> ScheduleListResponse.builder()
                 .schedule_id(value.getScheduleId())
                 .host(value.getHostEmail())
-                .region_name(value.getScheduleRegion())
+                .regionId(value.getRegionId())
                 .schedule_name(value.getScheduleName())
                 .start_day(value.getScheduleStartDay())
                 .end_day(value.getScheduleEndDay())
