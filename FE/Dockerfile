@@ -1,20 +1,23 @@
 FROM node:16.15.1 as build-stage
 WORKDIR /var/jenkins_home/workspace/TurtleProject/FE
 COPY package*.json ./
-#RUN npm install
-#COPY . .
-#RUN npm run build
+RUN npm install
+COPY . .
+RUN npm run build
 #CMD ["npm","run","start"]
 
-#FROM nginx:stable-alpine as production-stage
-#RUN mkdir /app
-#WORKDIR /app
+FROM nginx:stable-alpine as production-stage
+RUN mkdir /app
+WORKDIR /app
 #RUN mkdir ./dist
 #COPY --from=build-stage /var/jenkins_home/workspace/TurtleProject/FE/dist ./dist
-#COPY ./nginx.conf /etc/nginx/conf.d
-#EXPOSE 80
-#CMD ["nginx", "-g","daemon off;"]
+COPY ./nginx.conf /etc/nginx/conf.d
 
-RUN npm install -g serve
-COPY . .
-ENTRYPOINT ["serve", "-s", "build"]
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g","daemon off;"]
+
+#RUN npm install -g serve
+#COPY . .
+#ENTRYPOINT ["serve", "-s", "build"]
