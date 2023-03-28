@@ -1,8 +1,8 @@
 FROM node:16.15.1 as build-stage
 WORKDIR /var/jenkins_home/workspace/TurtleProject/FE
 COPY package*.json ./
-RUN npm install
-COPY . .
+#RUN npm install
+#COPY . .
 #RUN npm run build
 #FROM nginx:stable-alpine as production-stage
 #RUN mkdir /app
@@ -15,7 +15,6 @@ COPY . .
 #CMD ["npm","run","start"]
 RUN npm install -g serve
 
-RUN mkdir ./build
-COPY ./build ./build
+COPY . .
 
 ENTRYPOINT ["serve", "-s", "build"]
