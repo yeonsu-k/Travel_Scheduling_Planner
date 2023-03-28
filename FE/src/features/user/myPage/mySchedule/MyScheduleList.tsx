@@ -15,6 +15,7 @@ export interface MyScheduleConfig {
   mine: boolean;
   private: boolean;
   modifiedTime: string;
+  regionId: number;
 }
 
 const MyScheduleList = () => {
@@ -26,6 +27,7 @@ const MyScheduleList = () => {
     await Axios.get(api.user.getScheduleList())
       .then((res) => {
         setMySchedule(res.data.data);
+        console.log(res.data.data);
         setLoading(false);
       })
       .catch((err) => {
