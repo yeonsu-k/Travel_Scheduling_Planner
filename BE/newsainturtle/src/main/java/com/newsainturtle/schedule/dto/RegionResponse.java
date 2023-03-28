@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 public class RegionResponse {
 
+    private Long regionId;
+
     private String regionName;
 
     private String regionImageURL;
@@ -15,7 +17,8 @@ public class RegionResponse {
     private String contents;
 
     @Builder
-    public RegionResponse(String regionName, String regionImageURL, String englishName, String contents) {
+    public RegionResponse(Long regionId, String regionName, String regionImageURL, String englishName, String contents) {
+        this.regionId = regionId;
         this.regionName = regionName;
         this.regionImageURL = regionImageURL;
         this.englishName = englishName;
