@@ -9,13 +9,14 @@ import api from "api/Api";
 
 export interface DestinationConfig {
   regionName: string;
+  regionId: number;
   regionImageURL: string;
   englishName: string;
   contents: string;
 }
 
 const MainDestinationsList = () => {
-  const [destinations, setDestinations] = useState([]);
+  const [destinations, setDestinations] = useState<DestinationConfig[]>([]);
   const [input, setInput] = useState("");
   const upRef = useRef<HTMLDivElement>(null);
 

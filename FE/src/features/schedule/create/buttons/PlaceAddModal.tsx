@@ -65,7 +65,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
         latitude: gps.latitude,
         longitude: gps.longitude,
         isHotel: addCurrentTab == "호텔" ? 1 : 0,
-        regionId: 1, // 추후 수정 // 1(서울), 4(부산), 5(제주)
+        regionId: local.id,
       };
       Axios.post(api.createSchedule.customlocation(), data).then((res) => {
         setAddPlaceModal(false);
@@ -138,7 +138,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
               <Stack direction="row" spacing={1} justifyContent="space-between">
                 <Stack direction="row" width="100%" alignItems="baseline">
                   <Box width="10%" alignItems="left">
-                    {local}
+                    {local.name}
                   </Box>
                   <CssTextField inputRef={addressInfo} variant="filled" label="주소 검색" fullWidth />
                 </Stack>

@@ -23,7 +23,7 @@ function CreateMap() {
   const [markerListSize, setMarkerListSize] = useState(marker.length);
   const geocoder = new kakao.maps.services.Geocoder();
   const [centerPos, setCenterPos] = useState(() => {
-    geocoder.addressSearch(local, function (result: any[], status: string) {
+    geocoder.addressSearch(local.name, function (result: any[], status: string) {
       if (status === kakao.maps.services.Status.OK) {
         return { center: new kakao.maps.LatLng(result[0].y, result[0].x), level: 8 };
       }
@@ -34,7 +34,7 @@ function CreateMap() {
   const [markerInfo, setMarkerInfo] = useState<basicConfig>();
 
   useEffect(() => {
-    geocoder.addressSearch(local, function (result: any[], status: string) {
+    geocoder.addressSearch(local.name, function (result: any[], status: string) {
       if (status === kakao.maps.services.Status.OK) {
         setCenterPos({ center: new kakao.maps.LatLng(result[0].y, result[0].x), level: 8 });
       }

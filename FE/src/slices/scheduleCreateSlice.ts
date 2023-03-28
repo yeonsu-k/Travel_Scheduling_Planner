@@ -12,7 +12,10 @@ export interface basicConfig {
 }
 
 interface scheduleCreateConfig {
-  local: string;
+  local: {
+    id: number;
+    name: string;
+  };
   date: {
     start: string;
     end: string;
@@ -34,7 +37,10 @@ interface scheduleCreateConfig {
 }
 
 const initialState: scheduleCreateConfig = {
-  local: "서울",
+  local: {
+    id: 1,
+    name: "서울",
+  },
   date: {
     start: format(new Date(), "yyyy-MM-dd"),
     end: format(addDays(new Date(), 2), "yyyy-MM-dd"),

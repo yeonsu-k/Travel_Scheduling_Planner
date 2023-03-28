@@ -15,10 +15,15 @@ interface modalProps {
 const MainDestinationModal = ({ setModalOpen, item }: modalProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { regionName, regionImageURL, englishName, contents } = item;
+  const { regionId, regionName, regionImageURL, englishName, contents } = item;
 
   const moveToCreate = () => {
-    dispatch(setLocal(regionName));
+    dispatch(
+      setLocal({
+        id: regionId,
+        name: regionName,
+      }),
+    );
     navigate("/schedule/create");
   };
 

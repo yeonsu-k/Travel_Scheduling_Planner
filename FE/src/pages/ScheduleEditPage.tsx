@@ -39,6 +39,7 @@ interface sendScheduleListProps {
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
 
+  const local = useAppSelector(selectLocal);
   const date = useAppSelector(selectDate);
   const place = useAppSelector(selectPlaceList);
   const totalList = useAppSelector(selectTotalList);
@@ -288,9 +289,9 @@ const ScheduleEditPage = () => {
         scheduleList.push(scheduleItem);
       }
     });
-
+    // scheduleRegion: region,
     const sendData = {
-      scheduleRegion: region,
+      regionId: local.id,
       scheduleName: "",
       isPrivate: true,
       scheduleStartDay: date.start,
