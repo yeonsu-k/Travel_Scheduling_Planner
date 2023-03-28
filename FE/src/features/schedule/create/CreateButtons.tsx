@@ -5,12 +5,9 @@ import styles from "./Create.module.css";
 import { styled } from "@mui/material/styles";
 import PlaceAddModal from "./buttons/PlaceAddModal";
 import CreateScheduleModal from "./buttons/CreateScheduleModal";
-
-interface ScheduleCreatPropsType {
-  currentMove: string;
-  setCurrentMove: React.Dispatch<React.SetStateAction<string>>;
-  scheduleCreateClick: () => void;
-}
+import { useAppSelector } from "app/hooks";
+import { selectVehicle, setVehicle } from "slices/scheduleCreateSlice";
+import { useDispatch } from "react-redux";
 
 const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -21,20 +18,22 @@ const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-function CreateButtons(props: ScheduleCreatPropsType) {
-  const { currentMove, setCurrentMove, scheduleCreateClick } = props;
+function CreateButtons(props: { scheduleCreateClick: () => void }) {
+  const dispatch = useDispatch();
+  const vehicle = useAppSelector(selectVehicle);
+  const { scheduleCreateClick } = props;
   const [createScheduleModal, setCreateScheduleModal] = useState(false);
   const [addPlaceModal, setAddPlaceModal] = useState(false);
 
   const MoveArr = [
     {
       name: "car",
-      toolTip: "대중교통",
+      toolTip: "자동차",
       icon: <DirectionsCar />,
     },
     {
       name: "bus",
-      toolTip: "자동차",
+      toolTip: "대중교통",
       icon: <DirectionsSubway />,
     },
   ];
@@ -45,8 +44,8 @@ function CreateButtons(props: ScheduleCreatPropsType) {
         return (
           <TooltipStyled title={`이동수단:${ele.toolTip}`} placement="right" key={index}>
             <a
-              className={currentMove === ele.name ? `${styles.floatBtn} ${styles.floatBtn_On}` : `${styles.floatBtn}`}
-              onClick={() => setCurrentMove(ele.name)}
+              className={vehicle === ele.name ? `${styles.floatBtn} ${styles.floatBtn_On}` : `${styles.floatBtn}`}
+              onClick={() => dispatch(setVehicle(ele.name))}
             >
               {ele.icon}
             </a>

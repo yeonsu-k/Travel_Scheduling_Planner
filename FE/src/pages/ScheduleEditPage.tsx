@@ -21,6 +21,7 @@ import {
   selectPlaceList,
   selectPointPlace,
   selectTotalList,
+  selectVehicle,
 } from "slices/scheduleCreateSlice";
 import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
@@ -40,6 +41,7 @@ const ScheduleEditPage = () => {
   const dispatch = useDispatch();
 
   const region = useAppSelector(selectRegion);
+  const vehicle = useAppSelector(selectVehicle);
   const date = useAppSelector(selectDate);
   const place = useAppSelector(selectPlaceList);
   const totalList = useAppSelector(selectTotalList);
@@ -288,7 +290,7 @@ const ScheduleEditPage = () => {
         scheduleList.push(scheduleItem);
       }
     });
-    // scheduleRegion: region,
+
     const sendData = {
       regionId: region.id,
       scheduleName: "",
@@ -297,7 +299,7 @@ const ScheduleEditPage = () => {
       scheduleEndDay: date.end,
       scheduleStartLocation: pointPlace[0]?.address,
       scheduleEndLocation: pointPlace[1]?.address,
-      vehicle: "버스",
+      vehicle: vehicle,
       scheduleLocationRequestList: scheduleList,
     };
 
