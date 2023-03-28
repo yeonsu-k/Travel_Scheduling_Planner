@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./MySchedule.module.css";
 import Text from "components/Text";
 import ButtonStyled from "components/Button";
@@ -9,6 +9,7 @@ import api from "api/Api";
 import { Button } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import { DestinationConfig } from "features/main/MainDestinationsList";
 
 const getDate = (data: string) => {
   const date = new Date(data);
@@ -18,8 +19,29 @@ const getDate = (data: string) => {
   return year + "." + month + "." + day;
 };
 
+const getDday = (data: string) => {
+  const today = new Date();
+  const target = new Date(data);
+  // const target = new Date("Mar 31, 2023, 00:00:00");
+  const gap = target > today ? target.getTime() - today.getTime() : today.getTime() - target.getTime();
+  const result = Math.floor(gap / (1000 * 60 * 60 * 24));
+  return result == 0 ? "D-DAY" : target > today ? `D-${result + 1}` : `D+${result}`;
+  return result;
+};
+
 const MyScheduleListItem = (item: MyScheduleConfig) => {
   const [scheduleName, setScheduleName] = useState<string>(item.schedule_name);
+  const [regionInfo, setRegionInfo] = useState<DestinationConfig>();
+
+  const getRegionInfo = async () => {
+    await Axios.get(api.createSchedule.getRegion(item.regionId))
+      .then((res) => {
+        setRegionInfo(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const modifyName = async () => {
     await Axios.post(api.user.schedule(item.schedule_id), {
@@ -58,14 +80,18 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
     }
   };
 
+  useEffect(() => {
+    getRegionInfo();
+  }, []);
+
   return (
     <div className={styles.schedule}>
       <div className={styles.scheduleContainer}>
         <div className={styles.scheduleImgContainer}>
-          <img className={styles.scheduleImg} src="https://myro.co.kr/myro_image/city/busan.jpg" alt="" />
+          <img className={styles.scheduleImg} src={regionInfo?.regionImageURL} alt="지역 사진" />
           <div className={styles.scheduleInfo}>
-            <Text value="BUSAN" type="groupTitle" bold />
-            <span className={styles.scheduleInfoRegion}>{item.region_name}</span>
+            <Text value={regionInfo?.englishName} type="groupTitle" bold />
+            <span className={styles.scheduleInfoRegion}>{regionInfo?.regionName}</span>
             <span className={styles.scheduleInfoEmail}>{item.host}</span>
           </div>
         </div>
@@ -124,7 +150,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             <ButtonStyled text="일정 삭제" onClick={deleteSchedule} />
           </div>
         </div>
-        <div className={styles.scheduleDDAY}>D-18</div>
+        <div className={styles.scheduleDDAY}>{getDday(item.start_day)}</div>
       </div>
     </div>
   );

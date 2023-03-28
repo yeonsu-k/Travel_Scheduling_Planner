@@ -4,12 +4,21 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-FROM nginx:stable-alpine as production-stage
+#CMD ["npm","run","start"]
+
+#FROM nginx:stable-alpine as production-stage
+FROM nginx
 RUN mkdir /app
 WORKDIR /app
-RUN mkdir ./dist
-COPY --from=build-stage /var/jenkins_home/workspace/Da_Ta_Project_Front/frontend/dist ./dist
+#RUN mkdir ./dist
+#COPY --from=build-stage /var/jenkins_home/workspace/TurtleProject/FE/dist ./dist
 COPY ./nginx.conf /etc/nginx/conf.d
+
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g","daemon off;"]
-#CMD ["npm","run","start"]
+
+#RUN npm install -g serve
+#COPY . .
+#ENTRYPOINT ["serve", "-s", "build"]

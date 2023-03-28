@@ -10,6 +10,7 @@ import MyProfileEdit from "features/user/myPage/myProfile/MyProfileEdit";
 import ScheduleRouter from "features/schedule/ScheduleRouter";
 import NotFound from "pages/NotFound";
 import AuthRoute from "./AuthRoute";
+import DataPage from "pages/DataPage";
 
 function App() {
   const location = useLocation();
@@ -36,6 +37,8 @@ function App() {
           <Route path="/schedule/*" element={<AuthRoute component={<ScheduleRouter />} />} />
 
           <Route path="*" element={<NotFound />} />
+
+          <Route path="/data" element={<DataPage />} />
         </Routes>
       </div>
     </>
