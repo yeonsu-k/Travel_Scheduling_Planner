@@ -8,7 +8,7 @@ import { Stack, TextField, Typography, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ImageMap from "./ImageMap";
 import { useAppSelector } from "app/hooks";
-import { selectLocal } from "slices/scheduleCreateSlice";
+import { selectRegion } from "slices/scheduleCreateSlice";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 
@@ -36,7 +36,7 @@ const CssTextField = styled(TextField)({
 
 function ButtonsAddModal(props: ButtonsAddModalType) {
   const { setAddPlaceModal } = props;
-  const local = useAppSelector(selectLocal);
+  const region = useAppSelector(selectRegion);
   const addressInfo = useRef<HTMLInputElement>(null);
   const [addCurrentTab, setAddCurrentTab] = useState("장소");
   const [openAddToast, setOpenAddToast] = useState(false);
@@ -65,7 +65,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
         latitude: gps.latitude,
         longitude: gps.longitude,
         isHotel: addCurrentTab == "호텔" ? 1 : 0,
-        regionId: local.id,
+        regionId: region.id,
       };
       Axios.post(api.createSchedule.customlocation(), data).then((res) => {
         setAddPlaceModal(false);
@@ -77,7 +77,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
     // 장소 검색
     if (addressInfo.current) {
       setSearchBtnClick(true);
-      setAddressValue(local + " " + addressInfo.current.value);
+      setAddressValue(region + " " + addressInfo.current.value);
     }
   };
 
@@ -138,7 +138,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
               <Stack direction="row" spacing={1} justifyContent="space-between">
                 <Stack direction="row" width="100%" alignItems="baseline">
                   <Box width="10%" alignItems="left">
-                    {local.name}
+                    {region.name}
                   </Box>
                   <CssTextField inputRef={addressInfo} variant="filled" label="주소 검색" fullWidth />
                 </Stack>

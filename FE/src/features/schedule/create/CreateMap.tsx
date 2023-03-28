@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { basicConfig, selectLocal, selectMarker } from "slices/scheduleCreateSlice";
+import { basicConfig, selectMarker, selectRegion } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
 import styles from "./Create.module.css";
 import hotelImage from "asset/markerHotel.png";
@@ -17,13 +17,13 @@ declare global {
 const { kakao } = window;
 
 function CreateMap() {
-  const local = useAppSelector(selectLocal);
+  const region = useAppSelector(selectRegion);
   const marker = useAppSelector(selectMarker);
   const mainMap = useRef<HTMLInputElement>(null);
   const [markerListSize, setMarkerListSize] = useState(marker.length);
   const geocoder = new kakao.maps.services.Geocoder();
   const [centerPos, setCenterPos] = useState(() => {
-    geocoder.addressSearch(local.name, function (result: any[], status: string) {
+    geocoder.addressSearch(region.name, function (result: any[], status: string) {
       if (status === kakao.maps.services.Status.OK) {
         return { center: new kakao.maps.LatLng(result[0].y, result[0].x), level: 8 };
       }
@@ -34,12 +34,12 @@ function CreateMap() {
   const [markerInfo, setMarkerInfo] = useState<basicConfig>();
 
   useEffect(() => {
-    geocoder.addressSearch(local.name, function (result: any[], status: string) {
+    geocoder.addressSearch(region.name, function (result: any[], status: string) {
       if (status === kakao.maps.services.Status.OK) {
         setCenterPos({ center: new kakao.maps.LatLng(result[0].y, result[0].x), level: 8 });
       }
     });
-  }, [local]);
+  }, [region]);
 
   useEffect(() => {
     // 마커 리스트에서 가장 마지막 위치를 기준으로 중심 좌표 바꿔주기

@@ -1,5 +1,5 @@
 import React from "react";
-import { selectLocal, setLocal } from "slices/scheduleCreateSlice";
+import { selectRegion, setRegion } from "slices/scheduleCreateSlice";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Info.module.css";
 import Modal from "components/Modal";
@@ -9,7 +9,7 @@ import { Stack } from "@mui/system";
 
 function InfoLocal() {
   const dispatch = useAppDispatch();
-  const local = useAppSelector(selectLocal);
+  const region = useAppSelector(selectRegion);
   const [ModalOpen, setModalOpen] = React.useState(false);
   const [searchLocal, setSearchLocal] = React.useState({
     id: 1,
@@ -29,13 +29,13 @@ function InfoLocal() {
   };
 
   const savePlace = () => {
-    dispatch(setLocal(searchLocal));
+    dispatch(setRegion(searchLocal));
     setModalOpen(false);
   };
   return (
     <div className={styles.content}>
       <Stack alignItems="center" onClick={showModal} sx={{ cursor: "pointer" }}>
-        <span className={styles.localText}>{local.name}</span>
+        <span className={styles.localText}>{region.name}</span>
         <span className={styles.localText_en}>Busan</span>
       </Stack>
       {ModalOpen && (

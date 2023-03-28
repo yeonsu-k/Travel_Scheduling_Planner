@@ -12,7 +12,7 @@ export interface basicConfig {
 }
 
 interface scheduleCreateConfig {
-  local: {
+  region: {
     id: number;
     name: string;
   };
@@ -37,7 +37,7 @@ interface scheduleCreateConfig {
 }
 
 const initialState: scheduleCreateConfig = {
-  local: {
+  region: {
     id: 1,
     name: "서울",
   },
@@ -56,8 +56,8 @@ const scheduleCreateSlice = createSlice({
   name: "scheduleCreate",
   initialState,
   reducers: {
-    setLocal: (state, action: PayloadAction<scheduleCreateConfig["local"]>) => {
-      state.local = action.payload;
+    setRegion: (state, action: PayloadAction<scheduleCreateConfig["region"]>) => {
+      state.region = action.payload;
     },
     setDate: (state, action: PayloadAction<scheduleCreateConfig["date"]>) => {
       state.date = action.payload;
@@ -112,7 +112,7 @@ const scheduleCreateSlice = createSlice({
   },
 });
 export const {
-  setLocal,
+  setRegion,
   setDate,
   setHotelList,
   setPlaceList,
@@ -123,7 +123,7 @@ export const {
   setTotalList,
 } = scheduleCreateSlice.actions;
 
-export const selectLocal = (state: rootState) => state.scheduleCreate.local;
+export const selectRegion = (state: rootState) => state.scheduleCreate.region;
 export const selectDate = (state: rootState) => state.scheduleCreate.date;
 export const selectHotelList = (state: rootState) => state.scheduleCreate.hotel;
 export const selectPlaceList = (state: rootState) => state.scheduleCreate.place;
