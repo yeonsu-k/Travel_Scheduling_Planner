@@ -115,73 +115,73 @@ function Header() {
               </span>
             )}
 
-            <Box sx={{ flexGrow: 0 }}>
-              <ButtonBase onClick={handleOpenNotice} disableRipple>
-                <IconButton
-                  sx={{ color: location.pathname == "/" && scrollPosition < 200 ? "white" : "black" }}
-                  disableRipple
-                >
-                  <Badge color="error" overlap="circular" badgeContent={1} variant="dot">
-                    <Notifications />
-                  </Badge>
-                </IconButton>
-              </ButtonBase>
-              <Menu
-                sx={{
-                  cursor: "pointer",
-                  "& .MuiList-root": {
-                    pt: 0,
-                    pb: 0,
-                  },
-                }}
-                anchorEl={anchorElNotice}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                PaperProps={{
-                  elevation: 0,
-                  sx: {
-                    overflow: "visible",
-                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                    mt: 1,
-                    ml: 0,
-                    "& .MuiAvatar-root": {
-                      width: 32,
-                      height: 32,
-                      mr: 1,
-                    },
-                    "&:before": {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      top: 0,
-                      right: 10,
-                      width: 10,
-                      height: 10,
-                      bgcolor: "background.paper",
-                      transform: "translateY(-50%)  rotate(45deg)",
-                      zIndex: 0,
-                    },
-                  },
-                }}
-                open={Boolean(anchorElNotice)}
-                onClose={handleCloseNotice}
-              >
-                <MenuItem onClick={handleCloseNotice}>
-                  {/* <Modal title="알림" modalClose={handleCloseNotice}> */}
-                  <Notice />
-                  {/* </Modal> */}
-                </MenuItem>
-              </Menu>
-            </Box>
             {login ? (
               <>
+                <Box sx={{ flexGrow: 0 }}>
+                  <ButtonBase onClick={handleOpenNotice} disableRipple>
+                    <IconButton
+                      sx={{ color: location.pathname == "/" && scrollPosition < 200 ? "white" : "black" }}
+                      disableRipple
+                    >
+                      <Badge color="error" overlap="circular" badgeContent={1} variant="dot">
+                        <Notifications />
+                      </Badge>
+                    </IconButton>
+                  </ButtonBase>
+                  <Menu
+                    sx={{
+                      cursor: "pointer",
+                      "& .MuiList-root": {
+                        pt: 0,
+                        pb: 0,
+                      },
+                    }}
+                    anchorEl={anchorElNotice}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        overflow: "visible",
+                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                        mt: 1,
+                        ml: 0,
+                        "& .MuiAvatar-root": {
+                          width: 32,
+                          height: 32,
+                          mr: 1,
+                        },
+                        "&:before": {
+                          content: '""',
+                          display: "block",
+                          position: "absolute",
+                          top: 0,
+                          right: 10,
+                          width: 10,
+                          height: 10,
+                          bgcolor: "background.paper",
+                          transform: "translateY(-50%)  rotate(45deg)",
+                          zIndex: 0,
+                        },
+                      },
+                    }}
+                    open={Boolean(anchorElNotice)}
+                    onClose={handleCloseNotice}
+                  >
+                    <MenuItem onClick={handleCloseNotice}>
+                      {/* <Modal title="알림" modalClose={handleCloseNotice}> */}
+                      <Notice />
+                      {/* </Modal> */}
+                    </MenuItem>
+                  </Menu>
+                </Box>
                 <Box sx={{ flexGrow: 0 }}>
                   <ButtonBase onClick={handleOpenUserMenu} disableRipple>
                     <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{userInfo.nickname.slice(0, 1)}</AvatarStyled>
