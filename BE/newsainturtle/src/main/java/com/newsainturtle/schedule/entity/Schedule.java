@@ -30,8 +30,8 @@ public class Schedule {
     @Column(name = "host_email")
     private String hostEmail;
 
-    @Column(name = "schedule_region", length = 20)
-    private String scheduleRegion;
+    @Column(name = "region_id")
+    private Long regionId;
 
     @Column(name = "schedule_name", length = 20)
     private String scheduleName;
@@ -67,11 +67,11 @@ public class Schedule {
     private List<ScheduleLocation> scheduleLocations = new ArrayList<>();
 
     @Builder
-    public Schedule(String hostEmail, String scheduleRegion, String scheduleName, boolean isPrivate, String scheduleStartDay,
+    public Schedule(String hostEmail, Long regionId, String scheduleName, boolean isPrivate, String scheduleStartDay,
                     String scheduleEndDay, String scheduleStartLocation, String scheduleEndLocation, String vehicle,
                     List<ScheduleLocation> scheduleLocations) {
         this.hostEmail = hostEmail;
-        this.scheduleRegion = scheduleRegion;
+        this.regionId = regionId;
         this.scheduleName = scheduleName;
         this.isPrivate = isPrivate;
         this.scheduleStartDay = scheduleStartDay;
@@ -87,18 +87,5 @@ public class Schedule {
 
     public void changeIsPrivate() {
         this.isPrivate = !(this.isPrivate);
-    }
-    public void updatePeriod(SchedulePeriodRequest schedulePeriodRequest){
-        this.scheduleStartDay = schedulePeriodRequest.getStart_day();
-        this.scheduleEndDay = schedulePeriodRequest.getEnd_day();
-    }
-
-    public void updateStartEndLocation(ScheduleStartEndLocationRequest scheduleStartEndLocationRequest) {
-        this.scheduleStartLocation = scheduleStartEndLocationRequest.getStartLocation();
-        this.scheduleEndLocation = scheduleStartEndLocationRequest.getEndLocation();
-    }
-
-    public void updateVehicle(ScheduleVehicleRequest scheduleVehicleRequest) {
-        this.vehicle = scheduleVehicleRequest.getVehicle();
     }
 }
