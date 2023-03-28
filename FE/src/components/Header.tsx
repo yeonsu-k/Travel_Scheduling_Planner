@@ -91,7 +91,7 @@ function Header() {
     return (
       <header>
         <div
-          className={`${styles.wrapper} ${scrollPosition < 200 ? "" : styles.isScroll}`}
+          className={`${styles.wrapper} ${location.pathname == "/" && scrollPosition < 200 ? "" : styles.isScroll}`}
           style={location.pathname.includes("schedule") ? { position: "static" } : { position: "fixed" }}
         >
           <NavLink to="/" className={styles.link}>
