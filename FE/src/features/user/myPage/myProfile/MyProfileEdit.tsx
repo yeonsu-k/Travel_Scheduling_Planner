@@ -68,6 +68,7 @@ const MyProfileEdit = () => {
         .then((res: any) => {
           console.log(res);
           dispatch(setLogout());
+          alert("탈퇴가 완료되었습니다.");
           navigate("/");
         })
         .catch((err) => {
