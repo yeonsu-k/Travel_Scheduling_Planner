@@ -12,7 +12,8 @@ FROM nginx
 #WORKDIR /app
 #RUN mkdir ./dist
 #COPY --from=build-stage /var/jenkins_home/workspace/TurtleProject/FE/dist ./dist
-COPY ./nginx.conf /etc/nginx/conf.d
+RUN rm -rf /etc/nginx/conf.d/defalut.conf
+COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
 
 #RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build-stage /var/jenkins_home/workspace/TurtleProject/FE/build /usr/share/nginx/html
