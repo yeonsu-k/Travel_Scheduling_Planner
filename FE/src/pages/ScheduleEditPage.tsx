@@ -21,10 +21,12 @@ import {
   selectPlaceList,
   selectPointPlace,
   selectTotalList,
+  selectVehicle,
 } from "slices/scheduleCreateSlice";
 import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import { useNavigate } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -38,8 +40,9 @@ interface sendScheduleListProps {
 
 const ScheduleEditPage = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const region = useAppSelector(selectRegion);
+  const vehicle = useAppSelector(selectVehicle);
   const date = useAppSelector(selectDate);
   const place = useAppSelector(selectPlaceList);
   const totalList = useAppSelector(selectTotalList);
@@ -288,7 +291,7 @@ const ScheduleEditPage = () => {
         scheduleList.push(scheduleItem);
       }
     });
-    // scheduleRegion: region,
+
     const sendData = {
       regionId: region.id,
       scheduleName: "",
@@ -297,13 +300,14 @@ const ScheduleEditPage = () => {
       scheduleEndDay: date.end,
       scheduleStartLocation: pointPlace[0]?.address,
       scheduleEndLocation: pointPlace[1]?.address,
-      vehicle: "버스",
+      vehicle: vehicle,
       scheduleLocationRequestList: scheduleList,
     };
 
     Axios.post(api.createSchedule.schedule(), sendData)
       .then((res) => {
         console.log(res);
+        navigate("/mypage");
       })
       .catch((err) => {
         console.log(err);
