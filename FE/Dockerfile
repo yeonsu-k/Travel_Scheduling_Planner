@@ -8,8 +8,8 @@ RUN npm run build
 
 #FROM nginx:stable-alpine as production-stage
 FROM nginx
-RUN mkdir /app
-WORKDIR /app
+#RUN mkdir /app
+#WORKDIR /app
 #RUN mkdir ./dist
 #COPY --from=build-stage /var/jenkins_home/workspace/TurtleProject/FE/dist ./dist
 COPY ./nginx.conf /etc/nginx/conf.d
