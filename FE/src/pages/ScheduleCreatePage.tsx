@@ -21,12 +21,11 @@ function ScheduleCreatePage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState("호텔");
-  const [currentMove, setCurrentMove] = useState("car");
   const [hotelCurrentDay, setHotelCurrentDay] = useState(0);
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
 
   const scheduleCreateClick = () => {
-    // 일정 생성 버튼 클릭시 API
+    // 일정 생성 버튼 클릭시 장소 세팅 API
     dispatch(setTotalList());
     navigate("/schedule/edit");
   };
@@ -45,11 +44,7 @@ function ScheduleCreatePage() {
           />
         </Grid>
         <Grid item xs={4.3} sx={{ position: "relative" }}>
-          <CreateButtons
-            currentMove={currentMove}
-            setCurrentMove={setCurrentMove}
-            scheduleCreateClick={scheduleCreateClick}
-          />
+          <CreateButtons scheduleCreateClick={scheduleCreateClick} />
           <CreateMap />
         </Grid>
         <Grid item xs={1}>

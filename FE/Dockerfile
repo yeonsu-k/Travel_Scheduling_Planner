@@ -8,17 +8,17 @@ RUN npm run build
 
 #FROM nginx:stable-alpine as production-stage
 FROM nginx
-RUN mkdir /app
-WORKDIR /app
+#RUN mkdir /app
+#WORKDIR /app
 #RUN mkdir ./dist
 #COPY --from=build-stage /var/jenkins_home/workspace/TurtleProject/FE/dist ./dist
 COPY ./nginx.conf /etc/nginx/conf.d
 
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build /app/build /usr/share/nginx/html
+#RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build-stage /var/jenkins_home/workspace/TurtleProject/FE/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g","daemon off;"]
 
 #RUN npm install -g serve
 #COPY . .
-#ENTRYPOINT ["serve", "-s", "build"]
+#CMD ["npx", "serve", "-s", "build"]
