@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useRef, useState, Dispatch, SetStateAction } from "react";
 import Input from "components/Input";
 import Text from "components/Text";
 import Button from "components/Button";
@@ -11,17 +11,22 @@ import api from "api/Api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { passRep } from "features/user/regist/Regist";
+import EditIcon from "@mui/icons-material/Edit";
 
 const MyProfileEdit = () => {
   const userInfo = useAppSelector(selectUserInfo);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [nickname, setNickname] = useState<string>(userInfo.nickname);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false); // 새 비밀번호 형식
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(false); // 맞는지
+
+  const [newPic, setNewPic] = useState<Blob>();
+  const [imgPreview, setImgPreview] = useState<string>("");
 
   const passCheck = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
@@ -31,6 +36,30 @@ const MyProfileEdit = () => {
   const passCheckConfirm = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value === newPassword ? setIsPasswordConfirm(true) : setIsPasswordConfirm(false);
     console.log(isPasswordConfirm);
+  };
+
+  const handleImageUpload = useCallback(() => {
+    if (!inputRef.current) return;
+    inputRef.current.click();
+  }, []);
+
+  const onUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    console.log(e.target.files[0]);
+    setNewPic(e.target.files[0]);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onloadend = () => {
+      console.log(reader.result);
+      setImgPreview(reader.result as string);
+    };
+  };
+
+  const onUploadProfile = async () => {
+    // await Axios.post(api.user.editProfile()s);
   };
 
   const saveInfo = async () => {
@@ -81,9 +110,26 @@ const MyProfileEdit = () => {
     <div className={styles.profileWrapper}>
       <div className={styles.profileContainer}>
         <div className={styles.profileTopContainer}>
-          <div className={styles.profileImgContainer}>
-            <div className={styles.profileImgText}>{userInfo.nickname.slice(0, 1)}</div>
+          <div
+            className={styles.profileImgContainer}
+            style={{ backgroundColor: userInfo.profile || imgPreview ? "transparent" : "black" }}
+          >
+            {imgPreview ? (
+              <img src={imgPreview} alt="프리뷰" />
+            ) : userInfo.profile ? (
+              <img src={userInfo.profile} alt="프로필" />
+            ) : (
+              <>
+                {/* 프로필 없을 때 && 프리뷰 없을 때 */}
+                <input type="file" style={{ display: "none" }} ref={inputRef} onChange={onUploadImage} />
+                <div className={styles.profileImgText}>{userInfo.nickname.slice(0, 1)}</div>
+              </>
+            )}
+            <div className={styles.profileEditBtn} onClick={handleImageUpload}>
+              <EditIcon fontSize="small" />
+            </div>
           </div>
+          <Button text="버튼" color="main" onClick={onUploadProfile} />
           <div className={styles.profileUser}>
             <Text value={userInfo.nickname} type="pageTitle" bold />
           </div>
