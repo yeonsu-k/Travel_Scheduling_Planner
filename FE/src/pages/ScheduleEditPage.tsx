@@ -27,8 +27,26 @@ import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+import PlaceAddModal from "features/schedule/create/buttons/PlaceAddModal";
+import CreateSearch from "features/schedule/create/CreateSearch";
+import hotelImage from "asset/markerHotel.png";
+import placeImage from "asset/markerPlace.png";
+import pointImage from "asset/markerPoint.png";
+import CloseIcon from "@mui/icons-material/Close";
 
 const { kakao } = window;
+
+const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.black,
+    fontSize: 13,
+  },
+}));
 
 interface sendScheduleListProps {
   locationId: number;
@@ -46,6 +64,15 @@ const ScheduleEditPage = () => {
   const date = useAppSelector(selectDate);
   const place = useAppSelector(selectPlaceList);
   const totalList = useAppSelector(selectTotalList);
+  const fullScheduleList = useAppSelector(selectFullScheduleList);
+  const keepPlaceList = useAppSelector(selectKeepPlaceList);
+  const pointPlace = useAppSelector(selectPointPlace);
+  const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
+  const [addPlaceModal, setAddPlaceModal] = useState(false);
+  const [viewSearchBar, setViewSearchBar] = useState(false);
+  const [currentTab, setCurrentTab] = useState("호텔");
+  const [hotelCurrentDay, setHotelCurrentDay] = useState(0);
+  const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
@@ -53,11 +80,6 @@ const ScheduleEditPage = () => {
   const [originPosition, setOriginPosition] = useState({ x: 0, y: 0 }); // 드래그 전 포지션 값 (e.target.offset의 상대 위치)
   const [clientPosition, setClientPosition] = useState({ x: 0, y: 0 }); // 실시간 커서 위치인 e.client를 갱신하는 값
   const [position, setPosition] = useState({ left: 20, top: 100 }); //실제 드래그 할 요소가 위치하는 포지션 값
-
-  const fullScheduleList = useAppSelector(selectFullScheduleList);
-  const keepPlaceList = useAppSelector(selectKeepPlaceList);
-  const pointPlace = useAppSelector(selectPointPlace);
-  const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
 
   const setMap = () => {
     const container = document.getElementById("map");
@@ -335,6 +357,35 @@ const ScheduleEditPage = () => {
           <a className={styles.saveScheduleBtn} onClick={onClickSaveSchedule}>
             일정저장
           </a>
+
+          <TooltipStyled title="장소를 검색하여 일정에 추가" placement="left">
+            <div className={styles.searchPlaceBtn} onClick={() => setViewSearchBar(true)}>
+              <SearchIcon />
+            </div>
+          </TooltipStyled>
+          {viewSearchBar && (
+            <div className={styles.searchList}>
+              <div style={{ float: "right", cursor: "pointer" }} onClick={() => setViewSearchBar(false)}>
+                <CloseIcon fontSize="medium" />
+              </div>
+
+              <CreateSearch
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+                hotelCurrentDay={hotelCurrentDay}
+                setHotelCurrentDay={setHotelCurrentDay}
+                placeCurrentDay={placeCurrentDay}
+                setPlaceCurrentDay={setPlaceCurrentDay}
+              />
+            </div>
+          )}
+
+          <TooltipStyled title="장소를 등록하여 일정에 추가" placement="left">
+            <div className={styles.addPlaceBtn} onClick={() => setAddPlaceModal(true)}>
+              <AddLocationAltIcon />
+            </div>
+          </TooltipStyled>
+          {addPlaceModal && <PlaceAddModal setAddPlaceModal={setAddPlaceModal} />}
 
           <div
             className={styles.keepPlaces}

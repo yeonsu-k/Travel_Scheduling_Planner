@@ -18,6 +18,8 @@ import Modal from "@mui/material/Modal";
 import Text from "components/Text";
 import SearchCardInfoModal from "./SearchCardInfoModal";
 import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
+import { useLocation } from "react-router-dom";
+import { selectKeepPlaceList, setKeepPlaceList } from "slices/scheduleEditSlice";
 
 interface SearchListCardType {
   cardInfo: basicConfig;
@@ -27,10 +29,12 @@ interface SearchListCardType {
 
 function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCardType) {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const hotel = useAppSelector(selectHotelList);
   const place = useAppSelector(selectPlaceList);
   const pointPlace = useAppSelector(selectPointPlace);
   const marker = useAppSelector(selectMarker);
+  const keepPlaceList = useAppSelector(selectKeepPlaceList);
   const [ModalOpen, setModalOpen] = useState(false);
   const { hotelCurrentDay, placeCurrentDay, setCurrentTab, setHotelCurrentDay, setPlaceCurrentDay } =
     scheduleCreatProps;
@@ -92,6 +96,12 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
     }
   };
 
+  const AddKeepList = () => {
+    const item = cardInfo;
+    console.log(cardInfo);
+    dispatch(setKeepPlaceList([...keepPlaceList, cardInfo]));
+  };
+
   return (
     <div className={styles.card}>
       <img src={cardInfo.image} alt="" />
@@ -103,7 +113,18 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
           <IconButton disableRipple sx={{ padding: "0px" }} onClick={() => setModalOpen(true)}>
             <Info fontSize="small" className={styles.info_icon} />
           </IconButton>
-          <IconButton size="small" disableRipple onClick={() => InfoAddClick()}>
+          <IconButton
+            size="small"
+            disableRipple
+            onClick={() => {
+              console.log("path", location.pathname);
+              if (location.pathname == "/schedule/create") {
+                InfoAddClick();
+              } else {
+                AddKeepList();
+              }
+            }}
+          >
             <Add fontSize="small" className={styles.add_icon} />
           </IconButton>
         </div>
