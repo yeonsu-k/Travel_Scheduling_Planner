@@ -6,17 +6,12 @@ import Text from "components/Text";
 import Button from "components/Button";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-
-export interface DestinationConfig {
-  regionId: number;
-  regionName: string;
-  regionImageURL: string;
-  englishName: string;
-  contents: string;
-}
+import { DestinationConfig, selectDestinationList, setDestinationList } from "slices/mainSlice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "app/hooks";
 
 const MainDestinationsList = () => {
-  const [destinations, setDestinations] = useState([]);
+  const destinations: DestinationConfig[] = useAppSelector(selectDestinationList);
   const [input, setInput] = useState("");
   const upRef = useRef<HTMLDivElement>(null);
 
@@ -24,23 +19,10 @@ const MainDestinationsList = () => {
     if (upRef.current) upRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const getDestination = async () => {
-    await Axios.get(api.createSchedule.mainPlace())
-      .then((res) => {
-        setDestinations(res.data.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const filtered = destinations.filter((item: DestinationConfig) =>
-    item.regionName.replaceAll(" ", "").includes(input),
-  );
-
-  useEffect(() => {
-    getDestination();
-  }, []);
+  const filtered = destinations.filter((item: DestinationConfig) => {
+    const name = "대한민국" + item.regionName;
+    return name.includes(input);
+  });
 
   return (
     <div>

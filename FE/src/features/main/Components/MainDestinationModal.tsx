@@ -2,10 +2,10 @@ import React, { Dispatch, SetStateAction, useEffect } from "react";
 import styles from "../Main.module.css";
 import Text from "components/Text";
 import Button from "components/Button";
-import { DestinationConfig } from "../MainDestinationsList";
 import { useDispatch } from "react-redux";
 import { setRegion } from "slices/scheduleCreateSlice";
 import { useNavigate } from "react-router-dom";
+import { DestinationConfig } from "slices/mainSlice";
 
 interface modalProps {
   setModalOpen: Dispatch<SetStateAction<boolean>>;
