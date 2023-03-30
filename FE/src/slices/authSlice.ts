@@ -10,7 +10,8 @@ interface authConfig {
 
 interface userInfoConfig {
   email: string;
-  nickname: "";
+  nickname: string;
+  profile: string;
 }
 
 const initialState: authConfig = {
@@ -19,6 +20,7 @@ const initialState: authConfig = {
   userInfo: {
     email: "",
     nickname: "",
+    profile: "",
   },
 };
 
