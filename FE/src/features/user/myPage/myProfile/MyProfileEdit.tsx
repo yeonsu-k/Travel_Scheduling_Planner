@@ -1,10 +1,12 @@
-import React, { ChangeEvent, useCallback, useRef, useState, Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, useCallback, useRef, useState } from "react";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { storage } from "../../../../api/firebaseConfig";
 import Input from "components/Input";
 import Text from "components/Text";
 import Button from "components/Button";
 import styles from "./MyProfile.module.css";
 import loginStyles from "../../login/Login.module.css";
-import { selectUserInfo, setLogout } from "slices/authSlice";
+import { selectUserInfo, setLogout, setUserInfo } from "slices/authSlice";
 import { useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
@@ -28,6 +30,10 @@ const MyProfileEdit = () => {
   const [newPic, setNewPic] = useState<Blob>();
   const [imgPreview, setImgPreview] = useState<string>("");
 
+  /* firebase */
+  const [imageURL, setImageURL] = useState<string>("");
+  /* -- firebase */
+
   const passCheck = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
     passRep.test(newPassword) ? setIsPassword(true) : setIsPassword(false);
@@ -47,19 +53,32 @@ const MyProfileEdit = () => {
     if (!e.target.files) {
       return;
     }
-    console.log(e.target.files[0]);
-    setNewPic(e.target.files[0]);
 
-    const reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    reader.onloadend = () => {
-      console.log(reader.result);
-      setImgPreview(reader.result as string);
-    };
+    const file = e.target.files;
+    const storageRef = ref(storage, `file/${file[0].name}`);
+    const uploadTask = uploadBytes(storageRef, file[0]);
+
+    uploadTask.then((snapshot) => {
+      e.target.value = "";
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        onUploadProfile(downloadURL);
+        setImgPreview(downloadURL);
+      });
+    });
   };
 
-  const onUploadProfile = async () => {
-    // await Axios.post(api.user.editProfile()s);
+  const onUploadProfile = async (downloadURL: string) => {
+    await Axios.post(api.user.editProfile(), {
+      path: downloadURL,
+    })
+      .then((res) => {
+        console.log(res);
+        alert("프로필 이미지 변경이 완료되었습니다.");
+        dispatch(setUserInfo({ profile: downloadURL }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const saveInfo = async () => {
@@ -112,24 +131,20 @@ const MyProfileEdit = () => {
         <div className={styles.profileTopContainer}>
           <div
             className={styles.profileImgContainer}
-            style={{ backgroundColor: userInfo.profile || imgPreview ? "transparent" : "black" }}
+            style={{ backgroundColor: userInfo.profile || imgPreview ? "transparent" : "#63C6E6" }}
           >
             {imgPreview ? (
               <img src={imgPreview} alt="프리뷰" />
             ) : userInfo.profile ? (
               <img src={userInfo.profile} alt="프로필" />
             ) : (
-              <>
-                {/* 프로필 없을 때 && 프리뷰 없을 때 */}
-                <input type="file" style={{ display: "none" }} ref={inputRef} onChange={onUploadImage} />
-                <div className={styles.profileImgText}>{userInfo.nickname.slice(0, 1)}</div>
-              </>
+              <div className={styles.profileImgText}>{userInfo.nickname.slice(0, 1)}</div>
             )}
+            <input type="file" style={{ display: "none" }} ref={inputRef} onChange={onUploadImage} />
             <div className={styles.profileEditBtn} onClick={handleImageUpload}>
               <EditIcon fontSize="small" />
             </div>
           </div>
-          <Button text="버튼" color="main" onClick={onUploadProfile} />
           <div className={styles.profileUser}>
             <Text value={userInfo.nickname} type="pageTitle" bold />
           </div>
