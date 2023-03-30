@@ -43,18 +43,10 @@ interface apiInterface {
     getFullList: (schedule_id: number) => string; // 일정 내용 전체 조회
     mainPlace: () => string; // 메인 장소 저장 & 메인 장소 조회 & 메인 장소 리스트 조회
     getRegion: (region_id: number) => string; // 특정 메인 장소 조회
-    period: (schedule_id: number) => string; // 일정 기간 저장 & 일정 기간 조회
-    startEndPlace: (schedule_id: number) => string; // 일정시작/끝장소 저장 & 일정시작/끝장소 조회
-    selectPlace: (schedule_id: number) => string; // 선택 장소 저장 & 선택 장소 조회
-    hotel: (schedule_id: number) => string; // 선택 호텔 조회
-    vehicle: (schedule_id: number) => string; // 이동 수단 저장 & 이동 수단 조회
     basiclocation: () => string; // 기본 장소 추가
     customlocation: () => string; // 사용자 장소 추가
     searchLocation: () => string; // 장소 검색
     getRecommend: (is_hotel: number, region_id: number) => string; // 추천 호텔 및 장소 검색
-    // getRecommendHotel: () => string; // 추천 호텔 조회
-    // location: () => string; // 추천 장소 조회 & 장소 상세 조회
-    getLocationDetail: (location_id: number) => string; // 장소 상세 조회
     makeSchedule: () => string; // 일정 생성 완료
   };
   editSchedule: {
@@ -99,18 +91,10 @@ const api: apiInterface = {
     getFullList: (schedule_id) => HOST + SCHEDULE + schedule_id,
     mainPlace: () => HOST + SCHEDULE + "main",
     getRegion: (region_id) => HOST + SCHEDULE + "main/" + region_id,
-    period: (schedule_id) => HOST + SCHEDULE + "period/" + schedule_id,
-    startEndPlace: (schedule_id) => HOST + SCHEDULE + "start/" + schedule_id,
-    selectPlace: (schedule_id) => HOST + SCHEDULE + "select/" + schedule_id,
-    hotel: (schedule_id) => HOST + SCHEDULE + "hotel/" + schedule_id,
-    vehicle: (schedule_id) => HOST + SCHEDULE + "vehicle/" + schedule_id,
     basiclocation: () => HOST + SCHEDULE + "basiclocation",
     customlocation: () => HOST + SCHEDULE + "customlocation",
     searchLocation: () => HOST + SCHEDULE + "location",
     getRecommend: (is_hotel, region_id) => HOST + SCHEDULE + "location/" + is_hotel + "/" + region_id,
-    // getRecommendHotel: () => HOST + SCHEDULE + "hotel",
-    // location: () => HOST + SCHEDULE + "location",
-    getLocationDetail: (location_id) => HOST + SCHEDULE + location_id,
     makeSchedule: () => HOST + SCHEDULE + "make",
   },
   editSchedule: {
