@@ -27,8 +27,19 @@ import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 
 const { kakao } = window;
+
+const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.black,
+    fontSize: 13,
+  },
+}));
 
 interface sendScheduleListProps {
   locationId: number;
@@ -335,6 +346,12 @@ const ScheduleEditPage = () => {
           <a className={styles.saveScheduleBtn} onClick={onClickSaveSchedule}>
             일정저장
           </a>
+
+          <TooltipStyled title="장소를 검색하여 일정에 추가" placement="left">
+            <div className={styles.searchPlaceBtn}>
+              <SearchIcon />
+            </div>
+          </TooltipStyled>
 
           <div
             className={styles.keepPlaces}

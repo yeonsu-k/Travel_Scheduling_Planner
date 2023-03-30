@@ -27,6 +27,27 @@
   z-index: 2;
 }
 
+.searchPlaceBtn {
+  position: absolute;
+  width: 2.5vw;
+  height: 2.5vw;
+  top: 1.5%;
+  right: 1%;
+  transform: translate(-1.5%, 1%);
+  border-radius: 70%;
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.searchPlaceBtn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
 .keepPlaces {
   position: absolute;
   width: 18vw;
