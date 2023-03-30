@@ -43,9 +43,26 @@
   cursor: pointer;
 }
 
-.searchPlaceBtn:hover {
+.searchPlaceBtn:hover,
+.addPlaceBtn:hover {
   background-color: #000000;
   color: #ffffff;
+}
+
+.addPlaceBtn {
+  position: absolute;
+  width: 2.5vw;
+  height: 2.5vw;
+  top: 8%;
+  right: 1%;
+  transform: translate(-8%, 1%);
+  border-radius: 70%;
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .keepPlaces {

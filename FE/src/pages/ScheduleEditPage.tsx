@@ -29,6 +29,7 @@ import api from "api/Api";
 import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 
 const { kakao } = window;
 
@@ -350,6 +351,12 @@ const ScheduleEditPage = () => {
           <TooltipStyled title="장소를 검색하여 일정에 추가" placement="left">
             <div className={styles.searchPlaceBtn}>
               <SearchIcon />
+            </div>
+          </TooltipStyled>
+
+          <TooltipStyled title="장소를 등록하여 일정에 추가" placement="left">
+            <div className={styles.addPlaceBtn}>
+              <AddLocationAltIcon />
             </div>
           </TooltipStyled>
 
