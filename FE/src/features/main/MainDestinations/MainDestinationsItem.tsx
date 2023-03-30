@@ -1,7 +1,7 @@
 import Modal from "@mui/material/Modal";
 import React, { forwardRef, useEffect, useState } from "react";
 import { DestinationConfig } from "slices/mainSlice";
-import MainDestinationModal from "../Components/MainDestinationModal";
+import MainDestinationModal from "./MainDestinationModal";
 import styles from "../Main.module.css";
 
 const MainDestinationItem = (item: DestinationConfig) => {
