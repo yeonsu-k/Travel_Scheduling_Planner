@@ -26,6 +26,7 @@ const MyProfile = ({ setViewSchedule, friendNumber }: MyProfileProps) => {
         dispatch(
           setUserInfo({
             email: res.data.data.email,
+            profile: res.data.data.profile,
           }),
         );
       })
@@ -41,7 +42,16 @@ const MyProfile = ({ setViewSchedule, friendNumber }: MyProfileProps) => {
   return (
     <div className={styles.myProfile}>
       <div className={styles.myProfileInfo}>
-        <img className={styles.profileImg} src={sampleImg} />
+        <div
+          className={styles.profileImgContainer}
+          style={{ backgroundColor: userInfo.profile ? "transparent" : "#63C6E6" }}
+        >
+          {userInfo.profile ? (
+            <img src={userInfo.profile} alt="프로필" />
+          ) : (
+            <div className={styles.profileImgText}>{userInfo.nickname.slice(0, 1)}</div>
+          )}
+        </div>
       </div>
 
       <div className={styles.myProfileInfo}>

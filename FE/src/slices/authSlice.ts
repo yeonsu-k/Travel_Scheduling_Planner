@@ -41,8 +41,9 @@ const authSlice = createSlice({
       sessionStorage.clear();
       localStorage.clear();
     },
-    setUserInfo: (state, { payload: { email } }) => {
+    setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;
+      state.userInfo.profile = profile;
     },
   },
 });
