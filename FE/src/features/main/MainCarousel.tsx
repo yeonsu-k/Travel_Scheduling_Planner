@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Main.module.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MainCarouselCard from "./Components/MainCarouselCard";
+import { DestinationConfig } from "slices/mainSlice";
 
 interface ArrowProps {
   className?: any;
   style?: any;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+}
+
+interface CarouselProps {
+  type: string;
+  destinations: DestinationConfig[];
 }
 
 const NextArrow = (props: ArrowProps) => {
@@ -33,7 +39,7 @@ const PrevArrow = (props: ArrowProps) => {
   );
 };
 
-const MainCarouselTest = ({ type, images }: any) => {
+const MainCarouselTest = ({ type, destinations }: CarouselProps) => {
   const [hover, setHover] = useState(false);
   const settings = {
     dots: type === "log" ? true : false,
@@ -49,8 +55,8 @@ const MainCarouselTest = ({ type, images }: any) => {
   return (
     <div className={styles.carouselContainer} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <Slider {...settings} touchMove={false} dotsClass={styles.dotsCss}>
-        {images.map((img: any, i: any) => (
-          <MainCarouselCard src={img.src} key={i} />
+        {destinations.map((item: DestinationConfig, i: number) => (
+          <MainCarouselCard type="destination" item={item} key={i} />
         ))}
       </Slider>
     </div>
