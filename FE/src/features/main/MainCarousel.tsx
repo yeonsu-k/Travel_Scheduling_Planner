@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MainCarouselCard from "./Components/MainCarouselCard";
 import { DestinationConfig } from "slices/mainSlice";
+import { LogConfig } from "./MainTravelLog";
 
 interface ArrowProps {
   className?: any;
@@ -14,7 +15,8 @@ interface ArrowProps {
 
 interface CarouselProps {
   type: string;
-  destinations: DestinationConfig[];
+  destinations?: DestinationConfig[];
+  images?: LogConfig[];
 }
 
 const NextArrow = (props: ArrowProps) => {
@@ -39,7 +41,7 @@ const PrevArrow = (props: ArrowProps) => {
   );
 };
 
-const MainCarouselTest = ({ type, destinations }: CarouselProps) => {
+const MainCarouselTest = ({ type, destinations, images }: CarouselProps) => {
   const [hover, setHover] = useState(false);
   const settings = {
     dots: type === "log" ? true : false,
@@ -54,11 +56,19 @@ const MainCarouselTest = ({ type, destinations }: CarouselProps) => {
 
   return (
     <div className={styles.carouselContainer} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-      <Slider {...settings} touchMove={false} dotsClass={styles.dotsCss}>
-        {destinations.map((item: DestinationConfig, i: number) => (
-          <MainCarouselCard type="destination" item={item} key={i} />
-        ))}
-      </Slider>
+      {type == "log" ? (
+        <Slider {...settings} touchMove={false} dotsClass={styles.dotsCss}>
+          {images?.map((info: LogConfig, i: number) => (
+            <MainCarouselCard type="log" info={info} key={i} />
+          ))}
+        </Slider>
+      ) : (
+        <Slider {...settings} touchMove={false} dotsClass={styles.dotsCss}>
+          {destinations?.map((item: DestinationConfig, i: number) => (
+            <MainCarouselCard type="destination" item={item} key={i} />
+          ))}
+        </Slider>
+      )}
     </div>
   );
 };

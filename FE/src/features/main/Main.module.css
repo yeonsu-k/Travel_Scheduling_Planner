@@ -219,6 +219,26 @@
   margin: 10px;
 }
 
+.carouselTextLog {
+  position: absolute;
+  width: 100%;
+  bottom: 46%;
+  color: white;
+}
+
+.carouselTextLog > p {
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: "Noto Sans";
+  margin: 10px;
+}
+
+.carouselTextLog > span {
+  font-size: 0.8rem;
+  font-weight: 200;
+  font-family: "Montserrat";
+}
+
 .dotsCss {
   display: inline-block;
   vertical-align: middle;
