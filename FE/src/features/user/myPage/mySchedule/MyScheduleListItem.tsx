@@ -145,7 +145,6 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
               {item.private ? "비공개" : "공개"}
             </Button>
             <ButtonStyled text="일정 수정" />
-            <ButtonStyled text="일정표" />
             <ButtonStyled text="일정 공유" />
             <ButtonStyled text="일정 삭제" onClick={deleteSchedule} />
           </div>
