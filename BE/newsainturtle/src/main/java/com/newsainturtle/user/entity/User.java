@@ -33,11 +33,6 @@ public class User {
     private String profile;
     private boolean withdraw;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private final List<Friend> friends = new ArrayList<>();
-
-    @OneToMany(mappedBy = "receiveUser", cascade = CascadeType.ALL)
-    private List<Notification> notifications = new ArrayList<>();
 
     @Builder
     public User(String email, String nickname, String password, boolean kakao, String profile, boolean withdraw) {
@@ -62,7 +57,5 @@ public class User {
         this.password = null;
         this.profile = null;
         this.withdraw = true;
-        this.friends.clear();
-        this.notifications.clear();
     }
 }

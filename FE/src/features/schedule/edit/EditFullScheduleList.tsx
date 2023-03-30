@@ -1,13 +1,13 @@
 import React from "react";
 import styles from "./Edit.module.css";
 import { selectFullScheduleList } from "slices/scheduleEditSlice";
-import { selectLocal, selectPlaceList } from "slices/scheduleCreateSlice";
+import { selectRegion, selectPlaceList } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
 import Text from "components/Text";
 import EditDayScheduleList from "./EditDayScheduleList";
 
 const EditFullScheduleList = () => {
-  const region = useAppSelector(selectLocal);
+  const region = useAppSelector(selectRegion);
 
   const fullScheduleList = useAppSelector(selectFullScheduleList);
 

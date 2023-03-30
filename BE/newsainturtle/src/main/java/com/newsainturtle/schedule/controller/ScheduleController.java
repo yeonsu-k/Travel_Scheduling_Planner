@@ -49,6 +49,16 @@ public class ScheduleController {
                 , HttpStatus.OK);
     }
 
+    @GetMapping("/travels")
+    @ApiOperation(value = "여행기 조회", notes = "추천 여행기를 조회합니다.")
+    public ResponseEntity<BaseResponse> findTravels() {
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                FIND_TRAVELS_SUCCESS_MESSAGE,
+                scheduleService.findTravels())
+                , HttpStatus.OK);
+    }
+
     @PostMapping("/friend")
     @ApiOperation(value = "일정 공유 - 친구 초대", notes = "일정 공유를 위한 친구 초대")
     public ResponseEntity<BaseResponse> inviteFriend(@ApiIgnore Authentication authentication,

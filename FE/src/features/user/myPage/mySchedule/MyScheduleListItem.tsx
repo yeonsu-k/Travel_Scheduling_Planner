@@ -9,7 +9,7 @@ import api from "api/Api";
 import { Button } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { DestinationConfig } from "features/main/MainDestinationsList";
+import { DestinationConfig } from "slices/mainSlice";
 
 const getDate = (data: string) => {
   const date = new Date(data);

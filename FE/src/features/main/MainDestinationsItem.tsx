@@ -1,8 +1,8 @@
 import Modal from "@mui/material/Modal";
 import React, { forwardRef, useEffect, useState } from "react";
+import { DestinationConfig } from "slices/mainSlice";
 import MainDestinationModal from "./Components/MainDestinationModal";
 import styles from "./Main.module.css";
-import { DestinationConfig } from "./MainDestinationsList";
 
 const MainDestinationItem = (item: DestinationConfig) => {
   const [ModalOpen, setModalOpen] = useState(false);
@@ -26,7 +26,7 @@ const MainDestinationItem = (item: DestinationConfig) => {
         </div>
         <div className={styles.cardContent}>
           <div className={styles.cardEngTitle}>{englishName}</div>
-          <div className={styles.cardTitle}>{regionName}</div>
+          <div className={styles.cardTitle}>대한민국 {regionName}</div>
         </div>
       </div>
       {ModalOpen ? (

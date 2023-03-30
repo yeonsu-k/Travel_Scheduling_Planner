@@ -1,16 +1,30 @@
-import React from "react";
+import api from "api/Api";
+import Axios from "api/JsonAxios";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { DestinationConfig, setDestinationList } from "slices/mainSlice";
 import styles from "../main/Main.module.css";
-import MainCarouselTest from "./MainCarousel";
+import MainCarousel from "./MainCarousel";
 
 const MainDestinations = () => {
-  const images = [
-    { src: "https://www.myro.co.kr/myro_image/city/gyeongju.jpg" },
-    { src: "https://www.myro.co.kr/myro_image/city/seoul.jpg" },
-    { src: "https://www.myro.co.kr/myro_image/city/gangneung.jpg" },
-    { src: "https://www.myro.co.kr/myro_image/city/yeosu.jpg" },
-    { src: "https://www.myro.co.kr/myro_image/city/jeju.jpg" },
-    { src: "https://www.myro.co.kr/myro_image/city/busan.jpg" },
-  ];
+  const dispatch = useDispatch();
+  const [destinations, setDestinations] = useState<DestinationConfig[]>([]);
+
+  const getDestination = async () => {
+    await Axios.get(api.createSchedule.mainPlace())
+      .then((res) => {
+        setDestinations(res.data.data);
+        dispatch(setDestinationList({ destinationList: res.data.data }));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  useEffect(() => {
+    getDestination();
+  }, []);
+
   return (
     <div id={styles.mainPopular}>
       <div className={styles.mainTextContainer}>
@@ -18,7 +32,7 @@ const MainDestinations = () => {
         <div className={styles.mainSubTitleText}>POPULAR DESTINATIONS</div>
       </div>
       <div>
-        <MainCarouselTest type="destination" images={images} />
+        <MainCarousel type="destination" destinations={destinations} />
       </div>
     </div>
   );

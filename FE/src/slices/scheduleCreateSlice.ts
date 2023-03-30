@@ -12,11 +12,15 @@ export interface basicConfig {
 }
 
 interface scheduleCreateConfig {
-  local: string;
+  region: {
+    id: number;
+    name: string;
+  };
   date: {
     start: string;
     end: string;
   };
+  vehicle: string;
   hotel: (basicConfig | null)[];
   place: {
     onePlace: basicConfig;
@@ -34,11 +38,15 @@ interface scheduleCreateConfig {
 }
 
 const initialState: scheduleCreateConfig = {
-  local: "서울",
+  region: {
+    id: 1,
+    name: "서울",
+  },
   date: {
     start: format(new Date(), "yyyy-MM-dd"),
     end: format(addDays(new Date(), 2), "yyyy-MM-dd"),
   },
+  vehicle: "car",
   hotel: Array.from({ length: 2 }, () => null),
   place: [],
   pointPlace: Array.from({ length: 2 }, () => null),
@@ -50,11 +58,14 @@ const scheduleCreateSlice = createSlice({
   name: "scheduleCreate",
   initialState,
   reducers: {
-    setLocal: (state, action: PayloadAction<scheduleCreateConfig["local"]>) => {
-      state.local = action.payload;
+    setRegion: (state, action: PayloadAction<scheduleCreateConfig["region"]>) => {
+      state.region = action.payload;
     },
     setDate: (state, action: PayloadAction<scheduleCreateConfig["date"]>) => {
       state.date = action.payload;
+    },
+    setVehicle: (state, action: PayloadAction<scheduleCreateConfig["vehicle"]>) => {
+      state.vehicle = action.payload;
     },
     setHotelList: (state, action: PayloadAction<scheduleCreateConfig["hotel"]>) => {
       state.hotel = action.payload;
@@ -106,8 +117,9 @@ const scheduleCreateSlice = createSlice({
   },
 });
 export const {
-  setLocal,
+  setRegion,
   setDate,
+  setVehicle,
   setHotelList,
   setPlaceList,
   setPlaceTime,
@@ -117,8 +129,9 @@ export const {
   setTotalList,
 } = scheduleCreateSlice.actions;
 
-export const selectLocal = (state: rootState) => state.scheduleCreate.local;
+export const selectRegion = (state: rootState) => state.scheduleCreate.region;
 export const selectDate = (state: rootState) => state.scheduleCreate.date;
+export const selectVehicle = (state: rootState) => state.scheduleCreate.vehicle;
 export const selectHotelList = (state: rootState) => state.scheduleCreate.hotel;
 export const selectPlaceList = (state: rootState) => state.scheduleCreate.place;
 export const selectPointPlace = (state: rootState) => state.scheduleCreate.pointPlace;

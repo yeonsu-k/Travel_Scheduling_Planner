@@ -25,7 +25,7 @@ export const ButtonStyled = ({ text, color, radius, width, height, ...rest }: Pr
     border: color ? "" : "1px solid #efefef",
     borderRadius: radius ? "5px" : "0px",
     padding: color ? "0.3rem 0.8rem" : "0.5rem 1.4rem",
-    boxShadow: color ? "" : "0px 5px 16px rgba(0, 0, 0, 0.08)",
+    boxShadow: color === "white" ? "0px 5px 16px rgba(0, 0, 0, 0.08)" : "",
     width: width,
     height: height,
     fontFamily: "Pretendard-Regular",

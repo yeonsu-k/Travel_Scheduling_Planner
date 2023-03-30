@@ -1,6 +1,7 @@
 // core
 import { configureStore, combineReducers, getDefaultMiddleware } from "@reduxjs/toolkit";
 import authReducer from "slices/authSlice";
+import mainReducer from "slices/mainSlice";
 import scheduleCreateReducer from "slices/scheduleCreateSlice";
 import scheduleEditReducer from "slices/scheduleEditSlice";
 import friendReducer from "slices/friendSlice";
@@ -9,6 +10,7 @@ import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  main: mainReducer,
   scheduleCreate: scheduleCreateReducer,
   scheduleEdit: scheduleEditReducer,
   friend: friendReducer,
