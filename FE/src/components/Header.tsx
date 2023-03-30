@@ -184,7 +184,14 @@ function Header() {
                 </Box>
                 <Box sx={{ flexGrow: 0 }}>
                   <ButtonBase onClick={handleOpenUserMenu} disableRipple>
-                    <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{userInfo.nickname.slice(0, 1)}</AvatarStyled>
+                    {userInfo.profile == "" ? (
+                      <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{userInfo.nickname.slice(0, 1)}</AvatarStyled>
+                    ) : (
+                      <AvatarStyled sx={{ bgcolor: "transparent" }}>
+                        <img src={userInfo.profile} style={{ width: "100%" }} />
+                      </AvatarStyled>
+                    )}
+                    {/* {menuOpen ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />} */}
                   </ButtonBase>
                   <Menu
                     sx={{

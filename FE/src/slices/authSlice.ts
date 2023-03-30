@@ -10,7 +10,8 @@ interface authConfig {
 
 interface userInfoConfig {
   email: string;
-  nickname: "";
+  nickname: string;
+  profile: string;
 }
 
 const initialState: authConfig = {
@@ -19,6 +20,7 @@ const initialState: authConfig = {
   userInfo: {
     email: "",
     nickname: "",
+    profile: "",
   },
 };
 
@@ -39,8 +41,9 @@ const authSlice = createSlice({
       sessionStorage.clear();
       localStorage.clear();
     },
-    setUserInfo: (state, { payload: { email } }) => {
+    setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;
+      state.userInfo.profile = profile;
     },
   },
 });
