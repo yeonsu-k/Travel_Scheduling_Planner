@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../main/Main.module.css";
-import MainCarousel from "./MainCarousel";
+import styles from "../Main.module.css";
+import MainCarousel from "../Components/MainCarousel";
 
 export interface LogConfig {
   title: string;

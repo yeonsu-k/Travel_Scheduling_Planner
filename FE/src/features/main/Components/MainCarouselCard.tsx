@@ -1,7 +1,7 @@
 import React from "react";
 import { DestinationConfig } from "slices/mainSlice";
 import styles from "../Main.module.css";
-import { LogConfig } from "../MainTravelLog";
+import { LogConfig } from "../MainTravelLog/MainTravelLog";
 
 interface CarouselCardProps {
   type: string;

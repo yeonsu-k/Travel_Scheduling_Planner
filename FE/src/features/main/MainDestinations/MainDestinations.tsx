@@ -3,8 +3,8 @@ import Axios from "api/JsonAxios";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { DestinationConfig, setDestinationList } from "slices/mainSlice";
-import styles from "../main/Main.module.css";
-import MainCarousel from "./MainCarousel";
+import styles from "../Main.module.css";
+import MainCarousel from "../Components/MainCarousel";
 
 const MainDestinations = () => {
   const dispatch = useDispatch();
