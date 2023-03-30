@@ -47,7 +47,6 @@ function Header() {
         accessToken: accessToken,
       })
         .then((res) => {
-          console.log(res);
           dispatch(setToken({ token: true }));
         })
         .catch((err) => {
