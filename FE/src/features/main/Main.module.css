@@ -199,7 +199,7 @@
 }
 
 .carouselCard > img {
-  object-fit: fill;
+  object-fit: cover;
   height: 100%;
   width: 100%;
   filter: brightness(80%);
@@ -346,9 +346,7 @@
 
 .cardImgContainer img {
   width: 100%;
-  /* object-fit: contain; */
   overflow: hidden;
-  /* object-fit: fill; */
   transform: scale(1);
   transition: all 200ms ease-in-out;
   backface-visibility: hidden;
@@ -454,7 +452,6 @@
   height: 500px;
   padding: 10px;
   box-sizing: border-box;
-  overflow: auto;
 }
 
 .logModalTitle {
@@ -466,24 +463,27 @@
 
 .logModalInfoCont {
   display: flex;
-}
-
-.logModalInfo {
-  display: flex;
-  flex-direction: column;
-  width: 60%;
-}
-
-.logInfoImg > img {
   width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+  height: 80%;
+}
+
+.logInfoImg {
+  width: 400px;
+  min-width: 400px;
+  height: 80%;
+}
+
+.logInfoImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .logModalItemCont {
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: auto;
 }
 
 .logModalItem {

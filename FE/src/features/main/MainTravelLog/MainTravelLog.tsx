@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Main.module.css";
 import MainCarousel from "../Components/MainCarousel";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
+import { TravelLogConfig, locationConfig, setTravelLogList } from "slices/mainSlice";
+import { useDispatch } from "react-redux";
+import Loading from "components/Loading";
 
 export interface LogConfig {
   title: string;
@@ -9,50 +14,62 @@ export interface LogConfig {
 }
 
 const MainTravelLog = () => {
-  const images: LogConfig[] = [
-    {
-      title: "경주 여행 한복과 함께라면 인생사진 성공",
-      src: "https://www.myro.co.kr/myro_image/travelog/blog_001.jpg",
-      author: "MYRO blog",
-    },
-    {
-      title: "홍천&춘천 여행을 위한 애견동반 리조트",
-      src: "https://www.myro.co.kr/myro_image/travelog/blog_002.jpg",
-      author: "MYRO blog",
-    },
-    {
-      title: "하와이 랜선여행, 꼭 둘러봐야할 곳 9곳 소개",
-      src: "https://www.myro.co.kr/myro_image/travelog/blog_004.jpg",
-      author: "MYRO blog",
-    },
-    {
-      title: "남원 가볼 만한 곳",
-      src: "https://www.myro.co.kr/myro_image/travelog/blog_minhae9191.jpg",
-      author: "미네쿠의 세계여행",
-    },
-    {
-      title: "강릉 아르떼뮤지엄 1박2일",
-      src: "https://www.myro.co.kr/myro_image/travelog/blog_005.jpg",
-      author: "MYRO blog",
-    },
-    {
-      title: "영월, 봄에 가볼 만한 곳 모아 모아",
-      src: "https://www.myro.co.kr/myro_image/travelog/blog_009.jpg",
-      author: "MYRO blog",
-    },
-    {
-      title: "괌으로 겨울 여행 떠나는 세 가지 이유",
-      src: "https://www.myro.co.kr/myro_image/travelog/blog_006.jpg",
-      author: "MYRO blog",
-    },
-  ];
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const getTravelLog = async () => {
+    await Axios.get(api.createSchedule.getTravels())
+      .then((res) => {
+        setLoading(true);
+        const response = res.data.data;
+        let tmpTravelLog: TravelLogConfig[] = [];
+        response.map(async (item: TravelLogConfig, i: number) => {
+          await Axios.get(api.createSchedule.getRegion(item.regionId))
+            .then((res) => {
+              console.log(response);
+              const scheduleLocations = item.scheduleLocations;
+              const tmpSchedule: any[] = [];
+              scheduleLocations.map((schedule: locationConfig) => {
+                const locations = {
+                  address: schedule.location.address,
+                  locationName: schedule.location.locationName,
+                };
+                tmpSchedule.push(locations);
+              });
+              const tmpTravelLogItem: TravelLogConfig = {
+                hostEmail: item.hostEmail,
+                scheduleLocations: tmpSchedule,
+                scheduleName: item.scheduleName,
+                logImg: `https://source.unsplash.com/random/?korea,${res.data.data.englishName}${i}`,
+                regionId: item.regionId,
+                regionEng: res.data.data.englishName,
+              };
+              tmpTravelLog = [...tmpTravelLog, tmpTravelLogItem];
+            })
+            .catch((err: any) => {
+              console.log(err);
+            });
+          dispatch(setTravelLogList({ travelLogList: tmpTravelLog }));
+          setLoading(false);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getTravelLog();
+  }, []);
+
   return (
     <div id={styles.travelLog}>
       <div className={styles.mainTextContainer}>
         <div className={styles.mainTitleText}>여행기</div>
         <div className={styles.mainSubTitleText}>TRAVELOG</div>
       </div>
-      <MainCarousel type="log" images={images} />
+      {loading ? <Loading /> : null}
+      <MainCarousel type="log" />
     </div>
   );
 };
