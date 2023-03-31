@@ -1,10 +1,6 @@
+import React from "react";
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
-import React from "react";
-
-interface mainConfig {
-  destinationList: DestinationConfig[];
-}
 
 export interface DestinationConfig {
   regionId: number;
@@ -14,8 +10,14 @@ export interface DestinationConfig {
   contents: string;
 }
 
+interface mainConfig {
+  destinationList: DestinationConfig[];
+  scheduleCnt: number;
+}
+
 const initialState: mainConfig = {
   destinationList: [],
+  scheduleCnt: 0,
 };
 
 const mainSlice = createSlice({
@@ -25,9 +27,13 @@ const mainSlice = createSlice({
     setDestinationList: (state, { payload: { destinationList } }) => {
       state.destinationList = destinationList;
     },
+    setScheduleCnt: (state, { payload: { scheduleCnt } }) => {
+      state.scheduleCnt = scheduleCnt;
+    },
   },
 });
 
-export const { setDestinationList } = mainSlice.actions;
+export const { setDestinationList, setScheduleCnt } = mainSlice.actions;
 export const selectDestinationList = (state: rootState) => state.main.destinationList;
+export const selectScheduleCnt = (state: rootState) => state.main.scheduleCnt;
 export default mainSlice.reducer;
