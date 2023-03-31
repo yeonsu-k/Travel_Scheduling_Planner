@@ -8,6 +8,7 @@ import { useAppSelector } from "app/hooks";
 import api from "api/Api";
 import { useDispatch } from "react-redux";
 import Axios from "api/JsonAxios";
+import { selectScheduleCnt } from "slices/mainSlice";
 
 interface MyProfileProps {
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
@@ -18,11 +19,11 @@ const MyProfile = ({ setViewSchedule, friendNumber }: MyProfileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useAppSelector(selectUserInfo);
+  const scheduleNumber = useAppSelector(selectScheduleCnt);
 
   const getUserInfo = async () => {
     await Axios.get(api.user.user())
       .then((res: any) => {
-        console.log(res.data.data.email);
         dispatch(
           setUserInfo({
             email: res.data.data.email,
@@ -64,7 +65,7 @@ const MyProfile = ({ setViewSchedule, friendNumber }: MyProfileProps) => {
       <div className={styles.myProfileInfo} onClick={() => setViewSchedule(true)}>
         <Text value="나의 일정" type="text" bold en />
         <div style={{ margin: "15%" }}></div>
-        <Text value="0" type="pageTitle" bold />
+        <Text value={scheduleNumber.toString()} type="pageTitle" bold />
       </div>
 
       <div className={styles.myProfileInfo} onClick={() => setViewSchedule(false)}>
