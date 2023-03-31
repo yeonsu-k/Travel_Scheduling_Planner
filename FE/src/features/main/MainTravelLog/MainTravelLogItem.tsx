@@ -1,15 +1,19 @@
 import React from "react";
 import styles from "../Main.module.css";
 
-const MainTravelLogItem = () => {
+interface MainTravelLogItemProps {
+  location: any;
+}
+
+const MainTravelLogItem = ({ location }: MainTravelLogItemProps) => {
   return (
     <div className={styles.logModalItem}>
       <div className={styles.logModalImgCont}>
-        <img src="https://www.myro.co.kr/myro_image/travelog/blog_001.jpg" />
+        <img src="https://www.myro.co.kr/getSpotImage/gyeongju?no=1110" />
       </div>
       <div className={styles.logModalTextCont}>
-        <span>장소 이름</span>
-        <span>장소 주소</span>
+        <span>{location.locationName}</span>
+        <span>{location.address}</span>
       </div>
     </div>
   );

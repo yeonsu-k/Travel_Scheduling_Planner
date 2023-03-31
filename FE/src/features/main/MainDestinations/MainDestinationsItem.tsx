@@ -35,9 +35,7 @@ const MainDestinationItem = (item: DestinationConfig) => {
             <MainDestinationModal item={item} setModalOpen={setModalOpen} />
           </Bar>
         </Modal>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </div>
   );
 };

@@ -199,7 +199,7 @@
 }
 
 .carouselCard > img {
-  object-fit: fill;
+  object-fit: cover;
   height: 100%;
   width: 100%;
   filter: brightness(80%);
@@ -346,9 +346,7 @@
 
 .cardImgContainer img {
   width: 100%;
-  /* object-fit: contain; */
   overflow: hidden;
-  /* object-fit: fill; */
   transform: scale(1);
   transition: all 200ms ease-in-out;
   backface-visibility: hidden;
@@ -393,6 +391,19 @@
 
   display: grid;
   grid-template-columns: 1fr 2fr;
+
+  animation: slideFade 0.3s linear;
+}
+
+@keyframes slideFade {
+  0% {
+    opacity: 0;
+    margin-top: -100px;
+  }
+  100% {
+    opacity: 100%;
+    margin-top: 0;
+  }
 }
 
 .imgContainer {
@@ -454,42 +465,79 @@
   height: 500px;
   padding: 10px;
   box-sizing: border-box;
-  overflow: auto;
 }
 
 .logModalTitle {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 20px;
 }
 
-.logModalInfoCont {
-  display: flex;
+.logModalTitle > span:nth-child(2) {
+  font-size: 0.7rem;
+  color: #999;
+  font-family: "Montserrat";
 }
 
-.logModalInfo {
+.logModalInfoCont {
   display: flex;
-  flex-direction: column;
-  width: 60%;
+  width: 100%;
+  height: 80%;
+}
+
+.logInfoImg {
+  width: 400px;
+  min-width: 400px;
+  height: 80%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 5px;
 }
 
 .logInfoImg > img {
   width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logInfoImg span {
+  height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Noto Sans";
+}
+
+.logInfoImg span:nth-child(2) {
+  margin-top: 30px;
+  font-weight: 600;
+}
+
+.logInfoImg span:nth-child(3) {
+  font-size: 0.7rem;
+  font-family: "Montserrat";
+  color: #999;
 }
 
 .logModalItemCont {
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
+}
+
+.logModalLogItem {
+  padding: 0 30px 0 30px;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
 .logModalItem {
   display: grid;
   grid-template-columns: 1fr 3fr;
-  margin: 10px;
+  margin-bottom: 10px;
   padding: 10px;
   box-sizing: border-box;
   background-color: #fff;
@@ -497,11 +545,16 @@
   border-radius: 10px;
 }
 
+.logModalItemTitle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
 .logModalImgCont {
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background-color: #666;
   overflow: hidden;
   margin: auto;
 }
@@ -520,7 +573,20 @@
 }
 
 .logModalTextCont > span {
-  margin: 5px 0 5px 0;
+  margin: 2px 0 2px 0;
+}
+
+.logModalTextCont > span:nth-child(1) {
+  font-family: "Noto Sans";
+  font-weight: 700;
+}
+
+.logModalTextCont > span:nth-child(2) {
+  font-size: small;
+}
+
+.copyBtn {
+  width: 100%;
 }
 
 /* 반응형: 모바일 */
