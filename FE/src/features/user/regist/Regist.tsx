@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export const emailRep =
   /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-export const passRep = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+export const passRep = /^(?=.*[a-z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,}$/;
 
 const Regist = () => {
   const navigate = useNavigate();
@@ -41,15 +41,6 @@ const Regist = () => {
     }
   };
 
-  const passwordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    if (passRep.test(password)) {
-      setIsPassword(true);
-    } else {
-      setIsPassword(false);
-    }
-  };
-
   const passwordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === password) {
       setIsPasswordConfirm(true);
@@ -59,9 +50,21 @@ const Regist = () => {
   };
 
   const confirm = async () => {
-    if (!isPassword) {
-      alert("비밀번호 형식을 확인해주세요.");
-    } else if (!isPasswordConfirm) {
+    const num = password.search(/[0-9]/g);
+    const eng = password.search(/[a-z]/gi);
+    const spe = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+    if (password.length < 8) {
+      alert("비밀번호 8자리 이상");
+    } else if (password.search(/\s/) != -1) {
+      alert("비밀번호는 공백 없이 입력해주세요.");
+    } else if (num < 0 || eng < 0 || spe < 0) {
+      alert("비밀번호는 영문, 숫자, 특수문자를 혼합하여 입력해주세요.");
+    } else {
+      setIsPassword(true);
+    }
+
+    if (!isPasswordConfirm) {
       alert("비밀번호를 확인해주세요.");
     } else if (!duplEmail) {
       alert("이메일을 확인해주세요.");
@@ -85,12 +88,6 @@ const Regist = () => {
         });
     }
   };
-
-  // const login = async () => {
-  //   await Axios.get(api.auth.join({
-
-  //   }));
-  // };
 
   return (
     <div className={styles.container}>
@@ -125,8 +122,8 @@ const Regist = () => {
         <Input
           type="password"
           name="email"
-          placeholder="비밀번호(문자, 숫자, 특수문자 포함 10~20자)"
-          onChange={(e) => passwordCheck(e)}
+          placeholder="비밀번호(영문, 숫자, 특수문자 포함 8자 이상)"
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <div className={styles.inputTextContainer}>

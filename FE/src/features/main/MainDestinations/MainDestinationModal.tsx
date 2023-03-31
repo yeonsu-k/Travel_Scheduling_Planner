@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import styles from "../Main.module.css";
 import Text from "components/Text";
 import Button from "components/Button";
 import { useDispatch } from "react-redux";
-import { setRegion } from "slices/scheduleCreateSlice";
+import { setListClear, setRegion } from "slices/scheduleCreateSlice";
 import { useNavigate } from "react-router-dom";
 import { DestinationConfig } from "slices/mainSlice";
 
@@ -24,6 +24,7 @@ const MainDestinationModal = ({ setModalOpen, item }: modalProps) => {
         name: regionName,
       }),
     );
+    dispatch(setListClear());
     navigate("/schedule/create");
   };
 

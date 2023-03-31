@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.newsainturtle.schedule.constant.ScheduleErrorConstant.*;
@@ -102,6 +103,57 @@ public class ScheduleService {
                                 .build()).collect(Collectors.toList()))
                 .build();
 
+    }
+
+    public List<ScheduleResponse> findTravels() {
+        List<Schedule> scheduleList = scheduleRepository.findByPrivateTrue();
+        if(6<scheduleList.size()) {
+            Random random = new Random();
+            int[] idx = new int[6];
+            for(int i=0; i<6; i++) {
+                idx[i] = random.nextInt(scheduleList.size());
+                for(int j=0; j<i; j++) {
+                    if(idx[j]==idx[i]) i--;
+                }
+            }
+            List<Schedule> newList = new ArrayList<>();
+            for(int i=0; i<6; i++) newList.add(scheduleList.get(idx[i]));
+            return makeDto(newList);
+        }
+        else {
+            return makeDto(scheduleList);
+        }
+    }
+
+    private List<ScheduleResponse> makeDto(List<Schedule> scheduleList) {
+        return scheduleList
+                .stream()
+                .map(schedule -> ScheduleResponse.builder()
+                        .hostEmail(schedule.getHostEmail())
+                        .regionId(schedule.getRegionId())
+                        .scheduleName(schedule.getScheduleName())
+                        .isPrivate(schedule.isPrivate())
+                        .scheduleStartDay(schedule.getScheduleStartDay())
+                        .scheduleEndDay(schedule.getScheduleEndDay())
+                        .scheduleStartLocation(schedule.getScheduleStartLocation())
+                        .scheduleEndLocation(schedule.getScheduleEndLocation())
+                        .vehicle(schedule.getVehicle())
+                        .scheduleLocations(schedule.getScheduleLocations().stream()
+                                .map(scheduleLocation -> ScheduleLocationResponse.builder()
+                                        .location(LocationResponse.builder()
+                                                .locationId(scheduleLocation.getLocation().getLocationId())
+                                                .regionId(scheduleLocation.getLocation().getRegionId())
+                                                .locationName(scheduleLocation.getLocation().getLocationName())
+                                                .address(scheduleLocation.getLocation().getAddress())
+                                                .longitude(scheduleLocation.getLocation().getLongitude())
+                                                .latitude(scheduleLocation.getLocation().getLatitude()).build())
+                                        .day(scheduleLocation.getDay())
+                                        .sequence(scheduleLocation.getSequence())
+                                        .startTime(scheduleLocation.getStartTime())
+                                        .endTime(scheduleLocation.getEndTime())
+                                        .build()).collect(Collectors.toList()))
+                        .build()
+                ).collect(Collectors.toList());
     }
 
     private Schedule findScheduleById(Long scheduleId) {

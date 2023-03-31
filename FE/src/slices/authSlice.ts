@@ -6,11 +6,13 @@ interface authConfig {
   accessToken: string;
   login: boolean;
   userInfo: userInfoConfig;
+  token: boolean;
 }
 
 interface userInfoConfig {
   email: string;
-  nickname: "";
+  nickname: string;
+  profile: string;
 }
 
 const initialState: authConfig = {
@@ -19,7 +21,9 @@ const initialState: authConfig = {
   userInfo: {
     email: "",
     nickname: "",
+    profile: "",
   },
+  token: false,
 };
 
 const authSlice = createSlice({
@@ -39,12 +43,17 @@ const authSlice = createSlice({
       sessionStorage.clear();
       localStorage.clear();
     },
-    setUserInfo: (state, { payload: { email } }) => {
+    setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;
+      state.userInfo.profile = profile;
+    },
+    setToken: (state, { payload: { token } }) => {
+      state.token = token;
     },
   },
 });
 
-export const { setLogin, setLogout, setUserInfo } = authSlice.actions;
+export const { setLogin, setLogout, setUserInfo, setToken } = authSlice.actions;
 export const selectUserInfo = (state: rootState) => state.auth.userInfo;
+export const selectToken = (state: rootState) => state.auth.token;
 export default authSlice.reducer;

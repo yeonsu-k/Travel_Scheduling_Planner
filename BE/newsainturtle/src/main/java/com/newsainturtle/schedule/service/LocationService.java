@@ -117,7 +117,7 @@ public class LocationService {
     }
 
     private List<LocationResponse> findCustomLocation(LocationRequest locationRequest, String email) {
-        return customLocationRepository.findByRegionIdAAndLocationNameAndHotel(locationRequest.getRegionId(), locationRequest.getLocationName(), email, locationRequest.isHotel())
+        return customLocationRepository.findByRegionIdAAndLocationNameAndHotel(locationRequest.getRegionId(), email, locationRequest.getLocationName(), locationRequest.isHotel())
                 .stream()
                 .map(location -> LocationResponse.builder()
                         .locationId(location.getLocationId())
