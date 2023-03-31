@@ -43,7 +43,7 @@ const InfoLocalSelect = ({ modalClose }: Props) => {
   const [currentValue, setCurrentValue] = useState<DestinationConfig>({
     regionId: region.id,
     regionName: region.name,
-    englishName: "SEOUL",
+    englishName: region.engName,
   });
   const [searchLocal, setSearchLocal] = useState<DestinationConfig[]>([]);
 
@@ -71,6 +71,7 @@ const InfoLocalSelect = ({ modalClose }: Props) => {
       setRegion({
         id: currentValue.regionId,
         name: currentValue.regionName,
+        engName: currentValue.englishName,
       }),
     );
     modalClose();

@@ -14,7 +14,7 @@ function InfoLocal() {
     <div className={styles.content}>
       <Stack alignItems="center" onClick={() => setModalOpen(true)} sx={{ cursor: "pointer" }}>
         <span className={styles.localText}>{region.name}</span>
-        <span className={styles.localText_en}>Busan</span>
+        <span className={styles.localText_en}>{region.engName}</span>
       </Stack>
       {ModalOpen && (
         <Modal title="지역선택" modalClose={() => setModalOpen(false)}>
