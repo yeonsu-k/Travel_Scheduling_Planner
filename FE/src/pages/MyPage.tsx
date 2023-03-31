@@ -23,7 +23,7 @@ function MyPage() {
 
   return (
     <div>
-      <MyProfile setViewSchedule={setViewSchedule} friendNumber={friendNumber} />
+      <MyProfile setViewSchedule={setViewSchedule} friendNumber={friendNumber}/>
       {viewSchedule ? <MySchedule /> : <MyFriends friendList={friendList} />}
     </div>
   );
@@ -34,7 +34,6 @@ export default MyPage;
 export const getFriendInfo = async () => {
   await Axios.get(api.friend.friend())
     .then((res) => {
-      console.log(res);
       friendNumber = res.data.data.friends.length;
       friendList = [...res.data.data.friends];
     })
