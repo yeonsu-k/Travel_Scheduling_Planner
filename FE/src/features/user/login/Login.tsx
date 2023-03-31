@@ -76,7 +76,7 @@ const Login = () => {
               login: true,
             }),
           );
-          dispatch(setUserInfo({ email: email }));
+          dispatch(setUserInfo({ email: email, profile: res.data.data.profile }));
           setLoading(false);
           navigate("/");
         })
