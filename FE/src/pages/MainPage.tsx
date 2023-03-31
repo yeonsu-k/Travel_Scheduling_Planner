@@ -1,10 +1,10 @@
 import MainFooter from "features/main/MainFooter";
 import React from "react";
 import styles from "../features/main/Main.module.css";
-import MainDestinations from "../features/main/MainDestinations";
-import MainDestinationsList from "../features/main/MainDestinationsList";
+import MainDestinations from "../features/main/MainDestinations/MainDestinations";
+import MainDestinationsList from "../features/main/MainDestinations/MainDestinationsList";
 import MainDisplay from "../features/main/MainDisplay";
-import MainTravelLog from "../features/main/MainTravelLog";
+import MainTravelLog from "../features/main/MainTravelLog/MainTravelLog";
 
 function MainPage() {
   return (

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Main.module.css";
+import styles from "../Main.module.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import MainCarouselCard from "./Components/MainCarouselCard";
+import MainCarouselCard from "./MainCarouselCard";
 import { DestinationConfig } from "slices/mainSlice";
-import { LogConfig } from "./MainTravelLog";
+import { LogConfig } from "../MainTravelLog/MainTravelLog";
 
 interface ArrowProps {
   className?: any;
