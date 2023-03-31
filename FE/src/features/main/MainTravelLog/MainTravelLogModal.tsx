@@ -17,7 +17,7 @@ const MainTravelLogModal = ({ open, setModalOpen, travelLog }: ModalTravelLogMod
       <div className={styles.logModalContainer}>
         <div className={styles.logModalTitle}>
           <Text value="여행기" type="groupTitle" />
-          <span>TRAVELLOG</span>
+          <span>TRAVELOG</span>
         </div>
         <div className={styles.logModalInfoCont}>
           <div className={styles.logInfoImg}>
