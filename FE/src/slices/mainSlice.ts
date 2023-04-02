@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
-import React from "react";
 
 interface mainConfig {
   destinationList: DestinationConfig[];
+  notiNumber: number;
 }
 
 export interface DestinationConfig {
@@ -16,6 +16,7 @@ export interface DestinationConfig {
 
 const initialState: mainConfig = {
   destinationList: [],
+  notiNumber: 0,
 };
 
 const mainSlice = createSlice({
@@ -25,9 +26,15 @@ const mainSlice = createSlice({
     setDestinationList: (state, { payload: { destinationList } }) => {
       state.destinationList = destinationList;
     },
+    setNotiNumber: (state, { payload: { notiNumber } }) => {
+      state.notiNumber = notiNumber;
+      console.log("redux: ", state.notiNumber);
+    },
   },
 });
 
-export const { setDestinationList } = mainSlice.actions;
+export const { setDestinationList, setNotiNumber } = mainSlice.actions;
 export const selectDestinationList = (state: rootState) => state.main.destinationList;
+export const selectNotiNumber = (state: rootState) => state.main.notiNumber;
+
 export default mainSlice.reducer;

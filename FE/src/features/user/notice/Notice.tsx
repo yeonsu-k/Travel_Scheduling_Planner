@@ -2,10 +2,12 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import NoticeItem from "./NoticeItem";
-import { useAppSelector } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { selectUserInfo } from "slices/authSlice";
+
+import { selectNotiNumber, setNotiNumber } from "slices/mainSlice";
 
 export interface noticeListProps {
   notificationId: number;
@@ -18,20 +20,23 @@ export interface noticeListProps {
 let noticeList: noticeListProps[] = [];
 
 const Notice = () => {
-  const email = useAppSelector(selectUserInfo).email;
+  const dispatch = useAppDispatch();
 
-  const fireNotification = (title: string, options: any) => {
+  const email = useAppSelector(selectUserInfo).email;
+  const notiNumber = useAppSelector(selectNotiNumber);
+
+  const requestNotification = () => {
     if (Notification.permission !== "granted") {
       Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          new Notification(title, options);
-        } else {
+        if (permission !== "granted") {
           return;
         }
       });
-    } else {
-      new Notification(title, options);
     }
+  };
+
+  const fireNotification = (title: string, options: object) => {
+    new Notification(title, options);
   };
 
   const webSocketUrl = process.env.REACT_APP_SOCKET_URL + email;
@@ -72,6 +77,29 @@ const Notice = () => {
     };
   }
 
+  const getNotification = async () => {
+    let notificationCount = 0;
+
+    await Axios.get(api.notification.notification())
+      .then((res) => {
+        console.log(res);
+        noticeList = [...res.data.data.notifications];
+        console.log("list", noticeList);
+
+        noticeList.map((value, key) => {
+          if (value.status === "NO_RESPONSE") {
+            notificationCount++;
+          }
+        });
+
+        console.log("cnt: ", notificationCount);
+        dispatch(setNotiNumber({ notiNumber: notificationCount }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const onClickClearBtn = async () => {
     await Axios.delete(api.notification.notification())
       .then((res) => {
@@ -84,7 +112,12 @@ const Notice = () => {
 
   useEffect(() => {
     getNotification();
+    requestNotification();
   }, []);
+
+  useEffect(() => {
+    getNotification();
+  }, [notiNumber]);
 
   return (
     <div className={styles.notice}>
@@ -108,15 +141,3 @@ const Notice = () => {
 };
 
 export default Notice;
-
-export const getNotification = async () => {
-  await Axios.get(api.notification.notification())
-    .then((res) => {
-      console.log(res);
-      noticeList = [...res.data.data.notifications];
-      console.log("list", noticeList);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};

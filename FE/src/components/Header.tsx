@@ -14,6 +14,7 @@ import HeaderMobile from "./HeaderMobile";
 import MenuIcon from "@mui/icons-material/Menu";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import { selectNotiNumber } from "slices/mainSlice";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -32,6 +33,7 @@ function Header() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [anchorElNotice, setAnchorElNotice] = React.useState<null | HTMLElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const notiNumber = useAppSelector(selectNotiNumber);
 
   useEffect(() => {
     window.addEventListener("scroll", updateScroll);
@@ -123,7 +125,7 @@ function Header() {
                       sx={{ color: location.pathname == "/" && scrollPosition < 200 ? "white" : "black" }}
                       disableRipple
                     >
-                      <Badge color="error" overlap="circular" badgeContent={1} variant="dot">
+                      <Badge color="error" overlap="circular" badgeContent={notiNumber}>
                         <Notifications />
                       </Badge>
                     </IconButton>
@@ -176,9 +178,7 @@ function Header() {
                     onClose={handleCloseNotice}
                   >
                     <MenuItem onClick={handleCloseNotice}>
-                      {/* <Modal title="알림" modalClose={handleCloseNotice}> */}
                       <Notice />
-                      {/* </Modal> */}
                     </MenuItem>
                   </Menu>
                 </Box>
