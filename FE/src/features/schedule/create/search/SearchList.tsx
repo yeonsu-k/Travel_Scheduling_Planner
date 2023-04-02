@@ -34,9 +34,10 @@ function SearchList(props: SearchListType) {
 
   useEffect(() => {
     searchView ? keywordSearch() : recommends();
-  }, [select, keyword]);
+  }, [select, keyword, region]);
 
   const keywordSearch = async () => {
+    setCardList([]);
     await Axios.post(api.createSchedule.searchLocation(), {
       regionId: region.id,
       locationName: keyword,
@@ -84,7 +85,7 @@ function SearchList(props: SearchListType) {
           <Text value={"추천 " + select} bold />
         )}
       </Box>
-      {list?.map((card, index) => {
+      {list.map((card, index) => {
         return (
           <Box key={index} mb={1}>
             <SearchListCard cardInfo={card} select={select} scheduleCreatProps={scheduleCreatProps} />

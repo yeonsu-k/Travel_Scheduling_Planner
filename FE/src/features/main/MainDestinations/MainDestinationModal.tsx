@@ -22,6 +22,7 @@ const MainDestinationModal = ({ setModalOpen, item }: modalProps) => {
       setRegion({
         id: regionId,
         name: regionName,
+        engName: englishName,
       }),
     );
     dispatch(setListClear());

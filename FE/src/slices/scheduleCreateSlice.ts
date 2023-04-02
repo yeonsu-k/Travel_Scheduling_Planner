@@ -15,6 +15,7 @@ interface scheduleCreateConfig {
   region: {
     id: number;
     name: string;
+    engName: string;
   };
   date: {
     start: string;
@@ -41,6 +42,7 @@ const initialState: scheduleCreateConfig = {
   region: {
     id: 1,
     name: "서울",
+    engName: "SEOUL",
   },
   date: {
     start: format(new Date(), "yyyy-MM-dd"),
