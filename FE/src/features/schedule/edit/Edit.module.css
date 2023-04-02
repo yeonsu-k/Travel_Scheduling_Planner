@@ -27,6 +27,54 @@
   z-index: 2;
 }
 
+.searchPlaceBtn {
+  position: absolute;
+  width: 2.5vw;
+  height: 2.5vw;
+  top: 1.5%;
+  right: 1%;
+  transform: translate(-1.5%, 1%);
+  border-radius: 70%;
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.searchPlaceBtn:hover,
+.addPlaceBtn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.searchList {
+  position: absolute;
+  width: 15vw;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background-color: #ffffff;
+  z-index: 10;
+}
+
+.addPlaceBtn {
+  position: absolute;
+  width: 2.5vw;
+  height: 2.5vw;
+  top: 8%;
+  right: 1%;
+  transform: translate(-8%, 1%);
+  border-radius: 70%;
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
 .keepPlaces {
   position: absolute;
   width: 18vw;

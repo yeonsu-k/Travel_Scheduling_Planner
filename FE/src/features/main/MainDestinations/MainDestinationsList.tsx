@@ -1,13 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./Main.module.css";
+import styles from "../Main.module.css";
 import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
 import Text from "components/Text";
 import Button from "components/Button";
-import Axios from "api/JsonAxios";
-import api from "api/Api";
-import { DestinationConfig, selectDestinationList, setDestinationList } from "slices/mainSlice";
-import { useDispatch } from "react-redux";
+import { DestinationConfig, selectDestinationList } from "slices/mainSlice";
 import { useAppSelector } from "app/hooks";
 
 const MainDestinationsList = () => {

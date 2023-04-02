@@ -77,7 +77,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
     // 장소 검색
     if (addressInfo.current) {
       setSearchBtnClick(true);
-      setAddressValue(region + " " + addressInfo.current.value);
+      setAddressValue(region.name + " " + addressInfo.current.value);
     }
   };
 

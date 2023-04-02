@@ -4,6 +4,8 @@ import styles from "./MySchedule.module.css";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import Loading from "components/Loading";
+import { setScheduleCnt } from "slices/mainSlice";
+import { useDispatch } from "react-redux";
 
 export interface MyScheduleConfig {
   schedule_id: number;
@@ -19,6 +21,7 @@ export interface MyScheduleConfig {
 }
 
 const MyScheduleList = () => {
+  const dispatch = useDispatch();
   const [mySchedule, setMySchedule] = useState<MyScheduleConfig[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -27,6 +30,7 @@ const MyScheduleList = () => {
     await Axios.get(api.user.getScheduleList())
       .then((res) => {
         setMySchedule(res.data.data);
+        dispatch(setScheduleCnt({ scheduleCnt: res.data.data.length }));
         setLoading(false);
       })
       .catch((err) => {

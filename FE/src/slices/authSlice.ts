@@ -5,11 +5,13 @@ interface authConfig {
   accessToken: string;
   login: boolean;
   userInfo: userInfoConfig;
+  token: boolean;
 }
 
 interface userInfoConfig {
   email: string;
-  nickname: "";
+  nickname: string;
+  profile: string;
 }
 
 export let socket: WebSocket;
@@ -20,7 +22,9 @@ const initialState: authConfig = {
   userInfo: {
     email: "",
     nickname: "",
+    profile: "",
   },
+  token: false,
 };
 
 const authSlice = createSlice({
@@ -42,16 +46,21 @@ const authSlice = createSlice({
       console.log("login", state.login);
       socket.close();
     },
-    setUserInfo: (state, { payload: { email } }) => {
+    setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;
+      state.userInfo.profile = profile;
       const webSocketUrl = process.env.REACT_APP_SOCKET_URL + state.userInfo.email;
       socket = new WebSocket(webSocketUrl);
+    },
+    setToken: (state, { payload: { token } }) => {
+      state.token = token;
     },
   },
 });
 
-export const { setLogin, setLogout, setUserInfo } = authSlice.actions;
+export const { setLogin, setLogout, setUserInfo, setToken } = authSlice.actions;
 export const selectUserInfo = (state: rootState) => state.auth.userInfo;
 export const selectLoginState = (state: rootState) => state.auth.login;
 
+export const selectToken = (state: rootState) => state.auth.token;
 export default authSlice.reducer;

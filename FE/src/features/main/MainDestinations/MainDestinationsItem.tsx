@@ -1,8 +1,8 @@
 import Modal from "@mui/material/Modal";
 import React, { forwardRef, useEffect, useState } from "react";
 import { DestinationConfig } from "slices/mainSlice";
-import MainDestinationModal from "./Components/MainDestinationModal";
-import styles from "./Main.module.css";
+import MainDestinationModal from "./MainDestinationModal";
+import styles from "../Main.module.css";
 
 const MainDestinationItem = (item: DestinationConfig) => {
   const [ModalOpen, setModalOpen] = useState(false);
@@ -35,9 +35,7 @@ const MainDestinationItem = (item: DestinationConfig) => {
             <MainDestinationModal item={item} setModalOpen={setModalOpen} />
           </Bar>
         </Modal>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </div>
   );
 };

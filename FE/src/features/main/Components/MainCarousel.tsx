@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Main.module.css";
+import styles from "../Main.module.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import MainCarouselCard from "./Components/MainCarouselCard";
-import { DestinationConfig } from "slices/mainSlice";
-import { LogConfig } from "./MainTravelLog";
+import MainCarouselCard from "./MainCarouselCard";
+import { DestinationConfig, TravelLogConfig, selectTravelLogList } from "slices/mainSlice";
+import { LogConfig } from "../MainTravelLog/MainTravelLog";
+import { useAppSelector } from "app/hooks";
 
 interface ArrowProps {
   className?: any;
@@ -43,6 +44,8 @@ const PrevArrow = (props: ArrowProps) => {
 
 const MainCarouselTest = ({ type, destinations, images }: CarouselProps) => {
   const [hover, setHover] = useState(false);
+  const travelLogs = useAppSelector(selectTravelLogList);
+
   const settings = {
     dots: type === "log" ? true : false,
     arrow: true,
@@ -58,8 +61,8 @@ const MainCarouselTest = ({ type, destinations, images }: CarouselProps) => {
     <div className={styles.carouselContainer} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       {type == "log" ? (
         <Slider {...settings} touchMove={false} dotsClass={styles.dotsCss}>
-          {images?.map((info: LogConfig, i: number) => (
-            <MainCarouselCard type="log" info={info} key={i} />
+          {travelLogs?.map((travelLog: TravelLogConfig, i: number) => (
+            <MainCarouselCard type="log" travelLog={travelLog} key={i} />
           ))}
         </Slider>
       ) : (

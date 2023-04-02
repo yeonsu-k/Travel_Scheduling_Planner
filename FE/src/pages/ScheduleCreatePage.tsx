@@ -6,7 +6,7 @@ import CreateMap from "features/schedule/create/CreateMap";
 import CreateButtons from "features/schedule/create/CreateButtons";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "app/hooks";
-import { setTotalList } from "slices/scheduleCreateSlice";
+import { setListClear, setTotalList } from "slices/scheduleCreateSlice";
 
 export interface ScheduleCreatPropsType {
   currentTab: string;
@@ -27,6 +27,7 @@ function ScheduleCreatePage() {
   const scheduleCreateClick = () => {
     // 일정 생성 버튼 클릭시 장소 세팅 API
     dispatch(setTotalList());
+    dispatch(setListClear());
     navigate("/schedule/edit");
   };
 

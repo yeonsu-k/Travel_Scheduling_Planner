@@ -8,7 +8,7 @@ import styles from "./css/Header.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import Notice from "features/user/notice/Notice";
 import { rootState } from "app/store";
-import { setLogout, selectUserInfo } from "slices/authSlice";
+import { setLogout, selectUserInfo, setToken, setUserInfo } from "slices/authSlice";
 import { useAppSelector } from "app/hooks";
 import HeaderMobile from "./HeaderMobile";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -49,10 +49,12 @@ function Header() {
         accessToken: accessToken,
       })
         .then((res) => {
-          console.log(res);
+          dispatch(setUserInfo({ nickname: res.data.data.nickname, profile: res.data.data.profile }));
+          dispatch(setToken({ token: true }));
         })
         .catch((err) => {
           console.log("토큰 에러:", err);
+          dispatch(setToken({ token: false }));
           navigate("/login");
         });
     }
@@ -184,7 +186,14 @@ function Header() {
                 </Box>
                 <Box sx={{ flexGrow: 0 }}>
                   <ButtonBase onClick={handleOpenUserMenu} disableRipple>
-                    <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{userInfo.nickname.slice(0, 1)}</AvatarStyled>
+                    {userInfo.profile == "" ? (
+                      <AvatarStyled sx={{ bgcolor: "#63C6E6" }}>{userInfo.nickname.slice(0, 1)}</AvatarStyled>
+                    ) : (
+                      <AvatarStyled sx={{ bgcolor: "transparent" }}>
+                        <img src={userInfo.profile} style={{ width: "100%" }} />
+                      </AvatarStyled>
+                    )}
+                    {/* {menuOpen ? <KeyboardArrowUp fontSize="small" /> : <KeyboardArrowDown fontSize="small" />} */}
                   </ButtonBase>
                   <Menu
                     sx={{
