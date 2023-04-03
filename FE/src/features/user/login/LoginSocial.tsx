@@ -5,7 +5,7 @@ import styles from "./Login.module.css";
 
 const LoginSNS = () => {
   const getUrl = async () => {
-    await Axios.get("http://localhost:8080/api/auth/kakao/code")
+    await Axios.get(process.env.REACT_APP_API_BASE_URL + "/api/auth/kakao/code")
       .then((res: any) => {
         console.log(res);
         window.location.href = res.data.data.url;
