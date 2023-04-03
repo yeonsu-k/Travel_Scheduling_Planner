@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { selectNotiNumber, setNotiNumber } from "slices/mainSlice";
-import { socket } from "slices/authSlice";
+import { selectUserInfo } from "slices/authSlice";
 
 export interface noticeListProps {
   notificationId: number;
@@ -17,11 +17,15 @@ export interface noticeListProps {
 }
 
 let noticeList: noticeListProps[] = [];
+export let socket: WebSocket;
 
 const Notice = () => {
   const dispatch = useAppDispatch();
 
+  const email = useAppSelector(selectUserInfo).email;
   const ws = useRef<WebSocket | null>(null);
+  const webSocketUrl = process.env.REACT_APP_SOCKET_URL + email;
+  socket = new WebSocket(webSocketUrl);
   const notiNumber = useAppSelector(selectNotiNumber);
 
   const requestNotification = () => {
