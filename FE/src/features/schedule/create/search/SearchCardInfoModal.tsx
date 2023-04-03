@@ -88,8 +88,6 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
       <Stack justifyContent="space-between" spacing={3} p={3}>
         <Text value={place.name} type="groupTitle" />
         <div className={styles.contentGrid}>
-          {/* <span>영업시간</span>
-          <span>보기</span> */}
           <span>주소</span>
           <span>{place.address}</span>
           <span>구글지도</span>
