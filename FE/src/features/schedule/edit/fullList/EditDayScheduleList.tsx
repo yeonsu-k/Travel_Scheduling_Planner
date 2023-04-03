@@ -105,6 +105,8 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
                       }}
                     >
                       <EditScheduleItem
+                        day={day}
+                        index={key}
                         img={value.image}
                         placeName={value.name}
                         time={value.time}

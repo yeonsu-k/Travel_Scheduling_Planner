@@ -176,6 +176,49 @@
 
 /* EditScheduleItem */
 
+.changeTime {
+  width: 100%;
+  height: 6rem;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 45% 45%;
+  grid-template-columns: 75% 15%;
+  grid-template-areas:
+    "text confirm"
+    "time confirm";
+  column-gap: 0.5vw;
+  margin: 1vh 0 1vh;
+  padding: 2%;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  box-shadow: rgba(107, 117, 221, 0.15) 0px 1px 2px 1px;
+}
+
+.changeTimeInfo:nth-child(1) {
+  grid-area: text;
+  margin-right: auto;
+}
+
+.changeTimeInfo:nth-child(2) {
+  grid-area: time;
+  margin-right: auto;
+}
+
+.changeTimeInfo:nth-child(3) {
+  grid-area: confirm;
+  border-radius: 70%;
+  background-color: #98dde3;
+  width: 3vw;
+  height: 3vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
 .editScheduleItem {
   width: 100%;
   height: 6rem;
@@ -256,7 +299,8 @@
   display: inline-block;
 }
 
-.moveTime {
+.moveTime,
+.changeTimeValue {
   width: 3rem;
   height: 100%;
   border: none;
@@ -264,7 +308,17 @@
   text-align: end;
 }
 
-.moveTime:focus {
+.moveTime:focus,
+.changeTimeValue:focus {
+  outline: none;
+}
+
+.changeTimeValue {
+  text-align: start;
+  color: #ff9c00;
+}
+
+.changeTime:focus {
   outline: none;
 }
 
