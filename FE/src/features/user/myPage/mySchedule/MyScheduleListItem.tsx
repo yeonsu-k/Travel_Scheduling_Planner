@@ -141,8 +141,8 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             </div>
           </div>
           <div className={styles.scheduleBtn}>
-            <Button startIcon={item.private ? <LockIcon /> : <LockOpenIcon />} color="inherit" onClick={changePrivate}>
-              {item.private ? "비공개" : "공개"}
+            <Button startIcon={item.private ? <LockOpenIcon /> : <LockIcon />} color="inherit" onClick={changePrivate}>
+              {item.private ? "공개" : "비공개"}
             </Button>
             <ButtonStyled text="일정 수정" />
             <ButtonStyled text="일정 공유" />
