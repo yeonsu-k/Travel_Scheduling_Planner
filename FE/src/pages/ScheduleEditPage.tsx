@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "features/schedule/edit/Edit.module.css";
 import { useAppSelector } from "app/hooks";
 import EditDayList from "features/schedule/edit/EditDayList";
-import EditFullScheduleList from "features/schedule/edit/EditFullScheduleList";
+import EditFullScheduleList from "features/schedule/edit/fullList/EditFullScheduleList";
 import Text from "components/Text";
 import { useDispatch } from "react-redux";
 import {
