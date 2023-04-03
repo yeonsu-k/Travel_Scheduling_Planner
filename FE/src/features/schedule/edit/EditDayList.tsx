@@ -1,11 +1,16 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import styles from "./Edit.module.css";
 import Text from "components/Text";
 import EditDayItem from "./EditDayItem";
 import { useAppSelector } from "app/hooks";
 import { selectFullScheduleList } from "slices/scheduleEditSlice";
 
-const EditDayList = () => {
+interface EditDayListProps {
+  setDay: Dispatch<SetStateAction<number>>;
+  setViewDaySchedule: Dispatch<SetStateAction<boolean>>;
+}
+
+const EditDayList = ({ setDay, setViewDaySchedule }: EditDayListProps) => {
   const scheduleList = useAppSelector(selectFullScheduleList);
 
   return (
@@ -13,11 +18,11 @@ const EditDayList = () => {
       <Text value="일정" type="text" />
 
       <div className={styles.fullScheduleItem}>
-        <EditDayItem />
+        <EditDayItem setViewDaySchedule={setViewDaySchedule} />
       </div>
 
       {scheduleList.map((value, key) => (
-        <EditDayItem day={value.day} key={key} />
+        <EditDayItem day={value.day} key={key} setDay={setDay} setViewDaySchedule={setViewDaySchedule} />
       ))}
     </div>
   );
