@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import SearchListCard from "./SearchListCard";
 import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
 import Axios from "api/JsonAxios";
@@ -29,40 +29,23 @@ interface getRecommendApiType {
 
 function SearchList(props: SearchListType) {
   const { select, keyword, searchView, scheduleCreatProps } = props;
-  const [list, setCardList] = useState<basicConfig[]>([]);
   const region = useAppSelector(selectRegion);
+  const [list, setCardList] = useState<basicConfig[]>([]);
 
-  useEffect(() => {
-    searchView ? keywordSearch() : recommends();
-  }, [select, keyword, region]);
-
-  const keywordSearch = async () => {
+  const listViewType = () => {
     setCardList([]);
-    await Axios.post(api.createSchedule.searchLocation(), {
-      regionId: region.id,
-      locationName: keyword,
-      isHotel: select === "호텔",
-    }).then((res) => {
+    async function fetch() {
+      let response;
+      if (searchView) {
+        response = await Axios.post(api.createSchedule.searchLocation(), {
+          regionId: region.id,
+          locationName: keyword,
+          isHotel: select === "호텔",
+        });
+      } else response = await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, region.id));
+      const resData = response.data.data.splice(0, 20);
       setCardList(
-        res.data.data.map((ele: getRecommendApiType) => {
-          console.log(ele);
-          return {
-            id: ele.locationId,
-            image: ele.locationURL == null ? defaultPhoto : ele.locationURL,
-            name: ele.locationName,
-            address: ele.address,
-            latitude: ele.latitude,
-            longitude: ele.longitude,
-          };
-        }),
-      );
-    });
-  };
-
-  const recommends = async () => {
-    await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, region.id)).then((res) => {
-      setCardList(
-        res.data.data.map((ele: getRecommendApiType) => {
+        resData.map((ele: getRecommendApiType) => {
           return {
             id: ele.locationId,
             image: ele.locationURL == null ? defaultPhoto : ele.locationURL, // API변경시 사진으로 수정
@@ -73,8 +56,13 @@ function SearchList(props: SearchListType) {
           };
         }),
       );
-    });
+    }
+    fetch();
   };
+
+  useLayoutEffect(() => {
+    listViewType();
+  }, [select, keyword, region]);
 
   return (
     <>
