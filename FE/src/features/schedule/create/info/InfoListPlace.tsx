@@ -31,8 +31,8 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
     });
   }, [place]);
   const totalTime = useMemo(() => {
-    const hourArr = place.map((val) => val?.time.split(":")[0]).map((i) => Number(i));
-    const minuteArr = place.map((val) => val?.time.split(":")[1]).map((i) => Number(i));
+    const hourArr = place.map((val: { time: string }) => val.time.split(":")[0]).map((i) => Number(i));
+    const minuteArr = place.map((val: { time: string }) => val.time.split(":")[1]).map((i) => Number(i));
     const sumHour = hourArr.reduce((accumulator, current) => accumulator + current, 0);
     const sumMinute = minuteArr.reduce((accumulator, current) => accumulator + current, 0);
     return {
@@ -44,7 +44,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
 
   const deletePlace = (id: number) => {
     const placeList = [...place];
-    let changedIdx = place.findIndex((value) => value.onePlace.id === id);
+    let changedIdx = place.findIndex((value) => value.id === id);
     placeList.splice(changedIdx, 1);
     dispatch(setPlaceList(placeList));
 
@@ -168,9 +168,9 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
             {place.map((placeCard, index) => (
               <div className={styles.cardList} key={index}>
                 <div className={styles.card}>
-                  <img src={placeCard.onePlace.image} alt={""} />
+                  <img src={placeCard.image} alt={""} />
                   <div className={styles.placeCard}>
-                    <span className={styles.cardText}>{placeCard.onePlace.name}</span>
+                    <span className={styles.cardText}>{placeCard.name}</span>
                     <div className={styles.flexRow}>
                       <div className={styles.placeTimer}>
                         <Timer fontSize="small" />
@@ -199,7 +199,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
                         />
                         분
                       </div>
-                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.onePlace.id)}>
+                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.id)}>
                         <Close fontSize="small" color="error" />
                       </button>
                     </div>

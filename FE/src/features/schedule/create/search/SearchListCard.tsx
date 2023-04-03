@@ -30,9 +30,9 @@ interface SearchListCardType {
 function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCardType) {
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const hotel = useAppSelector(selectHotelList);
-  const place = useAppSelector(selectPlaceList);
-  const pointPlace = useAppSelector(selectPointPlace);
+  const hotel: (basicConfig | null)[] = useAppSelector(selectHotelList);
+  const place: basicConfig[] = useAppSelector(selectPlaceList);
+  const pointPlace: (basicConfig | null)[] = useAppSelector(selectPointPlace);
   const marker = useAppSelector(selectMarker);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
   const [ModalOpen, setModalOpen] = useState(false);
@@ -40,49 +40,50 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
     scheduleCreatProps;
 
   const InfoAddClick = () => {
-    setCurrentTab(select);
-    if (select === "호텔") {
-      const hotelList = [...hotel];
-      const markerList = [...marker];
-      if (hotelList[hotelCurrentDay] != null) {
-        const changedIdx = markerList.findIndex((value) => value.info?.id === hotelList[hotelCurrentDay]?.id);
-        markerList.splice(changedIdx, 1);
-      }
+    if (placeCurrentDay != -1) {
+      setPlaceCurrentDay(-1);
+      const pointPlaceList = [...pointPlace];
+      pointPlaceList[placeCurrentDay] = cardInfo;
+      dispatch(setPointPlace([...pointPlaceList]));
       dispatch(
         setMarker([
-          ...markerList,
+          ...marker,
           {
             info: cardInfo,
-            type: "hotel",
+            type: "point",
           },
         ]),
       );
-      hotelList[hotelCurrentDay] = cardInfo;
-      setHotelCurrentDay(hotelCurrentDay + 1 == hotel.length ? 0 : hotelCurrentDay + 1);
-      dispatch(setHotelList([...hotelList]));
-    }
-    if (select === "장소") {
-      if (placeCurrentDay != -1) {
-        setPlaceCurrentDay(-1);
-        const pointPlaceList = [...pointPlace];
-        pointPlaceList[placeCurrentDay] = cardInfo;
-        dispatch(setPointPlace([...pointPlaceList]));
+    } else {
+      setCurrentTab(select);
+      if (select === "호텔") {
+        const hotelList = [...hotel];
+        const markerList = [...marker];
+        if (hotelList[hotelCurrentDay] != null) {
+          const changedIdx = markerList.findIndex((value) => value.info?.id === hotelList[hotelCurrentDay]?.id);
+          markerList.splice(changedIdx, 1);
+        }
         dispatch(
           setMarker([
-            ...marker,
+            ...markerList,
             {
               info: cardInfo,
-              type: "point",
+              type: "hotel",
             },
           ]),
         );
-      } else {
+
+        hotelList[hotelCurrentDay] = cardInfo;
+        setHotelCurrentDay(hotelCurrentDay + 1 == hotel.length ? 0 : hotelCurrentDay + 1);
+        dispatch(setHotelList(hotelList));
+      } else if (select === "장소") {
         const placeList = [...place];
         placeList.push({
-          onePlace: cardInfo,
+          ...cardInfo,
           time: "2:00",
         });
-        dispatch(setPlaceList([...placeList]));
+        dispatch(setPlaceList(placeList));
+
         dispatch(
           setMarker([
             ...marker,

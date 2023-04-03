@@ -19,7 +19,7 @@ interface SearchListType {
 interface getRecommendApiType {
   locationId: number;
   locationName: string;
-  lcoationURL: string;
+  locationURL: string;
   address: string;
   latitude: number;
   longitude: number;
@@ -48,7 +48,7 @@ function SearchList(props: SearchListType) {
           console.log(ele);
           return {
             id: ele.locationId,
-            image: ele.lcoationURL == null ? defaultPhoto : ele.lcoationURL,
+            image: ele.locationURL == null ? defaultPhoto : ele.locationURL,
             name: ele.locationName,
             address: ele.address,
             latitude: ele.latitude,
@@ -65,7 +65,7 @@ function SearchList(props: SearchListType) {
         res.data.data.map((ele: getRecommendApiType) => {
           return {
             id: ele.locationId,
-            image: ele.lcoationURL == null ? defaultPhoto : ele.lcoationURL, // API변경시 사진으로 수정
+            image: ele.locationURL == null ? defaultPhoto : ele.locationURL, // API변경시 사진으로 수정
             name: ele.locationName,
             address: ele.address,
             latitude: ele.latitude,
