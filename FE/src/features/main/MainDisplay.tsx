@@ -1,24 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styles from "./Main.module.css";
 import MainMobileContainer from "./MainMobileContainer";
 
 const MainDisplay = () => {
-  /* 메인화면 애니메이션 잠정 보류 ... */
-  // const stepRef = useRef(null);
-  // useEffect(() => {
-  //   const options = {};
-  //   const callback = (entries: any, observer: any) => {
-  //     entries.forEach((entry: any) => {
-  //       if (entry.isIntersecting) {
-  //         observer.unobserve(entry.target);
-  //       }
-  //     });
-  //   };
-  //   const observer = new IntersectionObserver(callback, options);
-  //   if (stepRef.current) {
-  //     observer.observe(stepRef.current);
+  const [videoNum, setVideoNum] = useState(Math.floor(Math.random() * 15) + 1);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // const getRandomIndexArray = () => {
+  //   const randomIndexArray = new Array(15);
+  //   for (let i = 0; i < 15; i++) {
+  //     const randomNum = Math.floor(Math.random() * 15) + 1;
+  //     if (!randomIndexArray.includes(randomNum)) {
+  //       randomIndexArray[i] = randomNum;
+  //     } else {
+  //       i--;
+  //     }
   //   }
-  // }, []);
+  //   return randomIndexArray;
+  // };
+  // const cityData = useMemo<number[]>(() => getRandomIndexArray(), []);
+
+  const handleVideoEnded = () => {
+    if (!videoRef.current) return;
+    if (videoNum + 1 == 16) setVideoNum(0);
+    else setVideoNum(videoNum + 1);
+  };
 
   return (
     <div>
@@ -34,8 +39,8 @@ const MainDisplay = () => {
                 <div className={styles.button}>시작하기</div>
               </div>
             </div>
-            <video autoPlay muted loop className={styles.video}>
-              <source src={require("../../asset/main/MainMovie6.mp4")} type="video/mp4" />
+            <video autoPlay muted loop className={styles.video} ref={videoRef} onEnded={handleVideoEnded}>
+              <source src={`https://www.myro.co.kr/myro_video/MainMovie${videoNum}.mp4`} type="video/mp4" />
             </video>
           </div>
         </div>
