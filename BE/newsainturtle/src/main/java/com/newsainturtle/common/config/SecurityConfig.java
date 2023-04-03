@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/**",
             "/socket/notification/**",
             "/api/schedule/main",
+            "/api/schedule/travels",
             "/api/schedule/basiclocation"
     };
     private static final String[] IGNORE_URL_ARRAY = {
