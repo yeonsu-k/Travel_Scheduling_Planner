@@ -1,4 +1,3 @@
-import React from "react";
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
 
@@ -14,6 +13,8 @@ interface userInfoConfig {
   nickname: string;
   profile: string;
 }
+
+export let socket: WebSocket;
 
 const initialState: authConfig = {
   accessToken: "",
@@ -42,10 +43,14 @@ const authSlice = createSlice({
       state.userInfo.nickname = "";
       sessionStorage.clear();
       localStorage.clear();
+      console.log("login", state.login);
+      socket.close();
     },
     setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;
       state.userInfo.profile = profile;
+      const webSocketUrl = process.env.REACT_APP_SOCKET_URL + state.userInfo.email;
+      socket = new WebSocket(webSocketUrl);
     },
     setToken: (state, { payload: { token } }) => {
       state.token = token;
@@ -55,5 +60,7 @@ const authSlice = createSlice({
 
 export const { setLogin, setLogout, setUserInfo, setToken } = authSlice.actions;
 export const selectUserInfo = (state: rootState) => state.auth.userInfo;
+export const selectLoginState = (state: rootState) => state.auth.login;
+
 export const selectToken = (state: rootState) => state.auth.token;
 export default authSlice.reducer;

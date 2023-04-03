@@ -4,14 +4,20 @@ import Button from "components/Button";
 import Text from "components/Text";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { getNotification, noticeListProps } from "./Notice";
+import { noticeListProps } from "./Notice";
 import { getFriendInfo } from "pages/MyPage";
+import { setNotiNumber } from "slices/mainSlice";
+import { useAppDispatch } from "app/hooks";
 
 interface NoticeItemProps {
   noticeValue: noticeListProps;
 }
 
+let noticeList: noticeListProps[] = [];
+
 const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
+  const dispatch = useAppDispatch();
+
   const onClickHandlingNotification = async (isAccept: boolean) => {
     await Axios.post(api.notification.notification(), {
       notificationId: noticeValue.notificationId,
@@ -21,25 +27,46 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
       .then((res) => {
         console.log(res);
         alert("알림 처리 완료");
+        getNotification();
+        getFriendInfo();
       })
       .catch((err) => {
         console.log(err);
       });
-
-    getNotification();
-    getFriendInfo();
   };
 
   const onClickDeleteBtn = async () => {
     await Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId))
       .then((res) => {
         console.log(res);
+        getNotification();
       })
       .catch((err) => {
         console.log(err);
       });
+  };
 
-    getNotification();
+  const getNotification = async () => {
+    let notificationCount = 0;
+
+    await Axios.get(api.notification.notification())
+      .then((res) => {
+        console.log(res);
+        noticeList = [...res.data.data.notifications];
+        console.log("list", noticeList);
+
+        noticeList.map((value, key) => {
+          if (value.status === "NO_RESPONSE") {
+            notificationCount++;
+          }
+        });
+
+        console.log("cnt: ", notificationCount);
+        dispatch(setNotiNumber({ notiNumber: notificationCount }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
