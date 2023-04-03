@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
+import { socket } from "features/user/notice/Notice";
 
 interface authConfig {
   accessToken: string;
@@ -13,8 +14,6 @@ interface userInfoConfig {
   nickname: string;
   profile: string;
 }
-
-export let socket: WebSocket;
 
 const initialState: authConfig = {
   accessToken: "",
@@ -49,8 +48,6 @@ const authSlice = createSlice({
     setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;
       state.userInfo.profile = profile;
-      const webSocketUrl = process.env.REACT_APP_SOCKET_URL + state.userInfo.email;
-      socket = new WebSocket(webSocketUrl);
     },
     setToken: (state, { payload: { token } }) => {
       state.token = token;
