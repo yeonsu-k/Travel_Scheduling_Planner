@@ -47,7 +47,7 @@ public class WebSocketService {
     @OnClose
     public void onClose(Session session) {
         log.info("session close : {}", session);
-        if (!users.contains(session)) {
+        if (users.contains(session)) {
             users.remove(session);
             log.info("session close : {} - {}", session, userInfos.get(session.getId()));
             userInfos.remove(session.getId());
