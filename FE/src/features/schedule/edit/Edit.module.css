@@ -234,3 +234,15 @@
 .itemLink {
   display: inline-block;
 }
+
+.moveTime {
+  width: 3rem;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: end;
+}
+
+.moveTime:focus {
+  outline: none;
+}
