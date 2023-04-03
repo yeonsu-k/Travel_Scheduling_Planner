@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import { selectToken, setLogin, setUserInfo } from "slices/authSlice";
 import Loading from "components/Loading";
 import { useAppSelector } from "app/hooks";
+import { useSelector } from "react-redux";
+import { rootState } from "app/store";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ const Login = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
   const token = useAppSelector(selectToken);
+  const { login } = useSelector((state: rootState) => state.auth);
 
   const code = searchParams.get("code");
   const error = searchParams.get("error");
@@ -104,7 +107,7 @@ const Login = () => {
         <div className={styles.loginContainer}>
           <div className={styles.textTitle}>LOG IN</div>
           <div className={styles.smallText}>AI 여행 스케줄링 플래너 - MYRO</div>
-          {!token ? (
+          {login && !token ? (
             <div className={styles.tokenAlertText}>
               <Text value="토큰이 만료되었습니다. 다시 로그인해주세요." type="caption" color="cancle" />
             </div>
