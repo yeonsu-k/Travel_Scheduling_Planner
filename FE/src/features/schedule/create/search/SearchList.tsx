@@ -36,14 +36,19 @@ function SearchList(props: SearchListType) {
     setCardList([]);
     async function fetch() {
       let response;
+      let resData;
       if (searchView) {
         response = await Axios.post(api.createSchedule.searchLocation(), {
           regionId: region.id,
           locationName: keyword,
           isHotel: select === "호텔",
         });
-      } else response = await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, region.id));
-      const resData = response.data.data.splice(0, 20);
+        resData = response.data.data;
+      } else {
+        response = await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, region.id));
+        resData = response.data.data.splice(0, 20);
+      }
+
       setCardList(
         resData.map((ele: getRecommendApiType) => {
           return {
