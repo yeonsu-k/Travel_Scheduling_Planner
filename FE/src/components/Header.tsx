@@ -55,7 +55,8 @@ function Header() {
         .catch((err) => {
           console.log("토큰 에러:", err);
           dispatch(setToken({ token: false }));
-          navigate("/login");
+          dispatch(setLogout());
+          navigate("/");
         });
     }
   };
