@@ -26,7 +26,6 @@ const MainTravelLog = () => {
         response.map(async (item: TravelLogConfig, i: number) => {
           await Axios.get(api.createSchedule.getRegion(item.regionId))
             .then((res) => {
-              console.log(response);
               const scheduleLocations = item.scheduleLocations;
               const tmpSchedule: any[] = [];
               scheduleLocations.map((schedule: locationConfig) => {
