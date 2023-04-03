@@ -259,6 +259,8 @@ const ScheduleEditPage = () => {
     for (let day = 1; day <= travelDays; day++) {
       list.push({
         day: day,
+        startHour: 10,
+        startMinute: 0,
         dayList: [],
       });
     }
@@ -275,6 +277,8 @@ const ScheduleEditPage = () => {
       latitude: 0,
       longitude: 0,
       time: "",
+      startTime: "10:00",
+      endTime: "10:00",
     };
 
     let day = 0;
@@ -288,6 +292,8 @@ const ScheduleEditPage = () => {
         latitude: value.info.latitude,
         longitude: value.info.longitude,
         time: value.time,
+        startTime: "10:00",
+        endTime: "10:00",
       };
 
       list[day].dayList.push(placeInfo);
