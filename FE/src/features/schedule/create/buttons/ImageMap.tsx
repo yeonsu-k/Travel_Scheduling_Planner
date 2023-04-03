@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 
 interface ImageMapType {
   address: string;
@@ -54,7 +54,8 @@ function ImageMap(props: ImageMapType) {
       }
     });
   }
-  useEffect(() => {
+
+  useLayoutEffect(() => {
     if (imgMap.current) {
       imgMap.current.innerHTML = "";
       setMap();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { selectRegion, setRegion } from "slices/scheduleCreateSlice";
 import Axios from "api/JsonAxios";
@@ -47,7 +47,7 @@ const InfoLocalSelect = ({ modalClose }: Props) => {
   });
   const [searchLocal, setSearchLocal] = useState<DestinationConfig[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getLocalData();
   }, []);
 
@@ -62,7 +62,6 @@ const InfoLocalSelect = ({ modalClose }: Props) => {
   };
 
   const handleOnChangeSelectValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // const value: DestinationConfig = JSON.parse(e.target.value);
     setCurrentValue(JSON.parse(e.target.value));
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { basicConfig, selectMarker, selectRegion } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
 import styles from "./Create.module.css";
@@ -22,13 +22,13 @@ function CreateMap() {
   const mainMap = useRef<HTMLInputElement>(null);
   const [markerListSize, setMarkerListSize] = useState(marker.length);
   const geocoder = new kakao.maps.services.Geocoder();
-  const [centerPos, setCenterPos] = useState(() => {
+  const [centerPos, setCenterPos] = useState<{ y: number; x: number }>(() => {
     geocoder.addressSearch(region.name, function (result: any[], status: string) {
       if (status === kakao.maps.services.Status.OK) {
-        return { center: new kakao.maps.LatLng(result[0].y, result[0].x), level: 8 };
+        return { y: result[0].y, x: result[0].x };
       }
     });
-    return { center: new kakao.maps.LatLng(33.450701, 126.570667), level: 8 };
+    return { y: 33.450701, x: 126.570667 };
   });
   const [ModalOpen, setModalOpen] = useState(false);
   const [markerInfo, setMarkerInfo] = useState<basicConfig>();
@@ -36,34 +36,35 @@ function CreateMap() {
   useEffect(() => {
     geocoder.addressSearch(region.name, function (result: any[], status: string) {
       if (status === kakao.maps.services.Status.OK) {
-        setCenterPos({ center: new kakao.maps.LatLng(result[0].y, result[0].x), level: 8 });
+        setCenterPos({ y: result[0].y, x: result[0].x });
       }
     });
   }, [region]);
 
   useEffect(() => {
+    console.log("마커정보", marker);
     // 마커 리스트에서 가장 마지막 위치를 기준으로 중심 좌표 바꿔주기
     if (marker.length != 0 && marker.length >= markerListSize) {
       const centerData = marker[marker.length - 1].info;
-      setCenterPos({ center: new kakao.maps.LatLng(centerData.latitude, centerData.longitude), level: 6 });
+      setCenterPos({ y: centerData.latitude, x: centerData.longitude });
       setMarkerListSize(marker.length);
     }
   }, [marker]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (mainMap.current) {
       mainMap.current.innerHTML = "";
       setMap();
     }
-  }, [centerPos, marker]);
+  }, [centerPos]);
 
   function setMap() {
     const container = document.getElementById("map");
-    const options = centerPos;
+    const options = { center: new kakao.maps.LatLng(centerPos.y, centerPos.x), level: 7 };
     // 지도를 생성
     const map = new kakao.maps.Map(container, options);
-    map.setMinLevel(3);
-    map.setMaxLevel(9);
+    map.setMinLevel(5);
+    map.setMaxLevel(8);
 
     const imageSize = new kakao.maps.Size(30, 30);
     const imageOption = { offset: new kakao.maps.Point(30, 30) };
