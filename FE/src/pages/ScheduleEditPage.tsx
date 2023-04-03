@@ -36,6 +36,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditDayMoveList from "features/schedule/edit/dayList/EditDayMoveList";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import colorPalette from "styles/colorPalette";
+import Modal from "components/Modal";
+import Input from "components/Input";
+import SwitchButton from "components/SwitchButton";
+import ButtonStyled from "components/Button";
 
 const { kakao } = window;
 
@@ -82,6 +86,10 @@ const ScheduleEditPage = () => {
   const [originPosition, setOriginPosition] = useState({ x: 0, y: 0 }); // 드래그 전 포지션 값 (e.target.offset의 상대 위치)
   const [clientPosition, setClientPosition] = useState({ x: 0, y: 0 }); // 실시간 커서 위치인 e.client를 갱신하는 값
   const [position, setPosition] = useState({ left: 20, top: 100 }); //실제 드래그 할 요소가 위치하는 포지션 값
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false); // 확인 모달
+  const [scheduleTitle, setScheduleTitle] = useState<string>(""); // 일정 이름
+  const [scheduleOpen, setScheduleOpen] = useState<boolean>(true); // 일정 공개 여부
 
   const setMap = () => {
     const container = document.getElementById("map");
@@ -318,8 +326,8 @@ const ScheduleEditPage = () => {
 
     const sendData = {
       regionId: region.id,
-      scheduleName: "",
-      isPrivate: true,
+      scheduleName: scheduleTitle,
+      isPrivate: scheduleOpen,
       scheduleStartDay: date.start,
       scheduleEndDay: date.end,
       scheduleStartLocation: pointPlace[0]?.address,
@@ -356,7 +364,7 @@ const ScheduleEditPage = () => {
         <div className={styles.map} ref={containerRef}>
           <div id="map" style={{ width: "100%", height: "100%", zIndex: "0" }}></div>
 
-          <a className={styles.saveScheduleBtn} onClick={onClickSaveSchedule}>
+          <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
             일정저장
           </a>
 
@@ -465,6 +473,36 @@ const ScheduleEditPage = () => {
           </div>
         </div>
       </DragDropContext>
+
+      {/* 확인 모달 */}
+      {modalOpen ? (
+        <Modal title="일정 저장" modalClose={() => setModalOpen(false)}>
+          <div className={styles.scheduleTitleContainer}>
+            <div className={styles.scheduleTitle}>
+              <Text value="일정 이름" type="text" color="darkgray" />
+              <Input placeholder="일정 이름을 입력해주세요." onChange={(e) => setScheduleTitle(e.target.value)} />
+            </div>
+            <div className={styles.scheduleTitle}>
+              <Text value="일정 공개" type="text" color="darkgray" />
+              <SwitchButton
+                label={scheduleOpen ? "공개" : "비공개"}
+                checked={scheduleOpen}
+                onChange={() => setScheduleOpen(!scheduleOpen)}
+              />
+            </div>
+            <div
+              className={styles.scheduleConfirmBtn}
+              onClick={() => {
+                setModalOpen(false);
+                onClickSaveSchedule();
+              }}
+            >
+              <ButtonStyled text="저장" color="main" />
+              <ButtonStyled text="취소" onClick={() => setModalOpen(false)} />
+            </div>
+          </div>
+        </Modal>
+      ) : null}
     </div>
   );
 };

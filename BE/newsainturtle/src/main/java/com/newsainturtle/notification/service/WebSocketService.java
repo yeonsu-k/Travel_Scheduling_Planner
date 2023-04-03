@@ -26,7 +26,7 @@ public class WebSocketService {
     @OnOpen
     public void onOpen(Session session, @PathParam("email") String email) throws Exception {
         log.info("open session : {}, clients={}", session.toString(), users);
-        if (!users.contains(session)) {
+        if (!email.equals("undefined") && !users.contains(session)) {
             users.add(session);
             userInfos.put(session.getId(), email);
             log.info("session open : {} - {}", session, email);
@@ -47,7 +47,7 @@ public class WebSocketService {
     @OnClose
     public void onClose(Session session) {
         log.info("session close : {}", session);
-        if (!users.contains(session)) {
+        if (users.contains(session)) {
             users.remove(session);
             log.info("session close : {} - {}", session, userInfos.get(session.getId()));
             userInfos.remove(session.getId());

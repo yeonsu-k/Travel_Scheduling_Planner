@@ -2,9 +2,10 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import NoticeItem from "./NoticeItem";
-import { useAppSelector } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import { selectNotiNumber, setNotiNumber } from "slices/mainSlice";
 import { selectUserInfo } from "slices/authSlice";
 
 export interface noticeListProps {
@@ -16,31 +17,35 @@ export interface noticeListProps {
 }
 
 let noticeList: noticeListProps[] = [];
+export let socket: WebSocket;
 
 const Notice = () => {
-  const email = useAppSelector(selectUserInfo).email;
+  const dispatch = useAppDispatch();
 
-  const fireNotification = (title: string, options: any) => {
+  const email = useAppSelector(selectUserInfo).email;
+  const ws = useRef<WebSocket | null>(null);
+  const webSocketUrl = process.env.REACT_APP_SOCKET_URL + email;
+  socket = new WebSocket(webSocketUrl);
+  const notiNumber = useAppSelector(selectNotiNumber);
+
+  const requestNotification = () => {
     if (Notification.permission !== "granted") {
       Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          new Notification(title, options);
-        } else {
+        if (permission !== "granted") {
           return;
         }
       });
-    } else {
-      new Notification(title, options);
     }
   };
 
-  const webSocketUrl = process.env.REACT_APP_SOCKET_URL + email;
+  const fireNotification = (title: string, options: object) => {
+    new Notification(title, options);
+  };
 
-  const ws = useRef<WebSocket | null>(null);
   if (!ws.current) {
-    ws.current = new WebSocket(webSocketUrl);
+    ws.current = socket;
     ws.current.onopen = () => {
-      console.log("connected to " + webSocketUrl);
+      console.log("connected");
     };
     ws.current.onmessage = (event) => {
       console.log("메세지 옴: " + event.data);
@@ -63,14 +68,37 @@ const Notice = () => {
       getNotification();
     };
     ws.current.onclose = (event) => {
-      console.log("disconnect from " + webSocketUrl);
+      console.log("disconnect");
       console.log(event);
     };
     ws.current.onerror = (error) => {
-      console.log("connection error " + webSocketUrl);
+      console.log("connection error ");
       console.log(error);
     };
   }
+
+  const getNotification = async () => {
+    let notificationCount = 0;
+
+    await Axios.get(api.notification.notification())
+      .then((res) => {
+        console.log(res);
+        noticeList = [...res.data.data.notifications];
+        console.log("list", noticeList);
+
+        noticeList.map((value, key) => {
+          if (value.status === "NO_RESPONSE") {
+            notificationCount++;
+          }
+        });
+
+        console.log("cnt: ", notificationCount);
+        dispatch(setNotiNumber({ notiNumber: notificationCount }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const onClickClearBtn = async () => {
     await Axios.delete(api.notification.notification())
@@ -84,7 +112,12 @@ const Notice = () => {
 
   useEffect(() => {
     getNotification();
+    requestNotification();
   }, []);
+
+  useEffect(() => {
+    getNotification();
+  }, [notiNumber]);
 
   return (
     <div className={styles.notice}>
@@ -108,15 +141,3 @@ const Notice = () => {
 };
 
 export default Notice;
-
-export const getNotification = async () => {
-  await Axios.get(api.notification.notification())
-    .then((res) => {
-      console.log(res);
-      noticeList = [...res.data.data.notifications];
-      console.log("list", noticeList);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};

@@ -30,12 +30,14 @@ interface mainConfig {
   destinationList: DestinationConfig[];
   travelLogList: TravelLogConfig[];
   scheduleCnt: number;
+  notiNumber: number;
 }
 
 const initialState: mainConfig = {
   destinationList: [],
   travelLogList: [],
   scheduleCnt: 0,
+  notiNumber: 0,
 };
 
 const mainSlice = createSlice({
@@ -51,11 +53,17 @@ const mainSlice = createSlice({
     setScheduleCnt: (state, { payload: { scheduleCnt } }) => {
       state.scheduleCnt = scheduleCnt;
     },
+    setNotiNumber: (state, { payload: { notiNumber } }) => {
+      state.notiNumber = notiNumber;
+      console.log("redux: ", state.notiNumber);
+    },
   },
 });
 
-export const { setDestinationList, setScheduleCnt, setTravelLogList } = mainSlice.actions;
+export const { setDestinationList, setScheduleCnt, setTravelLogList, setNotiNumber } = mainSlice.actions;
 export const selectDestinationList = (state: rootState) => state.main.destinationList;
 export const selectTravelLogList = (state: rootState) => state.main.travelLogList;
 export const selectScheduleCnt = (state: rootState) => state.main.scheduleCnt;
+export const selectNotiNumber = (state: rootState) => state.main.notiNumber;
+
 export default mainSlice.reducer;

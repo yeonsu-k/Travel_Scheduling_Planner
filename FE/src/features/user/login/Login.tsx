@@ -29,7 +29,7 @@ const Login = () => {
     if (code) {
       console.log("kakao login code: " + code);
       setLoading(true);
-      await Axios.get(`http://localhost:8080/api/auth/kakao/login?code=${code}`)
+      await Axios.get(process.env.REACT_APP_API_BASE_URL + `/api/auth/kakao/login?code=${code}`)
         .then((res) => {
           dispatch(
             setLogin({
