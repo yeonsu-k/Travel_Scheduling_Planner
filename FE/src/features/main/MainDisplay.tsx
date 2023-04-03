@@ -5,6 +5,7 @@ import MainMobileContainer from "./MainMobileContainer";
 const MainDisplay = () => {
   const [videoNum, setVideoNum] = useState(Math.floor(Math.random() * 15) + 1);
   const videoRef = useRef<HTMLVideoElement>(null);
+  // 다른 영상으로 자동 재생
   // const getRandomIndexArray = () => {
   //   const randomIndexArray = new Array(15);
   //   for (let i = 0; i < 15; i++) {
