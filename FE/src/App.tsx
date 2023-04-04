@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Header from "components/Header";
@@ -12,23 +12,28 @@ import NotFound from "pages/NotFound";
 import AuthRoute from "./AuthRoute";
 import DataPage from "pages/DataPage";
 import NoticeToast from "features/user/notice/NoticeToast";
-import { socket } from "features/user/notice/Socket";
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { setNotiNumber } from "slices/mainSlice";
+import { selectUserInfo } from "slices/authSlice";
+import { connectSocket } from "features/user/notice/Socket";
 
 function App() {
   const dispatch = useAppDispatch();
-
   const location = useLocation();
   const [isNotice, setIsNotice] = useState(false);
   const [noticeMessage, setNoticeMessage] = useState("");
+  const email = useAppSelector(selectUserInfo).email;
 
-  if (socket) {
+  useLayoutEffect(() => {
+    const socket = new WebSocket(process.env.REACT_APP_SOCKET_URL + email);
+    connectSocket(socket);
+
     socket.onopen = () => {
       console.log("connected");
     };
+
     socket.onmessage = (event) => {
       console.log("메세지 옴: " + event.data);
 
@@ -38,46 +43,51 @@ function App() {
 
       if (data.type === "friend") {
         console.log("friend");
-        setNoticeMessage(`${data.senderNickname}님이 ${data.content}을 보냈습니다.`);
+        const message = `${data.senderNickname}님이 ${data.content}을 보냈습니다.`;
+        setNoticeMessage(message);
         setIsNotice(true);
       } else if (data.type === "schedule") {
-        setNoticeMessage(`${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`);
-
-        getNotification();
+        const message = `${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`;
+        setNoticeMessage(message);
+        setIsNotice(true);
       }
-      socket.onclose = (event) => {
-        console.log("disconnect");
-        console.log(event);
-      };
-      socket.onerror = (error) => {
-        console.log("connection error ");
-        console.log(error);
-      };
+
+      getNotification();
     };
 
-    let noticeList = [];
-    const getNotification = async () => {
-      let notificationCount = 0;
-      await Axios.get(api.notification.notification())
-        .then((res) => {
-          console.log(res);
-          noticeList = [...res.data.data.notifications];
-          console.log("list", noticeList);
+    socket.onclose = (event) => {
+      console.log("disconnect");
+      console.log(event);
+    };
 
-          noticeList.map((value, key) => {
-            if (value.status === "NO_RESPONSE") {
-              notificationCount++;
-            }
-          });
+    socket.onerror = (error) => {
+      console.log("connection error ");
+      console.log(error);
+    };
+  }, []);
 
-          console.log("cnt: ", notificationCount);
-          dispatch(setNotiNumber({ notiNumber: notificationCount }));
-        })
-        .catch((err) => {
-          console.log(err);
+  let noticeList = [];
+  const getNotification = async () => {
+    let notificationCount = 0;
+    await Axios.get(api.notification.notification())
+      .then((res) => {
+        console.log(res);
+        noticeList = [...res.data.data.notifications];
+        console.log("list", noticeList);
+
+        noticeList.map((value, key) => {
+          if (value.status === "NO_RESPONSE") {
+            notificationCount++;
+          }
         });
-    };
-  }
+
+        console.log("cnt: ", notificationCount);
+        dispatch(setNotiNumber({ notiNumber: notificationCount }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>

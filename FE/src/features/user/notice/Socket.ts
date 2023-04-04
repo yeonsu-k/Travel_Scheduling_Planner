@@ -1,9 +1,14 @@
 export let socket: WebSocket;
+export let message: string;
 
-export const connectSocket = (email: string) => {
-  socket = new WebSocket(process.env.REACT_APP_SOCKET_URL + email);
+export const connectSocket = (webSocket: WebSocket) => {
+  socket = webSocket;
 };
 
 export const disconnectSocket = () => {
   socket.close();
+};
+
+export const setMessage = () => {
+  message = "";
 };
