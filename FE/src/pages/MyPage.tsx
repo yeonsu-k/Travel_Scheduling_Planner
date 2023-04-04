@@ -5,16 +5,7 @@ import MyFriends from "features/user/myPage/myFriends/MyFriends";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useAppDispatch } from "app/hooks";
-import { setFriendCnt } from "slices/friendSlice";
-
-export interface friendProps {
-  profile: string;
-  email: string;
-  nickname: string;
-}
-
-let friendNumber = 0;
-let friendList: Array<friendProps> = [];
+import { setFriendCnt, setFriendList } from "slices/friendSlice";
 
 function MyPage() {
   const dispatch = useAppDispatch();
@@ -23,11 +14,11 @@ function MyPage() {
   const [scheduleColor, setScheduleColor] = useState("");
   const [friendColor, setfriendColor] = useState("");
 
-  const getFriendCnt = async () => {
+  const getFriendInfo = async () => {
     await Axios.get(api.friend.friend())
       .then((res) => {
         dispatch(setFriendCnt(res.data.data.friends.length));
-        friendList = [...res.data.data.friends];
+        dispatch(setFriendList(res.data.data.friends));
       })
       .catch((err) => {
         console.log(err);
@@ -35,7 +26,7 @@ function MyPage() {
   };
 
   useEffect(() => {
-    getFriendCnt();
+    getFriendInfo();
   }, []);
 
   useEffect(() => {
@@ -46,21 +37,9 @@ function MyPage() {
   return (
     <div>
       <MyProfile scheduleColor={scheduleColor} friendColor={friendColor} setViewSchedule={setViewSchedule} />
-      {viewSchedule ? <MySchedule /> : <MyFriends friendList={friendList} />}
+      {viewSchedule ? <MySchedule /> : <MyFriends />}
     </div>
   );
 }
 
 export default MyPage;
-
-export const getFriendInfo = async () => {
-  await Axios.get(api.friend.friend())
-    .then((res) => {
-      friendNumber = res.data.data.friends.length;
-      console.log("friendNumber", friendNumber);
-      friendList = [...res.data.data.friends];
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
