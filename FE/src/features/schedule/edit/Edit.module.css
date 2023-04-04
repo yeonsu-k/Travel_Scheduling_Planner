@@ -27,6 +27,26 @@
   z-index: 2;
 }
 
+.daySummary {
+  position: absolute;
+  width: 15vw;
+  height: 13vh;
+  top: 1.5%;
+  right: 1%;
+  transform: translate(-1.5%, 1%);
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+  margin: 8px 12px !important;
+  z-index: 2;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .searchPlaceBtn {
   position: absolute;
   width: 2.5vw;
@@ -120,7 +140,8 @@
 
 /* EditFullScheduleList */
 
-.editFullScheduleList {
+.editFullScheduleList,
+.editDayMoveList {
   width: 20%;
   height: 100%;
   display: flex;
@@ -150,10 +171,53 @@
   width: 1rem;
   height: 1rem;
   border-radius: 70%;
-  background-color: #ff2600;
+  /* background-color: #ff2600; */
 }
 
 /* EditScheduleItem */
+
+.changeTime {
+  width: 100%;
+  height: 6rem;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 45% 45%;
+  grid-template-columns: 75% 15%;
+  grid-template-areas:
+    "text confirm"
+    "time confirm";
+  column-gap: 0.5vw;
+  margin: 1vh 0 1vh;
+  padding: 2%;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  box-shadow: rgba(107, 117, 221, 0.15) 0px 1px 2px 1px;
+}
+
+.changeTimeInfo:nth-child(1) {
+  grid-area: text;
+  margin-right: auto;
+}
+
+.changeTimeInfo:nth-child(2) {
+  grid-area: time;
+  margin-right: auto;
+}
+
+.changeTimeInfo:nth-child(3) {
+  grid-area: confirm;
+  border-radius: 70%;
+  background-color: #98dde3;
+  width: 3vw;
+  height: 3vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 
 .editScheduleItem {
   width: 100%;
@@ -233,6 +297,90 @@
 
 .itemLink {
   display: inline-block;
+}
+
+.moveTime,
+.changeTimeValue {
+  width: 3rem;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: end;
+}
+
+.moveTime:focus,
+.changeTimeValue:focus {
+  outline: none;
+}
+
+.changeTimeValue {
+  text-align: start;
+  color: #ff9c00;
+}
+
+.changeTime:focus {
+  outline: none;
+}
+
+/* EditDayMoveItem.tsx */
+
+.editDayMoveItem {
+  width: 90%;
+  height: 5rem;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 30% 30% 30%;
+  grid-template-columns: 30% 40% 25%;
+  grid-template-areas:
+    "step startPoint route"
+    "step arrow route"
+    "step endPoint route";
+  column-gap: 0.5vw;
+  margin: 1vh 0 1vh;
+  padding: 2% 5% 2% 5%;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  box-shadow: rgba(31, 38, 135, 0.08) 0px 8px 16px 0px;
+}
+
+.moveItemInfo:nth-child(1) {
+  grid-area: step;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(2) {
+  grid-area: startPoint;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(3) {
+  grid-area: arrow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(4) {
+  grid-area: endPoint;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(5) {
+  grid-area: route;
+  width: 2rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 0.3rem;
+  cursor: pointer;
+  margin-left: auto;
 }
 
 .scheduleTitleContainer {

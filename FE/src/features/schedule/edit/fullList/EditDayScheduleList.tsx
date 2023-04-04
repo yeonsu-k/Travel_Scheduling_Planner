@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Edit.module.css";
+import styles from "../Edit.module.css";
 import Text from "components/Text";
 import EditScheduleItem from "./EditScheduleItem";
 import { useAppSelector } from "app/hooks";
@@ -105,6 +105,8 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
                       }}
                     >
                       <EditScheduleItem
+                        day={day}
+                        index={key}
                         img={value.image}
                         placeName={value.name}
                         time={value.time}
