@@ -42,7 +42,6 @@ function CreateMap() {
   }, [region]);
 
   useEffect(() => {
-    console.log("마커정보", marker);
     // 마커 리스트에서 가장 마지막 위치를 기준으로 중심 좌표 바꿔주기
     if (marker.length != 0 && marker.length >= markerListSize) {
       const centerData = marker[marker.length - 1].info;

@@ -58,7 +58,6 @@ function CreateButtons(props: { scheduleCreateClick: () => void }) {
     const isPlace = place.length >= differenceInDays(new Date(date.end), new Date(date.start)) + 1;
     const isPointPlace = !pointPlace.includes(null);
     if (isHotel && isPlace && isPointPlace) {
-      console.log(place.length);
       setIsToast(false);
       setCreateScheduleModal(true);
     } else {
