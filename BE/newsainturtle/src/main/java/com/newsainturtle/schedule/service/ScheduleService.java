@@ -237,11 +237,6 @@ public class ScheduleService {
         }
 
         @Override
-        public String toString() {
-            return locationSetRequest.getLcationId()+" "+this.dist;
-        }
-
-        @Override
         public int compareTo(Plc o) {
             return (int)(this.dist-o.dist);
         }
