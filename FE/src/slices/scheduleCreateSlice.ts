@@ -3,12 +3,13 @@ import { rootState } from "app/store";
 import { addDays, format } from "date-fns";
 
 export interface basicConfig {
-  id: number;
-  image: string;
-  name: string;
+  locationId: number;
+  locationName: string;
+  locationURL: string;
   address: string;
   latitude: number;
   longitude: number;
+  time: string;
 }
 
 interface scheduleCreateConfig {
@@ -23,10 +24,7 @@ interface scheduleCreateConfig {
   };
   vehicle: string;
   hotel: (basicConfig | null)[];
-  place: {
-    onePlace: basicConfig;
-    time: string;
-  }[];
+  place: basicConfig[];
   pointPlace: (basicConfig | null)[];
   marker: {
     info: basicConfig;
@@ -97,19 +95,19 @@ const scheduleCreateSlice = createSlice({
       const newHotel = temp.map((val) => {
         return {
           info: val,
-          time: "0:0",
+          time: "00:00",
         };
       });
       temp = pointPlace.filter((ele) => ele != null) as basicConfig[];
       const newPointPlace = temp.map((val) => {
         return {
           info: val,
-          time: "0:0",
+          time: "00:00",
         };
       });
       const newPlace = place.map((val) => {
         return {
-          info: val.onePlace,
+          info: val,
           time: val.time,
         };
       });

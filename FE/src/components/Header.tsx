@@ -111,9 +111,9 @@ function Header() {
 
           <Stack id={styles.nav} direction="row" spacing={3} alignItems="center">
             {location.pathname == "/" && (
-              <span className={styles.link} style={{ color: scrollPosition < 200 ? "white" : "black" }}>
+              <a href="/#goSkip" className={styles.link} style={{ color: scrollPosition < 200 ? "white" : "black" }}>
                 여행지
-              </span>
+              </a>
             )}
 
             {login ? (

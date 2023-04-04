@@ -206,7 +206,7 @@ p {
 .contentGrid {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-rows: repeat(5, minmax(1fr, auto));
   row-gap: 10px;
   width: 100%;
   font-size: 0.875rem;

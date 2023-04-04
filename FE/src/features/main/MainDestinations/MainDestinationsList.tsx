@@ -23,7 +23,7 @@ const MainDestinationsList = () => {
 
   return (
     <div>
-      <div ref={upRef} className={styles.mainTitleText}>
+      <div id="goSkip" ref={upRef} className={styles.mainTitleText}>
         <span className={styles.pageTitle}>어디로 여행을 떠나시나요?</span>
       </div>
       <div className={styles.mainSubTitleTextK}>

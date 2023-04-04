@@ -19,7 +19,7 @@ function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
     const hotelList = [...hotel];
 
     const markerList = [...marker];
-    const changedIdx = markerList.findIndex((value) => value.info?.id === hotelList[index]?.id);
+    const changedIdx = markerList.findIndex((value) => value.info.locationId === hotelList[index]?.locationId);
     markerList.splice(changedIdx, 1);
     dispatch(setMarker(markerList));
 
@@ -64,10 +64,10 @@ function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
               <div className={styles.card}>
                 {hotelCard != null ? (
                   <>
-                    <img src={hotelCard.image} />
+                    <img src={hotelCard.locationURL} />
                     <div>
                       <span className={styles.cardText}>
-                        {hotelCard.name}
+                        {hotelCard.locationName}
                         <br />
                         <small>Maison Glad Jeju</small>
                       </span>

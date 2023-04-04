@@ -48,6 +48,7 @@ interface apiInterface {
     searchLocation: () => string; // 장소 검색
     getRecommend: (is_hotel: number, region_id: number) => string; // 추천 호텔 및 장소 검색
     makeSchedule: () => string; // 일정 생성 완료
+    setLocation: () => string;
   };
   editSchedule: {
     getScheduleInfo: (schedule_id: number) => string; // 일정 정보 조회
@@ -96,6 +97,7 @@ const api: apiInterface = {
     searchLocation: () => HOST + SCHEDULE + "location",
     getRecommend: (is_hotel, region_id) => HOST + SCHEDULE + "location/" + is_hotel + "/" + region_id,
     makeSchedule: () => HOST + SCHEDULE + "make",
+    setLocation: () => HOST + SCHEDULE + "setlocation",
   },
   editSchedule: {
     getScheduleInfo: (schedule_id) => HOST + SCHEDULE2 + schedule_id,

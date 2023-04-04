@@ -44,7 +44,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
   return (
     <div className={styles.mainModalContainer}>
       <div className={styles.imgContainer}>
-        <img className={styles.imgContainer} src={place.image} />
+        <img className={styles.imgContainer} src={place.locationURL} />
         <div className={styles.socialBtnContainer}>
           <div>
             <div
@@ -52,7 +52,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
               onClick={() =>
                 searchInWeb({
                   site: "google",
-                  searchKeyword: place.name,
+                  searchKeyword: place.locationName,
                   x: place.latitude,
                   y: place.longitude,
                 })
@@ -65,7 +65,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
               onClick={() =>
                 searchInWeb({
                   site: "naver",
-                  searchKeyword: place.name,
+                  searchKeyword: place.locationName,
                 })
               }
             >
@@ -76,7 +76,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
               onClick={() =>
                 searchInWeb({
                   site: "instagram",
-                  searchKeyword: "" + place.name.replace(/\s+/g, "").toLowerCase(),
+                  searchKeyword: "" + place.locationName.replace(/\s+/g, "").toLowerCase(),
                 })
               }
             >
@@ -86,10 +86,8 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
         </div>
       </div>
       <Stack justifyContent="space-between" spacing={3} p={3}>
-        <Text value={place.name} type="groupTitle" />
+        <Text value={place.locationName} type="groupTitle" />
         <div className={styles.contentGrid}>
-          {/* <span>영업시간</span>
-          <span>보기</span> */}
           <span>주소</span>
           <span>{place.address}</span>
           <span>구글지도</span>
@@ -99,7 +97,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
               onClick={() =>
                 searchInWeb({
                   site: "google",
-                  searchKeyword: place.name,
+                  searchKeyword: place.locationName,
                   x: place.latitude,
                   y: place.longitude,
                 })
@@ -115,7 +113,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
               onClick={() =>
                 searchInWeb({
                   site: "naver",
-                  searchKeyword: place.name,
+                  searchKeyword: place.locationName,
                 })
               }
             >
@@ -129,7 +127,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
               onClick={() =>
                 searchInWeb({
                   site: "instagram",
-                  searchKeyword: "" + place.name.replace(/\s+/g, "").toLowerCase(),
+                  searchKeyword: "" + place.locationName.replace(/\s+/g, "").toLowerCase(),
                 })
               }
             >
