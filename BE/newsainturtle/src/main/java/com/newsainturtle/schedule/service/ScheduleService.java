@@ -57,7 +57,7 @@ public class ScheduleService {
                 .hostEmail(email)
                 .regionId(scheduleRequest.getRegionId())
                 .scheduleName(scheduleRequest.getScheduleName())
-                .isPrivate(scheduleRequest.isPrivate())
+                .isPrivate(scheduleRequest.getIsPrivate())
                 .scheduleStartDay(scheduleRequest.getScheduleStartDay())
                 .scheduleEndDay(scheduleRequest.getScheduleEndDay())
                 .scheduleStartLocation(scheduleRequest.getScheduleStartLocation())
