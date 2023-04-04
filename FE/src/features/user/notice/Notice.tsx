@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { selectNotiNumber, setNotiNumber } from "slices/mainSlice";
-import { selectUserInfo } from "slices/authSlice";
 
 export interface noticeListProps {
   notificationId: number;
@@ -17,15 +16,10 @@ export interface noticeListProps {
 }
 
 let noticeList: noticeListProps[] = [];
-export let socket: WebSocket;
 
 const Notice = () => {
   const dispatch = useAppDispatch();
 
-  const email = useAppSelector(selectUserInfo).email;
-  const ws = useRef<WebSocket | null>(null);
-  const webSocketUrl = process.env.REACT_APP_SOCKET_URL + email;
-  socket = new WebSocket(webSocketUrl);
   const notiNumber = useAppSelector(selectNotiNumber);
 
   const requestNotification = () => {
@@ -37,45 +31,6 @@ const Notice = () => {
       });
     }
   };
-
-  const fireNotification = (title: string, options: object) => {
-    new Notification(title, options);
-  };
-
-  if (!ws.current) {
-    ws.current = socket;
-    ws.current.onopen = () => {
-      console.log("connected");
-    };
-    ws.current.onmessage = (event) => {
-      console.log("메세지 옴: " + event.data);
-
-      const data = JSON.parse(event.data);
-
-      console.log("data: ", data.type);
-
-      if (data.type === "friend") {
-        console.log("friend");
-        fireNotification("MYRO", {
-          body: `${data.senderNickname}님이 ${data.content}을 보냈습니다.`,
-        });
-      } else if (data.type === "schedule") {
-        fireNotification("MYRO", {
-          body: `${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`,
-        });
-      }
-
-      getNotification();
-    };
-    ws.current.onclose = (event) => {
-      console.log("disconnect");
-      console.log(event);
-    };
-    ws.current.onerror = (error) => {
-      console.log("connection error ");
-      console.log(error);
-    };
-  }
 
   const getNotification = async () => {
     let notificationCount = 0;
@@ -121,6 +76,7 @@ const Notice = () => {
 
   return (
     <div className={styles.notice}>
+      new NoticeToast().message();
       {noticeList.length === 0 ? (
         <div>알림 내역이 없습니다.</div>
       ) : (

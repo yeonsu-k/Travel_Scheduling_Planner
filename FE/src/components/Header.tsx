@@ -15,6 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { selectNotiNumber } from "slices/mainSlice";
+import { connectSocket, disconnectSocket } from "features/user/notice/Socket";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -52,12 +53,14 @@ function Header() {
         dispatch(setLogout());
         navigate("/");
       });
+
     }
   };
 
   const onLogout = () => {
     handleCloseUserMenu();
     dispatch(setLogout());
+    disconnectSocket();
     window.location.replace("/");
   };
 

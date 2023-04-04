@@ -10,6 +10,8 @@ import api from "api/Api";
 import { useDispatch } from "react-redux";
 import { setLogin, setUserInfo } from "slices/authSlice";
 import Loading from "components/Loading";
+import { connectSocket } from "../notice/Socket";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,6 +38,8 @@ const Login = () => {
               login: true,
             }),
           );
+          dispatch(setUserInfo({ email: res.data.data.email }));
+          connectSocket(res.data.data.email);
           navigate("/");
         })
         .catch((err) => {
@@ -75,6 +79,7 @@ const Login = () => {
             }),
           );
           dispatch(setUserInfo({ email: email, profile: res.data.data.profile }));
+          connectSocket(email);
           setLoading(false);
           navigate("/");
         })
