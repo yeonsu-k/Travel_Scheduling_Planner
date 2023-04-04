@@ -12,5 +12,5 @@ import lombok.ToString;
 @ToString
 public class KakaoInfoMapResponse {
     @JsonProperty("kakao_account")
-    KakaoInfoResponse kakaoAccount;
+    private KakaoInfoResponse kakaoAccount;
 }
