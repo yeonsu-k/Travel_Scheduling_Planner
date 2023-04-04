@@ -1,7 +1,14 @@
 /* MyFriends.tsx */
 
 .myFriends {
-  margin: 5vw;
+  /* margin: 5vw; */
+  margin: 5vh auto;
+}
+
+@media screen and (min-width: 1400px) {
+  .myFriends {
+    width: 1380px;
+  }
 }
 
 .myFriendsTitle {

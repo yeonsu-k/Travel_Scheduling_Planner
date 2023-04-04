@@ -25,7 +25,6 @@ const MyFriends = ({ friendList }: MyFriendsProps) => {
   return (
     <div className={styles.myFriends}>
       <div className={styles.myFriendsTitle}>
-        <Text value="나의 친구" type="textTitle" bold en />
         <button className={styles.addFriendsButton} onClick={showAddFriendModal}>
           <Text value="친구 추가하기" color="white" bold />
         </button>
