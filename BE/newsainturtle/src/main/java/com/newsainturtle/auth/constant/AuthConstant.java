@@ -9,6 +9,7 @@ public class AuthConstant {
     public static final String NO_EMAIL_CHECK_ERROR_MESSAGE = "이메일 중복 검사를 완료해주세요.";
     public static final String SUCCESS_JOIN_USER_MESSAGE = "회원 가입이 완료 되었습니다.";
     public static final String LOGIN_SUCCESS_MESSAGE = "로그인이 완료되었습니다.";
+    public static final String KAKAO_LOGIN_SUCCESS_MESSAGE = "카카오 로그인이 완료되었습니다.";
     public static final String VALID_TOKEN_SUCCESS_MESSAGE = "유효한 토큰입니다.";
     public static final String KAKAO_CODE_URL_SUCCESS_MESSAGE = "카카오 로그인 관련 url 생성이 완료되었습니다.";
 
