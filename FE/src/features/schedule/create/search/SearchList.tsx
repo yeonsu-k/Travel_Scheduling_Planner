@@ -46,19 +46,13 @@ function SearchList(props: SearchListType) {
         resData = response.data.data;
       } else {
         response = await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, region.id));
-        resData = response.data.data.splice(0, 20);
+        resData = response.data.data.splice(0, 50); // 지우자!
       }
 
       setCardList(
         resData.map((ele: getRecommendApiType) => {
-          return {
-            id: ele.locationId,
-            image: ele.locationURL == null ? defaultPhoto : ele.locationURL, // API변경시 사진으로 수정
-            name: ele.locationName,
-            address: ele.address,
-            latitude: ele.latitude,
-            longitude: ele.longitude,
-          };
+          ele.locationURL = ele.locationURL == null ? defaultPhoto : ele.locationURL; // API변경시 사진으로 수정
+          return ele;
         }),
       );
     }

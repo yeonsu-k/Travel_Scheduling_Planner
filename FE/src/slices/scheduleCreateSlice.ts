@@ -3,9 +3,9 @@ import { rootState } from "app/store";
 import { addDays, format } from "date-fns";
 
 export interface basicConfig {
-  id: number;
-  image: string;
-  name: string;
+  locationId: number;
+  locationName: string;
+  locationURL: string;
   address: string;
   latitude: number;
   longitude: number;

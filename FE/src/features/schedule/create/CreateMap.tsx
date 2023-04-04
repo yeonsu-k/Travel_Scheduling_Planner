@@ -74,13 +74,15 @@ function CreateMap() {
     };
 
     const markers = marker
-      .filter((arr, index, callback) => index === callback.findIndex((val) => val.info.id === arr.info.id))
+      .filter(
+        (arr, index, callback) => index === callback.findIndex((val) => val.info.locationId === arr.info.locationId),
+      )
       .map((value) => {
         const { info, type } = value;
         const oneMarker = new kakao.maps.Marker({
           map: map, // 마커를 표시할 지도
           position: new kakao.maps.LatLng(info.latitude, info.longitude), // 마커를 표시할 위치
-          title: info.name, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          title: info.locationName, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
           image: type == "hotel" ? image.hotel : type == "place" ? image.place : image.point, // 마커 이미지
           clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정
         });
@@ -94,13 +96,15 @@ function CreateMap() {
       });
 
     const infowindow = marker
-      .filter((arr, index, callback) => index === callback.findIndex((val) => val.info.id === arr.info.id))
+      .filter(
+        (arr, index, callback) => index === callback.findIndex((val) => val.info.locationId === arr.info.locationId),
+      )
       .map((value) => {
         const { info } = value;
         new kakao.maps.InfoWindow({
           map: map, // 마커를 표시할 지도
           position: new kakao.maps.LatLng(info.latitude, info.longitude), // 마커를 표시할 위치
-          content: infoWindowElement(info.name),
+          content: infoWindowElement(info.locationName),
         });
       });
 

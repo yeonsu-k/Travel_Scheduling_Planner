@@ -285,9 +285,9 @@ const ScheduleEditPage = () => {
     let dayPlace = 0;
     totalList.map((value, key) => {
       placeInfo = {
-        id: value.info.id,
-        image: value.info.image,
-        name: value.info.name,
+        id: value.info.locationId,
+        image: value.info.locationURL,
+        name: value.info.locationName,
         address: value.info.address,
         latitude: value.info.latitude,
         longitude: value.info.longitude,

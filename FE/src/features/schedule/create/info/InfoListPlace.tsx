@@ -44,12 +44,12 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
 
   const deletePlace = (id: number) => {
     const placeList = [...place];
-    let changedIdx = place.findIndex((value) => value.id === id);
+    let changedIdx = place.findIndex((value) => value.locationId === id);
     placeList.splice(changedIdx, 1);
     dispatch(setPlaceList(placeList));
 
     const markerList = [...marker];
-    changedIdx = markerList.findIndex((value) => value.info.id === id);
+    changedIdx = markerList.findIndex((value) => value.info.locationId === id);
     markerList.splice(changedIdx, 1);
     dispatch(setMarker(markerList));
   };
@@ -58,7 +58,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
     const pointPlaceList = [...pointPlace];
 
     const markerList = [...marker];
-    const changedIdx = markerList.findIndex((value) => value.info?.id === pointPlaceList[index]?.id);
+    const changedIdx = markerList.findIndex((value) => value.info.locationId === pointPlaceList[index]?.locationId);
     markerList.splice(changedIdx, 1);
     dispatch(setMarker(markerList));
 
@@ -146,9 +146,9 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
               ) : (
                 <div className={styles.cardList}>
                   <div className={styles.card}>
-                    <img src={pointPlaceCard.image} alt={""} />
+                    <img src={pointPlaceCard.locationURL} alt={""} />
                     <div className={styles.placeCard}>
-                      <span className={styles.cardText}>{pointPlaceCard.name}</span>
+                      <span className={styles.cardText}>{pointPlaceCard.locationName}</span>
                       <div className={styles.flexRow}>
                         <div className={styles.placeTimer} />
                         <button className={styles.cardDelete} onClick={() => deletePointPlace(index)}>
@@ -168,9 +168,9 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
             {place.map((placeCard, index) => (
               <div className={styles.cardList} key={index}>
                 <div className={styles.card}>
-                  <img src={placeCard.image} alt={""} />
+                  <img src={placeCard.locationURL} alt={""} />
                   <div className={styles.placeCard}>
-                    <span className={styles.cardText}>{placeCard.name}</span>
+                    <span className={styles.cardText}>{placeCard.locationName}</span>
                     <div className={styles.flexRow}>
                       <div className={styles.placeTimer}>
                         <Timer fontSize="small" />
@@ -199,7 +199,7 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
                         />
                         분
                       </div>
-                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.id)}>
+                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.locationId)}>
                         <Close fontSize="small" color="error" />
                       </button>
                     </div>

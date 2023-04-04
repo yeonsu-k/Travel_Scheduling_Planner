@@ -5,8 +5,17 @@ import CreateSearch from "features/schedule/create/CreateSearch";
 import CreateMap from "features/schedule/create/CreateMap";
 import CreateButtons from "features/schedule/create/CreateButtons";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "app/hooks";
-import { setListClear, setTotalList } from "slices/scheduleCreateSlice";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import {
+  basicConfig,
+  selectHotelList,
+  selectPlaceList,
+  selectPointPlace,
+  setListClear,
+} from "slices/scheduleCreateSlice";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
+import { setscheduleList } from "slices/scheduleEditSlice";
 
 export interface ScheduleCreatPropsType {
   currentTab: string;
@@ -23,12 +32,20 @@ function ScheduleCreatePage() {
   const [currentTab, setCurrentTab] = useState("호텔");
   const [hotelCurrentDay, setHotelCurrentDay] = useState(0);
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
+  const hotelList = useAppSelector(selectHotelList) as basicConfig[];
+  const placeList = useAppSelector(selectPlaceList) as basicConfig[];
+  const pointPlace = useAppSelector(selectPointPlace) as basicConfig[];
 
-  const scheduleCreateClick = () => {
-    // 일정 생성 버튼 클릭시 장소 세팅 API
-    dispatch(setTotalList());
-    dispatch(setListClear());
-    navigate("/schedule/edit");
+  const scheduleCreateClick = async () => {
+    await Axios.post(api.createSchedule.setLocation(), {
+      hotelList: hotelList,
+      placeList: placeList,
+      pointPlace: pointPlace,
+    }).then((res) => {
+      dispatch(setscheduleList(res.data.data));
+      dispatch(setListClear());
+      navigate("/schedule/edit");
+    });
   };
 
   return (

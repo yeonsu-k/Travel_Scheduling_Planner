@@ -60,7 +60,9 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
         const hotelList = [...hotel];
         const markerList = [...marker];
         if (hotelList[hotelCurrentDay] != null) {
-          const changedIdx = markerList.findIndex((value) => value.info?.id === hotelList[hotelCurrentDay]?.id);
+          const changedIdx = markerList.findIndex(
+            (value) => value.info.locationId === hotelList[hotelCurrentDay]?.locationId,
+          );
           markerList.splice(changedIdx, 1);
         }
         dispatch(
@@ -105,9 +107,9 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
 
   return (
     <div className={styles.card}>
-      <img src={cardInfo.image} alt="" />
+      <img src={cardInfo.locationURL} alt="" />
       <div className={styles.placeCard}>
-        <Text value={cardInfo.name} type={"caption"} />
+        <Text value={cardInfo.locationName} type={"caption"} />
         <div className={styles.card_Icons}>
           <div />
           <div />
