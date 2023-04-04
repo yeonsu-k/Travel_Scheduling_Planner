@@ -3,6 +3,7 @@ package com.newsainturtle.schedule.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 
@@ -14,6 +15,7 @@ public class ScheduleRequest {
 
     private String scheduleName;
 
+    @NotNull
     private Boolean isPrivate;
 
     private String scheduleStartDay;
