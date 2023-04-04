@@ -14,6 +14,8 @@ import com.newsainturtle.schedule.repository.CustomLocationRepository;
 import com.newsainturtle.schedule.repository.LocationRepository;
 import com.newsainturtle.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -69,10 +71,7 @@ public class LocationService {
 
     public List<LocationResponse> findRecommendLocationList(Long regionId, String email, boolean isHotel) {
         isNullUser(email);
-        List<LocationResponse> locationResponseList = new ArrayList<>();
-        locationResponseList.addAll(findRecommendBasicLocationList(regionId,isHotel));
-        locationResponseList.addAll(findRecommendCustomLocationList(regionId,email,isHotel));
-        return locationResponseList;
+        return findRecommendBasicLocationList(regionId,isHotel);
     }
 
     public LocationResponse findLocationInfo(Long locationId) {
@@ -133,7 +132,8 @@ public class LocationService {
     }
 
     private List<LocationResponse> findRecommendBasicLocationList(Long regionId, boolean isHotel) {
-        return basicLocationRepository.findAllByRegionIdAndIsHotel(regionId,isHotel)
+        Pageable pageable = PageRequest.of(0,50);
+        return basicLocationRepository.findAllByRegionIdAndIsHotel(regionId,isHotel,pageable)
                 .stream()
                 .map(location -> LocationResponse.builder()
                         .locationId(location.getLocationId())
@@ -147,20 +147,4 @@ public class LocationService {
                         .build()
                 ).collect(Collectors.toList());
     }
-    private List<LocationResponse> findRecommendCustomLocationList(Long regionId, String email, boolean isHotel) {
-        return customLocationRepository.findAllByRegionIdAndIsHotel(regionId,email,isHotel)
-                .stream()
-                .map(location -> LocationResponse.builder()
-                        .locationId(location.getLocationId())
-                        .regionId(location.getRegionId())
-                        .locationName(location.getLocationName())
-                        .address(location.getAddress())
-                        .longitude(location.getLongitude())
-                        .latitude(location.getLatitude())
-                        .isHotel(location.isHotel())
-                        .locationURL(location.getLocationURL())
-                        .build()
-                ).collect(Collectors.toList());
-    }
-
 }
