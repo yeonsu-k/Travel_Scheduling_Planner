@@ -48,11 +48,15 @@ function Header() {
     if (login) {
       await Axios.post(api.auth.token(), {
         accessToken: accessToken,
-      }).catch((err) => {
-        console.log("토큰 에러:", err);
-        dispatch(setLogout());
-        navigate("/");
-      });
+      })
+        .then((res) => {
+          connectSocket(userInfo.email);
+        })
+        .catch((err) => {
+          console.log("토큰 에러:", err);
+          dispatch(setLogout());
+          navigate("/");
+        });
     }
   };
 

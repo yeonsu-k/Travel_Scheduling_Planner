@@ -490,20 +490,15 @@ const ScheduleEditPage = () => {
             </div>
             <div className={styles.scheduleTitle}>
               <Text value="일정 공개" type="text" color="darkgray" />
-              <SwitchButton
-                label={scheduleOpen ? "공개" : "비공개"}
-                checked={scheduleOpen}
-                onChange={() => setScheduleOpen(!scheduleOpen)}
-              />
+              <SwitchButton label="" checked={scheduleOpen} onChange={() => setScheduleOpen(!scheduleOpen)} />
             </div>
             <div
               className={styles.scheduleConfirmBtn}
               onClick={() => {
                 setModalOpen(false);
-                onClickSaveSchedule();
               }}
             >
-              <ButtonStyled text="저장" color="main" />
+              <ButtonStyled text="저장" color="main" onClick={() => onClickSaveSchedule()} />
               <ButtonStyled text="취소" onClick={() => setModalOpen(false)} />
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import NoticeItem from "./NoticeItem";
@@ -76,7 +76,6 @@ const Notice = () => {
 
   return (
     <div className={styles.notice}>
-      new NoticeToast().message();
       {noticeList.length === 0 ? (
         <div>알림 내역이 없습니다.</div>
       ) : (

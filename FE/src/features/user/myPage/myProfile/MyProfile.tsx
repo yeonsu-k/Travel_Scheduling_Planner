@@ -11,11 +11,13 @@ import Axios from "api/JsonAxios";
 import { selectScheduleCnt } from "slices/mainSlice";
 
 interface MyProfileProps {
+  scheduleColor: string;
+  friendColor: string;
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
   friendNumber: number;
 }
 
-const MyProfile = ({ setViewSchedule, friendNumber }: MyProfileProps) => {
+const MyProfile = ({ scheduleColor, friendColor, setViewSchedule, friendNumber }: MyProfileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useAppSelector(selectUserInfo);
@@ -62,13 +64,21 @@ const MyProfile = ({ setViewSchedule, friendNumber }: MyProfileProps) => {
         <Text value="프로필 수정" />
       </button>
 
-      <div className={styles.myProfileInfo} onClick={() => setViewSchedule(true)}>
+      <div
+        className={styles.myProfileInfo}
+        onClick={() => setViewSchedule(true)}
+        style={{ backgroundColor: scheduleColor }}
+      >
         <Text value="나의 일정" type="text" bold en />
         <div style={{ margin: "15%" }}></div>
         <Text value={scheduleNumber.toString()} type="pageTitle" bold />
       </div>
 
-      <div className={styles.myProfileInfo} onClick={() => setViewSchedule(false)}>
+      <div
+        className={styles.myProfileInfo}
+        onClick={() => setViewSchedule(false)}
+        style={{ backgroundColor: friendColor }}
+      >
         <Text value="나의 친구" type="text" bold en />
         <div style={{ margin: "15%" }}></div>
         <Text value={friendNumber.toString()} type="pageTitle" bold />

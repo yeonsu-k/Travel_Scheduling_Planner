@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Header from "components/Header";
@@ -11,9 +11,73 @@ import ScheduleRouter from "features/schedule/ScheduleRouter";
 import NotFound from "pages/NotFound";
 import AuthRoute from "./AuthRoute";
 import DataPage from "pages/DataPage";
+import NoticeToast from "features/user/notice/NoticeToast";
+import { socket } from "features/user/notice/Socket";
+import { useAppDispatch } from "app/hooks";
+import Axios from "api/JsonAxios";
+import api from "api/Api";
+import { setNotiNumber } from "slices/mainSlice";
+
+let noticeList = [];
 
 function App() {
+  const dispatch = useAppDispatch();
+
   const location = useLocation();
+  const [isNotice, setIsNotice] = useState(false);
+  const [noticeMessage, setNoticeMessage] = useState("");
+
+  useEffect(() => {
+    if (socket) {
+      socket.onmessage = (event) => {
+        console.log("메세지 옴: " + event.data);
+
+        const data = JSON.parse(event.data);
+
+        console.log("data: ", data.type);
+
+        if (data.type === "friend") {
+          console.log("friend");
+          setNoticeMessage(`${data.senderNickname}님이 ${data.content}을 보냈습니다.`);
+          setIsNotice(true);
+        } else if (data.type === "schedule") {
+          setNoticeMessage(`${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`);
+
+          getNotification();
+        }
+      };
+      socket.onclose = (event) => {
+        console.log("disconnect");
+        console.log(event);
+      };
+      socket.onerror = (error) => {
+        console.log("connection error ");
+        console.log(error);
+      };
+    }
+  });
+
+  const getNotification = async () => {
+    let notificationCount = 0;
+    await Axios.get(api.notification.notification())
+      .then((res) => {
+        console.log(res);
+        noticeList = [...res.data.data.notifications];
+        console.log("list", noticeList);
+
+        noticeList.map((value, key) => {
+          if (value.status === "NO_RESPONSE") {
+            notificationCount++;
+          }
+        });
+
+        console.log("cnt: ", notificationCount);
+        dispatch(setNotiNumber({ notiNumber: notificationCount }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -40,6 +104,7 @@ function App() {
 
           <Route path="/data" element={<DataPage />} />
         </Routes>
+        <NoticeToast message={noticeMessage} open={isNotice} onClose={setIsNotice} />
       </div>
     </>
   );
