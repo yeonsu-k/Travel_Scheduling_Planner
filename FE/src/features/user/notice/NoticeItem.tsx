@@ -38,6 +38,7 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
       .then((res) => {
         console.log(res);
         getNotification();
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
