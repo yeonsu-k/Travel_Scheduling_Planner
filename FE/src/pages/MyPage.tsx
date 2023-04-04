@@ -16,14 +16,26 @@ let friendList: Array<friendProps> = [];
 
 function MyPage() {
   const [viewSchedule, setViewSchedule] = useState(true);
+  const [scheduleColor, setScheduleColor] = useState("");
+  const [friendColor, setfriendColor] = useState("");
 
   useEffect(() => {
     getFriendInfo();
   }, []);
 
+  useEffect(() => {
+    setScheduleColor(viewSchedule ? "#98DDE3" : "#fff");
+    setfriendColor(viewSchedule ? "#fff" : "#98DDE3");
+  }, [viewSchedule]);
+
   return (
     <div>
-      <MyProfile setViewSchedule={setViewSchedule} friendNumber={friendNumber}/>
+      <MyProfile
+        scheduleColor={scheduleColor}
+        friendColor={friendColor}
+        setViewSchedule={setViewSchedule}
+        friendNumber={friendNumber}
+      />
       {viewSchedule ? <MySchedule /> : <MyFriends friendList={friendList} />}
     </div>
   );
