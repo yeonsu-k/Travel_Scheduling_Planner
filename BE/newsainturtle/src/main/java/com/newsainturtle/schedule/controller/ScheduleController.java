@@ -49,6 +49,15 @@ public class ScheduleController {
                 , HttpStatus.OK);
     }
 
+    @PostMapping("/setlocation")
+    public ResponseEntity<BaseResponse> setScheduleLocation(@RequestBody ScheduleLocationSetRequest scheduleLocationSetRequest) {
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                SET_SCHEDULELOCATION_SUCCESS_MESSAGE,
+                scheduleService.setScheduleLocation(scheduleLocationSetRequest))
+                , HttpStatus.OK);
+    }
+
     @GetMapping("/travels")
     @ApiOperation(value = "여행기 조회", notes = "추천 여행기를 조회합니다.")
     public ResponseEntity<BaseResponse> findTravels() {
