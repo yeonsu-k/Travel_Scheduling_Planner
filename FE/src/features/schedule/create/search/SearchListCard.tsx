@@ -43,7 +43,7 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
     if (placeCurrentDay != -1) {
       setPlaceCurrentDay(-1);
       const pointPlaceList = [...pointPlace];
-      pointPlaceList[placeCurrentDay] = cardInfo;
+      pointPlaceList[placeCurrentDay] = { ...cardInfo, time: "0:0" };
       dispatch(setPointPlace([...pointPlaceList]));
       dispatch(
         setMarker([
@@ -73,7 +73,7 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
           ]),
         );
 
-        hotelList[hotelCurrentDay] = cardInfo;
+        hotelList[hotelCurrentDay] = { ...cardInfo, time: "0:0" };
         setHotelCurrentDay(hotelCurrentDay + 1 == hotel.length ? 0 : hotelCurrentDay + 1);
         dispatch(setHotelList(hotelList));
       } else if (select === "장소") {
