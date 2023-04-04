@@ -1,12 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
-import { socket } from "features/user/notice/Notice";
 
 interface authConfig {
   accessToken: string;
   login: boolean;
   userInfo: userInfoConfig;
-  token: boolean;
 }
 
 interface userInfoConfig {
@@ -23,7 +21,6 @@ const initialState: authConfig = {
     nickname: "",
     profile: "",
   },
-  token: false,
 };
 
 const authSlice = createSlice({
@@ -39,25 +36,21 @@ const authSlice = createSlice({
     setLogout: (state) => {
       state.accessToken = "";
       state.login = false;
+      state.userInfo.email = "";
       state.userInfo.nickname = "";
+      state.userInfo.profile = "";
       sessionStorage.clear();
-      localStorage.clear();
       console.log("login", state.login);
-      socket.close();
     },
     setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;
       state.userInfo.profile = profile;
     },
-    setToken: (state, { payload: { token } }) => {
-      state.token = token;
-    },
   },
 });
 
-export const { setLogin, setLogout, setUserInfo, setToken } = authSlice.actions;
+export const { setLogin, setLogout, setUserInfo } = authSlice.actions;
 export const selectUserInfo = (state: rootState) => state.auth.userInfo;
 export const selectLoginState = (state: rootState) => state.auth.login;
 
-export const selectToken = (state: rootState) => state.auth.token;
 export default authSlice.reducer;

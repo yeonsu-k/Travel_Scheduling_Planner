@@ -8,9 +8,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useDispatch } from "react-redux";
-import { selectToken, setLogin, setUserInfo } from "slices/authSlice";
+import { setLogin, setUserInfo } from "slices/authSlice";
 import Loading from "components/Loading";
-import { useAppSelector } from "app/hooks";
+import { connectSocket } from "../notice/Socket";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ const Login = () => {
   const [isEmail, setIsEmail] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
-  const token = useAppSelector(selectToken);
 
   const code = searchParams.get("code");
   const error = searchParams.get("error");
@@ -38,6 +38,8 @@ const Login = () => {
               login: true,
             }),
           );
+          dispatch(setUserInfo({ email: res.data.data.email }));
+          connectSocket(res.data.data.email);
           navigate("/");
         })
         .catch((err) => {
@@ -77,6 +79,7 @@ const Login = () => {
             }),
           );
           dispatch(setUserInfo({ email: email, profile: res.data.data.profile }));
+          connectSocket(email);
           setLoading(false);
           navigate("/");
         })
@@ -104,11 +107,6 @@ const Login = () => {
         <div className={styles.loginContainer}>
           <div className={styles.textTitle}>LOG IN</div>
           <div className={styles.smallText}>AI 여행 스케줄링 플래너 - MYRO</div>
-          {!token ? (
-            <div className={styles.tokenAlertText}>
-              <Text value="토큰이 만료되었습니다. 다시 로그인해주세요." type="caption" color="cancle" />
-            </div>
-          ) : null}
           <div className={styles.inputTextContainer}>
             <label className={styles.inputText} htmlFor="name">
               이메일

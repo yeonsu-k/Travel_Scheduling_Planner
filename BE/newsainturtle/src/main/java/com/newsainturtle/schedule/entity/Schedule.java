@@ -1,8 +1,5 @@
 package com.newsainturtle.schedule.entity;
 
-import com.newsainturtle.schedule.dto.SchedulePeriodRequest;
-import com.newsainturtle.schedule.dto.ScheduleStartEndLocationRequest;
-import com.newsainturtle.schedule.dto.ScheduleVehicleRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

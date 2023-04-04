@@ -87,7 +87,7 @@ public class AuthService {
         return kakaoCodeURLResponse;
     }
 
-    public LoginResponse loginKakao(String code) {
+    public KakaoLoginResponse loginKakao(String code) {
         String accessToken = getKakaoToken(code);
         return getKakaoInfo(accessToken);
     }
@@ -152,7 +152,7 @@ public class AuthService {
                 .bodyToMono(String.class).block();
     }
 
-    private LoginResponse getKakaoInfo(String accessToken) {
+    private KakaoLoginResponse getKakaoInfo(String accessToken) {
 
         KakaoInfoResponse kakaoInfoResponse = connectKakaoUser(accessToken);
 
@@ -169,13 +169,13 @@ public class AuthService {
                                 .kakao(true)
                                 .build();
                         userRepository.save(newUser);
-                        return LoginResponse.builder().accessToken(jwtTokenProvider.createAccessToken(newUser.getEmail())).nickname(newUser.getNickname()).profile(newUser.getProfile()).build();
+                        return KakaoLoginResponse.builder().accessToken(jwtTokenProvider.createAccessToken(newUser.getEmail())).nickname(newUser.getNickname()).profile(newUser.getProfile()).email(newUser.getEmail()).build();
                     }
                 } else if (!user.isKakao() || user.isWithdraw()) {
                     disconnectKakaoUser(accessToken);
                     throw new UnavailableEmailException();
                 } else {
-                    return LoginResponse.builder().accessToken(jwtTokenProvider.createAccessToken(user.getEmail())).nickname(user.getNickname()).profile(user.getProfile()).build();
+                    return KakaoLoginResponse.builder().accessToken(jwtTokenProvider.createAccessToken(user.getEmail())).nickname(user.getNickname()).profile(user.getProfile()).email(user.getEmail()).build();
                 }
             }
         }

@@ -85,7 +85,7 @@ public class LocationService {
                 .longitude(location.getLongitude())
                 .latitude(location.getLatitude())
                 .isHotel(location.isHotel())
-                .lcoationURL(location.getLocationURL())
+                .locationURL(location.getLocationURL())
                 .build();
     }
 
@@ -111,7 +111,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
-                        .lcoationURL(location.getLocationURL())
+                        .locationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }
@@ -127,7 +127,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
-                        .lcoationURL(location.getLocationURL())
+                        .locationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }
@@ -143,7 +143,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
-                        .lcoationURL(location.getLocationURL())
+                        .locationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }
@@ -158,7 +158,7 @@ public class LocationService {
                         .longitude(location.getLongitude())
                         .latitude(location.getLatitude())
                         .isHotel(location.isHotel())
-                        .lcoationURL(location.getLocationURL())
+                        .locationURL(location.getLocationURL())
                         .build()
                 ).collect(Collectors.toList());
     }

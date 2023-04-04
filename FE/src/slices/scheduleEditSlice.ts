@@ -9,10 +9,14 @@ export interface placeInfoConfig {
   latitude: number;
   longitude: number;
   time: string;
+  startTime: string;
+  endTime: string;
 }
 
 export interface fullScheduleListConfig {
   day: number;
+  startHour: number;
+  startMinute: number;
   dayList: placeInfoConfig[];
 }
 
@@ -45,10 +49,16 @@ const scheduleEditSlice = createSlice({
     setKeepPlaceList: (state, { payload }) => {
       state.keepPlaceList = payload;
     },
+    setStayTime: (state, { payload: { day, index, startTime, endTime } }) => {
+      state.fullScheduleList[day - 1].dayList[index].startTime = startTime;
+      state.fullScheduleList[day - 1].dayList[index].endTime = endTime;
+      console.log("startTime", state.fullScheduleList[day - 1].dayList[index].startTime);
+      console.log("endTime: ", state.fullScheduleList[day - 1].dayList[index].endTime);
+    },
   },
 });
 
-export const { setFullScheduleList, setKeepPlaceList } = scheduleEditSlice.actions;
+export const { setFullScheduleList, setKeepPlaceList, setStayTime } = scheduleEditSlice.actions;
 
 export const selectFullScheduleList = (state: rootState) => state.scheduleEdit.fullScheduleList;
 export const selectKeepPlaceList = (state: rootState) => state.scheduleEdit.keepPlaceList;
