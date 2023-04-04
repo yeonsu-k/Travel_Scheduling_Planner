@@ -4,15 +4,15 @@ import Text from "components/Text";
 import Button from "components/Button";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { friendProps, getFriendInfo } from "pages/MyPage";
+import { friendProps } from "slices/friendSlice";
 
 interface MyFriendsListProps {
   friendInfo: friendProps;
 }
 
 const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
-  const onClickDeleteFriend = () => {
-    Axios.delete(api.friend.friend(), {
+  const onClickDeleteFriend = async () => {
+    await Axios.delete(api.friend.friend(), {
       data: {
         email: friendInfo.email,
       },
@@ -20,12 +20,19 @@ const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
       .then((res) => {
         console.log(res);
         alert("삭제가 완료되었습니다");
+        // const index = friends.findIndex((idx) => idx.email === friendInfo.email);
+        // const tmpList = [...friends];
+        // tmpList.splice(index, 1);
+
+        // console.log("tmpList", tmpList);
+        // dispatch(setFriendList([...tmpList]));
+
+        // console.log("friendList", friends);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
       });
-
-    getFriendInfo();
   };
 
   return (
