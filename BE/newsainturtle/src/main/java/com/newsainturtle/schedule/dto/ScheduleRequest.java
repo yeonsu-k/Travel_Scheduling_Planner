@@ -14,7 +14,7 @@ public class ScheduleRequest {
 
     private String scheduleName;
 
-    private boolean isPrivate;
+    private Boolean isPrivate;
 
     private String scheduleStartDay;
 
