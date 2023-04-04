@@ -36,21 +36,17 @@ function SearchList(props: SearchListType) {
     setCardList([]);
     async function fetch() {
       let response;
-      let resData;
       if (searchView) {
         response = await Axios.post(api.createSchedule.searchLocation(), {
           regionId: region.id,
           locationName: keyword,
           isHotel: select === "호텔",
         });
-        resData = response.data.data;
       } else {
         response = await Axios.get(api.createSchedule.getRecommend(select == "호텔" ? 1 : 0, region.id));
-        resData = response.data.data.splice(0, 50); // 지우자!
       }
-
       setCardList(
-        resData.map((ele: getRecommendApiType) => {
+        response.data.data.map((ele: getRecommendApiType) => {
           ele.locationURL = ele.locationURL == null ? defaultPhoto : ele.locationURL; // API변경시 사진으로 수정
           return ele;
         }),
