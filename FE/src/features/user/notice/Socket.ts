@@ -1,5 +1,4 @@
 import Axios from "api/JsonAxios";
-import { useRef } from "react";
 import { noticeListProps } from "./Notice";
 import api from "api/Api";
 import { setNotiNumber } from "slices/mainSlice";
@@ -12,15 +11,13 @@ const fireNotification = (title: string, options: object) => {
 };
 
 export const connectSocket = (email: string) => {
-  const ws = useRef<WebSocket | null>(null);
   socket = new WebSocket(process.env.REACT_APP_SOCKET_URL + email);
 
-  if (!ws.current) {
-    ws.current = socket;
-    ws.current.onopen = () => {
+  if (socket) {
+    socket.onopen = () => {
       console.log("connected");
     };
-    ws.current.onmessage = (event) => {
+    socket.onmessage = (event) => {
       console.log("메세지 옴: " + event.data);
 
       const data = JSON.parse(event.data);
@@ -40,11 +37,11 @@ export const connectSocket = (email: string) => {
 
       getNotification();
     };
-    ws.current.onclose = (event) => {
+    socket.onclose = (event) => {
       console.log("disconnect");
       console.log(event);
     };
-    ws.current.onerror = (error) => {
+    socket.onerror = (error) => {
       console.log("connection error ");
       console.log(error);
     };
