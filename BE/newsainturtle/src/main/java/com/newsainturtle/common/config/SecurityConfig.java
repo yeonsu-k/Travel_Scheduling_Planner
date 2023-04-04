@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] PERMIT_ALL_URL_ARRAY = {
             "/api/auth/**",
             "/socket/notification/**",
-            "/api/schedule/main",
+            "/api/schedule/main/**",
             "/api/schedule/travels",
             "/api/schedule/basiclocation"
     };
