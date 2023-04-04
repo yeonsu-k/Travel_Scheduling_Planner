@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
 
+export interface friendProps {
+  profile: string;
+  email: string;
+  nickname: string;
+}
+
 interface searchUserConfig {
   email: string;
   exist: boolean;
@@ -12,11 +18,13 @@ interface searchUserConfig {
 
 interface friendConfig {
   friendCnt: number;
+  friendList: friendProps[];
   searchUser: searchUserConfig;
 }
 
 const initialState: friendConfig = {
   friendCnt: 0,
+  friendList: [],
   searchUser: {
     email: "",
     exist: false,
@@ -31,6 +39,12 @@ const friendSlice = createSlice({
   name: "friend",
   initialState,
   reducers: {
+    setFriendCnt: (state, { payload }) => {
+      state.friendCnt = payload;
+    },
+    setFriendList: (state, { payload }) => {
+      state.friendList = payload;
+    },
     setSearchUser: (state, { payload }) => {
       state.searchUser = payload;
     },
@@ -44,15 +58,13 @@ const friendSlice = createSlice({
         success: false,
       };
     },
-    setFriendCnt: (state, { payload }) => {
-      state.friendCnt = payload;
-    },
   },
 });
 
-export const { setSearchUser, resetSearchUser, setFriendCnt } = friendSlice.actions;
+export const { setFriendCnt, setFriendList, setSearchUser, resetSearchUser } = friendSlice.actions;
 
-export const selectSearchUser = (state: rootState) => state.friend.searchUser;
 export const selectFriendCnt = (state: rootState) => state.friend.friendCnt;
+export const selectFriendList = (state: rootState) => state.friend.friendList;
+export const selectSearchUser = (state: rootState) => state.friend.searchUser;
 
 export default friendSlice.reducer;
