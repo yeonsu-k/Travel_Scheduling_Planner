@@ -39,9 +39,10 @@ const authSlice = createSlice({
     setLogout: (state) => {
       state.accessToken = "";
       state.login = false;
+      state.userInfo.email = "";
       state.userInfo.nickname = "";
+      state.userInfo.profile = "";
       sessionStorage.clear();
-      localStorage.clear();
       console.log("login", state.login);
       socket.close();
     },
