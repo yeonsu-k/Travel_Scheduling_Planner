@@ -3,7 +3,7 @@ import styles from "../Edit.module.css";
 import Text from "components/Text";
 import EditScheduleItem from "./EditScheduleItem";
 import { useAppSelector } from "app/hooks";
-import { selectFullScheduleList } from "slices/scheduleEditSlice";
+import { selectFullScheduleList, selectScheduleList } from "slices/scheduleEditSlice";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import colorPalette from "styles/colorPalette";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -14,7 +14,8 @@ interface EditDayScheduleListProps {
 
 const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
   const fullScheduleList = useAppSelector(selectFullScheduleList);
-  const placeNumber = fullScheduleList[day - 1].dayList.length;
+  const scheduleList = useAppSelector(selectScheduleList);
+  const placeNumber = scheduleList[day - 1].length;
   // const [timePicker, setTimePicker] = useState(false);
 
   let color;
@@ -91,9 +92,13 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
               alignItems: "center",
             }}
           >
-            {fullScheduleList[day - 1].dayList.map((value, key) => (
-              <div key={value.name} style={{ width: "90%" }}>
-                <Draggable key={value.id} draggableId={value.id.toString()} index={key}>
+            {scheduleList[day - 1].map((value, key) => (
+              <div key={value.location.locationName} style={{ width: "90%" }}>
+                <Draggable
+                  key={parseInt(value.day.toString() + "0" + value.sequence.toString())}
+                  draggableId={value.day.toString() + "0" + value.sequence.toString()}
+                  index={key}
+                >
                   {(provided) => (
                     <div
                       {...provided.dragHandleProps}
@@ -107,11 +112,11 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
                       <EditScheduleItem
                         day={day}
                         index={key}
-                        img={value.image}
-                        placeName={value.name}
-                        time={value.time}
-                        // startTime={value.startTime}
-                        // endTime={value.endTime}
+                        img={value.location.locationURL}
+                        placeName={value.location.locationName}
+                        time={value.location.time}
+                        startTime={value.startTime}
+                        endTime={value.endTime}
                       />
                     </div>
                   )}
