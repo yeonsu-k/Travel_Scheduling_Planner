@@ -496,10 +496,9 @@ const ScheduleEditPage = () => {
               className={styles.scheduleConfirmBtn}
               onClick={() => {
                 setModalOpen(false);
-                onClickSaveSchedule();
               }}
             >
-              <ButtonStyled text="저장" color="main" />
+              <ButtonStyled text="저장" color="main" onClick={() => onClickSaveSchedule()} />
               <ButtonStyled text="취소" onClick={() => setModalOpen(false)} />
             </div>
           </div>
