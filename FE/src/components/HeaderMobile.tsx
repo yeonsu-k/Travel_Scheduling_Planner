@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { rootState } from "app/store";
 import { useDispatch } from "react-redux";
 import { setLogout } from "slices/authSlice";
+import { disconnectSocket } from "features/user/notice/Socket";
 
 interface HeaderMobileProps {
   open: boolean;
@@ -27,6 +28,7 @@ const HeaderMobile = ({ open, setDrawerOpen }: HeaderMobileProps) => {
 
   const onLogout = () => {
     dispatch(setLogout());
+    disconnectSocket();
     window.location.replace("/"); // 새로고침 하면서 로그아웃
   };
 

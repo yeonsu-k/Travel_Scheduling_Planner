@@ -15,6 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { selectNotiNumber } from "slices/mainSlice";
+import { connectSocket, disconnectSocket } from "features/user/notice/Socket";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -51,11 +52,13 @@ function Header() {
         .then((res) => {
           dispatch(setUserInfo({ nickname: res.data.data.nickname, profile: res.data.data.profile }));
           dispatch(setToken({ token: true }));
+          connectSocket(userInfo.email);
         })
         .catch((err) => {
           console.log("토큰 에러:", err);
           dispatch(setToken({ token: false }));
           dispatch(setLogout());
+          disconnectSocket();
           navigate("/");
         });
     }
@@ -64,6 +67,7 @@ function Header() {
   const onLogout = () => {
     handleCloseUserMenu();
     dispatch(setLogout());
+    disconnectSocket();
     window.location.replace("/");
   };
 

@@ -13,6 +13,7 @@ import Loading from "components/Loading";
 import { useAppSelector } from "app/hooks";
 import { useSelector } from "react-redux";
 import { rootState } from "app/store";
+import { connectSocket } from "../notice/Socket";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,6 +42,8 @@ const Login = () => {
               login: true,
             }),
           );
+          dispatch(setUserInfo({ email: res.data.data.email }));
+          connectSocket(res.data.data.email);
           navigate("/");
         })
         .catch((err) => {
@@ -80,6 +83,7 @@ const Login = () => {
             }),
           );
           dispatch(setUserInfo({ email: email, profile: res.data.data.profile }));
+          connectSocket(email);
           setLoading(false);
           navigate("/");
         })
