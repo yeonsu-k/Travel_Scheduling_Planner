@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import NoticeItem from "./NoticeItem";
@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { selectNotiNumber, setNotiNumber } from "slices/mainSlice";
+import NoticeToast from "./NoticeToast";
 
 export interface noticeListProps {
   notificationId: number;
@@ -21,6 +22,7 @@ const Notice = () => {
   const dispatch = useAppDispatch();
 
   const notiNumber = useAppSelector(selectNotiNumber);
+  const [toast, setToast] = useState(false);
 
   const requestNotification = () => {
     if (Notification.permission !== "granted") {
@@ -76,9 +78,11 @@ const Notice = () => {
 
   return (
     <div className={styles.notice}>
-      new NoticeToast().message();
       {noticeList.length === 0 ? (
-        <div>알림 내역이 없습니다.</div>
+        <div>
+          알림 내역이 없습니다.
+          <NoticeToast message="test" open={true} onClose={setToast} />
+        </div>
       ) : (
         <>
           <div className={styles.clearBtn}>
