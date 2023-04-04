@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
-import { socket } from "features/user/notice/Notice";
 
 interface authConfig {
   accessToken: string;
@@ -44,7 +43,6 @@ const authSlice = createSlice({
       state.userInfo.profile = "";
       sessionStorage.clear();
       console.log("login", state.login);
-      socket.close();
     },
     setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;

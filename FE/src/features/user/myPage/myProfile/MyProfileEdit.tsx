@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { passRep } from "features/user/regist/Regist";
 import EditIcon from "@mui/icons-material/Edit";
+import { disconnectSocket } from "features/user/notice/Socket";
 
 const MyProfileEdit = () => {
   const userInfo = useAppSelector(selectUserInfo);
@@ -116,6 +117,7 @@ const MyProfileEdit = () => {
         .then((res: any) => {
           console.log(res);
           dispatch(setLogout());
+          disconnectSocket();
           alert("탈퇴가 완료되었습니다.");
           navigate("/");
         })
