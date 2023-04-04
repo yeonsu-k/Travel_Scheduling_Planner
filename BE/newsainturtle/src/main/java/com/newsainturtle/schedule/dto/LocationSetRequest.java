@@ -7,19 +7,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LocationSetRequest {
 
-    private Long lcationId;
-
-    private Long regionId;
+    private Long locationId;
 
     private String locationName;
 
     private String address;
 
-    private double longtitude;
+    private double longitude;
 
     private double latitude;
 
-    private boolean hotel;
-
     private String time;
+
+    private String locationURL;
 }
