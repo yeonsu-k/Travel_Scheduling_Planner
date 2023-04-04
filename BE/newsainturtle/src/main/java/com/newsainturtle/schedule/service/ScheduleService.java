@@ -57,7 +57,7 @@ public class ScheduleService {
                 .hostEmail(email)
                 .regionId(scheduleRequest.getRegionId())
                 .scheduleName(scheduleRequest.getScheduleName())
-                .isPrivate(scheduleRequest.isPrivate())
+                .isPrivate(scheduleRequest.getIsPrivate())
                 .scheduleStartDay(scheduleRequest.getScheduleStartDay())
                 .scheduleEndDay(scheduleRequest.getScheduleEndDay())
                 .scheduleStartLocation(scheduleRequest.getScheduleStartLocation())
@@ -155,8 +155,7 @@ public class ScheduleService {
         for(int i=1; i<day; i++) {
             dayList.get(i)[0] = scheduleLocationSetRequest.getHotelList().get(i-1);
         }
-        List<Plc> place = new ArrayList<>();
-        place = scheduleLocationSetRequest.getPlaceList()
+        List<Plc> place = scheduleLocationSetRequest.getPlaceList()
                 .stream()
                 .map(locationSetRequest -> new Plc(locationSetRequest))
                 .collect(Collectors.toList());
@@ -178,8 +177,8 @@ public class ScheduleService {
             for(int j=0; j<n; j++) {
                 LocationSetRequest locationSetRequest1 = dayList.get(i)[j];
                 LocationSetRequest locationSetRequest2 = dayList.get(i)[j+1];
-                durationList.add(new double[]{locationSetRequest1.getLongtitude(),locationSetRequest1.getLatitude()
-                        ,locationSetRequest2.getLongtitude(),locationSetRequest2.getLatitude()});
+                durationList.add(new double[]{locationSetRequest1.getLongitude(),locationSetRequest1.getLatitude()
+                        ,locationSetRequest2.getLongitude(),locationSetRequest2.getLatitude()});
             }
         }
         Mono<List<OpenStreetResponse>> mono = findFlux(durationList).sequential().collectList();
@@ -260,9 +259,9 @@ public class ScheduleService {
     }
     private double distance(LocationSetRequest locationSetRequest1, LocationSetRequest locationSetRequest2) {
         double lat1 = locationSetRequest1.getLatitude();
-        double lon1 = locationSetRequest1.getLongtitude();
+        double lon1 = locationSetRequest1.getLongitude();
         double lat2 = locationSetRequest2.getLatitude();
-        double lon2 = locationSetRequest2.getLongtitude();
+        double lon2 = locationSetRequest2.getLongitude();
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1))
                 * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));

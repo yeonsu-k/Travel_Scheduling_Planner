@@ -19,6 +19,7 @@ public class ScheduleListResponse {
     private String schedule_name;
     private String start_day;
     private String end_day;
+    private int locationCount;
     private LocalDateTime modifiedTime;
     private boolean isPrivate;
     private boolean isMine;
@@ -33,6 +34,7 @@ public class ScheduleListResponse {
                 .regionId(value.getRegionId())
                 .schedule_name(value.getScheduleName())
                 .start_day(value.getScheduleStartDay())
+                .locationCount(value.getScheduleLocations().size())
                 .end_day(value.getScheduleEndDay())
                 .modifiedTime(value.getModifiedTime())
                 .isPrivate(value.isPrivate())

@@ -19,6 +19,8 @@ import { setNotiNumber } from "slices/mainSlice";
 import { selectUserInfo } from "slices/authSlice";
 import { connectSocket } from "features/user/notice/Socket";
 
+let noticeList = [];
+
 function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -66,7 +68,6 @@ function App() {
     };
   }, []);
 
-  let noticeList = [];
   const getNotification = async () => {
     let notificationCount = 0;
     await Axios.get(api.notification.notification())
