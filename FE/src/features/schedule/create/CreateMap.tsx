@@ -55,7 +55,7 @@ function CreateMap() {
       mainMap.current.innerHTML = "";
       setMap();
     }
-  }, [centerPos]);
+  }, [centerPos, marker]);
 
   function setMap() {
     const container = document.getElementById("map");
