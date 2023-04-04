@@ -12,15 +12,15 @@ import lombok.ToString;
 @ToString
 public class KakaoInfoResponse {
     @JsonProperty("has_email")
-    boolean hasEmail;
+    private boolean hasEmail;
     @JsonProperty("email_needs_agreement")
-    boolean emailNeedsAgreement;
+    private boolean emailNeedsAgreement;
     @JsonProperty("profile_nickname_needs_agreement")
-    boolean profileNicknameNeedsAgreement;
+    private boolean profileNicknameNeedsAgreement;
     @JsonProperty("is_email_valid")
-    boolean isEmailValid;
+    private boolean isEmailValid;
     @JsonProperty("email")
-    String email;
+    private String email;
     @JsonProperty("profile")
-    KakaoNicknameResponse profile;
+    private KakaoNicknameResponse profile;
 }

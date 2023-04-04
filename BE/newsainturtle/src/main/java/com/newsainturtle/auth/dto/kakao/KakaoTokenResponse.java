@@ -8,5 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 public class KakaoTokenResponse {
     @JsonProperty("access_token")
-    String accessToken;
+    private String accessToken;
 }

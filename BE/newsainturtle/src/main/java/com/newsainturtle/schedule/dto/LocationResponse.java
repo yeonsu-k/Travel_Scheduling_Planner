@@ -23,5 +23,5 @@ public class LocationResponse {
 
     private boolean isHotel;
 
-    private String lcoationURL;
+    private String locationURL;
 }

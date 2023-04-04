@@ -12,5 +12,5 @@ import lombok.ToString;
 @ToString
 public class KakaoNicknameResponse {
     @JsonProperty("nickname")
-    String nickname;
+    private String nickname;
 }

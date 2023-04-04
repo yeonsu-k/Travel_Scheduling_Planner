@@ -26,4 +26,6 @@ public class ScheduleSuccessConstant {
 
     public static final String SELECT_FRIEND_LIST_SUCCESS_MESSAGE = "친구목록 조회에 성공했습니다.";
 
+    public static final String SET_SCHEDULELOCATION_SUCCESS_MESSAGE = "일정 지역 세팅에 성공했습니다.";
+
 }
