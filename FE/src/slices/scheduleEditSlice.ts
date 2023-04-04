@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
+import { basicConfig } from "slices/scheduleCreateSlice";
 
 export interface placeInfoConfig {
   id: number;
@@ -20,9 +21,18 @@ export interface fullScheduleListConfig {
   dayList: placeInfoConfig[];
 }
 
+interface scheduleConfig {
+  location: basicConfig;
+  day: number;
+  sequence: number;
+  startTime: string;
+  endTime: string;
+}
+
 interface scheduleEditConfig {
   fullScheduleList: fullScheduleListConfig[];
   keepPlaceList: placeInfoConfig[];
+  scheduleList: scheduleConfig[][];
 }
 
 const initialState: scheduleEditConfig = {
@@ -37,6 +47,7 @@ const initialState: scheduleEditConfig = {
     //   endTime: "12:00",
     // },
   ],
+  scheduleList: [],
 };
 
 const scheduleEditSlice = createSlice({
@@ -55,12 +66,16 @@ const scheduleEditSlice = createSlice({
       console.log("startTime", state.fullScheduleList[day - 1].dayList[index].startTime);
       console.log("endTime: ", state.fullScheduleList[day - 1].dayList[index].endTime);
     },
+    setscheduleList: (state, action: PayloadAction<scheduleEditConfig["scheduleList"]>) => {
+      state.scheduleList = action.payload;
+    },
   },
 });
 
-export const { setFullScheduleList, setKeepPlaceList, setStayTime } = scheduleEditSlice.actions;
+export const { setFullScheduleList, setKeepPlaceList, setStayTime, setscheduleList } = scheduleEditSlice.actions;
 
 export const selectFullScheduleList = (state: rootState) => state.scheduleEdit.fullScheduleList;
 export const selectKeepPlaceList = (state: rootState) => state.scheduleEdit.keepPlaceList;
+export const selectScheduleList = (state: rootState) => state.scheduleEdit.scheduleList;
 
 export default scheduleEditSlice.reducer;
