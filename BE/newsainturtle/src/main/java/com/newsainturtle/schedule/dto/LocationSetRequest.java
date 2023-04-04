@@ -19,7 +19,7 @@ public class LocationSetRequest {
 
     private double latitude;
 
-    private boolean isHotel;
+    private boolean hotel;
 
     private String time;
 }
