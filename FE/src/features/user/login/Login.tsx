@@ -10,9 +10,6 @@ import api from "api/Api";
 import { useDispatch } from "react-redux";
 import { setLogin, setUserInfo } from "slices/authSlice";
 import Loading from "components/Loading";
-import { useAppSelector } from "app/hooks";
-import { useSelector } from "react-redux";
-import { rootState } from "app/store";
 
 const Login = () => {
   const navigate = useNavigate();
