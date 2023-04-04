@@ -8,14 +8,14 @@ import styles from "./css/Header.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import Notice from "features/user/notice/Notice";
 import { rootState } from "app/store";
-import { setLogout, selectUserInfo, setUserInfo } from "slices/authSlice";
+import { setLogout, selectUserInfo } from "slices/authSlice";
 import { useAppSelector } from "app/hooks";
 import HeaderMobile from "./HeaderMobile";
 import MenuIcon from "@mui/icons-material/Menu";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { selectNotiNumber } from "slices/mainSlice";
-import { connectSocket, disconnectSocket } from "features/user/notice/Socket";
+import { disconnectSocket } from "features/user/notice/Socket";
 
 const AvatarStyled = styled(Avatar)(() => ({
   margin: 3,
@@ -48,15 +48,11 @@ function Header() {
     if (login) {
       await Axios.post(api.auth.token(), {
         accessToken: accessToken,
-      })
-        .then((res) => {
-          connectSocket(userInfo.email);
-        })
-        .catch((err) => {
-          console.log("토큰 에러:", err);
-          dispatch(setLogout());
-          navigate("/");
-        });
+      }).catch((err) => {
+        console.log("토큰 에러:", err);
+        dispatch(setLogout());
+        navigate("/");
+      });
     }
   };
 

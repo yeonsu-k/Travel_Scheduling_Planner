@@ -1,20 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyFriendsList from "./MyFriendsList";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Modal from "components/Modal";
 import MyFriendsSearch from "./MyFriendsSearch";
-import { useAppDispatch } from "app/hooks";
-import { resetSearchUser } from "slices/friendSlice";
-import { friendProps } from "pages/MyPage";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { resetSearchUser, selectFriendList, setFriendList } from "slices/friendSlice";
 
-export interface MyFriendsProps {
-  friendList: Array<friendProps>;
-}
-
-const MyFriends = ({ friendList }: MyFriendsProps) => {
+const MyFriends = () => {
   const dispatch = useAppDispatch();
 
+  const [friends, setFriends] = useState(useAppSelector(selectFriendList));
   const [openAddFriendModal, setOpenAddFriendModal] = useState(false);
 
   const showAddFriendModal = () => {
@@ -37,7 +33,7 @@ const MyFriends = ({ friendList }: MyFriendsProps) => {
         )}
       </div>
 
-      {friendList.map((value, key) => (
+      {friends.map((value, key) => (
         <MyFriendsList key={key} friendInfo={value} />
       ))}
     </div>

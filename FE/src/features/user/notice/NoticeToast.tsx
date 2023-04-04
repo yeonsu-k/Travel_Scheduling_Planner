@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect } from "react";
-import { Alert, Snackbar, Zoom, styled } from "@mui/material";
+import { Alert, Snackbar, Zoom } from "@mui/material";
 
 interface NoticeToastProps {
   message: string;
@@ -8,7 +8,9 @@ interface NoticeToastProps {
 }
 
 const NoticeToast = ({ message, open, onClose }: NoticeToastProps) => {
-  const timer = setTimeout(() => onClose(false), 3000);
+  const timer = setTimeout(() => {
+    onClose(false);
+  }, 3000);
 
   useEffect(() => {
     return () => {

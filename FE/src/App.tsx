@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Header from "components/Header";
@@ -12,50 +12,61 @@ import NotFound from "pages/NotFound";
 import AuthRoute from "./AuthRoute";
 import DataPage from "pages/DataPage";
 import NoticeToast from "features/user/notice/NoticeToast";
-import { socket } from "features/user/notice/Socket";
-import { useAppDispatch } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { setNotiNumber } from "slices/mainSlice";
+import { selectUserInfo } from "slices/authSlice";
+import { connectSocket } from "features/user/notice/Socket";
 
 let noticeList = [];
 
 function App() {
   const dispatch = useAppDispatch();
-
   const location = useLocation();
   const [isNotice, setIsNotice] = useState(false);
   const [noticeMessage, setNoticeMessage] = useState("");
+  const email = useAppSelector(selectUserInfo).email;
 
-  useEffect(() => {
-    if (socket) {
-      socket.onmessage = (event) => {
-        console.log("메세지 옴: " + event.data);
+  useLayoutEffect(() => {
+    const socket = new WebSocket(process.env.REACT_APP_SOCKET_URL + email);
+    connectSocket(socket);
 
-        const data = JSON.parse(event.data);
+    socket.onopen = () => {
+      console.log("connected");
+    };
 
-        console.log("data: ", data.type);
+    socket.onmessage = (event) => {
+      console.log("메세지 옴: " + event.data);
 
-        if (data.type === "friend") {
-          console.log("friend");
-          setNoticeMessage(`${data.senderNickname}님이 ${data.content}을 보냈습니다.`);
-          setIsNotice(true);
-        } else if (data.type === "schedule") {
-          setNoticeMessage(`${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`);
+      const data = JSON.parse(event.data);
 
-          getNotification();
-        }
-      };
-      socket.onclose = (event) => {
-        console.log("disconnect");
-        console.log(event);
-      };
-      socket.onerror = (error) => {
-        console.log("connection error ");
-        console.log(error);
-      };
-    }
-  });
+      console.log("data: ", data.type);
+
+      if (data.type === "friend") {
+        console.log("friend");
+        const message = `${data.senderNickname}님이 ${data.content}을 보냈습니다.`;
+        setNoticeMessage(message);
+        setIsNotice(true);
+      } else if (data.type === "schedule") {
+        const message = `${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`;
+        setNoticeMessage(message);
+        setIsNotice(true);
+      }
+
+      getNotification();
+    };
+
+    socket.onclose = (event) => {
+      console.log("disconnect");
+      console.log(event);
+    };
+
+    socket.onerror = (error) => {
+      console.log("connection error ");
+      console.log(error);
+    };
+  }, []);
 
   const getNotification = async () => {
     let notificationCount = 0;

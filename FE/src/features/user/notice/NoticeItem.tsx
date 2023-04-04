@@ -5,7 +5,6 @@ import Text from "components/Text";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { noticeListProps } from "./Notice";
-import { getFriendInfo } from "pages/MyPage";
 import { setNotiNumber } from "slices/mainSlice";
 import { useAppDispatch } from "app/hooks";
 
@@ -28,7 +27,6 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
         console.log(res);
         alert("알림 처리 완료");
         getNotification();
-        getFriendInfo();
       })
       .catch((err) => {
         console.log(err);
@@ -40,6 +38,7 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
       .then((res) => {
         console.log(res);
         getNotification();
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
