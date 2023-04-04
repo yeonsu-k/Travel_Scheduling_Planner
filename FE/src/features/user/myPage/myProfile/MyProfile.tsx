@@ -9,19 +9,20 @@ import api from "api/Api";
 import { useDispatch } from "react-redux";
 import Axios from "api/JsonAxios";
 import { selectScheduleCnt } from "slices/mainSlice";
+import { selectFriendCnt } from "slices/friendSlice";
 
 interface MyProfileProps {
   scheduleColor: string;
   friendColor: string;
   setViewSchedule: Dispatch<SetStateAction<boolean>>;
-  friendNumber: number;
 }
 
-const MyProfile = ({ scheduleColor, friendColor, setViewSchedule, friendNumber }: MyProfileProps) => {
+const MyProfile = ({ scheduleColor, friendColor, setViewSchedule }: MyProfileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useAppSelector(selectUserInfo);
   const scheduleNumber = useAppSelector(selectScheduleCnt);
+  const friendNumber = useAppSelector(selectFriendCnt);
 
   const getUserInfo = async () => {
     await Axios.get(api.user.user())
