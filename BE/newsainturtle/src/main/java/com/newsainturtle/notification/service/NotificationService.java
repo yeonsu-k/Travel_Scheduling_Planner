@@ -47,7 +47,7 @@ public class NotificationService {
         for (Notification notification : notifications) {
             User sender = userRepository.findById(notification.getSendUserId()).orElse(null);
             if (sender == null || sender.isWithdraw()) {
-                continue; //알림 데이터 삭제?
+                continue;
             }
             String type, content;
             if (notification instanceof FriendNotification) {
@@ -57,7 +57,7 @@ public class NotificationService {
                 type = "schedule";
                 Schedule schedule = scheduleRepository.findById(((ScheduleNotification) notification).getScheduleId()).orElse(null);
                 if (schedule == null) {
-                    continue; //알림 데이터 삭제?
+                    continue;
                 } else {
                     content = schedule.getScheduleName();
                 }
@@ -132,13 +132,11 @@ public class NotificationService {
         }
     }
 
-    public void sendNewNotification(String email, LiveNotificationResponse liveNotificationResponse){
+    public void sendNewNotification(String email, LiveNotificationResponse liveNotificationResponse) {
         try {
-            System.out.println("메세지 보냄: "+email);
             webSocketService.sendNewNotification(email, liveNotificationResponse);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
