@@ -44,7 +44,6 @@ function App() {
       console.log("data: ", data.type);
 
       if (data.type === "friend") {
-        console.log("friend");
         const message = `${data.senderNickname}님이 ${data.content}을 보냈습니다.`;
         setNoticeMessage(message);
         setIsNotice(true);
@@ -104,7 +103,7 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage setIsNotice={setIsNotice} setNoticeMessage={setNoticeMessage} />} />
           <Route path="/regist" element={<RegistPage />} />
 
           <Route path="/mypage" element={<AuthRoute component={<Mypage />} />} />
