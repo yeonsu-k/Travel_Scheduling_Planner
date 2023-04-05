@@ -215,10 +215,19 @@ span:nth-child(4) {
   text-align: center;
 }
 
-.shareModalTable th {
+.shareModalTable th,
+tr {
   font-size: 0.8rem;
+}
+
+.shareModalTable th {
+  color: #666;
+}
+.shareModalTable tr {
   color: #999;
 }
+
+/* MyScheduleInviteModal.tsx */
 
 .inviteModalContainer {
   width: 500px;
