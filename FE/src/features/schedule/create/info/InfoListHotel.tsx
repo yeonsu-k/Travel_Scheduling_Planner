@@ -36,7 +36,7 @@ function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
 
   return (
     <div className={styles.flex}>
-      <Box my={2.5}>
+      <Box my={2}>
         <Text value={hotel.filter((element) => null != element).length.toString()} type="textTitle" color="yellow" en />
       </Box>
       <button className={`${styles.btn} ${styles.delete_btn}`} onClick={deleteHotelAll}>
