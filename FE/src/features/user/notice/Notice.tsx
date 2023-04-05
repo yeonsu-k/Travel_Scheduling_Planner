@@ -95,9 +95,11 @@ const Notice = () => {
 
           <hr style={{ backgroundColor: "#c5c5c5", height: "1px", border: "0", width: "100%" }} />
 
-          {noticeList.map((value, key) => (
-            <NoticeItem key={key} noticeValue={value} setChange={setChange} />
-          ))}
+          <div className={styles.noticeBox}>
+            {noticeList.map((value, key) => (
+              <NoticeItem key={key} noticeValue={value} setChange={setChange} />
+            ))}
+          </div>
         </>
       )}
     </div>

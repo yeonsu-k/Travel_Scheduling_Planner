@@ -13,6 +13,12 @@
   margin-top: 1rem;
 }
 
+.noticeBox {
+  width: 100%;
+  height: 35vh;
+  overflow: scroll;
+}
+
 /* NoticeItem.tsx */
 
 .noticeItem {
