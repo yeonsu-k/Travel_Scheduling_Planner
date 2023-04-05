@@ -11,6 +11,9 @@ import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { DestinationConfig } from "slices/mainSlice";
 import MyScheduleShareModal from "./MyScheduleShareModal";
+import { useAppDispatch } from "app/hooks";
+import { scheduleConfig, setscheduleList } from "slices/scheduleEditSlice";
+import { useNavigate } from "react-router-dom";
 
 const getDate = (data: string) => {
   const date = new Date(data);
@@ -30,6 +33,9 @@ const getDday = (data: string) => {
 };
 
 const MyScheduleListItem = (item: MyScheduleConfig) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [scheduleName, setScheduleName] = useState<string>(item.schedule_name);
   const [regionInfo, setRegionInfo] = useState<DestinationConfig>();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -79,6 +85,72 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
           console.log(err);
         });
     }
+  };
+
+  const modifySchedule = async () => {
+    await Axios.get(api.createSchedule.getFullList(item.schedule_id))
+      .then((res) => {
+        console.log("수정 버튼 Data", res);
+        const locations: scheduleConfig[] = res.data.data.scheduleLocations;
+        const list: scheduleConfig[][] = [];
+        let tmpDataList: scheduleConfig[] = [];
+        let index = 0;
+        locations.map((value, key) => {
+          const startHour = parseInt(value.startTime.split(":")[0]);
+          const startMinute = parseInt(value.startTime.split(":")[1]);
+          const endHour = parseInt(value.endTime.split(":")[0]);
+          const endMinute = parseInt(value.endTime.split(":")[1]);
+
+          let hour = endHour - startHour;
+          let minute = endMinute - startMinute;
+
+          if (minute < 0) {
+            hour -= 1;
+            minute += 60;
+          }
+
+          const time = hour.toString() + ":" + minute.toString();
+
+          const tmpData: scheduleConfig = {
+            location: {
+              locationId: value.location.locationId,
+              locationName: value.location.locationName,
+              locationURL: value.location.locationURL,
+              address: value.location.address,
+              latitude: value.location.latitude,
+              longitude: value.location.longitude,
+              time: time,
+            },
+            day: value.day,
+            sequence: value.sequence,
+            startTime: value.startTime,
+            endTime: value.endTime,
+          };
+          if (index !== value.day - 1) {
+            console.log("index: ", index);
+            list.push(tmpDataList);
+            index++;
+            tmpDataList = [];
+            tmpDataList.push(tmpData);
+          } else {
+            if (key === locations.length - 1) {
+              tmpDataList.push(tmpData);
+              list.push(tmpDataList);
+              tmpDataList = [];
+            } else {
+              tmpDataList.push(tmpData);
+            }
+            console.log("value.day", value.day);
+          }
+        });
+        console.log("list", list);
+
+        dispatch(setscheduleList([...list]));
+        navigate("/schedule/edit");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -153,7 +225,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
               >
                 {item.private ? "공개" : "비공개"}
               </Button>
-              <ButtonStyled text="일정 수정" />
+              <ButtonStyled text="일정 수정" onClick={modifySchedule} />
               <ButtonStyled text="일정 공유" onClick={() => setModalOpen(true)} />
               <ButtonStyled text="일정 삭제" onClick={deleteSchedule} />
             </div>
