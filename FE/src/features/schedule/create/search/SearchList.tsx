@@ -50,7 +50,7 @@ function SearchList(props: SearchListType) {
       if (window.innerWidth <= 600) resData = resData.splice(0, 6);
       setCardList(
         resData.map((ele: getRecommendApiType) => {
-          ele.locationURL = ele.locationURL == null ? defaultPhoto : ele.locationURL; // API변경시 사진으로 수정
+          ele.locationURL = ele.locationURL == null ? defaultPhoto : ele.locationURL;
           return ele;
         }),
       );
