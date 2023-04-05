@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import styles from "../Main.module.css";
 import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
@@ -7,23 +7,32 @@ import Button from "components/Button";
 import { DestinationConfig, selectDestinationList } from "slices/mainSlice";
 import { useAppSelector } from "app/hooks";
 
-const MainDestinationsList = () => {
+interface Props {
+  onMoveToElement: () => void;
+}
+
+const MainDestinationsList = ({ onMoveToElement }: Props) => {
   const destinations: DestinationConfig[] = useAppSelector(selectDestinationList);
   const [input, setInput] = useState("");
-  const upRef = useRef<HTMLDivElement>(null);
+  const [selected, setSelected] = useState<number>(0);
 
-  const moveToUp = () => {
-    if (upRef.current) upRef.current.scrollIntoView({ behavior: "smooth" });
+  const filterItems = () => {
+    let result = destinations.filter((item: DestinationConfig) => {
+      const name = "대한민국" + item.regionName;
+      return name.includes(input);
+    });
+
+    if (selected == 0) {
+      result = result.sort((a, b) => (a.regionName > b.regionName ? 1 : -1));
+    } else {
+      result = result.sort((a, b) => (a.regionName < b.regionName ? 1 : -1));
+    }
+    return result;
   };
-
-  const filtered = destinations.filter((item: DestinationConfig) => {
-    const name = "대한민국" + item.regionName;
-    return name.includes(input);
-  });
 
   return (
     <div>
-      <div id="goSkip" ref={upRef} className={styles.mainTitleText}>
+      <div id="goSkip" className={styles.mainTitleText}>
         <span className={styles.pageTitle}>어디로 여행을 떠나시나요?</span>
       </div>
       <div className={styles.mainSubTitleTextK}>
@@ -41,15 +50,15 @@ const MainDestinationsList = () => {
         </div>
       </div>
       <div className={styles.mainFilterContainer}>
-        <MainDestinationsFilter />
+        <MainDestinationsFilter setSelected={setSelected} />
       </div>
       <div className={styles.mainDestinationContainer}>
-        {filtered.map((item: DestinationConfig, i: number) => (
+        {filterItems().map((item: DestinationConfig, i: number) => (
           <MainDestinationItem key={i} {...item} />
         ))}
       </div>
       <div className={styles.upBtn}>
-        <Button height="100%" text="여행지 선택화면으로 돌아가기" onClick={moveToUp} />
+        <Button height="100%" text="여행지 선택화면으로 돌아가기" onClick={onMoveToElement} />
       </div>
     </div>
   );

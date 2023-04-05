@@ -5,28 +5,13 @@ import EditDayList from "features/schedule/edit/EditDayList";
 import EditFullScheduleList from "features/schedule/edit/fullList/EditFullScheduleList";
 import Text from "components/Text";
 import { useDispatch } from "react-redux";
-import {
-  fullScheduleListConfig,
-  placeInfoConfig,
-  selectFullScheduleList,
-  selectKeepPlaceList,
-  setFullScheduleList,
-  setKeepPlaceList,
-} from "slices/scheduleEditSlice";
+import { selectKeepPlaceList, selectScheduleList, setKeepPlaceList, setscheduleList } from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
-import EditScheduleItem from "features/schedule/edit/EditScheduleItem";
-import {
-  selectDate,
-  selectRegion,
-  selectPlaceList,
-  selectPointPlace,
-  selectTotalList,
-  selectVehicle,
-} from "slices/scheduleCreateSlice";
-import { differenceInDays } from "date-fns";
+import KeepScheduleItem from "features/schedule/edit/KeepScheduleItem";
+import { selectDate, selectRegion, selectVehicle } from "slices/scheduleCreateSlice";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
@@ -40,8 +25,7 @@ import Modal from "components/Modal";
 import Input from "components/Input";
 import SwitchButton from "components/SwitchButton";
 import ButtonStyled from "components/Button";
-
-const { kakao } = window;
+import EditMap from "features/schedule/edit/EditMap";
 
 const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -66,12 +50,7 @@ const ScheduleEditPage = () => {
   const region = useAppSelector(selectRegion);
   const vehicle = useAppSelector(selectVehicle);
   const date = useAppSelector(selectDate);
-  const place = useAppSelector(selectPlaceList);
-  const totalList = useAppSelector(selectTotalList);
-  const fullScheduleList = useAppSelector(selectFullScheduleList);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
-  const pointPlace = useAppSelector(selectPointPlace);
-  const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
   const [addPlaceModal, setAddPlaceModal] = useState(false);
   const [viewSearchBar, setViewSearchBar] = useState(false);
   const [currentTab, setCurrentTab] = useState("호텔");
@@ -79,6 +58,7 @@ const ScheduleEditPage = () => {
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
   const [viewDaySchedule, setViewDaySchedule] = useState(false);
   const [day, setDay] = useState(0);
+  const scheduleList = useAppSelector(selectScheduleList);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
@@ -91,28 +71,9 @@ const ScheduleEditPage = () => {
   const [scheduleTitle, setScheduleTitle] = useState<string>(""); // 일정 이름
   const [scheduleOpen, setScheduleOpen] = useState<boolean>(true); // 일정 공개 여부
 
-  const setMap = () => {
-    const container = document.getElementById("map");
-    const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 5,
-    };
-
-    // 지도 생성
-    const map = new kakao.maps.Map(container, options);
-    map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
-
-    const geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(place, (result: any[], status: string) => {
-      // 정상적으로 검색이 완료되면
-      if (status === kakao.maps.services.Status.OK) {
-        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동
-        map.setCenter(coords);
-      }
-    });
-  };
+  // 일정 권한 확인
+  const [searchParams] = useSearchParams();
+  const isMine = searchParams.get("mine");
 
   const dragStartHandler = (e: any) => {
     // 고스트 이미지를 제거하기 위해 투명 캔버스 생성
@@ -190,8 +151,8 @@ const ScheduleEditPage = () => {
       return;
     }
 
-    const copyList = JSON.parse(JSON.stringify(fullScheduleList));
-    const keepList = JSON.parse(JSON.stringify(keepPlaceList));
+    const copyList = scheduleList.map((value) => value.slice());
+    const keepList = [...keepPlaceList];
 
     console.log("result", result);
 
@@ -212,15 +173,15 @@ const ScheduleEditPage = () => {
 
       const dragEndIndex = destination.index;
 
-      const dragContent = copyList[dragStartDay - 1].dayList[dragStartIndex];
-      copyList[dragStartDay - 1].dayList.splice(dragStartIndex, 1);
+      const dragContent = copyList[dragStartDay - 1][dragStartIndex].location;
+      copyList[dragStartDay - 1].splice(dragStartIndex, 1);
       if (keepList.length === 0) {
         keepList.push(dragContent);
       } else {
         keepList.splice(dragEndIndex, 0, dragContent);
       }
 
-      dispatch(setFullScheduleList([...copyList]));
+      dispatch(setscheduleList([...copyList]));
       dispatch(setKeepPlaceList([...keepList]));
     }
     // 보관함에서 일정으로 옮기는 경우
@@ -230,11 +191,18 @@ const ScheduleEditPage = () => {
       const dragEndDay = Number(destination.droppableId);
       const dragEndIndex = destination.index;
 
-      const dragContent = keepList[dragStartIndex];
+      const dragContent = {
+        location: keepList[dragStartIndex],
+        day: dragEndDay,
+        sequence: 0,
+        startTime: "10:00",
+        endTime: "10:00",
+        duration: 0,
+      };
       console.log(dragContent);
       keepList.splice(dragStartIndex, 1);
-      copyList[dragEndDay - 1].dayList.splice(dragEndIndex, 0, dragContent);
-      dispatch(setFullScheduleList([...copyList]));
+      copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
+      dispatch(setscheduleList([...copyList]));
       dispatch(setKeepPlaceList([...keepList]));
     } //일정 내에서 순서만 바꾸는 경우
     else {
@@ -244,90 +212,28 @@ const ScheduleEditPage = () => {
       const dragEndDay = Number(destination.droppableId);
       const dragEndIndex = destination.index;
 
-      const dragContent = copyList[dragStartDay - 1].dayList[dragStartIndex];
-      copyList[dragStartDay - 1].dayList.splice(dragStartIndex, 1);
-      copyList[dragEndDay - 1].dayList.splice(dragEndIndex, 0, dragContent);
-      dispatch(setFullScheduleList([...copyList]));
+      const dragContent = copyList[dragStartDay - 1][dragStartIndex];
+      copyList[dragStartDay - 1].splice(dragStartIndex, 1);
+      copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
+      dispatch(setscheduleList([...copyList]));
     }
-  };
-
-  const getSchedule = () => {
-    console.log("일정 생성 데이터 불러오기");
-
-    const list: fullScheduleListConfig[] = [];
-
-    for (let day = 1; day <= travelDays; day++) {
-      list.push({
-        day: day,
-        startHour: 10,
-        startMinute: 0,
-        dayList: [],
-      });
-    }
-
-    const dayPlaceCount = Math.floor(totalList.length / travelDays);
-
-    console.log("dayPlaceCount: ", dayPlaceCount);
-
-    let placeInfo: placeInfoConfig = {
-      id: 0,
-      image: "",
-      name: "",
-      address: "",
-      latitude: 0,
-      longitude: 0,
-      time: "",
-      startTime: "10:00",
-      endTime: "10:00",
-    };
-
-    let day = 0;
-    let dayPlace = 0;
-    totalList.map((value, key) => {
-      placeInfo = {
-        id: value.info.locationId,
-        image: value.info.locationURL,
-        name: value.info.locationName,
-        address: value.info.address,
-        latitude: value.info.latitude,
-        longitude: value.info.longitude,
-        time: value.time,
-        startTime: "10:00",
-        endTime: "10:00",
-      };
-
-      list[day].dayList.push(placeInfo);
-      dayPlace++;
-      console.log("dayPlace: ", dayPlace);
-      if (dayPlace === dayPlaceCount && day < travelDays - 1) {
-        day++;
-        dayPlace = 0;
-        console.log("day: ", day);
-      }
-    });
-
-    console.log("list: ", list);
-    console.log(totalList);
-
-    dispatch(setFullScheduleList([...list]));
   };
 
   const onClickSaveSchedule = () => {
-    const scheduleList: sendScheduleListProps[] = [];
+    const sendScheduleList: sendScheduleListProps[] = [];
 
-    fullScheduleList.map((value, key) => {
-      for (let idx = 0; idx < value.dayList.length; idx++) {
+    scheduleList.map((val, key) => {
+      scheduleList[key].map((value, index) => {
         const scheduleItem = {
-          locationId: value.dayList[idx].id,
-          day: value.day,
-          sequence: idx + 1,
-          startTime: "00:00",
-          endTime: "00:00",
+          locationId: value.location.locationId,
+          day: key + 1,
+          sequence: index + 1,
+          startTime: value.startTime,
+          endTime: value.endTime,
         };
 
-        console.log("scheduleItem", scheduleItem);
-        scheduleList.push(scheduleItem);
-      }
+        sendScheduleList.push(scheduleItem);
+      });
     });
 
     const sendData = {
@@ -336,10 +242,10 @@ const ScheduleEditPage = () => {
       isPrivate: scheduleOpen,
       scheduleStartDay: date.start,
       scheduleEndDay: date.end,
-      scheduleStartLocation: pointPlace[0]?.address,
-      scheduleEndLocation: pointPlace[1]?.address,
+      scheduleStartLocation: null,
+      scheduleEndLocation: null,
       vehicle: vehicle,
-      scheduleLocationRequestList: scheduleList,
+      scheduleLocationRequestList: sendScheduleList,
     };
 
     Axios.post(api.createSchedule.schedule(), sendData)
@@ -353,11 +259,8 @@ const ScheduleEditPage = () => {
   };
 
   useEffect(() => {
-    setMap();
-  }, [place]);
-
-  useEffect(() => {
-    getSchedule();
+    // getSchedule();
+    console.log("일정 불러오기", scheduleList);
   }, []);
 
   return (
@@ -368,30 +271,30 @@ const ScheduleEditPage = () => {
         {viewDaySchedule ? <EditDayMoveList day={day} /> : <EditFullScheduleList />}
 
         <div className={styles.map} ref={containerRef}>
-          <div id="map" style={{ width: "100%", height: "100%", zIndex: "0" }}></div>
+          {viewDaySchedule ? <EditMap day={day} /> : <EditMap />}
 
-          <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
-            일정저장
-          </a>
+          {isMine == "true" || isMine == null ? (
+            <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
+              일정저장
+            </a>
+          ) : null}
 
           {viewDaySchedule ? (
-            <div className={styles.daySummary}>
-              <div>
-                <Text value={day.toString()} type="title" en></Text>
-                <Text value="일차" type="caption" en />
-              </div>
+            <>
+              <div className={styles.daySummary}>
+                <div>
+                  <Text value={day.toString()} type="title" en></Text>
+                  <Text value="일차" type="caption" en />
+                </div>
 
-              <div style={{ color: colorPalette.yellow }}>
-                <LocationOnIcon fontSize="small" />
-                <Text
-                  value={fullScheduleList[day - 1].dayList.length.toString()}
-                  color="yellow"
-                  type="textTitle"
-                ></Text>
-                <Text value="개의 장소" type="caption" en />
+                <div style={{ color: colorPalette.yellow }}>
+                  <LocationOnIcon fontSize="small" />
+                  <Text value={scheduleList[day - 1].length.toString()} color="yellow" type="textTitle"></Text>
+                  <Text value="개의 장소" type="caption" en />
+                </div>
               </div>
-            </div>
-          ) : (
+            </>
+          ) : isMine == "true" || isMine == null ? (
             <>
               <TooltipStyled title="장소를 검색하여 일정에 추가" placement="left">
                 <div className={styles.searchPlaceBtn} onClick={() => setViewSearchBar(true)}>
@@ -422,61 +325,65 @@ const ScheduleEditPage = () => {
               </TooltipStyled>
               {addPlaceModal && <PlaceAddModal setAddPlaceModal={setAddPlaceModal} />}
             </>
-          )}
+          ) : null}
 
-          <div
-            className={styles.keepPlaces}
-            ref={dragComponentRef}
-            draggable
-            onDragStart={(e) => dragStartHandler(e)}
-            onDrag={(e) => dragHandler(e)}
-            onDragOver={(e) => dragOverHandler(e)}
-            onDragEnd={(e) => dragEndHandler(e)}
-            style={{ left: position.left, top: position.top }}
-          >
-            <Text value="포함되지 않은 장소" bold /> <br />
-            <div style={{ color: "#AAAAAA", fontSize: "0.7rem", margin: "0.5rem 0 1.5rem", lineHeight: "150%" }}>
-              일정에서 누락된 장소들이 이곳에 포함됩니다. <br />
-              일정에 포함된 장소를 옮겨 놓을 수도 있습니다. <br />
-              원하는 위치에 드래그하여 일정에 포함시키세요. <br />
-            </div>
-            <Droppable droppableId="keepPlaceList" key="keepPlaceList">
-              {(provided) => (
-                <div
-                  className="keepPlaceList"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{ width: "auto", minHeight: "10px" }}
-                >
-                  {keepPlaceList.map((value, key) => (
-                    <Draggable key={value.id} draggableId={value.id?.toString()} index={key}>
-                      {(provided) => (
-                        <div
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          ref={provided.innerRef}
-                          style={{
-                            ...provided.draggableProps.style,
-                            width: "auto",
-                            height: "auto",
-                          }}
-                        >
-                          <EditScheduleItem
-                            img={value.image}
-                            placeName={value.name}
-                            time={value.time}
-                            // startTime={value.startTime}
-                            // endTime={value.endTime}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+          {isMine == "true" || isMine == null ? (
+            <>
+              <div
+                className={styles.keepPlaces}
+                ref={dragComponentRef}
+                draggable
+                onDragStart={(e) => dragStartHandler(e)}
+                onDrag={(e) => dragHandler(e)}
+                onDragOver={(e) => dragOverHandler(e)}
+                onDragEnd={(e) => dragEndHandler(e)}
+                style={{ left: position.left, top: position.top }}
+              >
+                <Text value="포함되지 않은 장소" bold /> <br />
+                <div style={{ color: "#AAAAAA", fontSize: "0.7rem", margin: "0.5rem 0 1.5rem", lineHeight: "150%" }}>
+                  일정에서 누락된 장소들이 이곳에 포함됩니다. <br />
+                  일정에 포함된 장소를 옮겨 놓을 수도 있습니다. <br />
+                  원하는 위치에 드래그하여 일정에 포함시키세요. <br />
                 </div>
-              )}
-            </Droppable>
-          </div>
+                <Droppable droppableId="keepPlaceList" key="keepPlaceList">
+                  {(provided) => (
+                    <div
+                      className="keepPlaceList"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ width: "auto", minHeight: "10px" }}
+                    >
+                      {keepPlaceList.map((value, key) => (
+                        <Draggable key={value.locationId} draggableId={value.locationId?.toString()} index={key}>
+                          {(provided) => (
+                            <div
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                              ref={provided.innerRef}
+                              style={{
+                                ...provided.draggableProps.style,
+                                width: "auto",
+                                height: "auto",
+                              }}
+                            >
+                              <KeepScheduleItem
+                                img={value.locationURL}
+                                placeName={value.locationName}
+                                time={value.time}
+                                // startTime={value.startTime}
+                                // endTime={value.endTime}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </>
+          ) : null}
         </div>
       </DragDropContext>
 

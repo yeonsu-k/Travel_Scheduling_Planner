@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "../Edit.module.css";
 import Text from "components/Text";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { placeInfoConfig, selectFullScheduleList } from "slices/scheduleEditSlice";
+import { selectScheduleList } from "slices/scheduleEditSlice";
 import { useAppSelector } from "app/hooks";
 
 interface EditDayMoveItemProps {
@@ -11,13 +11,16 @@ interface EditDayMoveItemProps {
 }
 
 const EditDayMoveItem = ({ day, step }: EditDayMoveItemProps) => {
-  const dayList = useAppSelector(selectFullScheduleList)[day - 1].dayList;
+  const dayList = useAppSelector(selectScheduleList)[day - 1];
 
   const startPoint = dayList[step];
   const endPoint = dayList[step + 1];
 
   const onClickDetailRoute = () => {
-    window.open(process.env.REACT_APP_KAKAO_MAP_URL + `/?sName=${startPoint.name}&eName=${endPoint.name}`);
+    window.open(
+      process.env.REACT_APP_KAKAO_MAP_URL +
+        `/?sName=${startPoint.location.locationName}&eName=${endPoint.location.locationName}`,
+    );
   };
 
   return (
@@ -27,13 +30,13 @@ const EditDayMoveItem = ({ day, step }: EditDayMoveItemProps) => {
       </div>
 
       <div className={styles.moveItemInfo}>
-        <Text value={startPoint.name} type="smallText" />
+        <Text value={startPoint.location.locationName} type="smallText" />
       </div>
       <div className={styles.moveItemInfo}>
         <ArrowDropDownIcon fontSize="small" />
       </div>
       <div className={styles.moveItemInfo}>
-        <Text value={endPoint.name} type="smallText" />
+        <Text value={endPoint.location.locationName} type="smallText" />
       </div>
 
       <div className={styles.moveItemInfo} onClick={onClickDetailRoute}>

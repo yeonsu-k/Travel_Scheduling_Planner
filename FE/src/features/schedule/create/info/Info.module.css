@@ -12,17 +12,24 @@
   cursor: pointer;
 }
 
+
 /* InfoLocal */
+.localFlex {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 .localText {
   font-family: "Pretendard";
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 1.5vw, 1.5rem);
 }
 
 .localText_en {
   font-family: "Montserrat";
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: clamp(0.7rem, 1vw, 0.875rem);
   color: #CECECE;
 }
 
@@ -35,8 +42,9 @@
 .periodDate {
   font-family: "Montserrat";
   letter-spacing: -1px;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1vw, 1.2rem);
   color: #696969;
+  margin-top: 24px;
   cursor: pointer;
 }
 
@@ -213,4 +221,27 @@
   50% {
     background-color: white;
   }
+}
+
+@media screen and (max-width: 600px) {
+  .content {
+    margin: 3px 0px;
+  }
+
+  .localFlex {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+  }
+
+  .localText_en {
+    color: #666666;
+    margin-left: 0.5rem;
+  }
+
+  .periodDate {
+    color: #FF9C00;
+    margin-bottom: 5px;
+  }
+
 }

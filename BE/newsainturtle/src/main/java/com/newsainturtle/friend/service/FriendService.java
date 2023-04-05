@@ -85,8 +85,6 @@ public class FriendService {
                         .notificationStatus(NotificationStatus.NO_RESPONSE)
                         .build();
                 friendNotificationRepository.save(notification);
-                //상대방에게 알림 전송 (실시간 처리 필요)
-                System.out.println("/상대방에게 알림 전송 (실시간 처리 필요)");
                 notificationService.sendNewNotification(friendFollowRequest.getEmail(), LiveNotificationResponse.builder()
                         .senderNickname(requestUser.getNickname())
                         .type("friend")

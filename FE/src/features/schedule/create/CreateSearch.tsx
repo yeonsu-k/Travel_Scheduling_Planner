@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import createStyles from "features/schedule/create/Create.module.css";
 import styles from "./Create.module.css";
 import SearchRadioBtn from "./search/SearchRadioBtn";
 import SearchInput from "./search/SearchInput";
@@ -42,7 +43,7 @@ function CreateRight(props: ScheduleCreatPropsType) {
       </Stack>
       {searchClick ? (
         !searchView ? (
-          <Box className={styles.center} my={1.5}>
+          <Box className={styles.textCenter} my={1.5}>
             <Text value={`${select}${select === "호텔" ? "을" : "를"} 검색하세요`} bold />
             <Stack className={styles.searchWarning} my={2} spacing={0.5} justifyContent="center" alignItems="center">
               <ErrorOutline />

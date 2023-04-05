@@ -5,7 +5,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import colorPalette from "styles/colorPalette";
 import DeleteItemModal from "./DeleteItemModal";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { selectFullScheduleList, setFullScheduleList, setStayTime } from "slices/scheduleEditSlice";
+import { selectScheduleList, setStayTime, setscheduleList } from "slices/scheduleEditSlice";
 
 interface EditScheduleItemProps {
   day: number;
@@ -13,15 +13,15 @@ interface EditScheduleItemProps {
   img: string;
   placeName: string;
   time: string;
-  // startTime: string;
-  // endTime: string;
+  startTime: string;
+  endTime: string;
 }
 
-const EditScheduleItem = ({ day, index, img, placeName, time }: EditScheduleItemProps) => {
+const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime }: EditScheduleItemProps) => {
   const dispatch = useAppDispatch();
 
-  const fullList = useAppSelector(selectFullScheduleList);
-  const [input, setInput] = useState(0);
+  const scheduleList = useAppSelector(selectScheduleList);
+  const [input, setInput] = useState(scheduleList[day - 1][index].duration);
   const [changeStayTime, setChangeStayTime] = useState(false);
   const stayTime = time.split(":");
   const [hour, setHour] = useState(parseInt(stayTime[0]));
@@ -29,9 +29,20 @@ const EditScheduleItem = ({ day, index, img, placeName, time }: EditScheduleItem
   const [inputHour, setInputHour] = useState(hour);
   const [inputMinute, setInputMinute] = useState(minute);
   const [deleteItemModal, setDeleteItemModal] = useState(false);
+  let startMinute = startTime.split(":")[1];
+  let endMinute = endTime.split(":")[1];
 
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  if (parseInt(startMinute) < 10) {
+    startMinute = "0" + startMinute;
+    startTime = startTime.split(":")[0] + ":" + startMinute;
+  }
+  if (parseInt(endMinute) < 10) {
+    endMinute = "0" + endMinute;
+    endTime = endTime.split(":")[0] + ":" + endMinute;
+  }
+
+  // const [startTime, setStartTime] = useState("");
+  // const [endTime, setEndTime] = useState("");
 
   const onClickSaveStayTime = () => {
     setHour(inputHour);
@@ -44,99 +55,79 @@ const EditScheduleItem = ({ day, index, img, placeName, time }: EditScheduleItem
   };
 
   const deleteScheduleItem = () => {
-    const tmpList = JSON.parse(JSON.stringify(fullList));
-    tmpList[day - 1].dayList.splice(index, 1);
+    const tmpList = scheduleList.map((value) => value.slice());
+    tmpList[day - 1].splice(index, 1);
 
-    dispatch(setFullScheduleList([...tmpList]));
+    dispatch(setscheduleList([...tmpList]));
     setDeleteItemModal(false);
   };
 
-  const setTime = () => {
-    const moveHour = Math.floor(input / 60);
-    const moveMinute = input % 60;
-    let startHour, startMinute, endHour, endMinute;
+  // const setTime = () => {
+  //   const moveHour = Math.floor(input / 60);
+  //   const moveMinute = input % 60;
+  //   let startHour, startMinute, endHour, endMinute;
 
-    if (index === 0) {
-      startHour = fullList[day - 1].startHour;
-      startMinute = fullList[day - 1].startMinute;
+  //   if (index === 0) {
+  //     startHour = fullList[day - 1].startHour;
+  //     startMinute = fullList[day - 1].startMinute;
 
-      startHour += moveHour;
-      startMinute += moveMinute;
+  //     startHour += moveHour;
+  //     startMinute += moveMinute;
 
-      endHour = startHour + hour;
-      endMinute = startMinute + minute;
-    } else {
-      const prevTime = fullList[day - 1].dayList[index - 1].endTime.split(":");
-      console.log("prevTime", prevTime);
-      startHour = parseInt(prevTime[0]);
-      startMinute = parseInt(prevTime[1]);
+  //     endHour = startHour + hour;
+  //     endMinute = startMinute + minute;
+  //   } else {
+  //     const prevTime = fullList[day - 1].dayList[index - 1].endTime.split(":");
+  //     console.log("prevTime", prevTime);
+  //     startHour = parseInt(prevTime[0]);
+  //     startMinute = parseInt(prevTime[1]);
 
-      startHour += moveHour;
-      startMinute += moveMinute;
+  //     startHour += moveHour;
+  //     startMinute += moveMinute;
 
-      endHour = startHour + hour;
-      endMinute = startMinute + minute;
-    }
+  //     endHour = startHour + hour;
+  //     endMinute = startMinute + minute;
+  //   }
 
-    let startTimeStr: string, endTimeStr: string;
+  //   let startTimeStr: string, endTimeStr: string;
 
-    if (startMinute < 10) {
-      startTimeStr = `${startHour}:0${startMinute}`;
-      setStartTime(startTimeStr);
-    } else {
-      startTimeStr = `${startHour}:${startMinute}`;
-      setStartTime(startTimeStr);
-    }
+  //   if (startMinute < 10) {
+  //     startTimeStr = `${startHour}:0${startMinute}`;
+  //     setStartTime(startTimeStr);
+  //   } else {
+  //     startTimeStr = `${startHour}:${startMinute}`;
+  //     setStartTime(startTimeStr);
+  //   }
 
-    if (endMinute >= 60) {
-      const plusHour = Math.floor(endMinute / 60);
-      const minute = endMinute % 60;
+  //   if (endMinute >= 60) {
+  //     const plusHour = Math.floor(endMinute / 60);
+  //     const minute = endMinute % 60;
 
-      endHour += plusHour;
-      endMinute = minute;
-    }
+  //     endHour += plusHour;
+  //     endMinute = minute;
+  //   }
 
-    if (endMinute < 10) {
-      endTimeStr = `${endHour}:0${endMinute}`;
-      setEndTime(endTimeStr);
-    } else {
-      endTimeStr = `${endHour}:${endMinute}`;
-      setEndTime(endTimeStr);
-    }
+  //   if (endMinute < 10) {
+  //     endTimeStr = `${endHour}:0${endMinute}`;
+  //     setEndTime(endTimeStr);
+  //   } else {
+  //     endTimeStr = `${endHour}:${endMinute}`;
+  //     setEndTime(endTimeStr);
+  //   }
 
-    dispatch(setStayTime({ day: day, index: index, startTime: startTimeStr, endTime: endTimeStr }));
-  };
+  //   dispatch(setStayTime({ day: day, index: index, startTime: startTimeStr, endTime: endTimeStr }));
+  // };
 
-  useEffect(() => {
-    setTime();
-  }, []);
+  // useEffect(() => {
+  //   setTime();
+  // }, []);
 
-  useEffect(() => {
-    setTime();
-  }, [input, hour, minute, startTime, endTime]);
+  // useEffect(() => {
+  //   setTime();
+  // }, [input, hour, minute, startTime, endTime]);
 
   return (
     <>
-      <div
-        style={{
-          height: "2rem",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          color: colorPalette.darkgray,
-        }}
-      >
-        <MoreVertIcon fontSize="small" />
-        <input
-          type="number"
-          value={input}
-          min={0}
-          className={styles.moveTime}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.valueAsNumber)}
-        />
-        <Text value="분" type="caption" />
-      </div>
-
       {changeStayTime ? (
         <div className={styles.changeTime}>
           <div className={styles.changeTimeInfo}>
@@ -199,6 +190,30 @@ const EditScheduleItem = ({ day, index, img, placeName, time }: EditScheduleItem
           <div className={styles.scheduleItemInfo} onClick={onClickDeleteItem}>
             <Text value="삭제" type="smallText" />
           </div>
+        </div>
+      )}
+
+      {index === scheduleList[day - 1].length - 1 ? (
+        <></>
+      ) : (
+        <div
+          style={{
+            height: "2rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: colorPalette.darkgray,
+          }}
+        >
+          <MoreVertIcon fontSize="small" />
+          <input
+            type="number"
+            value={input}
+            min={0}
+            className={styles.moveTime}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.valueAsNumber)}
+          />
+          <Text value="분" type="caption" />
         </div>
       )}
 

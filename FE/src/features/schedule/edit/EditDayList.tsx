@@ -3,7 +3,7 @@ import styles from "./Edit.module.css";
 import Text from "components/Text";
 import EditDayItem from "./EditDayItem";
 import { useAppSelector } from "app/hooks";
-import { selectFullScheduleList } from "slices/scheduleEditSlice";
+import { selectScheduleList } from "slices/scheduleEditSlice";
 
 interface EditDayListProps {
   setDay: Dispatch<SetStateAction<number>>;
@@ -11,7 +11,7 @@ interface EditDayListProps {
 }
 
 const EditDayList = ({ setDay, setViewDaySchedule }: EditDayListProps) => {
-  const scheduleList = useAppSelector(selectFullScheduleList);
+  const scheduleList = useAppSelector(selectScheduleList);
 
   return (
     <div className={styles.editDayList}>
@@ -22,7 +22,7 @@ const EditDayList = ({ setDay, setViewDaySchedule }: EditDayListProps) => {
       </div>
 
       {scheduleList.map((value, key) => (
-        <EditDayItem day={value.day} key={key} setDay={setDay} setViewDaySchedule={setViewDaySchedule} />
+        <EditDayItem day={key + 1} key={key} setDay={setDay} setViewDaySchedule={setViewDaySchedule} />
       ))}
     </div>
   );

@@ -24,8 +24,7 @@ public class JwtTokenProvider {
         this.secretKey = secretKey;
     }
 
-    private static final long ACCESS_TOKEN_VALID_TIME = 30 * 600 * 1000L;
-    private static final long REFRESH_TOKEN_VALID_TIME = 30 * 24 * 60 * 60 * 1000L;
+    private static final long ACCESS_TOKEN_VALID_TIME = 10 * 30 * 60 * 1000L;
 
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
@@ -55,9 +54,7 @@ public class JwtTokenProvider {
     }
 
     public static DecodedJWT handleError(String token) {
-        JWTVerifier verifier = JWT
-                .require(Algorithm.HMAC512(secretKey.getBytes()))
-                .build();
+        JWTVerifier verifier = getVerifier();
         try {
             return verifier.verify(token.replace(TOKEN_PREFIX, ""));
         } catch (AlgorithmMismatchException ex) {

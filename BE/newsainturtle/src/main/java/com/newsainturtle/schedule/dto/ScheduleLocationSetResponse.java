@@ -16,4 +16,6 @@ public class ScheduleLocationSetResponse {
     private String startTime;
 
     private String endTime;
+
+    private int duration;
 }

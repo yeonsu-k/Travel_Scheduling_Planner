@@ -1,8 +1,12 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, {useRef, useState } from "react";
 import styles from "./Main.module.css";
 import MainMobileContainer from "./MainMobileContainer";
 
-const MainDisplay = () => {
+interface Props {
+  onMoveToElement: () => void;
+}
+
+const MainDisplay = ({ onMoveToElement }: Props) => {
   const [videoNum, setVideoNum] = useState(Math.floor(Math.random() * 15) + 1);
   const videoRef = useRef<HTMLVideoElement>(null);
   // 다른 영상으로 자동 재생
@@ -37,7 +41,9 @@ const MainDisplay = () => {
                 <div className={styles.titleText}>
                   <b>MYRO</b>
                 </div>
-                <div className={styles.button}>시작하기</div>
+                <div className={styles.button} onClick={onMoveToElement}>
+                  시작하기
+                </div>
               </div>
             </div>
             <video autoPlay muted loop className={styles.video} ref={videoRef} onEnded={handleVideoEnded}>
