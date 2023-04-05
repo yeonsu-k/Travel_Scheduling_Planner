@@ -10,8 +10,10 @@ import api from "api/Api";
 import { useDispatch } from "react-redux";
 import { setLogin, setUserInfo } from "slices/authSlice";
 import Loading from "components/Loading";
+import { connectSocket } from "../notice/Socket";
+import { LoginProps } from "pages/LoginPage";
 
-const Login = () => {
+const Login = ({ setIsNotice, setNoticeMessage }: LoginProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState<string>("");
@@ -76,6 +78,7 @@ const Login = () => {
             }),
           );
           dispatch(setUserInfo({ email: email, profile: res.data.data.profile }));
+          connect();
           setLoading(false);
           navigate("/");
         })
@@ -90,6 +93,46 @@ const Login = () => {
 
   const moveRegist = () => {
     navigate("/regist");
+  };
+
+  const connect = () => {
+    const socket = new WebSocket(process.env.REACT_APP_SOCKET_URL + email);
+    connectSocket(socket);
+
+    socket.onopen = () => {
+      console.log("connected");
+    };
+
+    socket.onmessage = (event) => {
+      console.log("메세지 옴: " + event.data);
+
+      const data = JSON.parse(event.data);
+
+      console.log("data: ", data.type);
+
+      if (data.type === "friend") {
+        console.log("friend");
+        const message = `${data.senderNickname}님이 ${data.content}을 보냈습니다.`;
+        setNoticeMessage(message);
+        setIsNotice(true);
+      } else if (data.type === "schedule") {
+        const message = `${data.senderNickname}님이 ${data.content} 일정을 공유했습니다.`;
+        setNoticeMessage(message);
+        setIsNotice(true);
+      }
+
+      // getNotification();
+    };
+
+    socket.onclose = (event) => {
+      console.log("disconnect");
+      console.log(event);
+    };
+
+    socket.onerror = (error) => {
+      console.log("connection error ");
+      console.log(error);
+    };
   };
 
   useEffect(() => {
