@@ -27,7 +27,7 @@ import {
 import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
@@ -92,6 +92,10 @@ const ScheduleEditPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false); // 확인 모달
   const [scheduleTitle, setScheduleTitle] = useState<string>(""); // 일정 이름
   const [scheduleOpen, setScheduleOpen] = useState<boolean>(true); // 일정 공개 여부
+
+  // 일정 권한 확인
+  const [searchParams] = useSearchParams();
+  const isMine = searchParams.get("mine");
 
   const setMap = () => {
     const container = document.getElementById("map");
@@ -373,9 +377,11 @@ const ScheduleEditPage = () => {
         <div className={styles.map} ref={containerRef}>
           <div id="map" style={{ width: "100%", height: "100%", zIndex: "0" }}></div>
 
-          <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
-            일정저장
-          </a>
+          {isMine == "true" ? (
+            <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
+              일정저장
+            </a>
+          ) : null}
 
           {viewDaySchedule ? (
             <div className={styles.daySummary}>
@@ -427,59 +433,61 @@ const ScheduleEditPage = () => {
             </>
           )}
 
-          <div
-            className={styles.keepPlaces}
-            ref={dragComponentRef}
-            draggable
-            onDragStart={(e) => dragStartHandler(e)}
-            onDrag={(e) => dragHandler(e)}
-            onDragOver={(e) => dragOverHandler(e)}
-            onDragEnd={(e) => dragEndHandler(e)}
-            style={{ left: position.left, top: position.top }}
-          >
-            <Text value="포함되지 않은 장소" bold /> <br />
-            <div style={{ color: "#AAAAAA", fontSize: "0.7rem", margin: "0.5rem 0 1.5rem", lineHeight: "150%" }}>
-              일정에서 누락된 장소들이 이곳에 포함됩니다. <br />
-              일정에 포함된 장소를 옮겨 놓을 수도 있습니다. <br />
-              원하는 위치에 드래그하여 일정에 포함시키세요. <br />
+          {isMine == "true" ? (
+            <div
+              className={styles.keepPlaces}
+              ref={dragComponentRef}
+              draggable
+              onDragStart={(e) => dragStartHandler(e)}
+              onDrag={(e) => dragHandler(e)}
+              onDragOver={(e) => dragOverHandler(e)}
+              onDragEnd={(e) => dragEndHandler(e)}
+              style={{ left: position.left, top: position.top }}
+            >
+              <Text value="포함되지 않은 장소" bold /> <br />
+              <div style={{ color: "#AAAAAA", fontSize: "0.7rem", margin: "0.5rem 0 1.5rem", lineHeight: "150%" }}>
+                일정에서 누락된 장소들이 이곳에 포함됩니다. <br />
+                일정에 포함된 장소를 옮겨 놓을 수도 있습니다. <br />
+                원하는 위치에 드래그하여 일정에 포함시키세요. <br />
+              </div>
+              <Droppable droppableId="keepPlaceList" key="keepPlaceList">
+                {(provided) => (
+                  <div
+                    className="keepPlaceList"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={{ width: "auto", minHeight: "10px" }}
+                  >
+                    {keepPlaceList.map((value, key) => (
+                      <Draggable key={value.id} draggableId={value.id?.toString()} index={key}>
+                        {(provided) => (
+                          <div
+                            {...provided.dragHandleProps}
+                            {...provided.draggableProps}
+                            ref={provided.innerRef}
+                            style={{
+                              ...provided.draggableProps.style,
+                              width: "auto",
+                              height: "auto",
+                            }}
+                          >
+                            <EditScheduleItem
+                              img={value.image}
+                              placeName={value.name}
+                              time={value.time}
+                              // startTime={value.startTime}
+                              // endTime={value.endTime}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
             </div>
-            <Droppable droppableId="keepPlaceList" key="keepPlaceList">
-              {(provided) => (
-                <div
-                  className="keepPlaceList"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{ width: "auto", minHeight: "10px" }}
-                >
-                  {keepPlaceList.map((value, key) => (
-                    <Draggable key={value.id} draggableId={value.id?.toString()} index={key}>
-                      {(provided) => (
-                        <div
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          ref={provided.innerRef}
-                          style={{
-                            ...provided.draggableProps.style,
-                            width: "auto",
-                            height: "auto",
-                          }}
-                        >
-                          <EditScheduleItem
-                            img={value.image}
-                            placeName={value.name}
-                            time={value.time}
-                            // startTime={value.startTime}
-                            // endTime={value.endTime}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </div>
+          ) : null}
         </div>
       </DragDropContext>
 
