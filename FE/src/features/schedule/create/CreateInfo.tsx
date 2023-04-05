@@ -3,7 +3,7 @@ import createStyles from "./Create.module.css";
 import InfoLocal from "./info/InfoLocal";
 import InfoDate from "./info/InfoDate";
 import { Stack } from "@mui/system";
-import InfoSelectList from "./info/InofoSelectList";
+import InfoSelectList from "./info/InfoSelectList";
 import Modal from "components/Modal";
 
 interface ScheduleCreatPropsType {
