@@ -140,7 +140,17 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
                   <Box width="10%" alignItems="left">
                     {region.name}
                   </Box>
-                  <CssTextField inputRef={addressInfo} variant="filled" label="주소 검색" fullWidth />
+                  <CssTextField
+                    inputRef={addressInfo}
+                    variant="filled"
+                    label="주소 검색"
+                    fullWidth
+                    onKeyDown={(e) => {
+                      if (e.code === "Enter") {
+                        searchClick();
+                      }
+                    }}
+                  />
                 </Stack>
                 <Button text="검색" color="pink" width="10%" onClick={() => searchClick()} />
               </Stack>
