@@ -1,6 +1,6 @@
 import api from "api/Api";
 import Axios from "api/JsonAxios";
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, { RefObject, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { DestinationConfig, setDestinationList } from "slices/mainSlice";
 import styles from "../Main.module.css";

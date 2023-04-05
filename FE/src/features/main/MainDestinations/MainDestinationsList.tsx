@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from "react";
+import React, { useState } from "react";
 import styles from "../Main.module.css";
 import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
