@@ -8,8 +8,7 @@ import { useDispatch } from "react-redux";
 import { selectKeepPlaceList, selectScheduleList, setKeepPlaceList, setscheduleList } from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import KeepScheduleItem from "features/schedule/edit/KeepScheduleItem";
-import { selectDate, selectRegion, selectPointPlace, selectTotalList, selectVehicle } from "slices/scheduleCreateSlice";
-import { differenceInDays } from "date-fns";
+import { selectDate, selectRegion, selectVehicle } from "slices/scheduleCreateSlice";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -51,10 +50,7 @@ const ScheduleEditPage = () => {
   const region = useAppSelector(selectRegion);
   const vehicle = useAppSelector(selectVehicle);
   const date = useAppSelector(selectDate);
-  const totalList = useAppSelector(selectTotalList);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
-  const pointPlace = useAppSelector(selectPointPlace);
-  const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
   const [addPlaceModal, setAddPlaceModal] = useState(false);
   const [viewSearchBar, setViewSearchBar] = useState(false);
   const [currentTab, setCurrentTab] = useState("호텔");
@@ -222,67 +218,6 @@ const ScheduleEditPage = () => {
     }
   };
 
-  // const getSchedule = () => {
-  //   console.log("일정 생성 데이터 불러오기");
-
-  //   const list: fullScheduleListConfig[] = [];
-
-  //   for (let day = 1; day <= travelDays; day++) {
-  //     list.push({
-  //       day: day,
-  //       startHour: 10,
-  //       startMinute: 0,
-  //       dayList: [],
-  //     });
-  //   }
-
-  //   const dayPlaceCount = Math.floor(totalList.length / travelDays);
-
-  //   console.log("dayPlaceCount: ", dayPlaceCount);
-
-  //   let placeInfo: placeInfoConfig = {
-  //     id: 0,
-  //     image: "",
-  //     name: "",
-  //     address: "",
-  //     latitude: 0,
-  //     longitude: 0,
-  //     time: "",
-  //     startTime: "10:00",
-  //     endTime: "10:00",
-  //   };
-
-  //   let day = 0;
-  //   let dayPlace = 0;
-  //   totalList.map((value, key) => {
-  //     placeInfo = {
-  //       id: value.info.locationId,
-  //       image: value.info.locationURL,
-  //       name: value.info.locationName,
-  //       address: value.info.address,
-  //       latitude: value.info.latitude,
-  //       longitude: value.info.longitude,
-  //       time: value.time,
-  //       startTime: "10:00",
-  //       endTime: "10:00",
-  //     };
-
-  //     list[day].dayList.push(placeInfo);
-  //     dayPlace++;
-  //     console.log("dayPlace: ", dayPlace);
-  //     if (dayPlace === dayPlaceCount && day < travelDays - 1) {
-  //       day++;
-  //       dayPlace = 0;
-  //       console.log("day: ", day);
-  //     }
-  //   });
-
-  //   console.log("list: ", list);
-  //   console.log(totalList);
-
-  //   dispatch(setScheduleList([...list]));
-  // };
-
   const onClickSaveSchedule = () => {
     const sendScheduleList: sendScheduleListProps[] = [];
 
@@ -306,10 +241,10 @@ const ScheduleEditPage = () => {
       isPrivate: scheduleOpen,
       scheduleStartDay: date.start,
       scheduleEndDay: date.end,
-      scheduleStartLocation: pointPlace[0]?.address,
-      scheduleEndLocation: pointPlace[1]?.address,
+      scheduleStartLocation: null,
+      scheduleEndLocation: null,
       vehicle: vehicle,
-      scheduleLocationRequestList: scheduleList,
+      scheduleLocationRequestList: sendScheduleList,
     };
 
     Axios.post(api.createSchedule.schedule(), sendData)
@@ -337,7 +272,7 @@ const ScheduleEditPage = () => {
         <div className={styles.map} ref={containerRef}>
           {viewDaySchedule ? <EditMap day={day} /> : <EditMap />}
 
-          {isMine == "true" ? (
+          {isMine == "true" || isMine == null ? (
             <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
               일정저장
             </a>
@@ -358,7 +293,7 @@ const ScheduleEditPage = () => {
                 </div>
               </div>
             </>
-          ) : isMine == "true" ? (
+          ) : isMine == "true" || isMine == null ? (
             <>
               <TooltipStyled title="장소를 검색하여 일정에 추가" placement="left">
                 <div className={styles.searchPlaceBtn} onClick={() => setViewSearchBar(true)}>
@@ -391,7 +326,7 @@ const ScheduleEditPage = () => {
             </>
           ) : null}
 
-          {isMine == "true" ? (
+          {isMine == "true" || isMine == null ? (
             <>
               <div
                 className={styles.keepPlaces}
