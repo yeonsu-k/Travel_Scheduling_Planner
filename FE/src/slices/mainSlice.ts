@@ -14,6 +14,7 @@ export interface locationConfig {
   location: {
     address: string;
     locationName: string;
+    locationURL: string;
   };
 }
 
