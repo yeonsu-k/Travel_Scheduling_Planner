@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./MyFriends.module.css";
 import Text from "components/Text";
 import Button from "components/Button";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { friendProps } from "slices/friendSlice";
+import { friendProps, setFriendCnt, setFriendList } from "slices/friendSlice";
+import { useAppDispatch } from "app/hooks";
+import Loading from "components/Loading";
 
 interface MyFriendsListProps {
   friendInfo: friendProps;
 }
 
 const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
+  const dispatch = useAppDispatch();
+
+  const [loading, setLoading] = useState(false);
+
   const onClickDeleteFriend = async () => {
     await Axios.delete(api.friend.friend(), {
       data: {
@@ -35,8 +41,26 @@ const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
       });
   };
 
+  const getFriendInfo = async () => {
+    setLoading(true);
+    await Axios.get(api.friend.friend())
+      .then((res) => {
+        dispatch(setFriendCnt(res.data.data.friends.length));
+        dispatch(setFriendList(res.data.data.friends));
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getFriendInfo();
+  }, []);
+
   return (
     <div className={styles.myFriendsList}>
+      {loading ? <Loading /> : null}
       <div className={styles.friendInfo}>
         <img className={styles.profileImg} src={friendInfo.profile} alt="" />
       </div>
