@@ -169,3 +169,18 @@
 .searchInfo:nth-child(4) {
   grid-area: searchBtn;
 }
+
+/* MyFriendsSearchErr.tsx */
+
+.myFriendsSearchErr {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+}
+
+.turtleImg {
+  width: 10vw;
+  height: 10vw;
+}
