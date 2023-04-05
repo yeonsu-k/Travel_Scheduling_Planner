@@ -244,4 +244,10 @@
     margin-bottom: 5px;
   }
 
+  .mobileListScroll {
+    max-height: 40vh !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
 }
