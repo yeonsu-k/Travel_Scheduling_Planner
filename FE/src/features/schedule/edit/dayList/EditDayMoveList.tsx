@@ -3,14 +3,14 @@ import styles from "../Edit.module.css";
 import Text from "components/Text";
 import EditDayMoveItem from "./EditDayMoveItem";
 import { useAppSelector } from "app/hooks";
-import { selectFullScheduleList } from "slices/scheduleEditSlice";
+import { selectScheduleList } from "slices/scheduleEditSlice";
 
 interface EditDayMoveListProps {
   day: number;
 }
 
 const EditDayMoveList = ({ day }: EditDayMoveListProps) => {
-  const dayList = useAppSelector(selectFullScheduleList)[day - 1].dayList;
+  const dayList = useAppSelector(selectScheduleList)[day - 1];
 
   useEffect(() => {
     console.log("dayList", dayList);
