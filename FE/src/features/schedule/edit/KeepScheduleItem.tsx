@@ -12,12 +12,12 @@ interface EditScheduleItemProps {
   // endTime: string;
 }
 
-const EditScheduleItem = ({ img, placeName, time }: EditScheduleItemProps) => {
+const KeepScheduleItem = ({ img, placeName, time }: EditScheduleItemProps) => {
   const [input, setInput] = useState(0);
 
   return (
     <>
-      <div
+      {/* <div
         style={{
           height: "2rem",
           display: "flex",
@@ -35,7 +35,7 @@ const EditScheduleItem = ({ img, placeName, time }: EditScheduleItemProps) => {
           onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.valueAsNumber)}
         />
         <Text value="분" type="caption" />
-      </div>
+      </div> */}
 
       <div className={styles.editScheduleItem}>
         <img className={styles.scheduleItemInfo} src={img} />
@@ -71,4 +71,4 @@ const EditScheduleItem = ({ img, placeName, time }: EditScheduleItemProps) => {
   );
 };
 
-export default EditScheduleItem;
+export default KeepScheduleItem;
