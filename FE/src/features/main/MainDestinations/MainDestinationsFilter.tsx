@@ -1,11 +1,15 @@
 import { Button, Menu, MenuItem, MenuList } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Text from "components/Text";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
-const options = ["인기순", "추천순", "오름차순", "내림차순"];
+const options = ["오름차순", "내림차순"];
 
-const MainDestinationsFilter = () => {
+interface Props {
+  setSelected: Dispatch<SetStateAction<number>>;
+}
+
+const MainDestinationsFilter = ({ setSelected }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const open = Boolean(anchorEl);
@@ -16,6 +20,7 @@ const MainDestinationsFilter = () => {
 
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setSelectedIndex(index);
+    setSelected(index);
     setAnchorEl(null);
   };
 
@@ -25,19 +30,6 @@ const MainDestinationsFilter = () => {
 
   return (
     <div style={{ margin: "10px 0" }}>
-      {/* <List component="nav" sx={{ bgcolor: "background.paper" }}>
-        <ListItem
-          button
-          id="lock-button"
-          aria-haspopup="listbox"
-          aria-controls="lock-menu"
-          // aria-label="when device is locked"
-          // aria-expanded={open ? "true" : undefined}
-          onClick={handleClickListItem}
-        >
-          <ListItemText primary={options[selectedIndex]} />
-        </ListItem>
-      </List> */}
       <Button
         id="lock-button"
         aria-haspopup="listbox"

@@ -46,7 +46,7 @@
   background-color: #26dbe1;
   color: #fff;
   font-size: 0.9rem;
-  z-index: 100;
+  z-index: 2;
 }
 
 .scheduleImgContainer {
@@ -152,18 +152,6 @@
 .scheduleBtn > Button {
   height: 70%;
   width: 60%;
-}
-
-/* 내 스케줄 아님 */
-.scheduleNotMine {
-  border: 1px dashed #d5d5d5;
-  margin: 0 20px 20px 20px;
-  box-sizing: border-box;
-  border-radius: 20px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* MyScheduleShareModal.tsx */
@@ -285,12 +273,12 @@ tr {
   margin: 0 10px 0 10px;
   border: 0.5px solid #ececec;
   border-radius: 50%;
+  overflow: hidden;
 }
 
 .friendImg > img {
   width: 100%;
   object-fit: cover;
-  border-radius: 50%;
 }
 
 .invitedFriendItem > div:nth-child(2) {
