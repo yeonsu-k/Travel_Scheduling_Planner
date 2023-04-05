@@ -9,7 +9,7 @@ interface inputInfo {
   placeholder: string;
   type?: string;
   value?: string | number | readonly string[] | undefined;
-  disabled?: boolean; // 수정 가능 여부
+  disabled?: boolean;
   size?: "medium" | "small";
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
   onKeyPress?: React.KeyboardEventHandler<HTMLInputElement> | undefined;
@@ -26,7 +26,6 @@ const InputStyle = styled(InputBox)(() => ({
   "&:after": { borderBottom: "2px solid #39f", transition: "none" },
 }));
 
-// rest 쪽에는 onChange, type, name, value, placeholder 등의 input 에서 사용 하는 값들을 넣어줄수 있다.
 const Input = ({ placeholder, size, ...rest }: inputInfo) => (
   <div>
     <FormControl sx={{ width: "100%", height: "100%" }}>

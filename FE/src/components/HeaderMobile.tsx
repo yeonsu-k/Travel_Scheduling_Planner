@@ -9,10 +9,8 @@ import styles from "./css/Header.module.css";
 import { Avatar } from "@mui/material";
 import Text from "./Text";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { rootState } from "app/store";
 import { useDispatch } from "react-redux";
-import { selectUserInfo, setLogout } from "slices/authSlice";
+import { selectLoginState, selectUserInfo, setLogout } from "slices/authSlice";
 import { disconnectSocket } from "features/user/notice/Socket";
 import { useAppSelector } from "app/hooks";
 
@@ -24,7 +22,7 @@ interface HeaderMobileProps {
 const HeaderMobile = ({ open, setDrawerOpen }: HeaderMobileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { login } = useSelector((state: rootState) => state.auth);
+  const login = useAppSelector(selectLoginState);
   const userInfo = useAppSelector(selectUserInfo);
 
   const onLogout = () => {

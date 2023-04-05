@@ -3,7 +3,7 @@ import { selectDate, selectHotelList, selectMarker, setHotelList, setMarker } fr
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import styles from "./Info.module.css";
 import Text from "components/Text";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { addDays, differenceInDays, format } from "date-fns";
 import { Close } from "@mui/icons-material";
 import { ScheduleCreatPropsType } from "pages/ScheduleCreatePage";
@@ -45,7 +45,7 @@ function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
       <Box my={0.5}>
         <p className={styles.explain}>숙소는 일정의 시작 지점과 종료 지점으로 설정됩니다.</p>
       </Box>
-      <>
+      <Stack className={styles.mobileListScroll} width="100%" maxHeight="100%">
         {hotel.map((hotelCard, index) => (
           <Box className={styles.flex} mb={1} key={index}>
             <button
@@ -91,7 +91,7 @@ function InfoListHotel(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
             </div>
           </Box>
         ))}
-      </>
+      </Stack>
     </div>
   );
 }

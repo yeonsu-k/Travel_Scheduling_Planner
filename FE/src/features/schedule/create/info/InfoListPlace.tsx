@@ -117,106 +117,109 @@ function InfoListPlace(props: { scheduleCreatProps: ScheduleCreatPropsType }) {
             (총{totalTime.hour}시간{totalTime.minute}분)
           </span>
         </Box>
+        <Box mb={1} width="100%" maxHeight="100%">
+          <button className={`${styles.btn} ${styles.delete_btn}`} onClick={deletePlaceAll}>
+            장소전체삭제
+          </button>
+        </Box>
 
-        <button className={`${styles.btn} ${styles.delete_btn}`} onClick={deletePlaceAll}>
-          장소전체삭제
-        </button>
-        <Stack className={styles.flex} my={1} spacing={0.5}>
-          <Divider className={styles.divider} />
-          {pointPlace.map((pointPlaceCard, index) => (
-            <Box key={index} minWidth="100%">
-              <div className={` ${styles.flexRow} ${styles.placeDrop}`}>
-                <small>{`${index == 0 ? "출발" : "종착"} 장소`}</small>
-              </div>
-              {pointPlaceCard === null ? (
-                <>
-                  <div
-                    className={
-                      placeCurrentDay === index
-                        ? `${styles.place_explain} ${styles.explain_focused}`
-                        : `${styles.place_explain}`
-                    }
-                    onClick={() => {
-                      placeCurrentDay === index ? setPlaceCurrentDay(-1) : setPlaceCurrentDay(index);
-                    }}
-                  >
-                    <p>{`이 곳을 누르고 여행 ${index == 0 ? "출발지" : "종착지"} 장소를 추가하세요`}</p>
+        <Stack className={styles.mobileListScroll} width="100%" maxHeight="100%">
+          <Stack className={styles.flex} mb={1} spacing={0.5}>
+            {pointPlace.map((pointPlaceCard, index) => (
+              <Box key={index} minWidth="100%">
+                <div className={` ${styles.flexRow} ${styles.placeDrop}`}>
+                  <small>{`${index == 0 ? "출발" : "종착"} 장소`}</small>
+                </div>
+                {pointPlaceCard === null ? (
+                  <>
+                    <div
+                      className={
+                        placeCurrentDay === index
+                          ? `${styles.place_explain} ${styles.explain_focused}`
+                          : `${styles.place_explain}`
+                      }
+                      onClick={() => {
+                        placeCurrentDay === index ? setPlaceCurrentDay(-1) : setPlaceCurrentDay(index);
+                      }}
+                    >
+                      <p>{`이 곳을 누르고 여행 ${index == 0 ? "출발지" : "종착지"} 장소를 추가하세요`}</p>
+                    </div>
+                  </>
+                ) : (
+                  <div className={styles.cardList}>
+                    <div className={styles.card}>
+                      <img src={pointPlaceCard.locationURL} alt={""} />
+                      <div className={styles.placeCard}>
+                        <span className={styles.cardText}>{pointPlaceCard.locationName}</span>
+                        <div className={styles.flexRow}>
+                          <div className={styles.placeTimer} />
+                          <button className={styles.cardDelete} onClick={() => deletePointPlace(index)}>
+                            <Close fontSize="small" color="error" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </>
-              ) : (
-                <div className={styles.cardList}>
+                )}
+              </Box>
+            ))}
+          </Stack>
+          <Divider className={styles.divider} />
+          {place.length > 0 ? (
+            <>
+              {place.map((placeCard, index) => (
+                <div className={styles.cardList} key={index}>
                   <div className={styles.card}>
-                    <img src={pointPlaceCard.locationURL} alt={""} />
+                    <img src={placeCard.locationURL} alt={""} />
                     <div className={styles.placeCard}>
-                      <span className={styles.cardText}>{pointPlaceCard.locationName}</span>
+                      <span className={styles.cardText}>{placeCard.locationName}</span>
                       <div className={styles.flexRow}>
-                        <div className={styles.placeTimer} />
-                        <button className={styles.cardDelete} onClick={() => deletePointPlace(index)}>
+                        <div className={styles.placeTimer}>
+                          <Timer fontSize="small" />
+                          <input
+                            name="hour"
+                            value={timer[index].hour}
+                            id="placeTime"
+                            type="number"
+                            dir="rtl"
+                            min="0"
+                            max="23"
+                            onBlur={(e) => onBurCheck(index, e)}
+                            onChange={(e) => onChangeAccount(index, e)}
+                          />
+                          시간
+                          <input
+                            name="minute"
+                            value={timer[index].minute}
+                            id="placeTime"
+                            type="number"
+                            dir="rtl"
+                            min="0"
+                            max="59"
+                            onBlur={(e) => onBurCheck(index, e)}
+                            onChange={(e) => onChangeAccount(index, e)}
+                          />
+                          분
+                        </div>
+                        <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.locationId)}>
                           <Close fontSize="small" color="error" />
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
-            </Box>
-          ))}
+              ))}
+            </>
+          ) : (
+            <>
+              <Box my={0.5}>
+                <p className={styles.explain}>가고 싶은 장소들을 검색하여 추가해주세요.</p>
+                <p className={styles.explain}>설정하신 일자별 여행시간 내에서</p>
+                <p className={styles.explain}>하루 평균 최대 8개 장소까지 선택 가능합니다.</p>
+              </Box>
+            </>
+          )}
         </Stack>
-        <Divider className={styles.divider} />
-        {place.length > 0 ? (
-          <>
-            {place.map((placeCard, index) => (
-              <div className={styles.cardList} key={index}>
-                <div className={styles.card}>
-                  <img src={placeCard.locationURL} alt={""} />
-                  <div className={styles.placeCard}>
-                    <span className={styles.cardText}>{placeCard.locationName}</span>
-                    <div className={styles.flexRow}>
-                      <div className={styles.placeTimer}>
-                        <Timer fontSize="small" />
-                        <input
-                          name="hour"
-                          value={timer[index].hour}
-                          id="placeTime"
-                          type="number"
-                          dir="rtl"
-                          min="0"
-                          max="23"
-                          onBlur={(e) => onBurCheck(index, e)}
-                          onChange={(e) => onChangeAccount(index, e)}
-                        />
-                        시간
-                        <input
-                          name="minute"
-                          value={timer[index].minute}
-                          id="placeTime"
-                          type="number"
-                          dir="rtl"
-                          min="0"
-                          max="59"
-                          onBlur={(e) => onBurCheck(index, e)}
-                          onChange={(e) => onChangeAccount(index, e)}
-                        />
-                        분
-                      </div>
-                      <button className={styles.cardDelete} onClick={() => deletePlace(placeCard.locationId)}>
-                        <Close fontSize="small" color="error" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </>
-        ) : (
-          <>
-            <Box my={0.5}>
-              <p className={styles.explain}>가고 싶은 장소들을 검색하여 추가해주세요.</p>
-              <p className={styles.explain}>설정하신 일자별 여행시간 내에서</p>
-              <p className={styles.explain}>하루 평균 최대 8개 장소까지 선택 가능합니다.</p>
-            </Box>
-          </>
-        )}
       </div>
     </>
   );

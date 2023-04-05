@@ -1,4 +1,4 @@
-import React, {useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./Main.module.css";
 import MainMobileContainer from "./MainMobileContainer";
 
@@ -10,19 +10,19 @@ const MainDisplay = ({ onMoveToElement }: Props) => {
   const [videoNum, setVideoNum] = useState(Math.floor(Math.random() * 15) + 1);
   const videoRef = useRef<HTMLVideoElement>(null);
   // 다른 영상으로 자동 재생
-  // const getRandomIndexArray = () => {
-  //   const randomIndexArray = new Array(15);
-  //   for (let i = 0; i < 15; i++) {
-  //     const randomNum = Math.floor(Math.random() * 15) + 1;
-  //     if (!randomIndexArray.includes(randomNum)) {
-  //       randomIndexArray[i] = randomNum;
-  //     } else {
-  //       i--;
-  //     }
-  //   }
-  //   return randomIndexArray;
-  // };
-  // const cityData = useMemo<number[]>(() => getRandomIndexArray(), []);
+  /* const getRandomIndexArray = () => {
+    const randomIndexArray = new Array(15);
+    for (let i = 0; i < 15; i++) {
+      const randomNum = Math.floor(Math.random() * 15) + 1;
+      if (!randomIndexArray.includes(randomNum)) {
+        randomIndexArray[i] = randomNum;
+      } else {
+        i--;
+      }
+    }
+    return randomIndexArray;
+  };
+  const cityData = useMemo<number[]>(() => getRandomIndexArray(), []); */
 
   const handleVideoEnded = () => {
     if (!videoRef.current) return;

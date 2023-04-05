@@ -100,8 +100,6 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
   };
 
   const AddKeepList = () => {
-    const item = cardInfo;
-    console.log(cardInfo);
     dispatch(setKeepPlaceList([...keepPlaceList, cardInfo]));
   };
 
@@ -120,7 +118,6 @@ function SearchListCard({ cardInfo, select, scheduleCreatProps }: SearchListCard
             size="small"
             disableRipple
             onClick={() => {
-              console.log("path", location.pathname);
               if (location.pathname == "/schedule/create") {
                 InfoAddClick();
               } else {

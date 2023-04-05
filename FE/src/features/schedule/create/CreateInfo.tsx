@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import createStyles from "./Create.module.css";
 import InfoLocal from "./info/InfoLocal";
 import InfoDate from "./info/InfoDate";
@@ -19,6 +19,11 @@ interface ScheduleCreatPropsType {
 
 function CreateInfo(props: ScheduleCreatPropsType) {
   const { mobilePlaceListOpen, setMobilePlaceListOpen } = props;
+
+  useEffect(() => {
+    if (mobilePlaceListOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "unset";
+  }, [mobilePlaceListOpen]);
 
   return (
     <>

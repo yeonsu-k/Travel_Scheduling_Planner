@@ -52,13 +52,9 @@ const InfoLocalSelect = ({ modalClose }: Props) => {
   }, []);
 
   const getLocalData = async () => {
-    await Axios.get(api.createSchedule.mainPlace())
-      .then((res) => {
-        setSearchLocal(res.data.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    await Axios.get(api.createSchedule.mainPlace()).then((res) => {
+      setSearchLocal(res.data.data);
+    });
   };
 
   const handleOnChangeSelectValue = (e: React.ChangeEvent<HTMLSelectElement>) => {

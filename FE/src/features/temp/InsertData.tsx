@@ -23,7 +23,6 @@ function InsertData() {
   const insert = async (data: any) => {
     if (data) {
       if (data.locationName.length > 20 || data.address.length > 50) return;
-      // console.log(data);
       await Axios.post(`http://localhost:8080/api/schedule/basiclocation`, {
         address: data.address,
         latitude: data.latitude,
@@ -32,13 +31,9 @@ function InsertData() {
         regionId: 1,
         isHotel: type === "2",
         locationURL: data.locationURL,
-      })
-        .then((res: any) => {
-          console.error(res);
-        })
-        .catch((err: any) => {
-          console.error(err);
-        });
+      }).then((res: any) => {
+        console.error(res);
+      });
     }
   };
 

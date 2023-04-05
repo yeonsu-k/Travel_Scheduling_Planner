@@ -1,10 +1,10 @@
 import React from "react";
-import { rootState } from "app/store";
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
+import { useAppSelector } from "app/hooks";
+import { selectLoginState } from "slices/authSlice";
 
 function AuthRoute({ component }: { component: JSX.Element }) {
-  const { login } = useSelector((state: rootState) => state.auth);
+  const login = useAppSelector(selectLoginState);
   const location = useLocation();
 
   if (!login) {
