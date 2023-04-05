@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import styles from "./Notice.module.css";
 import Button from "components/Button";
 import Text from "components/Text";
@@ -10,11 +10,12 @@ import { useAppDispatch } from "app/hooks";
 
 interface NoticeItemProps {
   noticeValue: noticeListProps;
+  setChange: Dispatch<SetStateAction<boolean>>;
 }
 
-let noticeList: noticeListProps[] = [];
+const noticeList: noticeListProps[] = [];
 
-const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
+const NoticeItem = ({ noticeValue, setChange }: NoticeItemProps) => {
   const dispatch = useAppDispatch();
 
   const onClickHandlingNotification = async (isAccept: boolean) => {
@@ -26,7 +27,7 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
       .then((res) => {
         console.log(res);
         alert("알림 처리 완료");
-        getNotification();
+        setChange(true);
       })
       .catch((err) => {
         console.log(err);
@@ -51,12 +52,13 @@ const NoticeItem = ({ noticeValue }: NoticeItemProps) => {
     await Axios.get(api.notification.notification())
       .then((res) => {
         console.log(res);
-        noticeList = [...res.data.data.notifications];
+        const list = [...res.data.data.notifications];
         console.log("list", noticeList);
 
         noticeList.map((value, key) => {
           if (value.status === "NO_RESPONSE") {
             notificationCount++;
+            noticeList.push(value);
           }
         });
 

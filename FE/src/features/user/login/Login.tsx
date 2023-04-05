@@ -12,6 +12,7 @@ import { setLogin, setUserInfo } from "slices/authSlice";
 import Loading from "components/Loading";
 import { connectSocket } from "../notice/Socket";
 import { LoginProps } from "pages/LoginPage";
+import { setNotiNumber } from "slices/mainSlice";
 
 const Login = ({ setIsNotice, setNoticeMessage }: LoginProps) => {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ const Login = ({ setIsNotice, setNoticeMessage }: LoginProps) => {
               login: true,
             }),
           );
-          dispatch(setUserInfo({ email: res.data.data.email }));
+          dispatch(setUserInfo({ email: res.data.data.email, profile: res.data.data.profile }));
+          connect();
           navigate("/");
         })
         .catch((err) => {
@@ -121,7 +123,7 @@ const Login = ({ setIsNotice, setNoticeMessage }: LoginProps) => {
         setIsNotice(true);
       }
 
-      // getNotification();
+      getNotification();
     };
 
     socket.onclose = (event) => {
@@ -133,6 +135,27 @@ const Login = ({ setIsNotice, setNoticeMessage }: LoginProps) => {
       console.log("connection error ");
       console.log(error);
     };
+  };
+
+  const getNotification = async () => {
+    let notificationCount = 0;
+    await Axios.get(api.notification.notification())
+      .then((res) => {
+        console.log(res);
+        const noticeList = [...res.data.data.notifications];
+
+        noticeList.map((value) => {
+          if (value.status === "NO_RESPONSE") {
+            notificationCount++;
+          }
+        });
+
+        console.log("cnt: ", notificationCount);
+        dispatch(setNotiNumber({ notiNumber: notificationCount }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {

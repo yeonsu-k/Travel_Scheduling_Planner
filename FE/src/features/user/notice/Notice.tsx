@@ -21,6 +21,7 @@ const Notice = () => {
   const dispatch = useAppDispatch();
 
   const notiNumber = useAppSelector(selectNotiNumber);
+  const [change, setChange] = useState(false);
 
   const requestNotification = () => {
     if (Notification.permission !== "granted") {
@@ -38,17 +39,20 @@ const Notice = () => {
     await Axios.get(api.notification.notification())
       .then((res) => {
         console.log(res);
-        noticeList = [...res.data.data.notifications];
+        noticeList = [];
+        const list = [...res.data.data.notifications];
         console.log("list", noticeList);
 
-        noticeList.map((value, key) => {
+        list.map((value, key) => {
           if (value.status === "NO_RESPONSE") {
             notificationCount++;
+            noticeList.push(value);
           }
         });
 
         console.log("cnt: ", notificationCount);
         dispatch(setNotiNumber({ notiNumber: notificationCount }));
+        console.log("noticeList", noticeList);
       })
       .catch((err) => {
         console.log(err);
@@ -74,6 +78,11 @@ const Notice = () => {
     getNotification();
   }, [notiNumber]);
 
+  useEffect(() => {
+    console.log("change");
+    getNotification();
+  }, [change]);
+
   return (
     <div className={styles.notice}>
       {noticeList.length === 0 ? (
@@ -86,9 +95,11 @@ const Notice = () => {
 
           <hr style={{ backgroundColor: "#c5c5c5", height: "1px", border: "0", width: "100%" }} />
 
-          {noticeList.map((value, key) => (
-            <NoticeItem key={key} noticeValue={value} />
-          ))}
+          <div className={styles.noticeBox}>
+            {noticeList.map((value, key) => (
+              <NoticeItem key={key} noticeValue={value} setChange={setChange} />
+            ))}
+          </div>
         </>
       )}
     </div>

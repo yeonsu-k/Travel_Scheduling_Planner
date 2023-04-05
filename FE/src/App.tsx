@@ -19,8 +19,6 @@ import { setNotiNumber } from "slices/mainSlice";
 import { selectUserInfo } from "slices/authSlice";
 import { connectSocket } from "features/user/notice/Socket";
 
-let noticeList = [];
-
 function App() {
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -72,10 +70,10 @@ function App() {
     await Axios.get(api.notification.notification())
       .then((res) => {
         console.log(res);
-        noticeList = [...res.data.data.notifications];
+        const noticeList = [...res.data.data.notifications];
         console.log("list", noticeList);
 
-        noticeList.map((value, key) => {
+        noticeList.map((value) => {
           if (value.status === "NO_RESPONSE") {
             notificationCount++;
           }
