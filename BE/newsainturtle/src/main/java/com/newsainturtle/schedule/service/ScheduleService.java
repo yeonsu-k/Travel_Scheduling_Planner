@@ -196,10 +196,11 @@ public class ScheduleService {
                     min %= 60;
                     hour++;
                 }
+                int time = 0;
                 String endTime = hour+":"+min;
-                if(j!=dayList.get(i).length-1) {
+                if(j<dayList.get(i).length-1) {
                     OpenStreetInfoResponse openStreetInfoResponse = list.get(listIdx++).getResponse().get(0);
-                    int time = (int)Math.round(openStreetInfoResponse.getDuration()/60);
+                    time = (int)Math.round(openStreetInfoResponse.getDuration()/60);
                     min += time;
                     if(60<=min) {
                         hour += min/60;
@@ -214,6 +215,7 @@ public class ScheduleService {
                         .sequence(j + 1L)
                         .startTime(startTime)
                         .endTime(endTime)
+                        .duration(time)
                         .build());
             }
         }
