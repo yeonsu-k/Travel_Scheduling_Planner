@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./MySchedule.module.css";
 import { Modal } from "@mui/material";
 import Input from "components/Input";
@@ -8,23 +8,30 @@ import { MyScheduleConfig } from "./MyScheduleList";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { InvitedFriendConfig } from "./MyScheduleShareModal";
+import Loading from "components/Loading";
 
 interface MyScheduleInviteModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   item: MyScheduleConfig;
   friends: InvitedFriendConfig[];
+  flag: boolean;
+  setFlag: Dispatch<SetStateAction<boolean>>;
 }
 
-const MyScheduleInviteModal = ({ open, setOpen, item, friends }: MyScheduleInviteModalProps) => {
+const MyScheduleInviteModal = ({ open, setOpen, item, friends, flag, setFlag }: MyScheduleInviteModalProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const sendInvite = async (email: string) => {
     if (emailRep.test(email)) {
+      setLoading(true);
       await Axios.post(api.createSchedule.inviteFriend(), {
         scheduleId: item.schedule_id,
         email: email,
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          setLoading(false);
+          setFlag(true);
           alert("친구 초대가 완료되었습니다.");
         })
         .catch((err) => {
@@ -35,6 +42,10 @@ const MyScheduleInviteModal = ({ open, setOpen, item, friends }: MyScheduleInvit
       return;
     }
   };
+
+  useEffect(() => {
+    setFlag(false);
+  }, [flag]);
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
@@ -64,6 +75,7 @@ const MyScheduleInviteModal = ({ open, setOpen, item, friends }: MyScheduleInvit
             </div>
           ))}
         </div>
+        {loading ? <Loading /> : null}
       </div>
     </Modal>
   );

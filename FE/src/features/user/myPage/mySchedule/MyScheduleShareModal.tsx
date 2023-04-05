@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./MySchedule.module.css";
 import { Modal } from "@mui/material";
 import { DestinationConfig } from "slices/mainSlice";
@@ -7,6 +7,7 @@ import MyScheduleInviteModal from "./MyScheduleInviteModal";
 import { MyScheduleConfig } from "./MyScheduleList";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
+import Loading from "components/Loading";
 
 interface MyScheduleShareModalProps {
   open: boolean;
@@ -25,10 +26,10 @@ export interface InvitedFriendConfig {
 const MyScheduleShareModal = ({ open, setOpen, regionInfo, item }: MyScheduleShareModalProps) => {
   const [emailModal, setEmailModal] = useState<boolean>(false);
   const [invitedList, setInvitedList] = useState<InvitedFriendConfig[]>([]);
+  const [flag, setFlag] = useState<boolean>(false);
   const invitedFriend = async () => {
     await Axios.get(api.createSchedule.invitedFriend(item.schedule_id))
       .then((res) => {
-        console.log(res.data.data.friends);
         setInvitedList(res.data.data.friends);
       })
       .catch((err) => {
@@ -41,9 +42,8 @@ const MyScheduleShareModal = ({ open, setOpen, regionInfo, item }: MyScheduleSha
   });
 
   useEffect(() => {
-    console.log("ON");
     invitedFriend();
-  }, []);
+  }, [flag]);
 
   return (
     <>
@@ -53,9 +53,16 @@ const MyScheduleShareModal = ({ open, setOpen, regionInfo, item }: MyScheduleSha
           <span>나의 여행 일정 공유</span>
           <div className={styles.shareBtn}>
             <ButtonStyled width="150px" height="50px" text="마이로 친구 공유" onClick={() => setEmailModal(true)} />
-            <ButtonStyled width="150px" height="50px" text="카카오톡 공유" />
+            {/* <ButtonStyled width="150px" height="50px" text="카카오톡 공유" /> */}
           </div>
-          <MyScheduleInviteModal open={emailModal} setOpen={setEmailModal} item={item} friends={invitedList} />
+          <MyScheduleInviteModal
+            open={emailModal}
+            setOpen={setEmailModal}
+            item={item}
+            friends={invitedList}
+            flag={flag}
+            setFlag={setFlag}
+          />
           <span>공유된 친구</span>
           <table className={styles.shareModalTable}>
             <thead>
