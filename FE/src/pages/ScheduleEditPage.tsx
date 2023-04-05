@@ -5,25 +5,10 @@ import EditDayList from "features/schedule/edit/EditDayList";
 import EditFullScheduleList from "features/schedule/edit/fullList/EditFullScheduleList";
 import Text from "components/Text";
 import { useDispatch } from "react-redux";
-import {
-  fullScheduleListConfig,
-  placeInfoConfig,
-  selectFullScheduleList,
-  selectKeepPlaceList,
-  selectScheduleList,
-  setFullScheduleList,
-  setKeepPlaceList,
-} from "slices/scheduleEditSlice";
+import { selectKeepPlaceList, selectScheduleList, setKeepPlaceList, setscheduleList } from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
-import EditScheduleItem from "features/schedule/edit/EditScheduleItem";
-import {
-  selectDate,
-  selectRegion,
-  selectPlaceList,
-  selectPointPlace,
-  selectTotalList,
-  selectVehicle,
-} from "slices/scheduleCreateSlice";
+import KeepScheduleItem from "features/schedule/edit/KeepScheduleItem";
+import { selectDate, selectRegion, selectPointPlace, selectTotalList, selectVehicle } from "slices/scheduleCreateSlice";
 import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
@@ -67,7 +52,6 @@ const ScheduleEditPage = () => {
   const vehicle = useAppSelector(selectVehicle);
   const date = useAppSelector(selectDate);
   const totalList = useAppSelector(selectTotalList);
-  const fullScheduleList = useAppSelector(selectFullScheduleList);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
   const pointPlace = useAppSelector(selectPointPlace);
   const travelDays = differenceInDays(new Date(date.end), new Date(date.start)) + 1;
@@ -171,8 +155,8 @@ const ScheduleEditPage = () => {
       return;
     }
 
-    const copyList = JSON.parse(JSON.stringify(fullScheduleList));
-    const keepList = JSON.parse(JSON.stringify(keepPlaceList));
+    const copyList = scheduleList.map((value) => value.slice());
+    const keepList = [...keepPlaceList];
 
     console.log("result", result);
 
@@ -193,15 +177,15 @@ const ScheduleEditPage = () => {
 
       const dragEndIndex = destination.index;
 
-      const dragContent = copyList[dragStartDay - 1].dayList[dragStartIndex];
-      copyList[dragStartDay - 1].dayList.splice(dragStartIndex, 1);
+      const dragContent = copyList[dragStartDay - 1][dragStartIndex].location;
+      copyList[dragStartDay - 1].splice(dragStartIndex, 1);
       if (keepList.length === 0) {
         keepList.push(dragContent);
       } else {
         keepList.splice(dragEndIndex, 0, dragContent);
       }
 
-      dispatch(setFullScheduleList([...copyList]));
+      dispatch(setscheduleList([...copyList]));
       dispatch(setKeepPlaceList([...keepList]));
     }
     // 보관함에서 일정으로 옮기는 경우
@@ -211,11 +195,17 @@ const ScheduleEditPage = () => {
       const dragEndDay = Number(destination.droppableId);
       const dragEndIndex = destination.index;
 
-      const dragContent = keepList[dragStartIndex];
+      const dragContent = {
+        location: keepList[dragStartIndex],
+        day: dragEndDay,
+        sequence: 0,
+        startTime: "10:00",
+        endTime: "10:00",
+      };
       console.log(dragContent);
       keepList.splice(dragStartIndex, 1);
-      copyList[dragEndDay - 1].dayList.splice(dragEndIndex, 0, dragContent);
-      dispatch(setFullScheduleList([...copyList]));
+      copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
+      dispatch(setscheduleList([...copyList]));
       dispatch(setKeepPlaceList([...keepList]));
     } //일정 내에서 순서만 바꾸는 경우
     else {
@@ -225,90 +215,89 @@ const ScheduleEditPage = () => {
       const dragEndDay = Number(destination.droppableId);
       const dragEndIndex = destination.index;
 
-      const dragContent = copyList[dragStartDay - 1].dayList[dragStartIndex];
-      copyList[dragStartDay - 1].dayList.splice(dragStartIndex, 1);
-      copyList[dragEndDay - 1].dayList.splice(dragEndIndex, 0, dragContent);
-      dispatch(setFullScheduleList([...copyList]));
+      const dragContent = copyList[dragStartDay - 1][dragStartIndex];
+      copyList[dragStartDay - 1].splice(dragStartIndex, 1);
+      copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
+      dispatch(setscheduleList([...copyList]));
     }
   };
 
-  const getSchedule = () => {
-    console.log("일정 생성 데이터 불러오기");
+  // const getSchedule = () => {
+  //   console.log("일정 생성 데이터 불러오기");
 
-    const list: fullScheduleListConfig[] = [];
+  //   const list: fullScheduleListConfig[] = [];
 
-    for (let day = 1; day <= travelDays; day++) {
-      list.push({
-        day: day,
-        startHour: 10,
-        startMinute: 0,
-        dayList: [],
-      });
-    }
+  //   for (let day = 1; day <= travelDays; day++) {
+  //     list.push({
+  //       day: day,
+  //       startHour: 10,
+  //       startMinute: 0,
+  //       dayList: [],
+  //     });
+  //   }
 
-    const dayPlaceCount = Math.floor(totalList.length / travelDays);
+  //   const dayPlaceCount = Math.floor(totalList.length / travelDays);
 
-    console.log("dayPlaceCount: ", dayPlaceCount);
+  //   console.log("dayPlaceCount: ", dayPlaceCount);
 
-    let placeInfo: placeInfoConfig = {
-      id: 0,
-      image: "",
-      name: "",
-      address: "",
-      latitude: 0,
-      longitude: 0,
-      time: "",
-      startTime: "10:00",
-      endTime: "10:00",
-    };
+  //   let placeInfo: placeInfoConfig = {
+  //     id: 0,
+  //     image: "",
+  //     name: "",
+  //     address: "",
+  //     latitude: 0,
+  //     longitude: 0,
+  //     time: "",
+  //     startTime: "10:00",
+  //     endTime: "10:00",
+  //   };
 
-    let day = 0;
-    let dayPlace = 0;
-    totalList.map((value, key) => {
-      placeInfo = {
-        id: value.info.locationId,
-        image: value.info.locationURL,
-        name: value.info.locationName,
-        address: value.info.address,
-        latitude: value.info.latitude,
-        longitude: value.info.longitude,
-        time: value.time,
-        startTime: "10:00",
-        endTime: "10:00",
-      };
+  //   let day = 0;
+  //   let dayPlace = 0;
+  //   totalList.map((value, key) => {
+  //     placeInfo = {
+  //       id: value.info.locationId,
+  //       image: value.info.locationURL,
+  //       name: value.info.locationName,
+  //       address: value.info.address,
+  //       latitude: value.info.latitude,
+  //       longitude: value.info.longitude,
+  //       time: value.time,
+  //       startTime: "10:00",
+  //       endTime: "10:00",
+  //     };
 
-      list[day].dayList.push(placeInfo);
-      dayPlace++;
-      console.log("dayPlace: ", dayPlace);
-      if (dayPlace === dayPlaceCount && day < travelDays - 1) {
-        day++;
-        dayPlace = 0;
-        console.log("day: ", day);
-      }
-    });
+  //     list[day].dayList.push(placeInfo);
+  //     dayPlace++;
+  //     console.log("dayPlace: ", dayPlace);
+  //     if (dayPlace === dayPlaceCount && day < travelDays - 1) {
+  //       day++;
+  //       dayPlace = 0;
+  //       console.log("day: ", day);
+  //     }
+  //   });
 
-    console.log("list: ", list);
-    console.log(totalList);
+  //   console.log("list: ", list);
+  //   console.log(totalList);
 
-    dispatch(setFullScheduleList([...list]));
-  };
+  //   dispatch(setScheduleList([...list]));
+  // };
 
   const onClickSaveSchedule = () => {
-    const scheduleList: sendScheduleListProps[] = [];
+    const sendScheduleList: sendScheduleListProps[] = [];
 
-    fullScheduleList.map((value, key) => {
-      for (let idx = 0; idx < value.dayList.length; idx++) {
+    scheduleList.map((val, key) => {
+      scheduleList[key].map((value, index) => {
         const scheduleItem = {
-          locationId: value.dayList[idx].id,
-          day: value.day,
-          sequence: idx + 1,
-          startTime: "00:00",
-          endTime: "00:00",
+          locationId: value.location.locationId,
+          day: key + 1,
+          sequence: index + 1,
+          startTime: value.startTime,
+          endTime: value.endTime,
         };
 
-        console.log("scheduleItem", scheduleItem);
-        scheduleList.push(scheduleItem);
-      }
+        sendScheduleList.push(scheduleItem);
+      });
     });
 
     const sendData = {
@@ -334,7 +323,7 @@ const ScheduleEditPage = () => {
   };
 
   useEffect(() => {
-    getSchedule();
+    // getSchedule();
     console.log("일정 불러오기", scheduleList);
   }, []);
 
@@ -429,7 +418,7 @@ const ScheduleEditPage = () => {
                       style={{ width: "auto", minHeight: "10px" }}
                     >
                       {keepPlaceList.map((value, key) => (
-                        <Draggable key={value.id} draggableId={value.id?.toString()} index={key}>
+                        <Draggable key={value.locationId} draggableId={value.locationId?.toString()} index={key}>
                           {(provided) => (
                             <div
                               {...provided.dragHandleProps}
@@ -441,9 +430,9 @@ const ScheduleEditPage = () => {
                                 height: "auto",
                               }}
                             >
-                              <EditScheduleItem
-                                img={value.image}
-                                placeName={value.name}
+                              <KeepScheduleItem
+                                img={value.locationURL}
+                                placeName={value.locationName}
                                 time={value.time}
                                 // startTime={value.startTime}
                                 // endTime={value.endTime}

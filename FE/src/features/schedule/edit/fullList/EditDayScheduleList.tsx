@@ -3,7 +3,7 @@ import styles from "../Edit.module.css";
 import Text from "components/Text";
 import EditScheduleItem from "./EditScheduleItem";
 import { useAppSelector } from "app/hooks";
-import { selectFullScheduleList, selectScheduleList } from "slices/scheduleEditSlice";
+import { selectScheduleList } from "slices/scheduleEditSlice";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import colorPalette from "styles/colorPalette";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -14,7 +14,6 @@ interface EditDayScheduleListProps {
 }
 
 const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
-  const fullScheduleList = useAppSelector(selectFullScheduleList);
   const scheduleList = useAppSelector(selectScheduleList);
   const placeNumber = scheduleList[day - 1].length;
   // const [timePicker, setTimePicker] = useState(false);

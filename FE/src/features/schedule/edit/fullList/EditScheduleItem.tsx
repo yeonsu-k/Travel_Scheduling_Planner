@@ -5,7 +5,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import colorPalette from "styles/colorPalette";
 import DeleteItemModal from "./DeleteItemModal";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { selectFullScheduleList, setFullScheduleList, setStayTime } from "slices/scheduleEditSlice";
+import { selectScheduleList, setStayTime, setscheduleList } from "slices/scheduleEditSlice";
 
 interface EditScheduleItemProps {
   day: number;
@@ -20,7 +20,7 @@ interface EditScheduleItemProps {
 const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime }: EditScheduleItemProps) => {
   const dispatch = useAppDispatch();
 
-  const fullList = useAppSelector(selectFullScheduleList);
+  const scheduleList = useAppSelector(selectScheduleList);
   const [input, setInput] = useState(0);
   const [changeStayTime, setChangeStayTime] = useState(false);
   const stayTime = time.split(":");
@@ -44,10 +44,10 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
   };
 
   const deleteScheduleItem = () => {
-    const tmpList = JSON.parse(JSON.stringify(fullList));
-    tmpList[day - 1].dayList.splice(index, 1);
+    const tmpList = scheduleList.map((value) => value.slice());
+    tmpList[day - 1].splice(index, 1);
 
-    dispatch(setFullScheduleList([...tmpList]));
+    dispatch(setscheduleList([...tmpList]));
     setDeleteItemModal(false);
   };
 
