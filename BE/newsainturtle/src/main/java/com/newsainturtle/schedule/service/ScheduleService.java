@@ -112,107 +112,105 @@ public class ScheduleService {
 
     public List<ScheduleResponse> findTravels() {
         List<Schedule> scheduleList = scheduleRepository.findByPrivateTrue();
-        if(6<scheduleList.size()) {
+        if (6 < scheduleList.size()) {
             Random random = new Random();
             int[] idx = new int[6];
-            for(int i=0; i<6; i++) {
+            for (int i = 0; i < 6; i++) {
                 idx[i] = random.nextInt(scheduleList.size());
-                for(int j=0; j<i; j++) {
-                    if(idx[j]==idx[i]) i--;
+                for (int j = 0; j < i; j++) {
+                    if (idx[j] == idx[i]) i--;
                 }
             }
             List<Schedule> newList = new ArrayList<>();
-            for(int i=0; i<6; i++) newList.add(scheduleList.get(idx[i]));
+            for (int i = 0; i < 6; i++) newList.add(scheduleList.get(idx[i]));
             return makeDto(newList);
-        }
-        else {
+        } else {
             return makeDto(scheduleList);
         }
     }
 
     public List<List<ScheduleLocationSetResponse>> setScheduleLocation(ScheduleLocationSetRequest scheduleLocationSetRequest) {
-        int day = scheduleLocationSetRequest.getHotelList().size()+1;
+        int day = scheduleLocationSetRequest.getHotelList().size() + 1;
         int cnt = scheduleLocationSetRequest.getPlaceList().size();
         int[] placeCnt = new int[day];
-        if(cnt%day==0) {
-            for(int i=0; i<day; i++) {
-                placeCnt[i] = cnt/day+1;
+        if (cnt % day == 0) {
+            for (int i = 0; i < day; i++) {
+                placeCnt[i] = cnt / day + 1;
             }
-        }
-        else {
-            int num = cnt%day;
-            for(int i=0; i<day; i++) {
-                placeCnt[i] = cnt/day+1;
-                if(0<num--) placeCnt[i]++;
+        } else {
+            int num = cnt % day;
+            for (int i = 0; i < day; i++) {
+                placeCnt[i] = cnt / day + 1;
+                if (0 < num--) placeCnt[i]++;
             }
         }
 
         List<LocationSetRequest[]> dayList = new ArrayList<>();
-        for(int i=0; i<day; i++) {
-            dayList.add(new LocationSetRequest[placeCnt[i]+1]);
+        for (int i = 0; i < day; i++) {
+            dayList.add(new LocationSetRequest[placeCnt[i] + 1]);
         }
         dayList.get(0)[0] = scheduleLocationSetRequest.getPointPlace().get(0);
-        for(int i=1; i<day; i++) {
-            dayList.get(i)[0] = scheduleLocationSetRequest.getHotelList().get(i-1);
+        for (int i = 1; i < day; i++) {
+            dayList.get(i)[0] = scheduleLocationSetRequest.getHotelList().get(i - 1);
         }
         List<Plc> place = scheduleLocationSetRequest.getPlaceList()
                 .stream()
                 .map(locationSetRequest -> new Plc(locationSetRequest))
                 .collect(Collectors.toList());
-        for(int c=0; c<day; c++) {
-            place = setDistance(place,dayList.get(c)[0]);
+        for (int c = 0; c < day; c++) {
+            place = setDistance(place, dayList.get(c)[0]);
             Collections.sort(place);
-            for(int i=1; i<placeCnt[c]; i++) {
+            for (int i = 1; i < placeCnt[c]; i++) {
                 dayList.get(c)[i] = place.get(0).locationSetRequest;
                 place.remove(0);
             }
         }
-        for(int i=0; i<day-1; i++) {
+        for (int i = 0; i < day - 1; i++) {
             dayList.get(i)[placeCnt[i]] = scheduleLocationSetRequest.getHotelList().get(i);
         }
-        dayList.get(day-1)[placeCnt[day-1]] = scheduleLocationSetRequest.getPointPlace().get(1);
+        dayList.get(day - 1)[placeCnt[day - 1]] = scheduleLocationSetRequest.getPointPlace().get(1);
         List<double[]> durationList = new ArrayList<>();
-        for(int i=0; i<day; i++) {
-            int n = dayList.get(i).length-1;
-            for(int j=0; j<n; j++) {
+        for (int i = 0; i < day; i++) {
+            int n = dayList.get(i).length - 1;
+            for (int j = 0; j < n; j++) {
                 LocationSetRequest locationSetRequest1 = dayList.get(i)[j];
-                LocationSetRequest locationSetRequest2 = dayList.get(i)[j+1];
-                durationList.add(new double[]{locationSetRequest1.getLongitude(),locationSetRequest1.getLatitude()
-                        ,locationSetRequest2.getLongitude(),locationSetRequest2.getLatitude()});
+                LocationSetRequest locationSetRequest2 = dayList.get(i)[j + 1];
+                durationList.add(new double[]{locationSetRequest1.getLongitude(), locationSetRequest1.getLatitude()
+                        , locationSetRequest2.getLongitude(), locationSetRequest2.getLatitude()});
             }
         }
         Mono<List<OpenStreetResponse>> mono = findFlux(durationList).sequential().collectList();
         List<OpenStreetResponse> list = mono.block();
         List<List<ScheduleLocationSetResponse>> scheduleLocationSetResponse = new ArrayList<>();
         int listIdx = 0;
-        for(int i=0; i<day; i++) {
+        for (int i = 0; i < day; i++) {
             scheduleLocationSetResponse.add(new ArrayList<>());
             int min = 0;
             int hour = 10;
-            for(int j=0; j<dayList.get(i).length; j++) {
+            for (int j = 0; j < dayList.get(i).length; j++) {
                 LocationSetRequest locationSetRequest = dayList.get(i)[j];
-                String startTime = hour+":"+min;
-                StringTokenizer st = new StringTokenizer(locationSetRequest.getTime(),":");
+                String startTime = hour + ":" + min;
+                StringTokenizer st = new StringTokenizer(locationSetRequest.getTime(), ":");
                 hour += Integer.parseInt(st.nextToken());
                 min += Integer.parseInt(st.nextToken());
-                if(60<=min) {
+                if (60 <= min) {
                     min %= 60;
                     hour++;
                 }
-                String endTime = hour+":"+min;
-                if(j==dayList.get(i).length-1) continue;
+                String endTime = hour + ":" + min;
+                if (j == dayList.get(i).length - 1) continue;
                 OpenStreetInfoResponse openStreetInfoResponse = list.get(listIdx++).getResponse().get(0);
-                int time = (int)Math.round(openStreetInfoResponse.getDuration()/60);
+                int time = (int) Math.round(openStreetInfoResponse.getDuration() / 60);
                 min += time;
-                if(60<=min) {
-                    hour += min/60;
+                if (60 <= min) {
+                    hour += min / 60;
                     min %= 60;
                 }
                 scheduleLocationSetResponse.get(i).add(ScheduleLocationSetResponse
                         .builder()
                         .location(locationSetRequest)
-                        .day(i+1L)
-                        .sequence(j+1L)
+                        .day(i + 1L)
+                        .sequence(j + 1L)
                         .startTime(startTime)
                         .endTime(endTime)
                         .build());
@@ -220,16 +218,19 @@ public class ScheduleService {
         }
         return scheduleLocationSetResponse;
     }
+
     private List<Plc> setDistance(List<Plc> place, LocationSetRequest target) {
-        for(int i=0; i<place.size(); i++) {
+        for (int i = 0; i < place.size(); i++) {
             double d = distance(target, place.get(i).locationSetRequest);
             place.get(i).dist = d;
         }
         return place;
     }
+
     private class Plc implements Comparable<Plc> {
         LocationSetRequest locationSetRequest;
         double dist;
+
         Plc(LocationSetRequest locationSetRequest) {
             this.locationSetRequest = locationSetRequest;
             dist = 0;
@@ -237,12 +238,12 @@ public class ScheduleService {
 
         @Override
         public int compareTo(Plc o) {
-            return (int)(this.dist-o.dist);
+            return (int) (this.dist - o.dist);
         }
     }
 
     private Mono<OpenStreetResponse> findMono(double[] ll) {
-        String url = "http://newsain.kro.kr:5000/route/v1/driving/"+ll[0]+","+ll[1]+";"+ll[2]+","+ll[3];
+        String url = "http://newsain.kro.kr:5000/route/v1/driving/" + ll[0] + "," + ll[1] + ";" + ll[2] + "," + ll[3];
         WebClient webClient = WebClient.create();
         return webClient.get()
                 .uri(url)
@@ -257,6 +258,7 @@ public class ScheduleService {
                 .runOn(Schedulers.elastic())
                 .flatMap(this::findMono);
     }
+
     private double distance(LocationSetRequest locationSetRequest1, LocationSetRequest locationSetRequest2) {
         double lat1 = locationSetRequest1.getLatitude();
         double lon1 = locationSetRequest1.getLongitude();
@@ -323,7 +325,7 @@ public class ScheduleService {
     }
 
     private void isNullScheduleLocation(List<ScheduleLocationRequest> scheduleLocationRequestList) {
-        if(scheduleLocationRequestList.isEmpty()) {
+        if (scheduleLocationRequestList.isEmpty()) {
             throw new NullException(NULL_SCHEDULE_LOCATION_MESSAGE);
         }
     }
@@ -335,7 +337,7 @@ public class ScheduleService {
 
         User user = userRepository.findByEmail(email);
         ScheduleMember scheduleMemberUser = scheduleMemberRepository.findByScheduleIdAndUserEmail(scheduleId, email);
-        if(scheduleMemberUser == null){
+        if (scheduleMemberUser == null) {
             throw new UninvitedUsersException();
         }
 
@@ -359,7 +361,6 @@ public class ScheduleService {
                         .notificationStatus(NotificationStatus.NO_RESPONSE)
                         .build();
                 scheduleNotificationRepository.save(newScheduleNotification);
-                //상대방에게 알림 전송 (실시간 처리 필요)
                 Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
                 notificationService.sendNewNotification(friendEmail, LiveNotificationResponse.builder()
                         .senderNickname(user.getNickname())

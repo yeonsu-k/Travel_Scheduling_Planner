@@ -16,7 +16,7 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     List<Friend> findByFriendList(User user);
 
     @Transactional
-    @Modifying //clearAutomatically = true
+    @Modifying
     @Query("DELETE FROM Friend f WHERE (f.requestUser = ?1 AND f.receiveUser = ?2 OR f.requestUser = ?2 AND f.receiveUser = ?1) AND f.isAccept = true")
     void deleteByFriend(User user, User friendUser);
 

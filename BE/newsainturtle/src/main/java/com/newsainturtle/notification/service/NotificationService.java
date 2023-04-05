@@ -132,13 +132,11 @@ public class NotificationService {
         }
     }
 
-    public void sendNewNotification(String email, LiveNotificationResponse liveNotificationResponse){
+    public void sendNewNotification(String email, LiveNotificationResponse liveNotificationResponse) {
         try {
-            System.out.println("메세지 보냄: "+email);
             webSocketService.sendNewNotification(email, liveNotificationResponse);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
