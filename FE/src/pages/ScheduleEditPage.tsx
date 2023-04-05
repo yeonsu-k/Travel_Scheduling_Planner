@@ -10,6 +10,7 @@ import {
   placeInfoConfig,
   selectFullScheduleList,
   selectKeepPlaceList,
+  selectScheduleList,
   setFullScheduleList,
   setKeepPlaceList,
 } from "slices/scheduleEditSlice";
@@ -79,6 +80,7 @@ const ScheduleEditPage = () => {
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
   const [viewDaySchedule, setViewDaySchedule] = useState(false);
   const [day, setDay] = useState(0);
+  const scheduleList = useAppSelector(selectScheduleList);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
@@ -358,6 +360,7 @@ const ScheduleEditPage = () => {
 
   useEffect(() => {
     getSchedule();
+    console.log("일정 불러오기", scheduleList);
   }, []);
 
   return (
