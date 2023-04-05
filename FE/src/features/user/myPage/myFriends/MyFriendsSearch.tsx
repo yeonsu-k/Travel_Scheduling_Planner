@@ -8,11 +8,14 @@ import Axios from "api/JsonAxios";
 import api from "api/Api";
 import { useAppDispatch } from "app/hooks";
 import { setSearchUser } from "slices/friendSlice";
+import MyFriendsSearchErr from "./MyFriendsSearchErr";
 
 const MyFriendsSearch = () => {
   const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState("");
+  const [isUser, setIsUser] = useState(false);
+  const [type, setType] = useState("");
 
   const onClickSearchUser = () => {
     console.log(email);
@@ -23,18 +26,28 @@ const MyFriendsSearch = () => {
       .then((res) => {
         console.log(res);
 
-        const searchData = {
-          email: res.data.data.email,
-          exist: res.data.data.exist,
-          nickname: res.data.data.nickname,
-          profile: res.data.data.profile,
-          status: res.data.data.status,
-          success: res.data.success,
-        };
-        dispatch(setSearchUser(searchData));
+        if (res.data.data.email !== null) {
+          setIsUser(true);
+          const searchData = {
+            email: res.data.data.email,
+            exist: res.data.data.exist,
+            nickname: res.data.data.nickname,
+            profile: res.data.data.profile,
+            status: res.data.data.status,
+            success: res.data.success,
+          };
+          dispatch(setSearchUser(searchData));
+        } else {
+          setIsUser(false);
+          setType("사용자");
+        }
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.status === 400) {
+          setIsUser(false);
+          setType("이메일");
+        }
       });
   };
 
@@ -53,7 +66,7 @@ const MyFriendsSearch = () => {
         <Button text="검색" color="main" radius onClick={onClickSearchUser} />
       </div>
 
-      <MyFriendsSearchItem />
+      {isUser ? <MyFriendsSearchItem /> : <MyFriendsSearchErr type={type} />}
     </div>
   );
 };
