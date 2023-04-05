@@ -15,7 +15,7 @@ interface MyScheduleShareModalProps {
   item: MyScheduleConfig;
 }
 
-interface InvitedFriendConfig {
+export interface InvitedFriendConfig {
   email: string;
   nickname: string;
   profile: string;
@@ -55,7 +55,7 @@ const MyScheduleShareModal = ({ open, setOpen, regionInfo, item }: MyScheduleSha
             <ButtonStyled width="150px" height="50px" text="마이로 친구 공유" onClick={() => setEmailModal(true)} />
             <ButtonStyled width="150px" height="50px" text="카카오톡 공유" />
           </div>
-          <MyScheduleInviteModal open={emailModal} setOpen={setEmailModal} item={item} />
+          <MyScheduleInviteModal open={emailModal} setOpen={setEmailModal} item={item} friends={invitedList} />
           <span>공유된 친구</span>
           <table className={styles.shareModalTable}>
             <thead>

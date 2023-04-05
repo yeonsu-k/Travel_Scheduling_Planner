@@ -236,11 +236,40 @@ span:nth-child(4) {
   color: #666;
 }
 
-.inviteInput {
-  width: 70%;
-  margin: 20px;
+.invitedFriendsCont {
+  margin: 30px;
 }
 
-.inviteSendBtn {
-  margin: 20px;
+.invitedFriendItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 380px;
+  height: 60px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 4px 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 10px;
+}
+
+.invitedFriendItem > div:nth-child(1) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.friendImg {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px 0 10px;
+  border: 0.5px solid #ececec;
+  border-radius: 50%;
+}
+
+.friendImg > img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.invitedFriendItem > div:nth-child(2) {
+  margin-right: 10px;
 }
