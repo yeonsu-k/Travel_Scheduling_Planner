@@ -17,8 +17,7 @@ interface MyScheduleInviteModalProps {
 }
 
 const MyScheduleInviteModal = ({ open, setOpen, item, friends }: MyScheduleInviteModalProps) => {
-  const [email, setEmail] = useState<string>("");
-  const sendInvite = async () => {
+  const sendInvite = async (email: string) => {
     if (emailRep.test(email)) {
       await Axios.post(api.createSchedule.inviteFriend(), {
         scheduleId: item.schedule_id,
@@ -56,6 +55,10 @@ const MyScheduleInviteModal = ({ open, setOpen, item, friends }: MyScheduleInvit
                   width="80px"
                   text={friend.status}
                   color={friend.status == "초대" ? "main" : friend.status == "참여중" ? "pink" : "gray"}
+                  disabled={friend.status != "초대"}
+                  onClick={() => {
+                    sendInvite(friend.email);
+                  }}
                 />
               </div>
             </div>
