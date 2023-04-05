@@ -21,7 +21,7 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
   const dispatch = useAppDispatch();
 
   const scheduleList = useAppSelector(selectScheduleList);
-  const [input, setInput] = useState(0);
+  const [input, setInput] = useState(scheduleList[day - 1][index].duration);
   const [changeStayTime, setChangeStayTime] = useState(false);
   const stayTime = time.split(":");
   const [hour, setHour] = useState(parseInt(stayTime[0]));
@@ -29,6 +29,17 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
   const [inputHour, setInputHour] = useState(hour);
   const [inputMinute, setInputMinute] = useState(minute);
   const [deleteItemModal, setDeleteItemModal] = useState(false);
+  let startMinute = startTime.split(":")[1];
+  let endMinute = endTime.split(":")[1];
+
+  if (parseInt(startMinute) < 10) {
+    startMinute = "0" + startMinute;
+    startTime = startTime.split(":")[0] + ":" + startMinute;
+  }
+  if (parseInt(endMinute) < 10) {
+    endMinute = "0" + endMinute;
+    endTime = endTime.split(":")[0] + ":" + endMinute;
+  }
 
   // const [startTime, setStartTime] = useState("");
   // const [endTime, setEndTime] = useState("");
@@ -117,26 +128,6 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
 
   return (
     <>
-      <div
-        style={{
-          height: "2rem",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          color: colorPalette.darkgray,
-        }}
-      >
-        <MoreVertIcon fontSize="small" />
-        <input
-          type="number"
-          value={input}
-          min={0}
-          className={styles.moveTime}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.valueAsNumber)}
-        />
-        <Text value="분" type="caption" />
-      </div>
-
       {changeStayTime ? (
         <div className={styles.changeTime}>
           <div className={styles.changeTimeInfo}>
@@ -199,6 +190,30 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
           <div className={styles.scheduleItemInfo} onClick={onClickDeleteItem}>
             <Text value="삭제" type="smallText" />
           </div>
+        </div>
+      )}
+
+      {index === scheduleList[day - 1].length - 1 ? (
+        <></>
+      ) : (
+        <div
+          style={{
+            height: "2rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: colorPalette.darkgray,
+          }}
+        >
+          <MoreVertIcon fontSize="small" />
+          <input
+            type="number"
+            value={input}
+            min={0}
+            className={styles.moveTime}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.valueAsNumber)}
+          />
+          <Text value="분" type="caption" />
         </div>
       )}
 
