@@ -140,7 +140,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
               </div>
               <div className={styles.scheduleTextBot}>
                 <span className={styles.scheduleTextTitle}>선택장소</span>
-                <span className={styles.scheduleTextCont}>11</span>
+                <span className={styles.scheduleTextCont}>{item.locationCount}</span>
               </div>
             </div>
           </div>
