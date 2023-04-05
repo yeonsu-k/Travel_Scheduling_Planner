@@ -14,6 +14,8 @@ import MyScheduleShareModal from "./MyScheduleShareModal";
 import { useAppDispatch } from "app/hooks";
 import { scheduleConfig, setscheduleList } from "slices/scheduleEditSlice";
 import { useNavigate } from "react-router-dom";
+import { setDate } from "slices/scheduleCreateSlice";
+import { format } from "date-fns";
 
 const getDate = (data: string) => {
   const date = new Date(data);
@@ -91,6 +93,17 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
     await Axios.get(api.createSchedule.getFullList(item.schedule_id))
       .then((res) => {
         console.log("수정 버튼 Data", res);
+        const startDate = res.data.data.scheduleStartDay;
+        const endDate = res.data.data.scheduleEndDay;
+        dispatch(
+          setDate({
+            start: format(new Date(startDate), "yyyy-MM-dd"),
+            end: format(new Date(endDate), "yyyy-MM-dd"),
+          }),
+        );
+
+        console.log("startDate", startDate);
+
         const locations: scheduleConfig[] = res.data.data.scheduleLocations;
         const list: scheduleConfig[][] = [];
         let tmpDataList: scheduleConfig[] = [];

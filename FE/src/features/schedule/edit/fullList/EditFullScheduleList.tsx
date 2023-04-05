@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../Edit.module.css";
 import { selectScheduleList } from "slices/scheduleEditSlice";
-import { selectRegion } from "slices/scheduleCreateSlice";
+import { selectDate, selectRegion } from "slices/scheduleCreateSlice";
 import { useAppSelector } from "app/hooks";
 import Text from "components/Text";
 import EditDayScheduleList from "./EditDayScheduleList";
+import { add } from "date-fns";
 
 const EditFullScheduleList = () => {
   const region = useAppSelector(selectRegion).name;
 
   const scheduleList = useAppSelector(selectScheduleList);
+  const date = new Date(useAppSelector(selectDate).start);
 
   return (
     <div className={styles.editFullScheduleList}>
@@ -21,7 +23,7 @@ const EditFullScheduleList = () => {
 
       {scheduleList.map((value, key) => (
         <div key={key} style={{ width: "90%" }}>
-          <EditDayScheduleList day={key + 1} />
+          <EditDayScheduleList day={key + 1} date={add(date, { days: key })} />
         </div>
       ))}
     </div>

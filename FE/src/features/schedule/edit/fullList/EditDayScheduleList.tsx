@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../Edit.module.css";
 import Text from "components/Text";
 import EditScheduleItem from "./EditScheduleItem";
@@ -11,12 +11,18 @@ import { useSearchParams } from "react-router-dom";
 
 interface EditDayScheduleListProps {
   day: number;
+  date: Date;
 }
 
-const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
+const EditDayScheduleList = ({ day, date }: EditDayScheduleListProps) => {
   const scheduleList = useAppSelector(selectScheduleList);
   const placeNumber = scheduleList[day - 1].length;
-  // const [timePicker, setTimePicker] = useState(false);
+
+  useEffect(() => {
+    console.log("date", date);
+    console.log("month", date.getMonth());
+    console.log("day", date.getDate());
+  });
 
   // 일정 권한 확인
   const [searchParams] = useSearchParams();
@@ -58,7 +64,7 @@ const EditDayScheduleList = ({ day }: EditDayScheduleListProps) => {
 
   return (
     <div className={styles.editDayScheduleList}>
-      <Text value={`${day}DAY 2월 23일 목`} en />
+      <Text value={`${day}DAY ${date.getMonth() + 1}월 ${date.getDate()}일 목`} en />
       <div style={{ margin: "1vh" }}></div>
       {isMine == "true" ? (
         <Text value="일차를 누르면 일정 전체 변경이 가능합니다." type="smallText" color="lightgray" />
