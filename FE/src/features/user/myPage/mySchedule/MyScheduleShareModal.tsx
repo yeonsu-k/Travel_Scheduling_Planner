@@ -15,18 +15,30 @@ interface MyScheduleShareModalProps {
   item: MyScheduleConfig;
 }
 
+interface InvitedFriendConfig {
+  email: string;
+  nickname: string;
+  profile: string;
+  status: string;
+}
+
 const MyScheduleShareModal = ({ open, setOpen, regionInfo, item }: MyScheduleShareModalProps) => {
   const [emailModal, setEmailModal] = useState<boolean>(false);
-  const [invitedList, setInvitedList] = useState([]);
+  const [invitedList, setInvitedList] = useState<InvitedFriendConfig[]>([]);
   const invitedFriend = async () => {
     await Axios.get(api.createSchedule.invitedFriend(item.schedule_id))
       .then((res) => {
-        console.log(res);
+        console.log(res.data.data.friends);
+        setInvitedList(res.data.data.friends);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  const filteredInvitedList = invitedList.filter((item: InvitedFriendConfig) => {
+    return item.status == "참여중";
+  });
 
   useEffect(() => {
     console.log("ON");
@@ -52,16 +64,13 @@ const MyScheduleShareModal = ({ open, setOpen, regionInfo, item }: MyScheduleSha
                 <th>ID OR EMAIL</th>
                 <th>관리</th>
               </tr>
-              <tr>
-                <td>slrspdla</td>
-                <td>slrspdla</td>
-                <td>slrspdla</td>
-              </tr>
-              <tr>
-                <td>slrspdla</td>
-                <td>slrspdla</td>
-                <td>slrspdla</td>
-              </tr>
+              {filteredInvitedList.map((item: InvitedFriendConfig, i: number) => (
+                <tr key={i}>
+                  <td>{item.nickname}</td>
+                  <td>{item.email}</td>
+                  <td>{item.status}</td>
+                </tr>
+              ))}
             </thead>
           </table>
         </div>
