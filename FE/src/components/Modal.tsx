@@ -21,7 +21,7 @@ function Modal({ title, modalClose, children }: Props) {
               <CloseIcon fontSize="inherit" />
             </IconButton>
           </Stack>
-          <Stack justifyContent="center" alignItems="center">
+          <Stack justifyContent="center" alignItems="center" width="100%" height="100%">
             {children}
           </Stack>
         </Stack>
