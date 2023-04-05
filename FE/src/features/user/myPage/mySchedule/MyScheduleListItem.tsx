@@ -146,7 +146,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
         console.log("list", list);
 
         dispatch(setscheduleList([...list]));
-        navigate("/schedule/edit");
+        navigate({ pathname: "/schedule/edit", search: "?mine=" + item.mine });
       })
       .catch((err) => {
         console.log(err);
@@ -216,24 +216,24 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
               </div>
             </div>
           </div>
-          {item.mine ? (
-            <div className={styles.scheduleBtn}>
-              <Button
-                startIcon={item.private ? <LockOpenIcon /> : <LockIcon />}
-                color="inherit"
-                onClick={changePrivate}
-              >
-                {item.private ? "공개" : "비공개"}
-              </Button>
-              <ButtonStyled text="일정 수정" onClick={modifySchedule} />
-              <ButtonStyled text="일정 공유" onClick={() => setModalOpen(true)} />
-              <ButtonStyled text="일정 삭제" onClick={deleteSchedule} />
-            </div>
-          ) : (
-            <div className={styles.scheduleNotMine}>
-              <Text value="일정 수정 권한이 없습니다." color="darkgray" />
-            </div>
-          )}
+          <div className={styles.scheduleBtn}>
+            {item.mine ? (
+              <>
+                <Button
+                  startIcon={item.private ? <LockOpenIcon /> : <LockIcon />}
+                  color="inherit"
+                  onClick={changePrivate}
+                >
+                  {item.private ? "공개" : "비공개"}
+                </Button>
+                <ButtonStyled text="일정 수정" onClick={modifySchedule} />
+                <ButtonStyled text="일정 공유" onClick={() => setModalOpen(true)} />
+                <ButtonStyled text="일정 삭제" onClick={deleteSchedule} />
+              </>
+            ) : (
+              <ButtonStyled text="일정 확인" onClick={modifySchedule} />
+            )}
+          </div>
         </div>
         <div className={styles.scheduleDDAY}>{getDday(item.start_day)}</div>
       </div>

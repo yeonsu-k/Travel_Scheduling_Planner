@@ -22,7 +22,7 @@ const EditFullScheduleList = () => {
 
       {scheduleList.map((value, key) => (
         <div key={key} style={{ width: "90%" }}>
-          <EditDayScheduleList day={value[key].day} />
+          <EditDayScheduleList day={key + 1} />
         </div>
       ))}
     </div>
