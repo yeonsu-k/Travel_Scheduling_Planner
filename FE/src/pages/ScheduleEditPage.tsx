@@ -364,11 +364,7 @@ const ScheduleEditPage = () => {
 
                 <div style={{ color: colorPalette.yellow }}>
                   <LocationOnIcon fontSize="small" />
-                  <Text
-                    value={fullScheduleList[day - 1].dayList.length.toString()}
-                    color="yellow"
-                    type="textTitle"
-                  ></Text>
+                  <Text value={scheduleList[day - 1].length.toString()} color="yellow" type="textTitle"></Text>
                   <Text value="개의 장소" type="caption" en />
                 </div>
               </div>
