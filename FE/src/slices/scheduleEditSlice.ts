@@ -8,6 +8,7 @@ export interface scheduleConfig {
   sequence: number;
   startTime: string;
   endTime: string;
+  duration: number;
 }
 
 interface scheduleEditConfig {

@@ -197,6 +197,7 @@ const ScheduleEditPage = () => {
         sequence: 0,
         startTime: "10:00",
         endTime: "10:00",
+        duration: 0,
       };
       console.log(dragContent);
       keepList.splice(dragStartIndex, 1);

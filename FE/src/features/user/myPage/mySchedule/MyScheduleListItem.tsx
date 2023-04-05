@@ -138,6 +138,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             sequence: value.sequence,
             startTime: value.startTime,
             endTime: value.endTime,
+            duration: 0,
           };
           if (index !== value.day - 1) {
             console.log("index: ", index);
