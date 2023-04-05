@@ -148,6 +148,7 @@
   font-size: 1.8rem;
   color: black;
   text-align: center;
+  margin-top: 80px;
 }
 
 .mainSubTitleText {
@@ -167,7 +168,7 @@
 /* Carousel */
 .carouselContainer {
   max-width: 1400px;
-  padding-bottom: 80px;
+  /* padding-bottom: 80px; */
   margin: 0 auto;
 }
 
@@ -306,7 +307,7 @@
 
 .mainFilterContainer {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   padding-right: 100px;
 }
 
