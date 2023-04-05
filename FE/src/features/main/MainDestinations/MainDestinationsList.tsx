@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../Main.module.css";
 import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
@@ -14,11 +14,21 @@ interface Props {
 const MainDestinationsList = ({ onMoveToElement }: Props) => {
   const destinations: DestinationConfig[] = useAppSelector(selectDestinationList);
   const [input, setInput] = useState("");
+  const [selected, setSelected] = useState<number>(0);
 
-  const filtered = destinations.filter((item: DestinationConfig) => {
-    const name = "대한민국" + item.regionName;
-    return name.includes(input);
-  });
+  const filterItems = () => {
+    let result = destinations.filter((item: DestinationConfig) => {
+      const name = "대한민국" + item.regionName;
+      return name.includes(input);
+    });
+
+    if (selected == 0) {
+      result = result.sort((a, b) => (a.regionName > b.regionName ? 1 : -1));
+    } else {
+      result = result.sort((a, b) => (a.regionName < b.regionName ? 1 : -1));
+    }
+    return result;
+  };
 
   return (
     <div>
@@ -40,10 +50,10 @@ const MainDestinationsList = ({ onMoveToElement }: Props) => {
         </div>
       </div>
       <div className={styles.mainFilterContainer}>
-        <MainDestinationsFilter />
+        <MainDestinationsFilter setSelected={setSelected} />
       </div>
       <div className={styles.mainDestinationContainer}>
-        {filtered.map((item: DestinationConfig, i: number) => (
+        {filterItems().map((item: DestinationConfig, i: number) => (
           <MainDestinationItem key={i} {...item} />
         ))}
       </div>
