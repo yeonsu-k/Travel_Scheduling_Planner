@@ -10,6 +10,7 @@ import {
   placeInfoConfig,
   selectFullScheduleList,
   selectKeepPlaceList,
+  selectScheduleList,
   setFullScheduleList,
   setKeepPlaceList,
 } from "slices/scheduleEditSlice";
@@ -26,7 +27,7 @@ import {
 import { differenceInDays } from "date-fns";
 import Axios from "api/JsonAxios";
 import api from "api/Api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
@@ -40,8 +41,7 @@ import Modal from "components/Modal";
 import Input from "components/Input";
 import SwitchButton from "components/SwitchButton";
 import ButtonStyled from "components/Button";
-
-const { kakao } = window;
+import EditMap from "features/schedule/edit/EditMap";
 
 const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -66,7 +66,6 @@ const ScheduleEditPage = () => {
   const region = useAppSelector(selectRegion);
   const vehicle = useAppSelector(selectVehicle);
   const date = useAppSelector(selectDate);
-  const place = useAppSelector(selectPlaceList);
   const totalList = useAppSelector(selectTotalList);
   const fullScheduleList = useAppSelector(selectFullScheduleList);
   const keepPlaceList = useAppSelector(selectKeepPlaceList);
@@ -79,6 +78,7 @@ const ScheduleEditPage = () => {
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
   const [viewDaySchedule, setViewDaySchedule] = useState(false);
   const [day, setDay] = useState(0);
+  const scheduleList = useAppSelector(selectScheduleList);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
@@ -91,28 +91,9 @@ const ScheduleEditPage = () => {
   const [scheduleTitle, setScheduleTitle] = useState<string>(""); // 일정 이름
   const [scheduleOpen, setScheduleOpen] = useState<boolean>(true); // 일정 공개 여부
 
-  const setMap = () => {
-    const container = document.getElementById("map");
-    const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 5,
-    };
-
-    // 지도 생성
-    const map = new kakao.maps.Map(container, options);
-    map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
-
-    const geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(place, (result: any[], status: string) => {
-      // 정상적으로 검색이 완료되면
-      if (status === kakao.maps.services.Status.OK) {
-        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동
-        map.setCenter(coords);
-      }
-    });
-  };
+  // 일정 권한 확인
+  const [searchParams] = useSearchParams();
+  const isMine = searchParams.get("mine");
 
   const dragStartHandler = (e: any) => {
     // 고스트 이미지를 제거하기 위해 투명 캔버스 생성
@@ -353,11 +334,8 @@ const ScheduleEditPage = () => {
   };
 
   useEffect(() => {
-    setMap();
-  }, [place]);
-
-  useEffect(() => {
     getSchedule();
+    console.log("일정 불러오기", scheduleList);
   }, []);
 
   return (
@@ -368,30 +346,34 @@ const ScheduleEditPage = () => {
         {viewDaySchedule ? <EditDayMoveList day={day} /> : <EditFullScheduleList />}
 
         <div className={styles.map} ref={containerRef}>
-          <div id="map" style={{ width: "100%", height: "100%", zIndex: "0" }}></div>
+          {viewDaySchedule ? <EditMap day={day} /> : <EditMap />}
 
-          <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
-            일정저장
-          </a>
+          {isMine == "true" ? (
+            <a className={styles.saveScheduleBtn} onClick={() => setModalOpen(true)}>
+              일정저장
+            </a>
+          ) : null}
 
           {viewDaySchedule ? (
-            <div className={styles.daySummary}>
-              <div>
-                <Text value={day.toString()} type="title" en></Text>
-                <Text value="일차" type="caption" en />
-              </div>
+            <>
+              <div className={styles.daySummary}>
+                <div>
+                  <Text value={day.toString()} type="title" en></Text>
+                  <Text value="일차" type="caption" en />
+                </div>
 
-              <div style={{ color: colorPalette.yellow }}>
-                <LocationOnIcon fontSize="small" />
-                <Text
-                  value={fullScheduleList[day - 1].dayList.length.toString()}
-                  color="yellow"
-                  type="textTitle"
-                ></Text>
-                <Text value="개의 장소" type="caption" en />
+                <div style={{ color: colorPalette.yellow }}>
+                  <LocationOnIcon fontSize="small" />
+                  <Text
+                    value={fullScheduleList[day - 1].dayList.length.toString()}
+                    color="yellow"
+                    type="textTitle"
+                  ></Text>
+                  <Text value="개의 장소" type="caption" en />
+                </div>
               </div>
-            </div>
-          ) : (
+            </>
+          ) : isMine == "true" ? (
             <>
               <TooltipStyled title="장소를 검색하여 일정에 추가" placement="left">
                 <div className={styles.searchPlaceBtn} onClick={() => setViewSearchBar(true)}>
@@ -422,61 +404,65 @@ const ScheduleEditPage = () => {
               </TooltipStyled>
               {addPlaceModal && <PlaceAddModal setAddPlaceModal={setAddPlaceModal} />}
             </>
-          )}
+          ) : null}
 
-          <div
-            className={styles.keepPlaces}
-            ref={dragComponentRef}
-            draggable
-            onDragStart={(e) => dragStartHandler(e)}
-            onDrag={(e) => dragHandler(e)}
-            onDragOver={(e) => dragOverHandler(e)}
-            onDragEnd={(e) => dragEndHandler(e)}
-            style={{ left: position.left, top: position.top }}
-          >
-            <Text value="포함되지 않은 장소" bold /> <br />
-            <div style={{ color: "#AAAAAA", fontSize: "0.7rem", margin: "0.5rem 0 1.5rem", lineHeight: "150%" }}>
-              일정에서 누락된 장소들이 이곳에 포함됩니다. <br />
-              일정에 포함된 장소를 옮겨 놓을 수도 있습니다. <br />
-              원하는 위치에 드래그하여 일정에 포함시키세요. <br />
-            </div>
-            <Droppable droppableId="keepPlaceList" key="keepPlaceList">
-              {(provided) => (
-                <div
-                  className="keepPlaceList"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{ width: "auto", minHeight: "10px" }}
-                >
-                  {keepPlaceList.map((value, key) => (
-                    <Draggable key={value.id} draggableId={value.id?.toString()} index={key}>
-                      {(provided) => (
-                        <div
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          ref={provided.innerRef}
-                          style={{
-                            ...provided.draggableProps.style,
-                            width: "auto",
-                            height: "auto",
-                          }}
-                        >
-                          <EditScheduleItem
-                            img={value.image}
-                            placeName={value.name}
-                            time={value.time}
-                            // startTime={value.startTime}
-                            // endTime={value.endTime}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+          {isMine == "true" ? (
+            <>
+              <div
+                className={styles.keepPlaces}
+                ref={dragComponentRef}
+                draggable
+                onDragStart={(e) => dragStartHandler(e)}
+                onDrag={(e) => dragHandler(e)}
+                onDragOver={(e) => dragOverHandler(e)}
+                onDragEnd={(e) => dragEndHandler(e)}
+                style={{ left: position.left, top: position.top }}
+              >
+                <Text value="포함되지 않은 장소" bold /> <br />
+                <div style={{ color: "#AAAAAA", fontSize: "0.7rem", margin: "0.5rem 0 1.5rem", lineHeight: "150%" }}>
+                  일정에서 누락된 장소들이 이곳에 포함됩니다. <br />
+                  일정에 포함된 장소를 옮겨 놓을 수도 있습니다. <br />
+                  원하는 위치에 드래그하여 일정에 포함시키세요. <br />
                 </div>
-              )}
-            </Droppable>
-          </div>
+                <Droppable droppableId="keepPlaceList" key="keepPlaceList">
+                  {(provided) => (
+                    <div
+                      className="keepPlaceList"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ width: "auto", minHeight: "10px" }}
+                    >
+                      {keepPlaceList.map((value, key) => (
+                        <Draggable key={value.id} draggableId={value.id?.toString()} index={key}>
+                          {(provided) => (
+                            <div
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                              ref={provided.innerRef}
+                              style={{
+                                ...provided.draggableProps.style,
+                                width: "auto",
+                                height: "auto",
+                              }}
+                            >
+                              <EditScheduleItem
+                                img={value.image}
+                                placeName={value.name}
+                                time={value.time}
+                                // startTime={value.startTime}
+                                // endTime={value.endTime}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </>
+          ) : null}
         </div>
       </DragDropContext>
 

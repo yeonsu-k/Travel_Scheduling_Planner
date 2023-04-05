@@ -7,14 +7,14 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import styles from "./css/Header.module.css";
 import { Avatar } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
 import Text from "./Text";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { rootState } from "app/store";
 import { useDispatch } from "react-redux";
-import { setLogout } from "slices/authSlice";
+import { selectUserInfo, setLogout } from "slices/authSlice";
 import { disconnectSocket } from "features/user/notice/Socket";
+import { useAppSelector } from "app/hooks";
 
 interface HeaderMobileProps {
   open: boolean;
@@ -25,6 +25,7 @@ const HeaderMobile = ({ open, setDrawerOpen }: HeaderMobileProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { login } = useSelector((state: rootState) => state.auth);
+  const userInfo = useAppSelector(selectUserInfo);
 
   const onLogout = () => {
     dispatch(setLogout());
@@ -37,11 +38,17 @@ const HeaderMobile = ({ open, setDrawerOpen }: HeaderMobileProps) => {
       <Box sx={{ width: "60vw" }}>
         {login ? (
           <Box className={styles.mobileProfile}>
-            <Avatar sx={{ width: 60, height: 60, bgcolor: deepPurple[500] }}>
-              <Text value="김" type="caption" color="white" />
-            </Avatar>
+            {userInfo.profile == "" ? (
+              <Avatar sx={{ width: 60, height: 60, bgcolor: "#63C6E6" }}>
+                <Text value={userInfo.nickname.slice(0, 1)} type="caption" color="white" />
+              </Avatar>
+            ) : (
+              <Box className={styles.mobileProfileImg}>
+                <img src={userInfo.profile} alt="프로필" />
+              </Box>
+            )}
             <Box sx={{ pt: 1 }}>
-              <Text value="연수" type="caption" color="black" />
+              <Text value={userInfo.nickname} type="caption" color="black" />
             </Box>
             <Box
               onClick={onLogout}
@@ -52,7 +59,7 @@ const HeaderMobile = ({ open, setDrawerOpen }: HeaderMobileProps) => {
           </Box>
         ) : (
           <Box className={styles.mobileProfile}>
-            <Avatar sx={{ width: 60, height: 60, bgcolor: deepPurple[500], mt: 2 }}></Avatar>
+            <Avatar sx={{ width: 60, height: 60, bgcolor: "#63C6E6", mt: 2 }}></Avatar>
             <Box
               onClick={() => navigate("/login")}
               sx={{ width: 65, textAlign: "center", backgroundColor: "#000", pt: 1, pb: 1, pl: 2, pr: 2, mt: 3 }}

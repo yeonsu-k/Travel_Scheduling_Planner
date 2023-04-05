@@ -7,12 +7,6 @@ import { TravelLogConfig, locationConfig, setTravelLogList } from "slices/mainSl
 import { useDispatch } from "react-redux";
 import Loading from "components/Loading";
 
-export interface LogConfig {
-  title: string;
-  src: string;
-  author: string;
-}
-
 const MainTravelLog = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,6 +26,7 @@ const MainTravelLog = () => {
                 const locations = {
                   address: schedule.location.address,
                   locationName: schedule.location.locationName,
+                  locationURL: schedule.location.locationURL,
                 };
                 tmpSchedule.push(locations);
               });

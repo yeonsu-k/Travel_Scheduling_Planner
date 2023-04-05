@@ -144,7 +144,6 @@ public class ScheduleService {
                 if (0 < num--) placeCnt[i]++;
             }
         }
-
         List<LocationSetRequest[]> dayList = new ArrayList<>();
         for (int i = 0; i < day; i++) {
             dayList.add(new LocationSetRequest[placeCnt[i] + 1]);
@@ -197,14 +196,16 @@ public class ScheduleService {
                     min %= 60;
                     hour++;
                 }
-                String endTime = hour + ":" + min;
-                if (j == dayList.get(i).length - 1) continue;
-                OpenStreetInfoResponse openStreetInfoResponse = list.get(listIdx++).getResponse().get(0);
-                int time = (int) Math.round(openStreetInfoResponse.getDuration() / 60);
-                min += time;
-                if (60 <= min) {
-                    hour += min / 60;
-                    min %= 60;
+                String endTime = hour+":"+min;
+                if(j!=dayList.get(i).length-1) {
+                    OpenStreetInfoResponse openStreetInfoResponse = list.get(listIdx++).getResponse().get(0);
+                    int time = (int)Math.round(openStreetInfoResponse.getDuration()/60);
+                    min += time;
+                    if(60<=min) {
+                        hour += min/60;
+                        min %= 60;
+                    }
+
                 }
                 scheduleLocationSetResponse.get(i).add(ScheduleLocationSetResponse
                         .builder()

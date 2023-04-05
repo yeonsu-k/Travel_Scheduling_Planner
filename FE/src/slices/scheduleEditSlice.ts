@@ -21,7 +21,7 @@ export interface fullScheduleListConfig {
   dayList: placeInfoConfig[];
 }
 
-interface scheduleConfig {
+export interface scheduleConfig {
   location: basicConfig;
   day: number;
   sequence: number;

@@ -1,7 +1,6 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DestinationConfig, TravelLogConfig } from "slices/mainSlice";
 import styles from "../Main.module.css";
-import MainTravelLog, { LogConfig } from "../MainTravelLog/MainTravelLog";
 import MainTravelLogModal from "../MainTravelLog/MainTravelLogModal";
 import { Modal } from "@mui/material";
 import MainDestinationModal from "../MainDestinations/MainDestinationModal";
@@ -16,12 +15,12 @@ const MainCarouselCard = ({ type, item, travelLog }: CarouselCardProps) => {
   const [ModalOpen, setModalOpen] = useState<boolean>(false);
   const [destiModalOpen, setDestiModalOpen] = useState<boolean>(false);
 
-  const Bar = forwardRef((props: any, ref: any) => (
-    <span {...props} ref={ref}>
-      {props.children}
-    </span>
-  ));
-  Bar.displayName = "Bar";
+  // const Bar = forwardRef((props: any, ref: any) => (
+  //   <span {...props} ref={ref}>
+  //     {props.children}
+  //   </span>
+  // ));
+  // Bar.displayName = "Bar";
 
   return (
     <>
@@ -51,9 +50,7 @@ const MainCarouselCard = ({ type, item, travelLog }: CarouselCardProps) => {
       {ModalOpen ? <MainTravelLogModal open={ModalOpen} setModalOpen={setModalOpen} travelLog={travelLog} /> : null}
       {destiModalOpen && item ? (
         <Modal open={destiModalOpen} onClose={() => setDestiModalOpen(false)}>
-          <Bar>
-            <MainDestinationModal item={item} setModalOpen={setDestiModalOpen} />
-          </Bar>
+          <MainDestinationModal item={item} setModalOpen={setDestiModalOpen} />
         </Modal>
       ) : null}
     </>
