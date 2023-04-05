@@ -10,6 +10,7 @@ import { Button } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { DestinationConfig } from "slices/mainSlice";
+import MyScheduleShareModal from "./MyScheduleShareModal";
 
 const getDate = (data: string) => {
   const date = new Date(data);
@@ -26,12 +27,12 @@ const getDday = (data: string) => {
   const gap = target > today ? target.getTime() - today.getTime() : today.getTime() - target.getTime();
   const result = Math.floor(gap / (1000 * 60 * 60 * 24));
   return result == 0 ? "D-DAY" : target > today ? `D-${result + 1}` : `D+${result}`;
-  return result;
 };
 
 const MyScheduleListItem = (item: MyScheduleConfig) => {
   const [scheduleName, setScheduleName] = useState<string>(item.schedule_name);
   const [regionInfo, setRegionInfo] = useState<DestinationConfig>();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const getRegionInfo = async () => {
     await Axios.get(api.createSchedule.getRegion(item.regionId))
@@ -145,12 +146,15 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
               {item.private ? "공개" : "비공개"}
             </Button>
             <ButtonStyled text="일정 수정" />
-            <ButtonStyled text="일정 공유" />
+            <ButtonStyled text="일정 공유" onClick={() => setModalOpen(true)} />
             <ButtonStyled text="일정 삭제" onClick={deleteSchedule} />
           </div>
         </div>
         <div className={styles.scheduleDDAY}>{getDday(item.start_day)}</div>
       </div>
+      {modalOpen ? (
+        <MyScheduleShareModal open={modalOpen} setOpen={setModalOpen} regionInfo={regionInfo} item={item} />
+      ) : null}
     </div>
   );
 };

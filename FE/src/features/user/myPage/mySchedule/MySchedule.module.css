@@ -153,3 +153,94 @@
   height: 70%;
   width: 60%;
 }
+
+.shareModalContainer,
+.inviteModalContainer {
+  width: 600px;
+  /* height: 320px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 30px;
+  box-sizing: border-box;
+
+  animation: slideFade 0.3s linear;
+}
+
+@keyframes slideFade {
+  0% {
+    opacity: 0;
+    margin-top: -100px;
+  }
+  100% {
+    opacity: 100%;
+    margin-top: 0;
+  }
+}
+
+.shareModalContainer > span:nth-child(1) {
+  font-size: 1.5rem;
+  font-family: "Montserrat";
+  font-weight: 500;
+  margin: 10px;
+}
+
+.shareModalContainer > span:nth-child(2),
+span:nth-child(4) {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.shareBtn {
+  margin: 10px;
+}
+
+.shareBtn > button {
+  margin: 0 50px 20px 50px;
+}
+
+.shareModalTable {
+  width: 100%;
+  table-layout: fixed;
+  word-break: break-all;
+  text-align: center;
+}
+
+.shareModalTable th {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.inviteModalContainer {
+  width: 500px;
+}
+
+.inviteModalContainer > span:nth-child(1) {
+  font-size: 1.2rem;
+  font-family: "Noto Sans";
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.inviteModalContainer > span:nth-child(2) {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.inviteInput {
+  width: 70%;
+  margin: 20px;
+}
+
+.inviteSendBtn {
+  margin: 20px;
+}
