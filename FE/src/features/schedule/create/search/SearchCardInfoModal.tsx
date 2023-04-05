@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Search.module.css";
+import createStyles from "features/schedule/create/Create.module.css";
 import { Close } from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import Text from "components/Text";
@@ -46,7 +47,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
       <div className={styles.imgContainer}>
         <img className={styles.imgContainer} src={place.locationURL} />
         <div className={styles.socialBtnContainer}>
-          <div>
+          <div className={createStyles.mobileDisplayNone}>
             <div
               className={styles.socialBtn}
               onClick={() =>
@@ -85,7 +86,7 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
           </div>
         </div>
       </div>
-      <Stack justifyContent="space-between" spacing={3} p={3}>
+      <Stack className={styles.mobileCardGridStack} justifyContent="space-between" m={3}>
         <Text value={place.locationName} type="groupTitle" />
         <div className={styles.contentGrid}>
           <span>주소</span>
@@ -136,12 +137,13 @@ function SearchCardInfoModal({ place, setModalOpen, InfoAddClick }: modalProps) 
           </span>
         </div>
         <Stack direction="row" justifyContent="flex-end" spacing={1}>
-          {/* <Button text="리뷰보기 (0)" color="black" width="25%" /> */}
-          {InfoAddClick ? (
-            <Button text="목록에 추가" color="main" width="25%" onClick={listAdd} />
-          ) : (
-            <Button text="닫기" color="black" width="25%" onClick={setModalOpen} />
-          )}
+          <div className={styles.modalButtonDiv}>
+            {InfoAddClick ? (
+              <Button text="목록에 추가" color="main" width="100%" onClick={listAdd} />
+            ) : (
+              <Button text="닫기" color="black" width="100%" onClick={setModalOpen} />
+            )}
+          </div>
         </Stack>
       </Stack>
       <div className={styles.closeBtn} onClick={setModalOpen}>

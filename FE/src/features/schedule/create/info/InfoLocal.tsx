@@ -12,7 +12,7 @@ function InfoLocal() {
 
   return (
     <div className={styles.content}>
-      <Stack alignItems="center" onClick={() => setModalOpen(true)} sx={{ cursor: "pointer" }}>
+      <Stack className={styles.localFlex} onClick={() => setModalOpen(true)}>
         <span className={styles.localText}>{region.name}</span>
         <span className={styles.localText_en}>{region.engName}</span>
       </Stack>

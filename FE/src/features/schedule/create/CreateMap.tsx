@@ -1,12 +1,12 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { basicConfig, selectMarker, selectRegion } from "slices/scheduleCreateSlice";
+import SearchCardInfoModal from "./search/SearchCardInfoModal";
 import { useAppSelector } from "app/hooks";
 import styles from "./Create.module.css";
 import hotelImage from "asset/markerHotel.png";
 import placeImage from "asset/markerPlace.png";
 import pointImage from "asset/markerPoint.png";
 import Modal from "@mui/material/Modal";
-import SearchCardInfoModal from "./search/SearchCardInfoModal";
 
 declare global {
   interface Window {

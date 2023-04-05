@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import createStyles from "features/schedule/create/Create.module.css";
 import styles from "./Info.module.css";
 import Modal from "components/Modal";
 import { Stack } from "@mui/system";
@@ -20,14 +21,16 @@ function InfoDate() {
 
   return (
     <div className={styles.content}>
-      <Stack alignItems="center" spacing={3}>
-        <Text
-          value={differenceInDays(new Date(date.end), new Date(date.start)) + 1 + " DAY"}
-          type="textTitle"
-          en
-          bold
-        />
-        <span className={styles.periodDate} onClick={showModal}>
+      <Stack alignItems="center">
+        <Box className={createStyles.mobileDisplayNone}>
+          <Text
+            value={differenceInDays(new Date(date.end), new Date(date.start)) + 1 + " DAY"}
+            type="textTitle"
+            en
+            bold
+          />
+        </Box>
+        <span className={`${styles.periodDate} ${createStyles.marginZero}`} onClick={showModal}>
           {date.start.toString()} ~ {date.end.toString()}
         </span>
       </Stack>

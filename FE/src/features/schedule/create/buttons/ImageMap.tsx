@@ -26,9 +26,9 @@ function ImageMap(props: ImageMapType) {
   const imgMap = useRef<HTMLInputElement>(null);
   function setMap() {
     const container = document.getElementById("ImgMap");
-    const geocoder = new kakao.maps.services.Geocoder();
+    const ps = new kakao.maps.services.Places();
 
-    geocoder.addressSearch(address, function (result: any[], status: string) {
+    ps.keywordSearch(address, function (result: any[], status: string) {
       if (status === kakao.maps.services.Status.OK) {
         setAddSuccess(true);
         const markerPosition = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -46,7 +46,8 @@ function ImageMap(props: ImageMapType) {
           level: 5, // 이미지 지도의 확대 레벨
           marker: marker, // 이미지 지도에 표시할 마커
         };
-        const map = new kakao.maps.StaticMap(container, options);
+
+        new kakao.maps.StaticMap(container, options);
       } else {
         setOpenSeachToast(true);
         setSearchBtnClick(false);
