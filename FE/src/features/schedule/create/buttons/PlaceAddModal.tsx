@@ -3,6 +3,7 @@ import Modal from "components/Modal";
 import Button from "components/Button";
 import Toast from "components/Toast";
 import searchStyles from "../search/Search.module.css";
+import createStyles from "features/schedule/create/Create.module.css";
 import { AccountBalance, Hotel } from "@mui/icons-material";
 import { Stack, TextField, Typography, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -84,7 +85,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
   return (
     <>
       <Modal title="" modalClose={() => setAddPlaceModal(false)}>
-        <Stack alignItems="center">
+        <Stack alignItems="center" minWidth="100%">
           <Typography variant="h5" display="block">
             장소 등록
           </Typography>
@@ -100,13 +101,15 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
               />
             ) : (
               <>
-                <p style={{ color: "#999" }}>검색해도 나오지 않는 장소를 이곳에서 등록 후 다시 검색해보세요.</p>
-                <p style={{ color: "#999" }}>추가하실 장소의 유형을 선택해주세요.</p>
+                <p className={searchStyles.commentText}>
+                  검색해도 나오지 않는 장소를 이곳에서 등록 후 다시 검색해보세요.
+                </p>
+                <p className={searchStyles.commentText}>추가하실 장소의 유형을 선택해주세요.</p>
               </>
             )}
           </Stack>
 
-          <Stack width="40vw" spacing={1}>
+          <Stack minWidth="100%" width="40vw" spacing={1}>
             <div className={searchStyles.searchRadio}>
               <label className={searchStyles.radio_label}>
                 <input
@@ -137,7 +140,7 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
             <Stack spacing={1} pb={2}>
               <Stack direction="row" spacing={1} justifyContent="space-between">
                 <Stack direction="row" width="100%" alignItems="baseline">
-                  <Box width="10%" alignItems="left">
+                  <Box className={createStyles.mobileDisplayNone} width="10%" alignItems="left">
                     {region.name}
                   </Box>
                   <CssTextField
@@ -166,13 +169,15 @@ function ButtonsAddModal(props: ButtonsAddModalType) {
             </Stack>
           </Stack>
 
-          <Button
-            text="장소추가"
-            color={addSuccess && placeTitleValue.length > 0 ? "main" : "gray"}
-            width="20%"
-            radius
-            onClick={() => addPlaceBtnClick()}
-          />
+          <div className={searchStyles.modalButtonDiv}>
+            <Button
+              text="장소추가"
+              color={addSuccess && placeTitleValue.length > 0 ? "main" : "gray"}
+              width="100%"
+              radius
+              onClick={() => addPlaceBtnClick()}
+            />
+          </div>
         </Stack>
       </Modal>
       <Toast message="검색된 주소만 등록할 수 있습니다." open={openAddToast} onClose={setOpenAddToast} />
