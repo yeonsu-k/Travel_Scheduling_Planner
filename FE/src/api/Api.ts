@@ -39,7 +39,8 @@ interface apiInterface {
   createSchedule: {
     schedule: () => string; // 여행 일정 생성 & 여행지 검색
     getTravels: () => string; // 여행기 조회
-    inviteFriend: (schedule_id: number) => string; // 일정공유 - 친구 초대하기
+    inviteFriend: () => string; // 일정 친구 초대
+    invitedFriend: (schedule_id: number) => string; // 일정공유 - 친구 초대하기
     getFullList: (schedule_id: number) => string; // 일정 내용 전체 조회
     mainPlace: () => string; // 메인 장소 저장 & 메인 장소 조회 & 메인 장소 리스트 조회
     getRegion: (region_id: number) => string; // 특정 메인 장소 조회
@@ -87,7 +88,8 @@ const api: apiInterface = {
   createSchedule: {
     schedule: () => HOST + SCHEDULE,
     getTravels: () => HOST + SCHEDULE + "travels",
-    inviteFriend: (schedule_id) => HOST + SCHEDULE + FRIEND + schedule_id,
+    inviteFriend: () => HOST + SCHEDULE + FRIEND,
+    invitedFriend: (schedule_id) => HOST + SCHEDULE + FRIEND + schedule_id,
     getFullList: (schedule_id) => HOST + SCHEDULE + schedule_id,
     mainPlace: () => HOST + SCHEDULE + "main",
     getRegion: (region_id) => HOST + SCHEDULE + "main/" + region_id,
