@@ -5,10 +5,9 @@ import { Avatar, Box, Menu, MenuItem, Stack, ButtonBase, Badge, IconButton } fro
 import { Notifications } from "@mui/icons-material";
 import Text from "./Text";
 import styles from "./css/Header.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Notice from "features/user/notice/Notice";
-import { rootState } from "app/store";
-import { setLogout, selectUserInfo } from "slices/authSlice";
+import { setLogout, selectUserInfo, selectLoginState, selectAccessToken } from "slices/authSlice";
 import { useAppSelector } from "app/hooks";
 import HeaderMobile from "./HeaderMobile";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -29,7 +28,8 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const userInfo = useAppSelector(selectUserInfo);
-  const { login, accessToken } = useSelector((state: rootState) => state.auth);
+  const login = useAppSelector(selectLoginState);
+  const accessToken = useAppSelector(selectAccessToken);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [anchorElNotice, setAnchorElNotice] = React.useState<null | HTMLElement>(null);
