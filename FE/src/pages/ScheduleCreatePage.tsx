@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Grid } from "@mui/material";
 import CreateInfo from "features/schedule/create/CreateInfo";
 import CreateSearch from "features/schedule/create/CreateSearch";
 import CreateMap from "features/schedule/create/CreateMap";
 import CreateButtons from "features/schedule/create/CreateButtons";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import styles from "features/schedule/create/Create.module.css";
 import {
   basicConfig,
   selectHotelList,
@@ -24,6 +24,8 @@ export interface ScheduleCreatPropsType {
   setHotelCurrentDay: React.Dispatch<React.SetStateAction<number>>;
   placeCurrentDay: number;
   setPlaceCurrentDay: React.Dispatch<React.SetStateAction<number>>;
+  mobilePlaceListOpen?: boolean;
+  setMobilePlaceListOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function ScheduleCreatePage() {
@@ -32,6 +34,7 @@ function ScheduleCreatePage() {
   const [currentTab, setCurrentTab] = useState("호텔");
   const [hotelCurrentDay, setHotelCurrentDay] = useState(0);
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
+  const [mobilePlaceListOpen, setMobilePlaceListOpen] = useState(false);
   const hotelList = useAppSelector(selectHotelList) as basicConfig[];
   const placeList = useAppSelector(selectPlaceList) as basicConfig[];
   const pointPlace = useAppSelector(selectPointPlace) as basicConfig[];
@@ -50,8 +53,8 @@ function ScheduleCreatePage() {
 
   return (
     <>
-      <Grid container columns={6.5} style={{ width: "100%", height: "100%" }}>
-        <Grid item xs ml={0.5}>
+      <div className={styles.pageContaineGrid}>
+        <div>
           <CreateInfo
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
@@ -59,13 +62,18 @@ function ScheduleCreatePage() {
             setHotelCurrentDay={setHotelCurrentDay}
             placeCurrentDay={placeCurrentDay}
             setPlaceCurrentDay={setPlaceCurrentDay}
+            mobilePlaceListOpen={mobilePlaceListOpen}
+            setMobilePlaceListOpen={setMobilePlaceListOpen}
           />
-        </Grid>
-        <Grid item xs={4.3} sx={{ position: "relative" }}>
+        </div>
+        <div style={{ position: "relative" }}>
           <CreateButtons scheduleCreateClick={scheduleCreateClick} />
           <CreateMap />
-        </Grid>
-        <Grid item xs={1}>
+          <div className={styles.mobileChoiceBtn} onClick={() => setMobilePlaceListOpen(true)}>
+            <a className={styles.floatBtn}>선택목록</a>
+          </div>
+        </div>
+        <div>
           <CreateSearch
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
@@ -74,8 +82,8 @@ function ScheduleCreatePage() {
             placeCurrentDay={placeCurrentDay}
             setPlaceCurrentDay={setPlaceCurrentDay}
           />
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </>
   );
 }
