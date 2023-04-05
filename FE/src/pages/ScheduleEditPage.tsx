@@ -400,7 +400,7 @@ const ScheduleEditPage = () => {
                 <Text value="개의 장소" type="caption" en />
               </div>
             </div>
-          ) : (
+          ) : isMine == "true" ? (
             <>
               <TooltipStyled title="장소를 검색하여 일정에 추가" placement="left">
                 <div className={styles.searchPlaceBtn} onClick={() => setViewSearchBar(true)}>
@@ -431,7 +431,7 @@ const ScheduleEditPage = () => {
               </TooltipStyled>
               {addPlaceModal && <PlaceAddModal setAddPlaceModal={setAddPlaceModal} />}
             </>
-          )}
+          ) : null}
 
           {isMine == "true" ? (
             <div
