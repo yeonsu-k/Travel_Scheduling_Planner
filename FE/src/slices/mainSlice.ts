@@ -1,4 +1,3 @@
-import React from "react";
 import { createSlice } from "@reduxjs/toolkit";
 import { rootState } from "app/store";
 
@@ -14,6 +13,7 @@ export interface locationConfig {
   location: {
     address: string;
     locationName: string;
+    locationURL: string;
   };
 }
 

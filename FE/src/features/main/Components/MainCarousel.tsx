@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../Main.module.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MainCarouselCard from "./MainCarouselCard";
 import { DestinationConfig, TravelLogConfig, selectTravelLogList } from "slices/mainSlice";
-import { LogConfig } from "../MainTravelLog/MainTravelLog";
 import { useAppSelector } from "app/hooks";
 
 interface ArrowProps {
@@ -17,7 +16,6 @@ interface ArrowProps {
 interface CarouselProps {
   type: string;
   destinations?: DestinationConfig[];
-  images?: LogConfig[];
 }
 
 const NextArrow = (props: ArrowProps) => {
@@ -42,7 +40,7 @@ const PrevArrow = (props: ArrowProps) => {
   );
 };
 
-const MainCarouselTest = ({ type, destinations, images }: CarouselProps) => {
+const MainCarouselTest = ({ type, destinations }: CarouselProps) => {
   const [hover, setHover] = useState(false);
   const travelLogs = useAppSelector(selectTravelLogList);
 
