@@ -40,7 +40,6 @@ const authSlice = createSlice({
       state.userInfo.nickname = "";
       state.userInfo.profile = "";
       sessionStorage.clear();
-      console.log("login", state.login);
     },
     setUserInfo: (state, { payload: { email, profile } }) => {
       state.userInfo.email = email;

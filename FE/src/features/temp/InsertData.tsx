@@ -32,13 +32,9 @@ function InsertData() {
         regionId: 1,
         isHotel: type === "2",
         locationURL: data.locationURL,
-      })
-        .then((res: any) => {
-          console.error(res);
-        })
-        .catch((err: any) => {
-          console.error(err);
-        });
+      }).then((res: any) => {
+        console.error(res);
+      });
     }
   };
 

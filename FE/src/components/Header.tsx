@@ -49,7 +49,6 @@ function Header() {
       await Axios.post(api.auth.token(), {
         accessToken: accessToken,
       }).catch((err) => {
-        console.log("토큰 에러:", err);
         dispatch(setLogout());
         navigate("/");
       });
