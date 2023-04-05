@@ -1,12 +1,16 @@
 import api from "api/Api";
 import Axios from "api/JsonAxios";
-import React, { useEffect, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { DestinationConfig, setDestinationList } from "slices/mainSlice";
 import styles from "../Main.module.css";
 import MainCarousel from "../Components/MainCarousel";
 
-const MainDestinations = () => {
+interface Props {
+  element: RefObject<HTMLDivElement>;
+}
+
+const MainDestinations = ({ element }: Props) => {
   const dispatch = useDispatch();
   const [destinations, setDestinations] = useState<DestinationConfig[]>([]);
 
@@ -34,6 +38,7 @@ const MainDestinations = () => {
       <div>
         <MainCarousel type="destination" destinations={destinations} />
       </div>
+      <div ref={element}></div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { RefObject, useRef, useState } from "react";
 import styles from "../Main.module.css";
 import MainDestinationsFilter from "./MainDestinationsFilter";
 import MainDestinationItem from "./MainDestinationsItem";
@@ -7,14 +7,13 @@ import Button from "components/Button";
 import { DestinationConfig, selectDestinationList } from "slices/mainSlice";
 import { useAppSelector } from "app/hooks";
 
-const MainDestinationsList = () => {
+interface Props {
+  onMoveToElement: () => void;
+}
+
+const MainDestinationsList = ({ onMoveToElement }: Props) => {
   const destinations: DestinationConfig[] = useAppSelector(selectDestinationList);
   const [input, setInput] = useState("");
-  const upRef = useRef<HTMLDivElement>(null);
-
-  const moveToUp = () => {
-    if (upRef.current) upRef.current.scrollIntoView({ behavior: "smooth" });
-  };
 
   const filtered = destinations.filter((item: DestinationConfig) => {
     const name = "대한민국" + item.regionName;
@@ -23,7 +22,7 @@ const MainDestinationsList = () => {
 
   return (
     <div>
-      <div id="goSkip" ref={upRef} className={styles.mainTitleText}>
+      <div id="goSkip" className={styles.mainTitleText}>
         <span className={styles.pageTitle}>어디로 여행을 떠나시나요?</span>
       </div>
       <div className={styles.mainSubTitleTextK}>
@@ -49,7 +48,7 @@ const MainDestinationsList = () => {
         ))}
       </div>
       <div className={styles.upBtn}>
-        <Button height="100%" text="여행지 선택화면으로 돌아가기" onClick={moveToUp} />
+        <Button height="100%" text="여행지 선택화면으로 돌아가기" onClick={onMoveToElement} />
       </div>
     </div>
   );
