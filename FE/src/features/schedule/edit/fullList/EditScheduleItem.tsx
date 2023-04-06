@@ -222,17 +222,21 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
   const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.valueAsNumber);
     const num = e.target.valueAsNumber - input;
+    console.log("num", num);
     for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
-      const currentEndHour = scheduleList[day - 1][i].endTime.split(":")[0];
-      const currentEndMinute = scheduleList[day - 1][i].endTime.split(":")[1];
+      const currentStartHour = scheduleList[day - 1][i].startTime.split(":")[0];
+      const currentStartMinute = scheduleList[day - 1][i].startTime.split(":")[1];
       let durationHour = 0;
       if (num > 0) {
         durationHour = Math.floor(num / 60);
+        console.log("durationHOur", durationHour);
       }
 
       const durationMinute = Math.floor(num % 60);
-      let nextStartHour = parseInt(currentEndHour) + durationHour;
-      let nextStartMinute = parseInt(currentEndMinute) + durationMinute;
+      console.log("durationMinute", durationMinute);
+      let nextStartHour = parseInt(currentStartHour) + durationHour;
+      let nextStartMinute = parseInt(currentStartMinute) + durationMinute;
+      console.log(`start : ${nextStartHour}:${nextStartMinute}`);
       if (nextStartMinute >= 60) {
         nextStartHour += Math.floor(nextStartMinute / 60);
         nextStartMinute -= 60 * Math.floor(nextStartMinute / 60);
