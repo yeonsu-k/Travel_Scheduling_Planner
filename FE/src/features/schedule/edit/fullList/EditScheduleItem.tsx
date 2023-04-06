@@ -219,6 +219,38 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
     setDeleteItemModal(false);
   };
 
+  const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.valueAsNumber);
+    const num = e.target.valueAsNumber - input;
+    for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
+      const currentEndHour = scheduleList[day - 1][i].endTime.split(":")[0];
+      const currentEndMinute = scheduleList[day - 1][i].endTime.split(":")[1];
+      let durationHour = 0;
+      if (num > 0) {
+        durationHour = Math.floor(num / 60);
+      }
+
+      const durationMinute = Math.floor(num % 60);
+      let nextStartHour = parseInt(currentEndHour) + durationHour;
+      let nextStartMinute = parseInt(currentEndMinute) + durationMinute;
+      if (nextStartMinute >= 60) {
+        nextStartHour += Math.floor(nextStartMinute / 60);
+        nextStartMinute -= 60 * Math.floor(nextStartMinute / 60);
+      }
+      const start = nextStartHour.toString() + ":" + nextStartMinute.toString();
+
+      let nextEndHour = parseInt(scheduleList[day - 1][i].endTime.split(":")[0]) + durationHour;
+      let nextEndMinute = parseInt(scheduleList[day - 1][i].endTime.split(":")[1]) + durationMinute;
+      if (nextEndMinute >= 60) {
+        nextEndHour += Math.floor(nextEndMinute / 60);
+        nextEndMinute -= 60 * Math.floor(nextEndMinute / 60);
+      }
+      const end = nextEndHour.toString() + ":" + nextEndMinute.toString();
+
+      dispatch(setStayTime({ day: day, index: i, startTime: start, endTime: end }));
+    }
+  };
+
   return (
     <>
       {changeStayTime ? (
@@ -304,7 +336,7 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
             value={input}
             min={0}
             className={styles.moveTime}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.valueAsNumber)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeDuration(e)}
           />
           <Text value="분" type="caption" />
         </div>
