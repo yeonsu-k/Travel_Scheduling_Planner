@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Loding from "components/Loding";
 import CreateInfo from "features/schedule/create/CreateInfo";
 import CreateSearch from "features/schedule/create/CreateSearch";
 import CreateMap from "features/schedule/create/CreateMap";
@@ -35,11 +36,13 @@ function ScheduleCreatePage() {
   const [hotelCurrentDay, setHotelCurrentDay] = useState(0);
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
   const [mobilePlaceListOpen, setMobilePlaceListOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const hotelList = useAppSelector(selectHotelList) as basicConfig[];
   const placeList = useAppSelector(selectPlaceList) as basicConfig[];
   const pointPlace = useAppSelector(selectPointPlace) as basicConfig[];
 
   const scheduleCreateClick = async () => {
+    setLoading(true);
     await Axios.post(api.createSchedule.setLocation(), {
       hotelList: hotelList,
       placeList: placeList,
@@ -47,6 +50,7 @@ function ScheduleCreatePage() {
     }).then((res) => {
       dispatch(setscheduleList(res.data.data));
       dispatch(setListClear());
+      setLoading(false);
       navigate("/schedule/edit");
     });
   };
@@ -84,6 +88,7 @@ function ScheduleCreatePage() {
           />
         </div>
       </div>
+      {loading && <Loding backgroundBlur />}
     </>
   );
 }
