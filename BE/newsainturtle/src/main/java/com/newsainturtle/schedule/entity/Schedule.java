@@ -85,4 +85,8 @@ public class Schedule {
     public void changeIsPrivate() {
         this.isPrivate = !(this.isPrivate);
     }
+
+    public void updateSchedule(Long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
 }

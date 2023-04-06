@@ -28,4 +28,6 @@ public class ScheduleSuccessConstant {
 
     public static final String SET_SCHEDULELOCATION_SUCCESS_MESSAGE = "일정 지역 세팅에 성공했습니다.";
 
+    public static final String UPDATE_SCHEDULE_SUCCESS_MESSAGE = "일정 수정에 성공했습니다.";
+
 }

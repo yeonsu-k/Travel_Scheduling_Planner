@@ -29,13 +29,24 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    @Operation(summary = "메인페이지에서 일정 생성", description = "메인 페이지에서 지역을 선택해 일정을 생성합니다.")
+    @Operation(summary = "일정 생성", description = "일정을 생성합니다.")
     public ResponseEntity<BaseResponse> createSchedule(@ApiIgnore Authentication authentication, @Valid @RequestBody ScheduleRequest scheduleRequest) {
         UserDetails userDetails = (UserDetails) authentication.getDetails();
         return new ResponseEntity<>(BaseResponse.from(
                 true,
                 CREATE_SCHEDULE_SUCCESS_MESSAGE,
                 scheduleService.createSchedule(scheduleRequest, userDetails.getUsername()))
+                , HttpStatus.OK);
+    }
+
+    @PutMapping
+    @Operation(summary = "일정 수정", description = "일정 수정합니다.")
+    public ResponseEntity<BaseResponse> updateSchedule(@ApiIgnore Authentication authentication, @Valid @RequestBody ScheduleUpdateRequest scheduleUpdateRequest) {
+        UserDetails userDetails = (UserDetails) authentication.getDetails();
+        scheduleService.updateSchedule(scheduleUpdateRequest, userDetails.getUsername());
+        return new ResponseEntity<>(BaseResponse.from(
+                true,
+                UPDATE_SCHEDULE_SUCCESS_MESSAGE)
                 , HttpStatus.OK);
     }
 
