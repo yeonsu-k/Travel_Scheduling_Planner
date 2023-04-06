@@ -121,7 +121,6 @@ function CreateMap() {
       ele.style.width = w + "px";
       elePre.style.display = "none";
       eleParent.style.border = "0px";
-      eleParent.style.background = "skyblue";
       eleParent.style.height = "0px";
     });
   }
