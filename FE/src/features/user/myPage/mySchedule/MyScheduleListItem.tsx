@@ -109,20 +109,29 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
         let tmpDataList: scheduleConfig[] = [];
         let index = 0;
         locations.map((value, key) => {
-          const startHour = parseInt(value.startTime.split(":")[0]);
-          const startMinute = parseInt(value.startTime.split(":")[1]);
-          const endHour = parseInt(value.endTime.split(":")[0]);
-          const endMinute = parseInt(value.endTime.split(":")[1]);
+          const startHour = value.startTime.split(":")[0];
+          const startMinute = value.startTime.split(":")[1];
+          const endHour = value.endTime.split(":")[0];
+          const endMinute = value.endTime.split(":")[1];
 
-          let hour = endHour - startHour;
-          let minute = endMinute - startMinute;
+          let hour = parseInt(endHour) - parseInt(startHour);
+          let minute = parseInt(endMinute) - parseInt(startMinute);
 
           if (minute < 0) {
             hour -= 1;
             minute += 60;
           }
 
+          // if (parseInt(startMinute) < 10) {
+          //   startMinute = "0" + startMinute;
+          // }
+          // if (parseInt(endMinute) < 10) {
+          //   endMinute = "0" + endMinute;
+          // }
+
           const time = hour.toString() + ":" + minute.toString();
+          // const startTime = startHour + ":" + startMinute;
+          // const endTime = endHour + ":" + endMinute;
 
           const tmpData: scheduleConfig = {
             location: {
