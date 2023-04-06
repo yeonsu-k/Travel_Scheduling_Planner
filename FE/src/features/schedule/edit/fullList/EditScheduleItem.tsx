@@ -32,11 +32,11 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
   let startMinute = startTime.split(":")[1];
   let endMinute = endTime.split(":")[1];
 
-  if (parseInt(startMinute) < 10) {
+  if (startMinute.length !== 2) {
     startMinute = "0" + startMinute;
     startTime = startTime.split(":")[0] + ":" + startMinute;
   }
-  if (parseInt(endMinute) < 10) {
+  if (endMinute.length !== 2) {
     endMinute = "0" + endMinute;
     endTime = endTime.split(":")[0] + ":" + endMinute;
   }
@@ -48,6 +48,49 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
     setHour(inputHour);
     setMinute(inputMinute);
     setChangeStayTime(false);
+    let endHour = parseInt(endTime.split(":")[0]);
+    let endMinute = parseInt(endTime.split(":")[1]);
+
+    endHour += inputHour;
+    endMinute += inputMinute;
+
+    if (endMinute >= 60) {
+      endHour += 1;
+      endMinute -= 60;
+    }
+
+    endTime = endHour.toString() + ":" + endMinute.toString();
+    console.log("endTime", endTime);
+
+    dispatch(setStayTime({ day: day, index: index, startTime: startTime, endTime: endTime }));
+
+    for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
+      let startH = parseInt(scheduleList[day - 1][i].startTime.split(":")[0]);
+      let startM = parseInt(scheduleList[day - 1][i].startTime.split(":")[1]);
+      let endH = parseInt(scheduleList[day - 1][i].endTime.split(":")[0]);
+      let endM = parseInt(scheduleList[day - 1][i].endTime.split(":")[1]);
+
+      startH += inputHour;
+      startM += inputMinute;
+      endH += inputHour;
+      endH += inputMinute;
+
+      if (startM >= 60) {
+        startH += 1;
+        startM -= 60;
+      }
+      if (endM >= 60) {
+        endH += 1;
+        endM -= 60;
+      }
+
+      const start = startH.toString() + ":" + startM.toString();
+      const end = endH.toString() + ":" + endM.toString();
+      console.log("start", start);
+      console.log("end", end);
+
+      dispatch(setStayTime({ day: day, index: i, startTime: start, endTime: end }));
+    }
   };
 
   const onClickDeleteItem = () => {
@@ -57,74 +100,160 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
   const deleteScheduleItem = () => {
     const tmpList = scheduleList.map((value) => value.slice());
     tmpList[day - 1].splice(index, 1);
-
     dispatch(setscheduleList([...tmpList]));
+    console.log("삭제 후", scheduleList);
+
+    if (index !== 0) {
+      const prevData = scheduleList[day - 1][index - 1];
+      const prevHour = prevData.endTime.split(":")[0];
+      const prevMinute = prevData.endTime.split(":")[1];
+
+      let nowHour = parseInt(prevHour);
+      let nowMinute = parseInt(prevMinute) + prevData.duration;
+
+      if (nowMinute >= 60) {
+        nowHour += 1;
+        nowMinute -= 60;
+      }
+
+      startTime = nowHour.toString() + ":" + nowMinute.toString();
+
+      let endHour = nowHour + hour;
+      let endMinute = nowMinute + minute;
+      if (endMinute >= 60) {
+        endHour += 1;
+        endMinute -= 60;
+      }
+      endTime = endHour.toString() + ":" + endMinute.toString();
+
+      console.log("삭제 후 startTime", startTime);
+      console.log("삭제 후 endTime", endTime);
+      dispatch(setStayTime({ day: day, index: index, startTime: startTime, endTime: endTime }));
+
+      for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
+        const prevData = scheduleList[day - 1][i - 1];
+        const prevHour = prevData.endTime.split(":")[0];
+        const prevMinute = prevData.endTime.split(":")[1];
+
+        let nowHour = parseInt(prevHour);
+        let nowMinute = parseInt(prevMinute) + prevData.duration;
+
+        if (nowMinute >= 60) {
+          nowHour += 1;
+          nowMinute -= 60;
+        }
+
+        startTime = nowHour.toString() + ":" + nowMinute.toString();
+
+        let endHour = nowHour + hour;
+        let endMinute = nowMinute + minute;
+        if (endMinute >= 60) {
+          endHour += 1;
+          endMinute -= 60;
+        }
+        endTime = endHour.toString() + ":" + endMinute.toString();
+
+        console.log("삭제 후 startTime", startTime);
+        console.log("삭제 후 endTime", endTime);
+        dispatch(setStayTime({ day: day, index: i, startTime: startTime, endTime: endTime }));
+      }
+    } else {
+      const nextData = scheduleList[day - 1][index + 1];
+      console.log("nextData", nextData);
+      let hour = parseInt(nextData.endTime.split(":")[0]) - parseInt(nextData.startTime.split(":")[0]);
+      let minute = parseInt(nextData.endTime.split(":")[1]) - parseInt(nextData.startTime.split(":")[1]);
+
+      console.log("변경 전", startTime);
+      console.log("변경 전", endTime);
+      console.log("변경 전 장소", placeName);
+      if (minute < 0) {
+        hour -= 1;
+        minute += 60;
+      }
+      startTime = "10:00";
+
+      let endHour = 10 + hour;
+      let endMinute = 0 + minute;
+      if (endMinute >= 60) {
+        endHour += 1;
+        endMinute -= 60;
+      }
+      console.log("hour", hour);
+      console.log("minute", minute);
+      endTime = endHour.toString() + ":" + endMinute.toString();
+
+      console.log("삭제 후 startTime", startTime);
+      console.log("삭제 후 endTime", endTime);
+      dispatch(setStayTime({ day: day, index: index, startTime: startTime, endTime: endTime }));
+      console.log("지금 index", index);
+
+      for (let i = index + 1; i < scheduleList[day - 1].length - 1; i++) {
+        const prevData = scheduleList[day - 1][i];
+        const prevHour = prevData.endTime.split(":")[0];
+        const prevMinute = prevData.endTime.split(":")[1];
+
+        let nowHour = parseInt(prevHour);
+        let nowMinute = parseInt(prevMinute) + prevData.duration;
+
+        if (nowMinute >= 60) {
+          nowHour += 1;
+          nowMinute -= 60;
+        }
+
+        startTime = nowHour.toString() + ":" + nowMinute.toString();
+
+        let endHour = nowHour + hour;
+        let endMinute = nowMinute + minute;
+        if (endMinute >= 60) {
+          endHour += 1;
+          endMinute -= 60;
+        }
+        endTime = endHour.toString() + ":" + endMinute.toString();
+
+        console.log("삭제 후 startTime", startTime);
+        console.log("삭제 후 endTime", endTime);
+        dispatch(setStayTime({ day: day, index: i, startTime: startTime, endTime: endTime }));
+      }
+    }
+
     setDeleteItemModal(false);
   };
 
-  // const setTime = () => {
-  //   const moveHour = Math.floor(input / 60);
-  //   const moveMinute = input % 60;
-  //   let startHour, startMinute, endHour, endMinute;
+  const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.valueAsNumber);
+    const num = e.target.valueAsNumber - input;
+    console.log("num", num);
+    for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
+      const currentStartHour = scheduleList[day - 1][i].startTime.split(":")[0];
+      const currentStartMinute = scheduleList[day - 1][i].startTime.split(":")[1];
+      let durationHour = 0;
+      if (num > 0) {
+        durationHour = Math.floor(num / 60);
+        console.log("durationHOur", durationHour);
+      }
 
-  //   if (index === 0) {
-  //     startHour = fullList[day - 1].startHour;
-  //     startMinute = fullList[day - 1].startMinute;
+      const durationMinute = Math.floor(num % 60);
+      console.log("durationMinute", durationMinute);
+      let nextStartHour = parseInt(currentStartHour) + durationHour;
+      let nextStartMinute = parseInt(currentStartMinute) + durationMinute;
+      console.log(`start : ${nextStartHour}:${nextStartMinute}`);
+      if (nextStartMinute >= 60) {
+        nextStartHour += Math.floor(nextStartMinute / 60);
+        nextStartMinute -= 60 * Math.floor(nextStartMinute / 60);
+      }
+      const start = nextStartHour.toString() + ":" + nextStartMinute.toString();
 
-  //     startHour += moveHour;
-  //     startMinute += moveMinute;
+      let nextEndHour = parseInt(scheduleList[day - 1][i].endTime.split(":")[0]) + durationHour;
+      let nextEndMinute = parseInt(scheduleList[day - 1][i].endTime.split(":")[1]) + durationMinute;
+      if (nextEndMinute >= 60) {
+        nextEndHour += Math.floor(nextEndMinute / 60);
+        nextEndMinute -= 60 * Math.floor(nextEndMinute / 60);
+      }
+      const end = nextEndHour.toString() + ":" + nextEndMinute.toString();
 
-  //     endHour = startHour + hour;
-  //     endMinute = startMinute + minute;
-  //   } else {
-  //     const prevTime = fullList[day - 1].dayList[index - 1].endTime.split(":");
-  //     console.log("prevTime", prevTime);
-  //     startHour = parseInt(prevTime[0]);
-  //     startMinute = parseInt(prevTime[1]);
-
-  //     startHour += moveHour;
-  //     startMinute += moveMinute;
-
-  //     endHour = startHour + hour;
-  //     endMinute = startMinute + minute;
-  //   }
-
-  //   let startTimeStr: string, endTimeStr: string;
-
-  //   if (startMinute < 10) {
-  //     startTimeStr = `${startHour}:0${startMinute}`;
-  //     setStartTime(startTimeStr);
-  //   } else {
-  //     startTimeStr = `${startHour}:${startMinute}`;
-  //     setStartTime(startTimeStr);
-  //   }
-
-  //   if (endMinute >= 60) {
-  //     const plusHour = Math.floor(endMinute / 60);
-  //     const minute = endMinute % 60;
-
-  //     endHour += plusHour;
-  //     endMinute = minute;
-  //   }
-
-  //   if (endMinute < 10) {
-  //     endTimeStr = `${endHour}:0${endMinute}`;
-  //     setEndTime(endTimeStr);
-  //   } else {
-  //     endTimeStr = `${endHour}:${endMinute}`;
-  //     setEndTime(endTimeStr);
-  //   }
-
-  //   dispatch(setStayTime({ day: day, index: index, startTime: startTimeStr, endTime: endTimeStr }));
-  // };
-
-  // useEffect(() => {
-  //   setTime();
-  // }, []);
-
-  // useEffect(() => {
-  //   setTime();
-  // }, [input, hour, minute, startTime, endTime]);
+      dispatch(setStayTime({ day: day, index: i, startTime: start, endTime: end }));
+    }
+  };
 
   return (
     <>
@@ -211,7 +340,7 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
             value={input}
             min={0}
             className={styles.moveTime}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setInput(e.target.valueAsNumber)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeDuration(e)}
           />
           <Text value="분" type="caption" />
         </div>

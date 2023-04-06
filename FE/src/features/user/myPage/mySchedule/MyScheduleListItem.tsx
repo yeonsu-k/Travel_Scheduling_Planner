@@ -109,20 +109,35 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
         let tmpDataList: scheduleConfig[] = [];
         let index = 0;
         locations.map((value, key) => {
-          const startHour = parseInt(value.startTime.split(":")[0]);
-          const startMinute = parseInt(value.startTime.split(":")[1]);
-          const endHour = parseInt(value.endTime.split(":")[0]);
-          const endMinute = parseInt(value.endTime.split(":")[1]);
+          const startHour = value.startTime.split(":")[0];
+          const startMinute = value.startTime.split(":")[1];
+          const endHour = value.endTime.split(":")[0];
+          const endMinute = value.endTime.split(":")[1];
+          let nextHour = "",
+            nextMinute = "";
+          if (key < locations.length - 1) {
+            nextHour = locations[key + 1].startTime.split(":")[0];
+            nextMinute = locations[key + 1].startTime.split(":")[1];
+          }
 
-          let hour = endHour - startHour;
-          let minute = endMinute - startMinute;
+          let hour = parseInt(endHour) - parseInt(startHour);
+          let minute = parseInt(endMinute) - parseInt(startMinute);
 
           if (minute < 0) {
             hour -= 1;
             minute += 60;
           }
 
+          let durationHour = parseInt(nextHour) - parseInt(endHour);
+          let durationMinute = parseInt(nextMinute) - parseInt(endMinute);
+
+          if (durationMinute < 0) {
+            durationHour -= 1;
+            durationMinute += 60;
+          }
+
           const time = hour.toString() + ":" + minute.toString();
+          const duration = durationHour * 60 + durationMinute;
 
           const tmpData: scheduleConfig = {
             location: {
@@ -138,7 +153,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             sequence: value.sequence,
             startTime: value.startTime,
             endTime: value.endTime,
-            duration: 0,
+            duration: duration,
           };
           if (index !== value.day - 1) {
             console.log("index: ", index);

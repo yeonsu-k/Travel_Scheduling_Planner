@@ -50,9 +50,7 @@ const KeepScheduleItem = ({ img, placeName, time }: EditScheduleItemProps) => {
           <Text value="00:00" type="smallText" color="white" en />
         </div>
 
-        <div className={styles.scheduleItemInfo}>
-          <Text value={time} type="smallText" color="yellow" />
-        </div>
+        <div className={styles.scheduleItemInfo}>{/* <Text value={time} type="smallText" color="yellow" /> */}</div>
 
         <div className={styles.scheduleItemInfo}>
           <Text value="시간표" type="smallText" />
