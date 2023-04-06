@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Edit.module.css";
 import { useAppSelector } from "app/hooks";
 import { selectScheduleList } from "slices/scheduleEditSlice";
@@ -13,6 +13,9 @@ import day7Marker from "asset/mapMarker/day7Marker.svg";
 import day8Marker from "asset/mapMarker/day8Marker.svg";
 import day9Marker from "asset/mapMarker/day9Marker.svg";
 import day10Marker from "asset/mapMarker/day10Marker.svg";
+import { basicConfig } from "slices/scheduleCreateSlice";
+import Modal from "@mui/material/Modal";
+import SearchCardInfoModal from "../create/search/SearchCardInfoModal";
 
 const { kakao } = window;
 
@@ -37,6 +40,16 @@ const EditMap = ({ day }: EditMapProps) => {
     day9Marker,
     day10Marker,
   ];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [markerInfo, setMarkerInfo] = useState<basicConfig>({
+    locationId: 0,
+    locationName: "",
+    locationURL: "",
+    address: "",
+    latitude: 0,
+    longitude: 0,
+    time: "",
+  });
 
   const checkMarkerColor = (day: number): string => {
     switch (day) {
@@ -114,14 +127,62 @@ const EditMap = ({ day }: EditMapProps) => {
 
           const imageSrc = markerImg[key];
           const imageSize = new kakao.maps.Size(25, 25);
-          const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+          const imageOption = { offset: new kakao.maps.Point(13, 20) };
+          const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
           const marker = new kakao.maps.Marker({
             map: map,
             position: position.latlng,
             title: position.title,
             image: markerImage,
+            clickable: true,
           });
+          const markerNumCSS =
+            "display: flex; justify-content: center; align-items: center; color: #ffffff; font-size: 0.8rem;";
+          const markerNumElement = (num: number) => {
+            const content = document.createElement("div");
+            content.className = "markerNum";
+            content.textContent = num.toString();
+            content.style.cssText = markerNumCSS;
+            return content;
+          };
+
+          const customMarker = new kakao.maps.CustomOverlay({
+            map: map,
+            position: point,
+            content: markerNumElement(idx + 1),
+            yAnchor: 1,
+          });
+
+          // kakao.maps.event.addListener(marker, "click", () => {
+          //   setMarkerInfo(value.location);
+          //   setModalOpen(true);
+          //   // const bounds = new kakao.maps.LatLngBounds();
+          //   // bounds.extend(new kakao.maps.LatLng(value.location.latitude, value.location.longitude));
+          //   // map.setBounds(bounds);
+          // });
+          // new kakao.maps.InfoWindow({
+          //   map: map,
+          //   position: new kakao.maps.LatLng(value.location.latitude, value.location.longitude),
+          //   content: infoWindowElement(value.location.locationName),
+          // });
+
+          // const infoTitle = Array.from(document.querySelectorAll<HTMLElement>("span.infoStyle"));
+          // infoTitle.forEach((e) => {
+          //   const w = e.offsetWidth + 10;
+          //   const ml = w / 2 + 15;
+          //   const ele = e.parentElement as HTMLElement;
+          //   const elePre = ele.previousSibling as HTMLElement;
+          //   const eleParent = ele.parentElement as HTMLElement;
+          //   ele.style.top = "-12px";
+          //   ele.style.left = "50%";
+          //   ele.style.marginLeft = -ml + "px";
+          //   ele.style.width = w + "px";
+          //   elePre.style.display = "none";
+          //   eleParent.style.border = "0px";
+          //   eleParent.style.background = "skyblue";
+          //   eleParent.style.height = "0px";
+          // });
 
           linePath.push(point);
         });
@@ -155,6 +216,23 @@ const EditMap = ({ day }: EditMapProps) => {
           image: markerImage,
         });
 
+        const infoTitle = Array.from(document.querySelectorAll<HTMLElement>("span.infoStyle"));
+        infoTitle.forEach((e) => {
+          const w = e.offsetWidth + 10;
+          const ml = w / 2 + 15;
+          const ele = e.parentElement as HTMLElement;
+          const elePre = ele.previousSibling as HTMLElement;
+          const eleParent = ele.parentElement as HTMLElement;
+          ele.style.top = "-12px";
+          ele.style.left = "50%";
+          ele.style.marginLeft = -ml + "px";
+          ele.style.width = w + "px";
+          elePre.style.display = "none";
+          eleParent.style.border = "0px";
+          eleParent.style.background = "skyblue";
+          eleParent.style.height = "0px";
+        });
+
         linePath.push(point);
       });
 
@@ -170,12 +248,33 @@ const EditMap = ({ day }: EditMapProps) => {
     }
   };
 
+  const cssInfoText =
+    "display: block; font-size:0.8rem; font-weight:600; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; color: black; text-align: center; border-radius: 4px; padding: 0px 10px; top:3px;";
+  const infoWindowElement = (name: string) => {
+    const element = document.createElement("span");
+    element.className = "infoStyle";
+    element.textContent = name;
+    element.style.cssText = cssInfoText;
+    return element;
+  };
+
   useEffect(() => {
     createMap();
     setMarker();
   }, [day]);
 
-  return <div id="map" className={styles.editMap}></div>;
+  return (
+    <>
+      <div id="map" className={styles.editMap}></div>
+      {modalOpen ? (
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+          <SearchCardInfoModal place={markerInfo} setModalOpen={() => setModalOpen(false)} />
+        </Modal>
+      ) : (
+        <></>
+      )}
+    </>
+  );
 };
 
 export default EditMap;
