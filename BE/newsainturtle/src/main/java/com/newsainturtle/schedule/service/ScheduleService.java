@@ -80,6 +80,30 @@ public class ScheduleService {
         return schedule.getScheduleName();
     }
 
+    public void updateSchedule(ScheduleUpdateRequest scheduleUpdateRequest, String email) {
+        Schedule schedule = Schedule.builder()
+                .hostEmail(email)
+                .regionId(scheduleUpdateRequest.getRegionId())
+                .scheduleName(scheduleUpdateRequest.getScheduleName())
+                .isPrivate(scheduleUpdateRequest.getIsPrivate())
+                .scheduleStartDay(scheduleUpdateRequest.getScheduleStartDay())
+                .scheduleEndDay(scheduleUpdateRequest.getScheduleEndDay())
+                .scheduleStartLocation(scheduleUpdateRequest.getScheduleStartLocation())
+                .scheduleEndLocation(scheduleUpdateRequest.getScheduleEndLocation())
+                .vehicle(scheduleUpdateRequest.getVehicle())
+                .scheduleLocations(scheduleUpdateRequest.getScheduleLocationRequestList().stream()
+                        .map(scheduleLocation -> ScheduleLocation.builder()
+                                .day(scheduleLocation.getDay())
+                                .sequence(scheduleLocation.getSequence())
+                                .startTime(scheduleLocation.getStartTime())
+                                .endTime(scheduleLocation.getEndTime())
+                                .location(findLocationById(scheduleLocation.getLocationId()))
+                                .build()).collect(Collectors.toList()))
+                .build();
+        schedule.updateSchedule(scheduleUpdateRequest.getScheduleId());
+        scheduleRepository.save(schedule);
+    }
+
     public ScheduleResponse findSchedule(Long scheduleId) {
         Schedule schedule = findScheduleById(scheduleId);
         return ScheduleResponse.builder()
