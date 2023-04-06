@@ -126,7 +126,7 @@ const EditMap = ({ day }: EditMapProps) => {
           const point = new kakao.maps.LatLng(value.location.latitude, value.location.longitude);
 
           const imageSrc = markerImg[key];
-          const imageSize = new kakao.maps.Size(25, 25);
+          const imageSize = new kakao.maps.Size(27, 27);
           const imageOption = { offset: new kakao.maps.Point(13, 20) };
           const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
@@ -137,15 +137,6 @@ const EditMap = ({ day }: EditMapProps) => {
             image: markerImage,
             clickable: true,
           });
-          const markerNumCSS =
-            "display: flex; justify-content: center; align-items: center; color: #ffffff; font-size: 0.8rem;";
-          const markerNumElement = (num: number) => {
-            const content = document.createElement("div");
-            content.className = "markerNum";
-            content.textContent = num.toString();
-            content.style.cssText = markerNumCSS;
-            return content;
-          };
 
           const customMarker = new kakao.maps.CustomOverlay({
             map: map,
@@ -154,35 +145,33 @@ const EditMap = ({ day }: EditMapProps) => {
             yAnchor: 1,
           });
 
-          // kakao.maps.event.addListener(marker, "click", () => {
-          //   setMarkerInfo(value.location);
-          //   setModalOpen(true);
-          //   // const bounds = new kakao.maps.LatLngBounds();
-          //   // bounds.extend(new kakao.maps.LatLng(value.location.latitude, value.location.longitude));
-          //   // map.setBounds(bounds);
-          // });
-          // new kakao.maps.InfoWindow({
-          //   map: map,
-          //   position: new kakao.maps.LatLng(value.location.latitude, value.location.longitude),
-          //   content: infoWindowElement(value.location.locationName),
-          // });
+          kakao.maps.event.addListener(marker, "click", () => {
+            setMarkerInfo(value.location);
+            setModalOpen(true);
+            // const bounds = new kakao.maps.LatLngBounds();
+            // bounds.extend(new kakao.maps.LatLng(value.location.latitude, value.location.longitude));
+            // map.setBounds(bounds);
+          });
+          new kakao.maps.InfoWindow({
+            map: map,
+            position: new kakao.maps.LatLng(value.location.latitude, value.location.longitude),
+            content: infoWindowElement(value.location.locationName),
+          });
 
-          // const infoTitle = Array.from(document.querySelectorAll<HTMLElement>("span.infoStyle"));
-          // infoTitle.forEach((e) => {
-          //   const w = e.offsetWidth + 10;
-          //   const ml = w / 2 + 15;
-          //   const ele = e.parentElement as HTMLElement;
-          //   const elePre = ele.previousSibling as HTMLElement;
-          //   const eleParent = ele.parentElement as HTMLElement;
-          //   ele.style.top = "-12px";
-          //   ele.style.left = "50%";
-          //   ele.style.marginLeft = -ml + "px";
-          //   ele.style.width = w + "px";
-          //   elePre.style.display = "none";
-          //   eleParent.style.border = "0px";
-          //   eleParent.style.background = "skyblue";
-          //   eleParent.style.height = "0px";
-          // });
+          const infoTitle = Array.from(document.querySelectorAll<HTMLElement>("span.infoStyle"));
+          infoTitle.forEach((e) => {
+            const w = e.offsetWidth + 10;
+            const ml = w / 2 + 15;
+            const ele = e.parentElement as HTMLElement;
+            const elePre = ele.previousSibling as HTMLElement;
+            const eleParent = ele.parentElement as HTMLElement;
+            ele.style.top = "-12px";
+            ele.style.left = "50%";
+            ele.style.marginLeft = -ml + "px";
+            ele.style.width = w + "px";
+            elePre.style.display = "none";
+            eleParent.remove();
+          });
 
           linePath.push(point);
         });
@@ -207,6 +196,7 @@ const EditMap = ({ day }: EditMapProps) => {
 
         const imageSrc = markerImg[day - 1];
         const imageSize = new kakao.maps.Size(25, 25);
+        const imageOption = { offset: new kakao.maps.Point(-20, 5) };
         const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
         const marker = new kakao.maps.Marker({
@@ -216,6 +206,26 @@ const EditMap = ({ day }: EditMapProps) => {
           image: markerImage,
         });
 
+        const customMarker = new kakao.maps.CustomOverlay({
+          map: map,
+          position: point,
+          content: markerNumElement(idx + 1),
+          yAnchor: 1,
+        });
+
+        kakao.maps.event.addListener(marker, "click", () => {
+          setMarkerInfo(value.location);
+          setModalOpen(true);
+          // const bounds = new kakao.maps.LatLngBounds();
+          // bounds.extend(new kakao.maps.LatLng(value.location.latitude, value.location.longitude));
+          // map.setBounds(bounds);
+        });
+        new kakao.maps.InfoWindow({
+          map: map,
+          position: new kakao.maps.LatLng(value.location.latitude, value.location.longitude),
+          content: infoWindowElement(value.location.locationName),
+        });
+
         const infoTitle = Array.from(document.querySelectorAll<HTMLElement>("span.infoStyle"));
         infoTitle.forEach((e) => {
           const w = e.offsetWidth + 10;
@@ -223,14 +233,12 @@ const EditMap = ({ day }: EditMapProps) => {
           const ele = e.parentElement as HTMLElement;
           const elePre = ele.previousSibling as HTMLElement;
           const eleParent = ele.parentElement as HTMLElement;
-          ele.style.top = "-12px";
+          ele.style.top = "-50px";
           ele.style.left = "50%";
           ele.style.marginLeft = -ml + "px";
           ele.style.width = w + "px";
           elePre.style.display = "none";
-          eleParent.style.border = "0px";
-          eleParent.style.background = "skyblue";
-          eleParent.style.height = "0px";
+          eleParent.remove();
         });
 
         linePath.push(point);
@@ -246,6 +254,16 @@ const EditMap = ({ day }: EditMapProps) => {
       polyline.setMap(map);
       linePath = [];
     }
+  };
+
+  const markerNumCSS =
+    "display: flex; justify-content: center; align-items: center; color: #ffffff; font-size: 0.8rem;";
+  const markerNumElement = (num: number) => {
+    const content = document.createElement("div");
+    content.className = "markerNum";
+    content.textContent = num.toString();
+    content.style.cssText = markerNumCSS;
+    return content;
   };
 
   const cssInfoText =
