@@ -101,6 +101,7 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
     const tmpList = scheduleList.map((value) => value.slice());
     tmpList[day - 1].splice(index, 1);
     dispatch(setscheduleList([...tmpList]));
+    console.log("삭제 후", scheduleList);
 
     if (index !== 0) {
       const prevData = scheduleList[day - 1][index - 1];
@@ -131,6 +132,63 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
 
       for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
         const prevData = scheduleList[day - 1][i - 1];
+        const prevHour = prevData.endTime.split(":")[0];
+        const prevMinute = prevData.endTime.split(":")[1];
+
+        let nowHour = parseInt(prevHour);
+        let nowMinute = parseInt(prevMinute) + prevData.duration;
+
+        if (nowMinute >= 60) {
+          nowHour += 1;
+          nowMinute -= 60;
+        }
+
+        startTime = nowHour.toString() + ":" + nowMinute.toString();
+
+        let endHour = nowHour + hour;
+        let endMinute = nowMinute + minute;
+        if (endMinute >= 60) {
+          endHour += 1;
+          endMinute -= 60;
+        }
+        endTime = endHour.toString() + ":" + endMinute.toString();
+
+        console.log("삭제 후 startTime", startTime);
+        console.log("삭제 후 endTime", endTime);
+        dispatch(setStayTime({ day: day, index: i, startTime: startTime, endTime: endTime }));
+      }
+    } else {
+      const nextData = scheduleList[day - 1][index + 1];
+      console.log("nextData", nextData);
+      let hour = parseInt(nextData.endTime.split(":")[0]) - parseInt(nextData.startTime.split(":")[0]);
+      let minute = parseInt(nextData.endTime.split(":")[1]) - parseInt(nextData.startTime.split(":")[1]);
+
+      console.log("변경 전", startTime);
+      console.log("변경 전", endTime);
+      console.log("변경 전 장소", placeName);
+      if (minute < 0) {
+        hour -= 1;
+        minute += 60;
+      }
+      startTime = "10:00";
+
+      let endHour = 10 + hour;
+      let endMinute = 0 + minute;
+      if (endMinute >= 60) {
+        endHour += 1;
+        endMinute -= 60;
+      }
+      console.log("hour", hour);
+      console.log("minute", minute);
+      endTime = endHour.toString() + ":" + endMinute.toString();
+
+      console.log("삭제 후 startTime", startTime);
+      console.log("삭제 후 endTime", endTime);
+      dispatch(setStayTime({ day: day, index: index, startTime: startTime, endTime: endTime }));
+      console.log("지금 index", index);
+
+      for (let i = index + 1; i < scheduleList[day - 1].length - 1; i++) {
+        const prevData = scheduleList[day - 1][i];
         const prevHour = prevData.endTime.split(":")[0];
         const prevMinute = prevData.endTime.split(":")[1];
 
