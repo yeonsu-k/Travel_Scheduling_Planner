@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../Main.module.css";
 import defaultPhoto from "asset/defaultPhoto.jpg";
+import { locationConfig } from "slices/mainSlice";
 
 interface MainTravelLogItemProps {
-  location: any;
+  location: locationConfig;
 }
 
 const MainTravelLogItem = ({ location }: MainTravelLogItemProps) => {
   return (
     <div className={styles.logModalItem}>
       <div className={styles.logModalImgCont}>
-        <img src={location.locationURL ? location.locationURL : defaultPhoto} />
+        <img src={location.location.locationURL ? location.location.locationURL : defaultPhoto} />
       </div>
       <div className={styles.logModalTextCont}>
-        <span>{location.locationName}</span>
-        <span>{location.address}</span>
+        <span>{location.location.locationName}</span>
+        <span>{location.location.address}</span>
       </div>
     </div>
   );
