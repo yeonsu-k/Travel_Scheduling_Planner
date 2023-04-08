@@ -74,6 +74,7 @@ const ScheduleEditPage = () => {
   // 일정 권한 확인
   const [searchParams] = useSearchParams();
   const isMine = searchParams.get("mine");
+  const scheduleId = searchParams.get("id");
 
   const dragStartHandler = (e: any) => {
     // 고스트 이미지를 제거하기 위해 투명 캔버스 생성
@@ -236,26 +237,50 @@ const ScheduleEditPage = () => {
       });
     });
 
-    const sendData = {
-      regionId: region.id,
-      scheduleName: scheduleTitle,
-      isPrivate: scheduleOpen,
-      scheduleStartDay: date.start,
-      scheduleEndDay: date.end,
-      scheduleStartLocation: null,
-      scheduleEndLocation: null,
-      vehicle: vehicle,
-      scheduleLocationRequestList: sendScheduleList,
-    };
+    if (scheduleId !== null) {
+      const sendData = {
+        scheduleId: scheduleId,
+        scheduleRegion: region.name,
+        scheduleName: scheduleTitle,
+        isPrivate: scheduleOpen,
+        scheduleStartDay: date.start,
+        scheduleEndDay: date.end,
+        scheduleStartLocation: null,
+        scheduleEndLocation: null,
+        vehicle: vehicle,
+        scheduleLocationRequest: sendScheduleList,
+      };
 
-    Axios.post(api.createSchedule.schedule(), sendData)
-      .then((res) => {
-        console.log(res);
-        navigate("/mypage");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      Axios.put(api.createSchedule.schedule(), sendData)
+        .then((res) => {
+          console.log("일정 수정 ", res);
+          navigate("/mypage");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      const sendData = {
+        regionId: region.id,
+        scheduleName: scheduleTitle,
+        isPrivate: scheduleOpen,
+        scheduleStartDay: date.start,
+        scheduleEndDay: date.end,
+        scheduleStartLocation: null,
+        scheduleEndLocation: null,
+        vehicle: vehicle,
+        scheduleLocationRequestList: sendScheduleList,
+      };
+
+      Axios.post(api.createSchedule.schedule(), sendData)
+        .then((res) => {
+          console.log(res);
+          navigate("/mypage");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {

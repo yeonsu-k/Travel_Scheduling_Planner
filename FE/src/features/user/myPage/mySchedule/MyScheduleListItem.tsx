@@ -14,7 +14,7 @@ import MyScheduleShareModal from "./MyScheduleShareModal";
 import { useAppDispatch } from "app/hooks";
 import { scheduleConfig, setscheduleList } from "slices/scheduleEditSlice";
 import { useNavigate } from "react-router-dom";
-import { setDate } from "slices/scheduleCreateSlice";
+import { setDate, setRegion } from "slices/scheduleCreateSlice";
 import { format } from "date-fns";
 
 const getDate = (data: string) => {
@@ -43,6 +43,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const getRegionInfo = async () => {
+    console.log("item", item);
     await Axios.get(api.createSchedule.getRegion(item.regionId))
       .then((res) => {
         setRegionInfo(res.data.data);
@@ -175,7 +176,22 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
         console.log("list", list);
 
         dispatch(setscheduleList([...list]));
-        navigate({ pathname: "/schedule/edit", search: "?mine=" + item.mine });
+
+        let engName = "";
+        if (regionInfo?.englishName) {
+          engName = regionInfo.englishName;
+        } else {
+          engName = "";
+        }
+        dispatch(
+          setRegion({
+            id: item.regionId,
+            name: item.region_name,
+            engName: engName,
+          }),
+        );
+
+        navigate({ pathname: "/schedule/edit", search: "id=" + item.schedule_id + "&mine=" + item.mine });
       })
       .catch((err) => {
         console.log(err);
