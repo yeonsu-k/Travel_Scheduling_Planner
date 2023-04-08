@@ -354,3 +354,7 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
 };
 
 export default EditScheduleItem;
+
+EditScheduleItem.defaultProps = {
+  time: "00:00",
+};
