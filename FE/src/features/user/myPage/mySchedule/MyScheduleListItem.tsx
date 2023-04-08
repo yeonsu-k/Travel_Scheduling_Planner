@@ -12,7 +12,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { DestinationConfig } from "slices/mainSlice";
 import MyScheduleShareModal from "./MyScheduleShareModal";
 import { useAppDispatch } from "app/hooks";
-import { scheduleConfig, setscheduleList } from "slices/scheduleEditSlice";
+import { resetKeepPlaceList, scheduleConfig, setscheduleList } from "slices/scheduleEditSlice";
 import { useNavigate } from "react-router-dom";
 import { setDate, setRegion } from "slices/scheduleCreateSlice";
 import { format } from "date-fns";
@@ -190,6 +190,7 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             engName: engName,
           }),
         );
+        dispatch(resetKeepPlaceList());
 
         navigate({ pathname: "/schedule/edit", search: "id=" + item.schedule_id + "&mine=" + item.mine });
       })
