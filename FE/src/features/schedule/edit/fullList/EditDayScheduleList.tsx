@@ -17,6 +17,7 @@ interface EditDayScheduleListProps {
 const EditDayScheduleList = ({ day, date }: EditDayScheduleListProps) => {
   const scheduleList = useAppSelector(selectScheduleList);
   const placeNumber = scheduleList[day - 1].length;
+  let dragIndex = 0;
 
   useEffect(() => {
     console.log("date", date);
@@ -105,7 +106,7 @@ const EditDayScheduleList = ({ day, date }: EditDayScheduleListProps) => {
             }}
           >
             {scheduleList[day - 1].map((value, key) => (
-              <div key={value.location.locationName} style={{ width: "90%" }}>
+              <div key={dragIndex++} style={{ width: "90%" }}>
                 <Draggable
                   isDragDisabled={isMine == "false"}
                   key={parseInt(value.day.toString() + "0" + value.sequence.toString())}
