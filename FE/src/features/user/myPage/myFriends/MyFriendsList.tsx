@@ -25,7 +25,6 @@ const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
     })
       .then((res) => {
         console.log(res);
-        alert("삭제가 완료되었습니다");
         // const index = friends.findIndex((idx) => idx.email === friendInfo.email);
         // const tmpList = [...friends];
         // tmpList.splice(index, 1);

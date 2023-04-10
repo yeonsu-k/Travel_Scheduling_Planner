@@ -18,7 +18,6 @@ const MyFriendsSearchItem = () => {
     })
       .then((res) => {
         console.log(res);
-        alert("친구요청 완료");
         searchFriendStatus();
       })
       .catch((err) => {

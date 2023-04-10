@@ -26,7 +26,6 @@ const NoticeItem = ({ noticeValue, setChange }: NoticeItemProps) => {
     })
       .then((res) => {
         console.log(res);
-        alert("알림 처리 완료");
         setChange(true);
       })
       .catch((err) => {
