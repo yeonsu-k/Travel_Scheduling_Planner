@@ -443,6 +443,7 @@ const ScheduleEditPage = () => {
                                 img={value.locationURL}
                                 placeName={value.locationName}
                                 time={value.time}
+                                key={key}
                                 // startTime={value.startTime}
                                 // endTime={value.endTime}
                               />
