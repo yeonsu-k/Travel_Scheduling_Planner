@@ -1,11 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "features/schedule/edit/Edit.module.css";
 import { useAppSelector } from "app/hooks";
 import EditDayList from "features/schedule/edit/EditDayList";
 import EditFullScheduleList from "features/schedule/edit/fullList/EditFullScheduleList";
 import Text from "components/Text";
 import { useDispatch } from "react-redux";
-import { selectKeepPlaceList, selectScheduleList, setKeepPlaceList, setscheduleList } from "slices/scheduleEditSlice";
+import {
+  selectKeepPlaceList,
+  selectScheduleList,
+  setDuration,
+  setKeepPlaceList,
+  setStayTime,
+  setscheduleList,
+} from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import KeepScheduleItem from "features/schedule/edit/KeepScheduleItem";
 import { selectDate, selectRegion, selectVehicle } from "slices/scheduleCreateSlice";
@@ -184,6 +191,46 @@ const ScheduleEditPage = () => {
 
       dispatch(setscheduleList([...copyList]));
       dispatch(setKeepPlaceList([...keepList]));
+
+      if (dragStartIndex !== scheduleList[dragStartDay - 1].length - 1) {
+        const prevEndHour = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[0];
+        const prevEndMinute = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[1];
+
+        console.log("prevData : ", prevEndHour + ":" + prevEndMinute);
+        dispatch(setDuration({ day: dragStartDay, index: dragStartIndex - 1, duration: 0 }));
+
+        for (let i = dragStartIndex + 1; i < scheduleList[dragStartDay].length; i++) {
+          let nextStartHour = parseInt(scheduleList[dragStartDay - 1][i].startTime.split(":")[0]);
+          let nextStartMinute = parseInt(scheduleList[dragStartDay - 1][i].startTime.split(":")[1]);
+          let nextEndHour = parseInt(scheduleList[dragStartDay - 1][i].endTime.split(":")[0]);
+          let nextEndMinute = parseInt(scheduleList[dragStartDay - 1][i].endTime.split(":")[1]);
+
+          let stayHour = nextEndHour - nextStartHour;
+          let stayMinute = nextEndMinute - nextStartMinute;
+
+          if (stayMinute < 0) {
+            stayHour -= 1;
+            stayMinute += 60;
+          }
+
+          nextStartHour = parseInt(prevEndHour);
+          nextStartMinute = parseInt(prevEndMinute);
+          nextEndHour = nextStartHour + stayHour;
+          nextEndMinute = nextStartMinute + stayMinute;
+
+          if (nextEndMinute >= 60) {
+            nextEndHour += 1;
+            nextEndMinute -= 60;
+          }
+
+          const startTime =
+            nextStartHour.toString().padStart(2, "0") + ":" + nextStartMinute.toString().padStart(2, "0");
+          const endTime = nextEndHour.toString().padStart(2, "0") + ":" + nextEndMinute.toString().padStart(2, "0");
+
+          console.log(`startTime: ${startTime}, endTime: ${endTime}`);
+          dispatch(setStayTime({ day: dragStartDay, index: i - 1, startTime: startTime, endTime: endTime }));
+        }
+      }
     }
     // 보관함에서 일정으로 옮기는 경우
     else if (source.droppableId === "keepPlaceList") {
@@ -282,11 +329,6 @@ const ScheduleEditPage = () => {
         });
     }
   };
-
-  useEffect(() => {
-    // getSchedule();
-    console.log("일정 불러오기", scheduleList);
-  }, []);
 
   return (
     <div style={{ width: "100%", height: "100%", display: "flex" }}>
