@@ -21,14 +21,14 @@ const MainTravelLog = () => {
           await Axios.get(api.createSchedule.getRegion(item.regionId))
             .then((res) => {
               const scheduleLocations = item.scheduleLocations;
-              const tmpSchedule: any[] = [];
+              let tmpSchedule: locationConfig[] = [];
               scheduleLocations.map((schedule: locationConfig) => {
                 const locations = {
                   address: schedule.location.address,
                   locationName: schedule.location.locationName,
                   locationURL: schedule.location.locationURL,
                 };
-                tmpSchedule.push(locations);
+                tmpSchedule = [...tmpSchedule, { location: locations }];
               });
               const tmpTravelLogItem: TravelLogConfig = {
                 hostEmail: item.hostEmail,
@@ -40,7 +40,7 @@ const MainTravelLog = () => {
               };
               tmpTravelLog = [...tmpTravelLog, tmpTravelLogItem];
             })
-            .catch((err: any) => {
+            .catch((err) => {
               console.log(err);
             });
           dispatch(setTravelLogList({ travelLogList: tmpTravelLog }));
