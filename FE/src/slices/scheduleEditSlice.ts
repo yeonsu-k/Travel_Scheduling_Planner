@@ -37,13 +37,17 @@ const scheduleEditSlice = createSlice({
       console.log("startTime", state.scheduleList[day - 1][index].startTime);
       console.log("endTime: ", state.scheduleList[day - 1][index].endTime);
     },
+    setDuration: (state, { payload: { day, index, duration } }) => {
+      state.scheduleList[day - 1][index].duration = duration;
+    },
     setscheduleList: (state, action: PayloadAction<scheduleEditConfig["scheduleList"]>) => {
       state.scheduleList = action.payload;
     },
   },
 });
 
-export const { setKeepPlaceList, resetKeepPlaceList, setStayTime, setscheduleList } = scheduleEditSlice.actions;
+export const { setKeepPlaceList, resetKeepPlaceList, setStayTime, setDuration, setscheduleList } =
+  scheduleEditSlice.actions;
 
 export const selectKeepPlaceList = (state: rootState) => state.scheduleEdit.keepPlaceList;
 export const selectScheduleList = (state: rootState) => state.scheduleEdit.scheduleList;
