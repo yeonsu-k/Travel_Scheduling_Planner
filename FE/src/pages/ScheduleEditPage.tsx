@@ -33,6 +33,7 @@ import Input from "components/Input";
 import SwitchButton from "components/SwitchButton";
 import ButtonStyled from "components/Button";
 import EditMap from "features/schedule/edit/EditMap";
+import Loading from "components/Loading";
 
 const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -66,6 +67,7 @@ const ScheduleEditPage = () => {
   const [viewDaySchedule, setViewDaySchedule] = useState(false);
   const [day, setDay] = useState(0);
   const scheduleList = useAppSelector(selectScheduleList);
+  const [loading, setLoading] = useState(false);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
@@ -267,7 +269,8 @@ const ScheduleEditPage = () => {
     }
   };
 
-  const onClickSaveSchedule = () => {
+  const onClickSaveSchedule = async () => {
+    setLoading(true);
     const sendScheduleList: sendScheduleListProps[] = [];
 
     scheduleList.map((val, key) => {
@@ -298,9 +301,10 @@ const ScheduleEditPage = () => {
         scheduleLocationRequest: sendScheduleList,
       };
 
-      Axios.put(api.createSchedule.schedule(), sendData)
+      await Axios.put(api.createSchedule.schedule(), sendData)
         .then((res) => {
           console.log("일정 수정 ", res);
+          setLoading(false);
           navigate("/mypage");
         })
         .catch((err) => {
@@ -319,9 +323,10 @@ const ScheduleEditPage = () => {
         scheduleLocationRequestList: sendScheduleList,
       };
 
-      Axios.post(api.createSchedule.schedule(), sendData)
+      await Axios.post(api.createSchedule.schedule(), sendData)
         .then((res) => {
           console.log(res);
+          setLoading(false);
           navigate("/mypage");
         })
         .catch((err) => {
@@ -332,6 +337,7 @@ const ScheduleEditPage = () => {
 
   return (
     <div style={{ width: "100%", height: "100%", display: "flex" }}>
+      {loading ? <Loading /> : null}
       <EditDayList setDay={setDay} setViewDaySchedule={setViewDaySchedule} />
 
       <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
