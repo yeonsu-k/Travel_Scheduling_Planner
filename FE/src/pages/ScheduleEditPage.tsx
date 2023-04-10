@@ -164,8 +164,6 @@ const ScheduleEditPage = () => {
     const copyList = scheduleList.map((value) => value.slice());
     const keepList = [...keepPlaceList];
 
-    console.log("result", result);
-
     // 보관함 내에서 순서만 바꾸는 경우
     if (source.droppableId === "keepPlaceList" && destination.droppableId === "keepPlaceList") {
       const dragStartIndex = source.index;
@@ -198,7 +196,6 @@ const ScheduleEditPage = () => {
         const prevEndHour = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[0];
         const prevEndMinute = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[1];
 
-        console.log("prevData : ", prevEndHour + ":" + prevEndMinute);
         dispatch(setDuration({ day: dragStartDay, index: dragStartIndex - 1, duration: 0 }));
 
         for (let i = dragStartIndex + 1; i < scheduleList[dragStartDay].length; i++) {
@@ -229,7 +226,6 @@ const ScheduleEditPage = () => {
             nextStartHour.toString().padStart(2, "0") + ":" + nextStartMinute.toString().padStart(2, "0");
           const endTime = nextEndHour.toString().padStart(2, "0") + ":" + nextEndMinute.toString().padStart(2, "0");
 
-          console.log(`startTime: ${startTime}, endTime: ${endTime}`);
           dispatch(setStayTime({ day: dragStartDay, index: i - 1, startTime: startTime, endTime: endTime }));
         }
       }
@@ -249,7 +245,6 @@ const ScheduleEditPage = () => {
         endTime: "10:00",
         duration: 0,
       };
-      console.log(dragContent);
       keepList.splice(dragStartIndex, 1);
       copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
       dispatch(setscheduleList([...copyList]));
@@ -301,15 +296,10 @@ const ScheduleEditPage = () => {
         scheduleLocationRequest: sendScheduleList,
       };
 
-      await Axios.put(api.createSchedule.schedule(), sendData)
-        .then((res) => {
-          console.log("일정 수정 ", res);
-          setLoading(false);
-          navigate("/mypage");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      await Axios.put(api.createSchedule.schedule(), sendData).then((res) => {
+        setLoading(false);
+        navigate("/mypage");
+      });
     } else {
       const sendData = {
         regionId: region.id,
@@ -323,15 +313,10 @@ const ScheduleEditPage = () => {
         scheduleLocationRequestList: sendScheduleList,
       };
 
-      await Axios.post(api.createSchedule.schedule(), sendData)
-        .then((res) => {
-          console.log(res);
-          setLoading(false);
-          navigate("/mypage");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      await Axios.post(api.createSchedule.schedule(), sendData).then((res) => {
+        setLoading(false);
+        navigate("/mypage");
+      });
     }
   };
 

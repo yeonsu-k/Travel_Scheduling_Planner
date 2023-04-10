@@ -55,7 +55,6 @@ const mainSlice = createSlice({
     },
     setNotiNumber: (state, { payload: { notiNumber } }) => {
       state.notiNumber = notiNumber;
-      console.log("redux: ", state.notiNumber);
     },
   },
 });

@@ -23,50 +23,33 @@ const NoticeItem = ({ noticeValue, setChange }: NoticeItemProps) => {
       notificationId: noticeValue.notificationId,
       isAccept: isAccept,
       type: noticeValue.type,
-    })
-      .then((res) => {
-        console.log(res);
-        setChange(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then((res) => {
+      setChange(true);
+    });
   };
 
   const onClickDeleteBtn = async () => {
-    await Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId))
-      .then((res) => {
-        console.log(res);
-        getNotification();
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await Axios.delete(api.notification.deleteOneNotification(noticeValue.notificationId)).then((res) => {
+      getNotification();
+      window.location.reload();
+    });
   };
 
   const getNotification = async () => {
     let notificationCount = 0;
 
-    await Axios.get(api.notification.notification())
-      .then((res) => {
-        console.log(res);
-        const list = [...res.data.data.notifications];
-        console.log("list", noticeList);
+    await Axios.get(api.notification.notification()).then((res) => {
+      const list = [...res.data.data.notifications];
 
-        noticeList.map((value, key) => {
-          if (value.status === "NO_RESPONSE") {
-            notificationCount++;
-            noticeList.push(value);
-          }
-        });
-
-        console.log("cnt: ", notificationCount);
-        dispatch(setNotiNumber({ notiNumber: notificationCount }));
-      })
-      .catch((err) => {
-        console.log(err);
+      noticeList.map((value, key) => {
+        if (value.status === "NO_RESPONSE") {
+          notificationCount++;
+          noticeList.push(value);
+        }
       });
+
+      dispatch(setNotiNumber({ notiNumber: notificationCount }));
+    });
   };
 
   return (

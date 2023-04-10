@@ -34,8 +34,6 @@ const scheduleEditSlice = createSlice({
     setStayTime: (state, { payload: { day, index, startTime, endTime } }) => {
       state.scheduleList[day - 1][index].startTime = startTime;
       state.scheduleList[day - 1][index].endTime = endTime;
-      console.log("startTime", state.scheduleList[day - 1][index].startTime);
-      console.log("endTime: ", state.scheduleList[day - 1][index].endTime);
     },
     setDuration: (state, { payload: { day, index, duration } }) => {
       state.scheduleList[day - 1][index].duration = duration;

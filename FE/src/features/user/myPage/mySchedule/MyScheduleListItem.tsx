@@ -43,14 +43,9 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const getRegionInfo = async () => {
-    console.log("item", item);
-    await Axios.get(api.createSchedule.getRegion(item.regionId))
-      .then((res) => {
-        setRegionInfo(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await Axios.get(api.createSchedule.getRegion(item.regionId)).then((res) => {
+      setRegionInfo(res.data.data);
+    });
   };
 
   const modifyName = async () => {
@@ -93,7 +88,6 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
   const modifySchedule = async () => {
     await Axios.get(api.createSchedule.getFullList(item.schedule_id))
       .then((res) => {
-        console.log("수정 버튼 Data", res);
         const startDate = res.data.data.scheduleStartDay;
         const endDate = res.data.data.scheduleEndDay;
         dispatch(
@@ -102,8 +96,6 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             end: format(new Date(endDate), "yyyy-MM-dd"),
           }),
         );
-
-        console.log("startDate", startDate);
 
         const locations: scheduleConfig[] = res.data.data.scheduleLocations;
         const list: scheduleConfig[][] = [];
@@ -157,7 +149,6 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             duration: duration,
           };
           if (index !== value.day - 1) {
-            console.log("index: ", index);
             list.push(tmpDataList);
             index++;
             tmpDataList = [];
@@ -170,10 +161,8 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             } else {
               tmpDataList.push(tmpData);
             }
-            console.log("value.day", value.day);
           }
         });
-        console.log("list", list);
 
         dispatch(setscheduleList([...list]));
 

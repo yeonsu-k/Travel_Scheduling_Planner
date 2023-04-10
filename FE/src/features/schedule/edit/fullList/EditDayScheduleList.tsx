@@ -19,12 +19,6 @@ const EditDayScheduleList = ({ day, date }: EditDayScheduleListProps) => {
   const placeNumber = scheduleList[day - 1].length;
   let dragIndex = 0;
 
-  useEffect(() => {
-    console.log("date", date);
-    console.log("month", date.getMonth());
-    console.log("day", date.getDate());
-  });
-
   // 일정 권한 확인
   const [searchParams] = useSearchParams();
   const isMine = searchParams.get("mine");

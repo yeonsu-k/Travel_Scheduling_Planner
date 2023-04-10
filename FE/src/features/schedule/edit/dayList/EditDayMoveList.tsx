@@ -12,10 +12,6 @@ interface EditDayMoveListProps {
 const EditDayMoveList = ({ day }: EditDayMoveListProps) => {
   const dayList = useAppSelector(selectScheduleList)[day - 1];
 
-  useEffect(() => {
-    console.log("dayList", dayList);
-  }, []);
-
   return (
     <div className={styles.editDayMoveList}>
       <Text value={`DAY ${day}`} bold en />

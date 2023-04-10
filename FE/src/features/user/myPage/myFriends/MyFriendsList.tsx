@@ -24,36 +24,19 @@ const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
       data: {
         email: friendInfo.email,
       },
-    })
-      .then((res) => {
-        console.log(res);
-        // const index = friends.findIndex((idx) => idx.email === friendInfo.email);
-        // const tmpList = [...friends];
-        // tmpList.splice(index, 1);
-
-        // console.log("tmpList", tmpList);
-        // dispatch(setFriendList([...tmpList]));
-
-        // console.log("friendList", friends);
-        setDeleteFriendModal(false);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then((res) => {
+      setDeleteFriendModal(false);
+      window.location.reload();
+    });
   };
 
   const getFriendInfo = async () => {
     setLoading(true);
-    await Axios.get(api.friend.friend())
-      .then((res) => {
-        dispatch(setFriendCnt(res.data.data.friends.length));
-        dispatch(setFriendList(res.data.data.friends));
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await Axios.get(api.friend.friend()).then((res) => {
+      dispatch(setFriendCnt(res.data.data.friends.length));
+      dispatch(setFriendList(res.data.data.friends));
+      setLoading(false);
+    });
   };
 
   useEffect(() => {

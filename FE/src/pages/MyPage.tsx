@@ -15,14 +15,10 @@ function MyPage() {
   const [friendColor, setfriendColor] = useState("");
 
   const getFriendInfo = async () => {
-    await Axios.get(api.friend.friend())
-      .then((res) => {
-        dispatch(setFriendCnt(res.data.data.friends.length));
-        dispatch(setFriendList(res.data.data.friends));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await Axios.get(api.friend.friend()).then((res) => {
+      dispatch(setFriendCnt(res.data.data.friends.length));
+      dispatch(setFriendList(res.data.data.friends));
+    });
   };
 
   useEffect(() => {
