@@ -1,11 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "features/schedule/edit/Edit.module.css";
 import { useAppSelector } from "app/hooks";
 import EditDayList from "features/schedule/edit/EditDayList";
 import EditFullScheduleList from "features/schedule/edit/fullList/EditFullScheduleList";
 import Text from "components/Text";
 import { useDispatch } from "react-redux";
-import { selectKeepPlaceList, selectScheduleList, setKeepPlaceList, setscheduleList } from "slices/scheduleEditSlice";
+import {
+  selectKeepPlaceList,
+  selectScheduleList,
+  setDuration,
+  setKeepPlaceList,
+  setStayTime,
+  setscheduleList,
+} from "slices/scheduleEditSlice";
 import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
 import KeepScheduleItem from "features/schedule/edit/KeepScheduleItem";
 import { selectDate, selectRegion, selectVehicle } from "slices/scheduleCreateSlice";
@@ -26,6 +33,7 @@ import Input from "components/Input";
 import SwitchButton from "components/SwitchButton";
 import ButtonStyled from "components/Button";
 import EditMap from "features/schedule/edit/EditMap";
+import Loading from "components/Loading";
 
 const TooltipStyled = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -59,6 +67,7 @@ const ScheduleEditPage = () => {
   const [viewDaySchedule, setViewDaySchedule] = useState(false);
   const [day, setDay] = useState(0);
   const scheduleList = useAppSelector(selectScheduleList);
+  const [loading, setLoading] = useState(false);
 
   // 포함되지 않은 장소
   const containerRef = useRef<any>(null); // 드래그 할 영역 네모 박스 Ref
@@ -74,6 +83,7 @@ const ScheduleEditPage = () => {
   // 일정 권한 확인
   const [searchParams] = useSearchParams();
   const isMine = searchParams.get("mine");
+  const scheduleId = searchParams.get("id");
 
   const dragStartHandler = (e: any) => {
     // 고스트 이미지를 제거하기 위해 투명 캔버스 생성
@@ -154,8 +164,6 @@ const ScheduleEditPage = () => {
     const copyList = scheduleList.map((value) => value.slice());
     const keepList = [...keepPlaceList];
 
-    console.log("result", result);
-
     // 보관함 내에서 순서만 바꾸는 경우
     if (source.droppableId === "keepPlaceList" && destination.droppableId === "keepPlaceList") {
       const dragStartIndex = source.index;
@@ -183,6 +191,44 @@ const ScheduleEditPage = () => {
 
       dispatch(setscheduleList([...copyList]));
       dispatch(setKeepPlaceList([...keepList]));
+
+      if (dragStartIndex !== scheduleList[dragStartDay - 1].length - 1) {
+        const prevEndHour = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[0];
+        const prevEndMinute = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[1];
+
+        dispatch(setDuration({ day: dragStartDay, index: dragStartIndex - 1, duration: 0 }));
+
+        for (let i = dragStartIndex + 1; i < scheduleList[dragStartDay].length; i++) {
+          let nextStartHour = parseInt(scheduleList[dragStartDay - 1][i].startTime.split(":")[0]);
+          let nextStartMinute = parseInt(scheduleList[dragStartDay - 1][i].startTime.split(":")[1]);
+          let nextEndHour = parseInt(scheduleList[dragStartDay - 1][i].endTime.split(":")[0]);
+          let nextEndMinute = parseInt(scheduleList[dragStartDay - 1][i].endTime.split(":")[1]);
+
+          let stayHour = nextEndHour - nextStartHour;
+          let stayMinute = nextEndMinute - nextStartMinute;
+
+          if (stayMinute < 0) {
+            stayHour -= 1;
+            stayMinute += 60;
+          }
+
+          nextStartHour = parseInt(prevEndHour);
+          nextStartMinute = parseInt(prevEndMinute);
+          nextEndHour = nextStartHour + stayHour;
+          nextEndMinute = nextStartMinute + stayMinute;
+
+          if (nextEndMinute >= 60) {
+            nextEndHour += 1;
+            nextEndMinute -= 60;
+          }
+
+          const startTime =
+            nextStartHour.toString().padStart(2, "0") + ":" + nextStartMinute.toString().padStart(2, "0");
+          const endTime = nextEndHour.toString().padStart(2, "0") + ":" + nextEndMinute.toString().padStart(2, "0");
+
+          dispatch(setStayTime({ day: dragStartDay, index: i - 1, startTime: startTime, endTime: endTime }));
+        }
+      }
     }
     // 보관함에서 일정으로 옮기는 경우
     else if (source.droppableId === "keepPlaceList") {
@@ -199,7 +245,6 @@ const ScheduleEditPage = () => {
         endTime: "10:00",
         duration: 0,
       };
-      console.log(dragContent);
       keepList.splice(dragStartIndex, 1);
       copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
       dispatch(setscheduleList([...copyList]));
@@ -219,7 +264,8 @@ const ScheduleEditPage = () => {
     }
   };
 
-  const onClickSaveSchedule = () => {
+  const onClickSaveSchedule = async () => {
+    setLoading(true);
     const sendScheduleList: sendScheduleListProps[] = [];
 
     scheduleList.map((val, key) => {
@@ -236,35 +282,47 @@ const ScheduleEditPage = () => {
       });
     });
 
-    const sendData = {
-      regionId: region.id,
-      scheduleName: scheduleTitle,
-      isPrivate: scheduleOpen,
-      scheduleStartDay: date.start,
-      scheduleEndDay: date.end,
-      scheduleStartLocation: null,
-      scheduleEndLocation: null,
-      vehicle: vehicle,
-      scheduleLocationRequestList: sendScheduleList,
-    };
+    if (scheduleId !== null) {
+      const sendData = {
+        scheduleId: scheduleId,
+        scheduleRegion: region.name,
+        scheduleName: scheduleTitle,
+        isPrivate: scheduleOpen,
+        scheduleStartDay: date.start,
+        scheduleEndDay: date.end,
+        scheduleStartLocation: null,
+        scheduleEndLocation: null,
+        vehicle: vehicle,
+        scheduleLocationRequest: sendScheduleList,
+      };
 
-    Axios.post(api.createSchedule.schedule(), sendData)
-      .then((res) => {
-        console.log(res);
+      await Axios.put(api.createSchedule.schedule(), sendData).then((res) => {
+        setLoading(false);
         navigate("/mypage");
-      })
-      .catch((err) => {
-        console.log(err);
       });
-  };
+    } else {
+      const sendData = {
+        regionId: region.id,
+        scheduleName: scheduleTitle,
+        isPrivate: scheduleOpen,
+        scheduleStartDay: date.start,
+        scheduleEndDay: date.end,
+        scheduleStartLocation: null,
+        scheduleEndLocation: null,
+        vehicle: vehicle,
+        scheduleLocationRequestList: sendScheduleList,
+      };
 
-  useEffect(() => {
-    // getSchedule();
-    console.log("일정 불러오기", scheduleList);
-  }, []);
+      await Axios.post(api.createSchedule.schedule(), sendData).then((res) => {
+        setLoading(false);
+        navigate("/mypage");
+      });
+    }
+  };
 
   return (
     <div style={{ width: "100%", height: "100%", display: "flex" }}>
+      {loading ? <Loading /> : null}
       <EditDayList setDay={setDay} setViewDaySchedule={setViewDaySchedule} />
 
       <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
@@ -370,6 +428,7 @@ const ScheduleEditPage = () => {
                                 img={value.locationURL}
                                 placeName={value.locationName}
                                 time={value.time}
+                                key={key}
                                 // startTime={value.startTime}
                                 // endTime={value.endTime}
                               />

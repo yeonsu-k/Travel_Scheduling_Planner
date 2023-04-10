@@ -15,37 +15,25 @@ const MyFriendsSearchItem = () => {
   const onClickRequestFrined = () => {
     Axios.post(api.friend.friend(), {
       email: searchUser.email,
-    })
-      .then((res) => {
-        console.log(res);
-        alert("친구요청 완료");
-        searchFriendStatus();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then((res) => {
+      searchFriendStatus();
+    });
   };
 
   const searchFriendStatus = () => {
     Axios.post(api.friend.searchUser(), {
       email: searchUser.email,
-    })
-      .then((res) => {
-        console.log(res);
-
-        const searchData = {
-          email: res.data.data.email,
-          exist: res.data.data.exist,
-          nickname: res.data.data.nickname,
-          profile: res.data.data.profile,
-          status: res.data.data.status,
-          success: res.data.success,
-        };
-        dispatch(setSearchUser(searchData));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then((res) => {
+      const searchData = {
+        email: res.data.data.email,
+        exist: res.data.data.exist,
+        nickname: res.data.data.nickname,
+        profile: res.data.data.profile,
+        status: res.data.data.status,
+        success: res.data.success,
+      };
+      dispatch(setSearchUser(searchData));
+    });
   };
 
   return (

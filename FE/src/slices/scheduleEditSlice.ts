@@ -28,11 +28,15 @@ const scheduleEditSlice = createSlice({
     setKeepPlaceList: (state, { payload }) => {
       state.keepPlaceList = payload;
     },
+    resetKeepPlaceList: (state) => {
+      state.keepPlaceList = [];
+    },
     setStayTime: (state, { payload: { day, index, startTime, endTime } }) => {
       state.scheduleList[day - 1][index].startTime = startTime;
       state.scheduleList[day - 1][index].endTime = endTime;
-      console.log("startTime", state.scheduleList[day - 1][index].startTime);
-      console.log("endTime: ", state.scheduleList[day - 1][index].endTime);
+    },
+    setDuration: (state, { payload: { day, index, duration } }) => {
+      state.scheduleList[day - 1][index].duration = duration;
     },
     setscheduleList: (state, action: PayloadAction<scheduleEditConfig["scheduleList"]>) => {
       state.scheduleList = action.payload;
@@ -40,7 +44,8 @@ const scheduleEditSlice = createSlice({
   },
 });
 
-export const { setKeepPlaceList, setStayTime, setscheduleList } = scheduleEditSlice.actions;
+export const { setKeepPlaceList, resetKeepPlaceList, setStayTime, setDuration, setscheduleList } =
+  scheduleEditSlice.actions;
 
 export const selectKeepPlaceList = (state: rootState) => state.scheduleEdit.keepPlaceList;
 export const selectScheduleList = (state: rootState) => state.scheduleEdit.scheduleList;

@@ -1,19 +1,33 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Edit.module.css";
 import Text from "components/Text";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import colorPalette from "styles/colorPalette";
+import DeleteItemModal from "./fullList/DeleteItemModal";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { selectKeepPlaceList, setKeepPlaceList } from "slices/scheduleEditSlice";
 
 interface EditScheduleItemProps {
   img: string;
   placeName: string;
   time: string;
+  key: number;
   // startTime: string;
   // endTime: string;
 }
 
-const KeepScheduleItem = ({ img, placeName, time }: EditScheduleItemProps) => {
+const KeepScheduleItem = ({ img, placeName, time, key }: EditScheduleItemProps) => {
+  const dispatch = useAppDispatch();
+
   const [input, setInput] = useState(0);
+  const keepList = useAppSelector(selectKeepPlaceList);
+  const [deleteItemModal, setDeleteItemModal] = useState(false);
+
+  const deleteScheduleItem = () => {
+    const tmpList = [...keepList];
+    tmpList.splice(key, 1);
+    dispatch(setKeepPlaceList([...tmpList]));
+
+    setDeleteItemModal(false);
+  };
 
   return (
     <>
@@ -61,9 +75,13 @@ const KeepScheduleItem = ({ img, placeName, time }: EditScheduleItemProps) => {
         <div className={styles.scheduleItemInfo}>
           <Text value="메모" type="smallText" />
         </div>
-        <div className={styles.scheduleItemInfo}>
+        <div className={styles.scheduleItemInfo} onClick={() => setDeleteItemModal(true)}>
           <Text value="삭제" type="smallText" />
         </div>
+
+        {deleteItemModal && (
+          <DeleteItemModal onClickDeleteItem={deleteScheduleItem} setDeleteItemModal={setDeleteItemModal} />
+        )}
       </div>
     </>
   );

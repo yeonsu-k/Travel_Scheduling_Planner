@@ -7,6 +7,7 @@ import api from "api/Api";
 import { friendProps, setFriendCnt, setFriendList } from "slices/friendSlice";
 import { useAppDispatch } from "app/hooks";
 import Loading from "components/Loading";
+import DeleteItemModal from "features/schedule/edit/fullList/DeleteItemModal";
 
 interface MyFriendsListProps {
   friendInfo: friendProps;
@@ -16,42 +17,26 @@ const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
   const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
+  const [deleteFriendModal, setDeleteFriendModal] = useState(false);
 
   const onClickDeleteFriend = async () => {
     await Axios.delete(api.friend.friend(), {
       data: {
         email: friendInfo.email,
       },
-    })
-      .then((res) => {
-        console.log(res);
-        alert("삭제가 완료되었습니다");
-        // const index = friends.findIndex((idx) => idx.email === friendInfo.email);
-        // const tmpList = [...friends];
-        // tmpList.splice(index, 1);
-
-        // console.log("tmpList", tmpList);
-        // dispatch(setFriendList([...tmpList]));
-
-        // console.log("friendList", friends);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then((res) => {
+      setDeleteFriendModal(false);
+      window.location.reload();
+    });
   };
 
   const getFriendInfo = async () => {
     setLoading(true);
-    await Axios.get(api.friend.friend())
-      .then((res) => {
-        dispatch(setFriendCnt(res.data.data.friends.length));
-        dispatch(setFriendList(res.data.data.friends));
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await Axios.get(api.friend.friend()).then((res) => {
+      dispatch(setFriendCnt(res.data.data.friends.length));
+      dispatch(setFriendList(res.data.data.friends));
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
@@ -83,8 +68,12 @@ const MyFriendsList = ({ friendInfo }: MyFriendsListProps) => {
             <Text value="2" /> */}
       </div>
       <div className={styles.friendInfo}>
-        <Button text="친구 삭제" onClick={onClickDeleteFriend} />
+        <Button text="친구 삭제" onClick={() => setDeleteFriendModal(true)} />
       </div>
+
+      {deleteFriendModal && (
+        <DeleteItemModal onClickDeleteItem={onClickDeleteFriend} setDeleteItemModal={setDeleteFriendModal} />
+      )}
     </div>
   );
 };

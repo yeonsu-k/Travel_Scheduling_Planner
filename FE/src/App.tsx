@@ -31,15 +31,11 @@ function App() {
     connectSocket(socket);
 
     socket.onopen = () => {
-      console.log("connected");
+      console.log("socket connected");
     };
 
     socket.onmessage = (event) => {
-      console.log("메세지 옴: " + event.data);
-
       const data = JSON.parse(event.data);
-
-      console.log("data: ", data.type);
 
       if (data.type === "friend") {
         const message = `${data.senderNickname}님이 ${data.content}을 보냈습니다.`;
@@ -55,36 +51,27 @@ function App() {
     };
 
     socket.onclose = (event) => {
-      console.log("disconnect");
-      console.log(event);
+      console.log("socket disconnected");
     };
 
     socket.onerror = (error) => {
-      console.log("connection error ");
-      console.log(error);
+      console.log("socket connection error ");
     };
   }, []);
 
   const getNotification = async () => {
     let notificationCount = 0;
-    await Axios.get(api.notification.notification())
-      .then((res) => {
-        console.log(res);
-        const noticeList = [...res.data.data.notifications];
-        console.log("list", noticeList);
+    await Axios.get(api.notification.notification()).then((res) => {
+      const noticeList = [...res.data.data.notifications];
 
-        noticeList.map((value) => {
-          if (value.status === "NO_RESPONSE") {
-            notificationCount++;
-          }
-        });
-
-        console.log("cnt: ", notificationCount);
-        dispatch(setNotiNumber({ notiNumber: notificationCount }));
-      })
-      .catch((err) => {
-        console.log(err);
+      noticeList.map((value) => {
+        if (value.status === "NO_RESPONSE") {
+          notificationCount++;
+        }
       });
+
+      dispatch(setNotiNumber({ notiNumber: notificationCount }));
+    });
   };
 
   return (

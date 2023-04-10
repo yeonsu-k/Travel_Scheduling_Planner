@@ -36,35 +36,23 @@ const Notice = () => {
   const getNotification = async () => {
     let notificationCount = 0;
 
-    await Axios.get(api.notification.notification())
-      .then((res) => {
-        console.log(res);
-        noticeList = [];
-        const list = [...res.data.data.notifications];
-        console.log("list", noticeList);
+    await Axios.get(api.notification.notification()).then((res) => {
+      noticeList = [];
+      const list = [...res.data.data.notifications];
 
-        list.map((value, key) => {
-          if (value.status === "NO_RESPONSE") {
-            notificationCount++;
-            noticeList.push(value);
-          }
-        });
-
-        console.log("cnt: ", notificationCount);
-        dispatch(setNotiNumber({ notiNumber: notificationCount }));
-        console.log("noticeList", noticeList);
-      })
-      .catch((err) => {
-        console.log(err);
+      list.map((value, key) => {
+        if (value.status === "NO_RESPONSE") {
+          notificationCount++;
+          noticeList.push(value);
+        }
       });
+
+      dispatch(setNotiNumber({ notiNumber: notificationCount }));
+    });
   };
 
   const onClickClearBtn = async () => {
-    await Axios.delete(api.notification.notification())
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    await Axios.delete(api.notification.notification());
 
     getNotification();
   };
@@ -79,7 +67,6 @@ const Notice = () => {
   }, [notiNumber]);
 
   useEffect(() => {
-    console.log("change");
     getNotification();
   }, [change]);
 

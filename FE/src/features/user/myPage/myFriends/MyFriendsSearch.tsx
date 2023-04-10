@@ -18,14 +18,10 @@ const MyFriendsSearch = () => {
   const [type, setType] = useState("");
 
   const onClickSearchUser = () => {
-    console.log(email);
-
     Axios.post(api.friend.searchUser(), {
       email: email,
     })
       .then((res) => {
-        console.log(res);
-
         if (res.data.data.email !== null) {
           setIsUser(true);
           const searchData = {
@@ -43,7 +39,6 @@ const MyFriendsSearch = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         if (err.response.status === 400) {
           setIsUser(false);
           setType("이메일");

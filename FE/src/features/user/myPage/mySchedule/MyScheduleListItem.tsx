@@ -12,9 +12,9 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { DestinationConfig } from "slices/mainSlice";
 import MyScheduleShareModal from "./MyScheduleShareModal";
 import { useAppDispatch } from "app/hooks";
-import { scheduleConfig, setscheduleList } from "slices/scheduleEditSlice";
+import { resetKeepPlaceList, scheduleConfig, setscheduleList } from "slices/scheduleEditSlice";
 import { useNavigate } from "react-router-dom";
-import { setDate } from "slices/scheduleCreateSlice";
+import { setDate, setRegion } from "slices/scheduleCreateSlice";
 import { format } from "date-fns";
 
 const getDate = (data: string) => {
@@ -43,13 +43,9 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const getRegionInfo = async () => {
-    await Axios.get(api.createSchedule.getRegion(item.regionId))
-      .then((res) => {
-        setRegionInfo(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await Axios.get(api.createSchedule.getRegion(item.regionId)).then((res) => {
+      setRegionInfo(res.data.data);
+    });
   };
 
   const modifyName = async () => {
@@ -92,7 +88,6 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
   const modifySchedule = async () => {
     await Axios.get(api.createSchedule.getFullList(item.schedule_id))
       .then((res) => {
-        console.log("수정 버튼 Data", res);
         const startDate = res.data.data.scheduleStartDay;
         const endDate = res.data.data.scheduleEndDay;
         dispatch(
@@ -101,8 +96,6 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             end: format(new Date(endDate), "yyyy-MM-dd"),
           }),
         );
-
-        console.log("startDate", startDate);
 
         const locations: scheduleConfig[] = res.data.data.scheduleLocations;
         const list: scheduleConfig[][] = [];
@@ -156,7 +149,6 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             duration: duration,
           };
           if (index !== value.day - 1) {
-            console.log("index: ", index);
             list.push(tmpDataList);
             index++;
             tmpDataList = [];
@@ -169,13 +161,27 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
             } else {
               tmpDataList.push(tmpData);
             }
-            console.log("value.day", value.day);
           }
         });
-        console.log("list", list);
 
         dispatch(setscheduleList([...list]));
-        navigate({ pathname: "/schedule/edit", search: "?mine=" + item.mine });
+
+        let engName = "";
+        if (regionInfo?.englishName) {
+          engName = regionInfo.englishName;
+        } else {
+          engName = "";
+        }
+        dispatch(
+          setRegion({
+            id: item.regionId,
+            name: item.region_name,
+            engName: engName,
+          }),
+        );
+        dispatch(resetKeepPlaceList());
+
+        navigate({ pathname: "/schedule/edit", search: "id=" + item.schedule_id + "&mine=" + item.mine });
       })
       .catch((err) => {
         console.log(err);

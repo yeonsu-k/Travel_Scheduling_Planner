@@ -60,7 +60,6 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
     }
 
     endTime = endHour.toString() + ":" + endMinute.toString();
-    console.log("endTime", endTime);
 
     dispatch(setStayTime({ day: day, index: index, startTime: startTime, endTime: endTime }));
 
@@ -86,8 +85,6 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
 
       const start = startH.toString() + ":" + startM.toString();
       const end = endH.toString() + ":" + endM.toString();
-      console.log("start", start);
-      console.log("end", end);
 
       dispatch(setStayTime({ day: day, index: i, startTime: start, endTime: end }));
     }
@@ -101,7 +98,6 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
     const tmpList = scheduleList.map((value) => value.slice());
     tmpList[day - 1].splice(index, 1);
     dispatch(setscheduleList([...tmpList]));
-    console.log("삭제 후", scheduleList);
 
     if (index !== 0) {
       const prevData = scheduleList[day - 1][index - 1];
@@ -126,8 +122,6 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
       }
       endTime = endHour.toString() + ":" + endMinute.toString();
 
-      console.log("삭제 후 startTime", startTime);
-      console.log("삭제 후 endTime", endTime);
       dispatch(setStayTime({ day: day, index: index, startTime: startTime, endTime: endTime }));
 
       for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
@@ -153,19 +147,13 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
         }
         endTime = endHour.toString() + ":" + endMinute.toString();
 
-        console.log("삭제 후 startTime", startTime);
-        console.log("삭제 후 endTime", endTime);
         dispatch(setStayTime({ day: day, index: i, startTime: startTime, endTime: endTime }));
       }
     } else {
       const nextData = scheduleList[day - 1][index + 1];
-      console.log("nextData", nextData);
       let hour = parseInt(nextData.endTime.split(":")[0]) - parseInt(nextData.startTime.split(":")[0]);
       let minute = parseInt(nextData.endTime.split(":")[1]) - parseInt(nextData.startTime.split(":")[1]);
 
-      console.log("변경 전", startTime);
-      console.log("변경 전", endTime);
-      console.log("변경 전 장소", placeName);
       if (minute < 0) {
         hour -= 1;
         minute += 60;
@@ -178,14 +166,9 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
         endHour += 1;
         endMinute -= 60;
       }
-      console.log("hour", hour);
-      console.log("minute", minute);
       endTime = endHour.toString() + ":" + endMinute.toString();
 
-      console.log("삭제 후 startTime", startTime);
-      console.log("삭제 후 endTime", endTime);
       dispatch(setStayTime({ day: day, index: index, startTime: startTime, endTime: endTime }));
-      console.log("지금 index", index);
 
       for (let i = index + 1; i < scheduleList[day - 1].length - 1; i++) {
         const prevData = scheduleList[day - 1][i];
@@ -210,8 +193,6 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
         }
         endTime = endHour.toString() + ":" + endMinute.toString();
 
-        console.log("삭제 후 startTime", startTime);
-        console.log("삭제 후 endTime", endTime);
         dispatch(setStayTime({ day: day, index: i, startTime: startTime, endTime: endTime }));
       }
     }
@@ -222,21 +203,17 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
   const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.valueAsNumber);
     const num = e.target.valueAsNumber - input;
-    console.log("num", num);
     for (let i = index + 1; i < scheduleList[day - 1].length; i++) {
       const currentStartHour = scheduleList[day - 1][i].startTime.split(":")[0];
       const currentStartMinute = scheduleList[day - 1][i].startTime.split(":")[1];
       let durationHour = 0;
       if (num > 0) {
         durationHour = Math.floor(num / 60);
-        console.log("durationHOur", durationHour);
       }
 
       const durationMinute = Math.floor(num % 60);
-      console.log("durationMinute", durationMinute);
       let nextStartHour = parseInt(currentStartHour) + durationHour;
       let nextStartMinute = parseInt(currentStartMinute) + durationMinute;
-      console.log(`start : ${nextStartHour}:${nextStartMinute}`);
       if (nextStartMinute >= 60) {
         nextStartHour += Math.floor(nextStartMinute / 60);
         nextStartMinute -= 60 * Math.floor(nextStartMinute / 60);
@@ -354,3 +331,7 @@ const EditScheduleItem = ({ day, index, img, placeName, time, startTime, endTime
 };
 
 export default EditScheduleItem;
+
+EditScheduleItem.defaultProps = {
+  time: "00:00",
+};
