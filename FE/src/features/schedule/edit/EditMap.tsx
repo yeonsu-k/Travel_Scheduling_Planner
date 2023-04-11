@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import styles from "./Edit.module.css";
 import { useAppSelector } from "app/hooks";
 import { selectScheduleList } from "slices/scheduleEditSlice";
@@ -111,6 +111,37 @@ const EditMap = ({ day }: EditMapProps) => {
     };
 
     map = new kakao.maps.Map(mapContainer, mapOption);
+  };
+
+  const updateMap = () => {
+    let cnt = 0;
+
+    if (day === 0) {
+      scheduleList.map((val, key) => {
+        scheduleList[key].map((value, idx) => {
+          latitude += value.location.latitude;
+          longitude += value.location.longitude;
+
+          cnt++;
+        });
+      });
+
+      latitude /= cnt;
+      longitude /= cnt;
+    } else {
+      scheduleList[day - 1].map((value, idx) => {
+        latitude += value.location.latitude;
+        longitude += value.location.longitude;
+
+        cnt++;
+      });
+
+      latitude /= cnt;
+      longitude /= cnt;
+    }
+
+    const moveLocation = new kakao.maps.LatLng(latitude, longitude);
+    map.panTo(moveLocation);
   };
 
   const setMarker = () => {
@@ -280,6 +311,21 @@ const EditMap = ({ day }: EditMapProps) => {
     createMap();
     setMarker();
   }, [day]);
+
+  useEffect(() => {
+    // updateMap();
+    setMarker();
+    console.log("변경");
+  }, []);
+
+  // useEffect(() => {
+  //   createMap();
+  // }, []);
+
+  // useLayoutEffect(() => {
+  //   createMap();
+  //   setMarker();
+  // }, []);
 
   return (
     <>
