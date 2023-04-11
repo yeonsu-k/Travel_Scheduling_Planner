@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class NotificationResponseRequest {
     @NotNull
-    Long notificationId;
+    private Long notificationId;
     @NotNull
-    Boolean isAccept;
+    private Boolean isAccept;
     @NotBlank
-    String type;
+    private String type;
 
     @Builder
     public NotificationResponseRequest(Long notificationId, Boolean isAccept, String type) {

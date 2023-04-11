@@ -73,7 +73,7 @@ public class LocationController {
                 , HttpStatus.OK);
     }
 
-    @GetMapping("location/{location_id}")
+    @GetMapping("/location/{location_id}")
     @ApiOperation(value = "장소 상세 조회", notes = "장소를 상세 조회합니다.")
     public ResponseEntity<BaseResponse> findLocationInfo(@PathVariable("location_id") Long locationId) {
         return new ResponseEntity<>(BaseResponse.from(
