@@ -10,7 +10,7 @@ import javax.validation.constraints.Email;
 @NoArgsConstructor
 public class FriendFollowRequest {
     @Email
-    String email;
+    private String email;
 
     @Builder
     public FriendFollowRequest(String email) {
