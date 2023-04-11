@@ -10,7 +10,6 @@ import MyProfileEdit from "features/user/myPage/myProfile/MyProfileEdit";
 import ScheduleRouter from "features/schedule/ScheduleRouter";
 import NotFound from "pages/NotFound";
 import AuthRoute from "./AuthRoute";
-import DataPage from "pages/DataPage";
 import NoticeToast from "features/user/notice/NoticeToast";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import Axios from "api/JsonAxios";
@@ -96,8 +95,6 @@ function App() {
           <Route path="/schedule/*" element={<AuthRoute component={<ScheduleRouter />} />} />
 
           <Route path="*" element={<NotFound />} />
-
-          <Route path="/data" element={<DataPage />} />
         </Routes>
         <NoticeToast message={noticeMessage} open={isNotice} onClose={setIsNotice} />
       </div>
