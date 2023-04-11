@@ -67,6 +67,7 @@ const ScheduleEditPage = () => {
   const [viewDaySchedule, setViewDaySchedule] = useState(false);
   const [day, setDay] = useState(0);
   const [schedule, setSchedule] = useState<scheduleConfig[][]>(useAppSelector(selectScheduleList));
+  let copyList: scheduleConfig[][] = [];
   const [loading, setLoading] = useState(false);
 
   // 포함되지 않은 장소
@@ -161,7 +162,7 @@ const ScheduleEditPage = () => {
       return;
     }
 
-    const copyList = schedule.map((value) => value.slice());
+    copyList = schedule.map((value) => value.slice());
     const keepList = [...keepPlaceList];
 
     // 보관함 내에서 순서만 바꾸는 경우
@@ -193,7 +194,10 @@ const ScheduleEditPage = () => {
       dispatch(setKeepPlaceList([...keepList]));
 
       if (dragStartIndex <= copyList[dragStartDay - 1].length - 1) {
-        for (let i = dragStartIndex; i < copyList[dragStartDay].length - 1; i++) {
+        let prevDataHour = copyList[dragStartDay - 1][0].endTime.split(":")[0];
+        let prevDataMinute = copyList[dragStartDay - 1][0].endTime.split(":")[1];
+        let prevDuration = copyList[dragStartDay - 1][0].duration;
+        for (let i = dragStartIndex; i < copyList[dragStartDay - 1].length - 1; i++) {
           let nextStartHour = parseInt(copyList[dragStartDay - 1][i].startTime.split(":")[0]);
           let nextStartMinute = parseInt(copyList[dragStartDay - 1][i].startTime.split(":")[1]);
           let nextEndHour = parseInt(copyList[dragStartDay - 1][i].endTime.split(":")[0]);
@@ -208,9 +212,7 @@ const ScheduleEditPage = () => {
           }
 
           if (i !== 0) {
-            const prevDataHour = copyList[dragStartDay - 1][i - 1].endTime.split(":")[0];
-            const prevDataMinute = copyList[dragStartDay - 1][i - 1].endTime.split(":")[1];
-            const prevDuration = copyList[dragStartDay - 1][i - 1].duration;
+            console.log("prev", copyList[dragStartDay - 1][i - 1]);
 
             nextStartHour = parseInt(prevDataHour);
             nextStartMinute = parseInt(prevDataMinute) + prevDuration;
@@ -237,10 +239,12 @@ const ScheduleEditPage = () => {
           const endTime = nextEndHour.toString().padStart(2, "0") + ":" + nextEndMinute.toString().padStart(2, "0");
 
           dispatch(setStayTime({ day: dragStartDay, index: i, startTime: startTime, endTime: endTime }));
+          prevDataHour = endTime.split(":")[0];
+          prevDataMinute = endTime.split(":")[1];
+          prevDuration = copyList[dragStartDay - 1][i].duration;
         }
-
-        setSchedule(copyList);
       }
+      setSchedule(copyList);
     }
     // 보관함에서 일정으로 옮기는 경우
     else if (source.droppableId === "keepPlaceList") {
@@ -254,13 +258,88 @@ const ScheduleEditPage = () => {
         day: dragEndDay,
         sequence: 0,
         startTime: "10:00",
-        endTime: "10:00",
+        endTime: "12:00",
         duration: 0,
       };
       keepList.splice(dragStartIndex, 1);
       copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
-      setscheduleList(copyList);
+
+      dispatch(setscheduleList([...copyList]));
+      // setSchedule(copyList);
       dispatch(setKeepPlaceList([...keepList]));
+
+      let startIndexHour = copyList[dragEndDay - 1][0].startTime.split(":")[0];
+      let startIndexMinute = copyList[dragEndDay - 1][0].startTime.split(":")[1];
+      let startIndexEndHour = copyList[dragEndDay - 1][0].endTime.split(":")[0];
+      let startIndexEndMinute = copyList[dragEndDay - 1][0].endTime.split(":")[1];
+      let stayHour = parseInt(startIndexEndHour) - parseInt(startIndexHour);
+      let stayMinute = parseInt(startIndexEndMinute) - parseInt(startIndexMinute);
+
+      console.log("firstdata", copyList[dragEndDay - 1][0]);
+      console.log(
+        `startTime: ${startIndexHour}: ${startIndexMinute}, endTime: ${startIndexEndHour}:${startIndexEndMinute} `,
+      );
+      if (stayMinute < 0) {
+        stayHour -= 1;
+        stayMinute += 60;
+      }
+      console.log("data", copyList[dragEndDay - 1][0]);
+      console.log(`stayHour: ${stayHour} , stayMinute : ${stayMinute}`);
+      startIndexHour = "10";
+      startIndexMinute = "00";
+      startIndexEndHour = (10 + stayHour).toString();
+      startIndexEndMinute = (0 + stayMinute).toString();
+
+      const startTime = startIndexHour.toString().padStart(2, "0") + ":" + startIndexMinute.toString().padStart(2, "0");
+      const endTime =
+        startIndexEndHour.toString().padStart(2, "0") + ":" + startIndexEndMinute.toString().padStart(2, "0");
+      dispatch(setStayTime({ day: dragEndDay, index: 0, startTime: startTime, endTime: endTime }));
+
+      let prevDataHour = copyList[dragEndDay - 1][0].endTime.split(":")[0];
+      let prevDataMinute = copyList[dragEndDay - 1][0].endTime.split(":")[1];
+      let prevDuration = copyList[dragEndDay - 1][0].duration;
+
+      for (let i = 1; i < copyList[dragEndDay - 1].length; i++) {
+        console.log("copylist", copyList[dragEndDay - 1][i]);
+        let nextStartHour = parseInt(copyList[dragEndDay - 1][i].startTime.split(":")[0]);
+        let nextStartMinute = parseInt(copyList[dragEndDay - 1][i].startTime.split(":")[1]);
+        let nextEndHour = parseInt(copyList[dragEndDay - 1][i].endTime.split(":")[0]);
+        let nextEndMinute = parseInt(copyList[dragEndDay - 1][i].endTime.split(":")[1]);
+
+        let stayHour = nextEndHour - nextStartHour;
+        let stayMinute = nextEndMinute - nextStartMinute;
+
+        if (stayMinute < 0) {
+          stayHour -= 1;
+          stayMinute += 60;
+        }
+
+        nextStartHour = parseInt(prevDataHour);
+        nextStartMinute = parseInt(prevDataMinute) + prevDuration;
+
+        if (nextStartMinute >= 60) {
+          nextStartHour += Math.floor(nextStartMinute / 60);
+          nextEndMinute -= 60 * Math.floor(nextStartMinute / 60);
+        }
+
+        nextEndHour = nextStartHour + stayHour;
+        nextEndMinute = nextStartMinute + stayMinute;
+
+        if (nextEndMinute >= 60) {
+          nextEndHour += 1;
+          nextEndMinute -= 60;
+        }
+
+        const startTime = nextStartHour.toString().padStart(2, "0") + ":" + nextStartMinute.toString().padStart(2, "0");
+        const endTime = nextEndHour.toString().padStart(2, "0") + ":" + nextEndMinute.toString().padStart(2, "0");
+        console.log("바뀐 data", copyList[dragEndDay - 1][i]);
+
+        dispatch(setStayTime({ day: dragEndDay, index: i, startTime: startTime, endTime: endTime }));
+        prevDataHour = endTime.split(":")[0];
+        prevDataMinute = endTime.split(":")[1];
+        prevDuration = copyList[dragEndDay - 1][i].duration;
+      }
+      setSchedule(copyList);
     } //일정 내에서 순서만 바꾸는 경우
     else {
       const dragStartDay = Number(source.droppableId);
