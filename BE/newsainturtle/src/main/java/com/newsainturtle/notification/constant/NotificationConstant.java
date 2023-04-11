@@ -1,10 +1,6 @@
 package com.newsainturtle.notification.constant;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class NotificationConstant {
+public final class NotificationConstant {
     public static final String SELECT_NOTIFICATION_LIST_SUCCESS_MESSAGE = "알림 목록 조회를 성공했습니다.";
     public static final String REMOVE_NOTIFICATION_ITEM_SUCCESS_MESSAGE = "알림 개별 삭제를 성공했습니다.";
     public static final String REMOVE_NOTIFICATION_ALL_SUCCESS_MESSAGE = "알림 전체 삭제를 성공했습니다.";
