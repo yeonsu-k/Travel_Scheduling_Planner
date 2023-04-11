@@ -9,12 +9,12 @@ interface EditScheduleItemProps {
   img: string;
   placeName: string;
   time: string;
-  key: number;
+  index: number;
   // startTime: string;
   // endTime: string;
 }
 
-const KeepScheduleItem = ({ img, placeName, time, key }: EditScheduleItemProps) => {
+const KeepScheduleItem = ({ img, placeName, time, index }: EditScheduleItemProps) => {
   const dispatch = useAppDispatch();
 
   const [input, setInput] = useState(0);
@@ -23,7 +23,7 @@ const KeepScheduleItem = ({ img, placeName, time, key }: EditScheduleItemProps) 
 
   const deleteScheduleItem = () => {
     const tmpList = [...keepList];
-    tmpList.splice(key, 1);
+    tmpList.splice(index, 1);
     dispatch(setKeepPlaceList([...tmpList]));
 
     setDeleteItemModal(false);
