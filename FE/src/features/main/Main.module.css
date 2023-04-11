@@ -1,0 +1,676 @@
+.display_row {
+  display: flex;
+  flex-direction: row;
+}
+
+.grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 3fr 5fr;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.containerInner {
+  width: 85%;
+  text-align: center;
+}
+
+.video {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  object-fit: cover;
+}
+
+.mainLeftSide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.titleText {
+  font-family: "LeferiPoint-BlackA";
+  font-size: 5rem;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 2;
+  margin: 0 0 30px 0;
+  color: #333;
+}
+
+.subtitleText {
+  font-size: 1.4rem;
+  text-align: center;
+  letter-spacing: 3px;
+  margin: 0 0 30px 0;
+}
+
+.pageTitle {
+  font-size: 2rem;
+}
+
+.button {
+  width: 100%;
+  height: 75px;
+  line-height: 75px;
+  background-color: #98dde3;
+  letter-spacing: 2px;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+  margin: 0 0 30px 0;
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  height: 300px;
+
+  margin: 0;
+  padding: 0;
+}
+
+.stepDesc {
+  display: flex;
+  width: 100%;
+}
+
+.stepDescLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* text-align: left; */
+  width: 60%;
+  background-color: #fafafa;
+}
+
+/* back in left 애니메이션 */
+.animation {
+  animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-1000px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.stepDescText {
+  font-family: "Pretendard-Regular";
+  font-size: 13px;
+  letter-spacing: 5px;
+  margin: 0 auto;
+  vertical-align: baseline; /* 가운데 정렬 유지하면서 왼쪽 맞춤 */
+}
+
+.stepContainer {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  text-align: center;
+  /* background-color: white; */
+}
+
+.stepDescTextTitle {
+  font-family: "Montserrat";
+  font-size: 1.2rem;
+  font-weight: bolder;
+  letter-spacing: 3px;
+}
+
+.stepDescTextCont {
+  /* justify-content: center; */
+  text-align: center;
+  margin-top: 20px;
+  letter-spacing: 3px;
+}
+
+.mainTextContainer {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.mainTitleText {
+  font-size: 1.8rem;
+  color: black;
+  text-align: center;
+  margin-top: 80px;
+}
+
+.mainSubTitleText {
+  font-family: "Montserrat";
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #999;
+}
+
+.mainSubTitleTextK {
+  margin: 20px 0;
+  font-size: 0.875rem;
+  color: #999;
+  text-align: center;
+}
+
+/* Carousel */
+.carouselContainer {
+  max-width: 1400px;
+  /* padding-bottom: 80px; */
+  margin: 0 auto;
+}
+
+.carouselBtnLeft {
+  position: absolute;
+  top: 225px;
+  left: 40px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.carouselBtnRight {
+  position: absolute;
+  top: 225px;
+  right: 40px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.carouselCardContainer {
+  position: relative;
+}
+
+.carouselCard {
+  height: 450px;
+  width: 100%;
+  padding: 10px 20px 10px 20px;
+  box-sizing: border-box;
+}
+
+.carouselCard > img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  filter: brightness(80%);
+}
+
+.carouselText {
+  position: absolute;
+  width: 100%;
+  bottom: 50px;
+  color: white;
+}
+
+.carouselText > p {
+  font-size: 1.6rem;
+  font-family: "Montserrat";
+  font-weight: 700;
+  margin: 10px;
+}
+
+.carouselTextLog {
+  position: absolute;
+  width: 100%;
+  bottom: 46%;
+  color: white;
+}
+
+.carouselTextLog > p {
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: "Noto Sans";
+  margin: 10px;
+}
+
+.carouselTextLog > span {
+  font-size: 0.8rem;
+  font-weight: 200;
+  font-family: "Montserrat";
+}
+
+.dotsCss {
+  display: inline-block;
+  vertical-align: middle;
+  margin: auto 0;
+  padding: 0;
+}
+
+.dotsCss li {
+  list-style: none;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 6px;
+  padding: 0;
+}
+
+.dotsCss li button {
+  border: 1px solid #d1d1d1;
+  background-color: transparent;
+  color: transparent;
+  cursor: pointer;
+  display: block;
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.dotsCss li button:hover {
+  background: rgba(102, 102, 102, 0.6);
+}
+
+.dotsCss :global(li.slick-active) button {
+  list-style: none;
+  background: rgba(102, 102, 102, 0.6);
+}
+
+/*-----/*-----*/
+/*-----/*-----*/
+
+.mainInputContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  width: 600px;
+  height: 4rem;
+  margin: 10px 0;
+}
+
+.mainInput {
+  width: 100%;
+  margin: 0;
+  background-color: transparent;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.mainInputIcon {
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+}
+
+.mainFilterContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 100px;
+}
+
+.mainDestinationContainer {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.mainDestinationItem {
+  display: flex;
+  justify-content: center;
+  width: 25%;
+}
+
+/* Card List */
+
+.card {
+  position: relative;
+  width: 85%;
+  /* height: 100%; */
+  display: grid;
+  grid-template-rows: 2.2fr 0.8fr;
+  box-shadow: rgb(31 38 135 / 20%) 0px 8px 32px 0px;
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  margin: 16px;
+  cursor: pointer;
+}
+
+.cardImgContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.cardImgContainer img {
+  width: 100%;
+  overflow: hidden;
+  transform: scale(1);
+  transition: all 200ms ease-in-out;
+  backface-visibility: hidden;
+}
+
+.card > div > img:hover {
+  transform: scale(1.5); /* 이미지 확대 */
+  transition: all 200ms ease-in-out;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  justify-content: center;
+  justify-items: center;
+  padding-left: 25px;
+  box-sizing: border-box;
+}
+
+.cardTitle {
+  font-size: 0.9rem;
+}
+
+.cardEngTitle {
+  font-family: "Montserrat";
+  font-size: 1.2em;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+/* Modal */
+.mainModalContainer {
+  width: 1400px;
+  height: 455px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+
+  animation: slideFade 0.3s linear;
+}
+
+@keyframes slideFade {
+  0% {
+    opacity: 0;
+    margin-top: -100px;
+  }
+  100% {
+    opacity: 100%;
+    margin-top: 0;
+  }
+}
+
+.imgContainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.imgContainer img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.contContainer {
+  padding: 80px;
+}
+
+.contTextTitle {
+  font-family: "Montserrat";
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.contTextContents {
+  height: 100px;
+  margin: 20px 0;
+}
+
+.contTextContents span {
+  line-height: 1.5;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.upBtn {
+  margin: 20px 0;
+  height: 50px;
+  text-align: center;
+}
+
+/* 여행기 모달 */
+.logModalContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+
+  width: 800px;
+  height: 500px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.logModalTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.logModalTitle > span:nth-child(2) {
+  font-size: 0.7rem;
+  color: #999;
+  font-family: "Montserrat";
+}
+
+.logModalInfoCont {
+  display: flex;
+  width: 100%;
+  height: 80%;
+}
+
+.logInfoImg {
+  width: 400px;
+  min-width: 400px;
+  height: 80%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.logInfoImg > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logInfoImg span {
+  height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Noto Sans";
+}
+
+.logInfoImg span:nth-child(2) {
+  margin-top: 30px;
+  font-weight: 600;
+}
+
+.logInfoImg span:nth-child(3) {
+  font-size: 0.7rem;
+  font-family: "Montserrat";
+  color: #999;
+}
+
+.logModalItemCont {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.logModalLogItem {
+  padding: 0 30px 0 30px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.logModalItem {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  margin-bottom: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+.logModalItemTitle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.logModalImgCont {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: auto;
+}
+
+.logModalImgCont > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logModalTextCont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.logModalTextCont > span {
+  margin: 2px 0 2px 0;
+}
+
+.logModalTextCont > span:nth-child(1) {
+  font-family: "Noto Sans";
+  font-weight: 700;
+}
+
+.logModalTextCont > span:nth-child(2) {
+  font-size: small;
+}
+
+.copyBtn {
+  width: 100%;
+}
+
+/* 반응형: 모바일 */
+
+.mobileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 55px;
+  margin-bottom: 10px;
+}
+
+.mobileSubTitleText {
+  display: block;
+  font-size: 12px;
+  text-align: center;
+  margin: 8px;
+  color: #98dde3;
+  letter-spacing: 4px;
+}
+
+.mobileTitleText {
+  font-family: "Montserrat";
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+@media screen and (min-width: 1200px) {
+  .mobileContainer {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 602px) and (max-width: 1199px) {
+  .mobileContainer {
+    display: none;
+  }
+
+  .mainDestinationItem {
+    width: 33%;
+  }
+}
+
+/* 모바일 */
+@media screen and (max-width: 601px) {
+  .mainDestinationItem {
+    width: 50%;
+  }
+
+  .cardContent {
+    padding-left: 10px;
+  }
+
+  #mainDisplay,
+  #travelLog,
+  #mainPopular {
+    display: none;
+  }
+
+  /* 어디로 여행 subtext, filter  삭제 */
+  .mainSubTitleTextK,
+  .mainFilterContainer {
+    display: none;
+  }
+
+  .pageTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .mainTitleText {
+    margin-bottom: 10px;
+  }
+
+  .cardTitle {
+    font-size: 0.5rem;
+    color: gray;
+  }
+
+  .cardEngTitle {
+    font-size: 0.8rem;
+  }
+}

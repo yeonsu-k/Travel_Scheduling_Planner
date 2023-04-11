@@ -1,0 +1,431 @@
+/* ScheduleEditPage */
+.map {
+  position: relative;
+  width: 76.5%;
+  height: 100%;
+}
+
+.saveScheduleBtn {
+  position: absolute;
+  width: 10vw;
+  height: 56px;
+  top: 1%;
+  left: 1%;
+  transform: translate(-1%, -1%);
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #000 !important;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 12px !important;
+  cursor: pointer;
+  font-size: 0.875rem;
+  z-index: 2;
+}
+
+.daySummary {
+  position: absolute;
+  width: 15vw;
+  height: 13vh;
+  top: 1.5%;
+  right: 1%;
+  transform: translate(-1.5%, 1%);
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+  margin: 8px 12px !important;
+  z-index: 2;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchPlaceBtn {
+  position: absolute;
+  width: 2.5vw;
+  height: 2.5vw;
+  top: 1.5%;
+  right: 1%;
+  transform: translate(-1.5%, 1%);
+  border-radius: 70%;
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.searchPlaceBtn:hover,
+.addPlaceBtn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.searchList {
+  position: absolute;
+  width: 15vw;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background-color: #ffffff;
+  z-index: 10;
+}
+
+.addPlaceBtn {
+  position: absolute;
+  width: 2.5vw;
+  height: 2.5vw;
+  top: 8%;
+  right: 1%;
+  transform: translate(-8%, 1%);
+  border-radius: 70%;
+  background-color: #ffffff;
+  box-shadow: 0 8px 32px 0 rgb(31 38 135 / 20%) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.keepPlaces {
+  position: absolute;
+  width: 18vw;
+  height: 30vh;
+  cursor: pointer;
+  text-align: center;
+  background-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.14) 0px 8px 17px 2px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px,
+    rgba(0, 0, 0, 0.2) 0px 5px 5px -3px;
+  border-radius: 0.25rem;
+  padding: 1.2rem;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* EditMap.tsx */
+
+.editMap {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* EditDayList */
+
+.editDayList {
+  width: 3.5%;
+  height: 100%;
+  background-color: #fafafa;
+  text-align: center;
+  padding: 2vh 0 2vh;
+  box-sizing: border-box;
+}
+
+.fullScheduleItem {
+  margin: 2vh 0 2vh;
+}
+
+/* EditDayItem */
+
+.editDayItem {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-block;
+  background-color: #ffffff;
+  margin-bottom: 0.3rem;
+  text-align: center;
+  line-height: 2.5rem;
+  cursor: pointer;
+}
+
+/* EditFullScheduleList */
+
+.editFullScheduleList,
+.editDayMoveList {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  padding: 2vh 0 2vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* EditDayScheduleList */
+
+.editDayScheduleList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1vh 0 1vh;
+  box-sizing: border-box;
+  margin: 2vh 0 2vh;
+  background-color: #fafafa;
+}
+
+.dayColor {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 70%;
+  /* background-color: #ff2600; */
+}
+
+/* EditScheduleItem */
+
+.changeTime {
+  width: 100%;
+  height: 6rem;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 45% 45%;
+  grid-template-columns: 75% 15%;
+  grid-template-areas:
+    "text confirm"
+    "time confirm";
+  column-gap: 0.5vw;
+  margin: 1vh 0 1vh;
+  padding: 2%;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  box-shadow: rgba(107, 117, 221, 0.15) 0px 1px 2px 1px;
+}
+
+.changeTimeInfo:nth-child(1) {
+  grid-area: text;
+  margin-right: auto;
+}
+
+.changeTimeInfo:nth-child(2) {
+  grid-area: time;
+  margin-right: auto;
+}
+
+.changeTimeInfo:nth-child(3) {
+  grid-area: confirm;
+  border-radius: 70%;
+  background-color: #98dde3;
+  width: 3vw;
+  height: 3vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.editScheduleItem {
+  width: 100%;
+  height: 6rem;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 25% 20% 10% 15%;
+  grid-template-columns: 25% 15% 15% 15% 15%;
+  grid-template-areas:
+    "itemImg itemTitle itemTitle itemTitle itemTime"
+    "itemImg itemTimeText itemTimeText itemTimeText itemTime"
+    "itemImg . . . itemTime"
+    "itemImg itemLink1 itemLink2 itemLink3 itemLink4";
+  column-gap: 0.5vw;
+  margin: 1vh 0 1vh;
+  padding: 2%;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  box-shadow: rgba(107, 117, 221, 0.15) 0px 1px 2px 1px;
+}
+
+.scheduleItemInfo:nth-child(1) {
+  grid-area: itemImg;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.2rem;
+  border: 1px solid black;
+}
+
+.scheduleItemInfo:nth-child(2) {
+  grid-area: itemTitle;
+  text-align: start;
+  width: 100%;
+}
+
+.scheduleItemInfo:nth-child(3) {
+  grid-area: itemTime;
+  width: 100%;
+  height: 85%;
+  align-items: start;
+  justify-content: start;
+  float: right;
+  background-color: #000000;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+}
+
+.scheduleItemInfo:nth-child(4) {
+  grid-area: itemTimeText;
+  width: 100%;
+  text-align: start;
+}
+
+.scheduleItemInfo:nth-child(5) {
+  grid-area: itemLink1;
+  width: 100%;
+  text-align: start;
+}
+
+.scheduleItemInfo:nth-child(6) {
+  grid-area: itemLink2;
+  width: 100%;
+}
+
+.scheduleItemInfo:nth-child(7) {
+  grid-area: itemLink3;
+  width: 100%;
+}
+
+.scheduleItemInfo:nth-child(8) {
+  grid-area: itemLink4;
+  width: 100%;
+}
+
+.itemLink {
+  display: inline-block;
+}
+
+.moveTime,
+.changeTimeValue {
+  width: 3rem;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: end;
+}
+
+.moveTime:focus,
+.changeTimeValue:focus {
+  outline: none;
+}
+
+.changeTimeValue {
+  text-align: start;
+  color: #ff9c00;
+}
+
+.changeTime:focus {
+  outline: none;
+}
+
+/* EditDayMoveItem.tsx */
+
+.editDayMoveItem {
+  width: 90%;
+  height: 5rem;
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  align-content: center;
+  grid-template-rows: 30% 30% 30%;
+  grid-template-columns: 30% 40% 25%;
+  grid-template-areas:
+    "step startPoint route"
+    "step arrow route"
+    "step endPoint route";
+  column-gap: 0.5vw;
+  margin: 1vh 0 1vh;
+  padding: 2% 5% 2% 5%;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  box-shadow: rgba(31, 38, 135, 0.08) 0px 8px 16px 0px;
+}
+
+.moveItemInfo:nth-child(1) {
+  grid-area: step;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(2) {
+  grid-area: startPoint;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(3) {
+  grid-area: arrow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(4) {
+  grid-area: endPoint;
+  margin-right: auto;
+}
+
+.moveItemInfo:nth-child(5) {
+  grid-area: route;
+  width: 2rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 0.3rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.scheduleTitleContainer {
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.scheduleTitle {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+.scheduleTitle > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.scheduleTitle > div {
+  height: 2.4rem;
+}
+
+.scheduleTitle > div > span {
+  margin-left: 1px;
+  margin-top: 2px;
+}
+
+.scheduleConfirmBtn {
+  margin-top: 20px;
+}
+
+.scheduleConfirmBtn button {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.scheduleConfirmBtn button:nth-child(1) {
+  box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.08);
+}

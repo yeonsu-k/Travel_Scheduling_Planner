@@ -1,0 +1,286 @@
+/* MySchedule.tsx */
+
+.mySchedule {
+  margin: 5vw;
+}
+
+.myScheduleTitle {
+  margin-left: 1%;
+}
+
+.myScheduleContainer {
+  margin-top: 1em;
+}
+
+.schedule {
+  display: flex;
+  justify-content: center;
+}
+
+.scheduleContainer {
+  position: relative;
+  height: 16.5rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 4px 2px 8px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  margin: 0.5em 0;
+}
+
+@media screen and (min-width: 1400px) {
+  .scheduleContainer {
+    width: 1380px;
+  }
+}
+
+.scheduleDDAY {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #26dbe1;
+  color: #fff;
+  font-size: 0.9rem;
+  z-index: 2;
+}
+
+.scheduleImgContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.scheduleImg {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.scheduleInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.scheduleInfo > span {
+  padding-bottom: 20px;
+  color: #999;
+}
+
+.scheduleInfo > span {
+  padding-bottom: 10px;
+}
+
+.scheduleInfoRegion {
+  font-size: 14px;
+}
+
+.scheduleInfoEmail {
+  font-size: 13px;
+}
+
+.scheduleContContainer {
+  display: grid;
+  grid-template-rows: 1.8fr 1.2fr;
+}
+
+.scheduleContent {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.scheduleContTitle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* place-items: center; */
+  align-items: center;
+}
+
+.scheduleContTitle > div {
+  padding-left: 40px;
+}
+
+.scheduleTextTop,
+.scheduleTextBot {
+  display: flex;
+}
+
+.scheduleTextTop {
+  padding-top: 20px;
+  align-items: center;
+}
+
+.scheduleTextBot {
+  padding-bottom: 20px;
+}
+
+.scheduleTextTitle {
+  font-weight: 900;
+  color: #5dc9dd;
+}
+
+.scheduleTextCont {
+  padding-left: 15px;
+}
+
+.scheduleTextInput > div {
+  padding-left: 15px;
+}
+
+.scheduleEditNameBtn {
+  cursor: pointer;
+}
+
+.scheduleBtn {
+  padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+}
+
+.scheduleBtn > Button {
+  height: 70%;
+  width: 60%;
+}
+
+/* MyScheduleShareModal.tsx */
+
+.shareModalContainer,
+.inviteModalContainer {
+  width: 600px;
+  /* height: 320px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 30px;
+  box-sizing: border-box;
+
+  animation: slideFade 0.3s linear;
+}
+
+@keyframes slideFade {
+  0% {
+    opacity: 0;
+    margin-top: -100px;
+  }
+  100% {
+    opacity: 100%;
+    margin-top: 0;
+  }
+}
+
+.shareModalContainer > span:nth-child(1) {
+  font-size: 1.5rem;
+  font-family: "Montserrat";
+  font-weight: 500;
+  margin: 10px;
+}
+
+.shareModalContainer > span:nth-child(2),
+span:nth-child(4) {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.shareBtn {
+  margin: 10px;
+}
+
+.shareBtn > button {
+  margin: 0 50px 20px 50px;
+}
+
+.shareModalTable {
+  width: 100%;
+  table-layout: fixed;
+  word-break: break-all;
+  text-align: center;
+}
+
+.shareModalTable th,
+tr {
+  font-size: 0.8rem;
+}
+
+.shareModalTable th {
+  color: #666;
+}
+.shareModalTable tr {
+  color: #999;
+}
+
+/* MyScheduleInviteModal.tsx */
+
+.inviteModalContainer {
+  width: 500px;
+}
+
+.inviteModalContainer > span:nth-child(1) {
+  font-size: 1.2rem;
+  font-family: "Noto Sans";
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.inviteModalContainer > span:nth-child(2) {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.invitedFriendsCont {
+  margin: 30px 30px 0px 30px;
+}
+
+.invitedFriendItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 380px;
+  height: 60px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04), 4px 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 10px;
+}
+
+.invitedFriendItem > div:nth-child(1) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.friendImg {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px 0 10px;
+  border: 0.5px solid #ececec;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.friendImg > img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.invitedFriendItem > div:nth-child(2) {
+  margin-right: 10px;
+}

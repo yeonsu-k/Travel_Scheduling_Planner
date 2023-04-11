@@ -1,0 +1,116 @@
+.container {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.registContainer {
+  height: 700px;
+  width: 350px;
+}
+
+.textTitle {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  color: #000000;
+}
+
+.smallText {
+  font-size: 12px;
+  text-align: center;
+  color: #616161;
+  letter-spacing: 1px;
+  padding-top: 20px;
+}
+
+.inputTextContainer {
+  margin: 18px 0 5px 0;
+}
+
+.inputText {
+  font-size: 14px;
+  color: #616161;
+}
+
+.inputEmailContainer {
+  display: flex;
+  justify-content: space-between;
+  /* width: 100%; */
+}
+
+.inputEmailContainer Button {
+  align-items: flex-end;
+  /* justify-content: end; */
+  /* width: 10%; */
+}
+
+.inputCheckbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.inputCheckbox > a {
+  color: #1e87f0;
+  font-size: 11px;
+}
+
+.inputCheckbox > label > span {
+  color: #666;
+}
+
+.inputCheckbox > label {
+  display: flex;
+  align-items: center;
+}
+
+.inputCheckbox > label > input {
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+/* Table */
+
+.registTable {
+  width: 100%;
+  padding: 4px;
+  margin-top: 8px;
+  box-sizing: border-box;
+  border: 1px solid #e0e0e0;
+}
+
+.registTable td {
+  font-size: 8px;
+  color: #999;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.tableSecond {
+  color: #000000 !important;
+}
+
+.registButton {
+  margin-top: 20px;
+}
+
+.registConfirm > button {
+  height: 45px;
+  margin-bottom: 20px;
+}
+
+.registBack > button {
+  height: 45px;
+  background-color: black !important;
+}
+
+@media screen and (max-width: 601px) {
+  .registContainer {
+    width: 80%;
+  }
+}
