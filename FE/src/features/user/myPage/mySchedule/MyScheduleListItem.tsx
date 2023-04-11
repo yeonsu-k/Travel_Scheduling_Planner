@@ -166,19 +166,29 @@ const MyScheduleListItem = (item: MyScheduleConfig) => {
 
         dispatch(setscheduleList([...list]));
 
+        let regionId = 0;
+        if (regionInfo?.regionId) {
+          regionId = regionInfo.regionId;
+        }
+
+        let regionName = "";
+        if (regionInfo?.regionName) {
+          regionName = regionInfo.regionName;
+        }
+
         let engName = "";
         if (regionInfo?.englishName) {
           engName = regionInfo.englishName;
-        } else {
-          engName = "";
         }
+
         dispatch(
           setRegion({
-            id: item.regionId,
-            name: item.region_name,
+            id: regionId,
+            name: regionName,
             engName: engName,
           }),
         );
+
         dispatch(resetKeepPlaceList());
 
         navigate({ pathname: "/schedule/edit", search: "id=" + item.schedule_id + "&mine=" + item.mine });
