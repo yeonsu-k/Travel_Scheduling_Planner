@@ -6,9 +6,9 @@ import EditFullScheduleList from "features/schedule/edit/fullList/EditFullSchedu
 import Text from "components/Text";
 import { useDispatch } from "react-redux";
 import {
+  scheduleConfig,
   selectKeepPlaceList,
   selectScheduleList,
-  setDuration,
   setKeepPlaceList,
   setStayTime,
   setscheduleList,
@@ -66,7 +66,7 @@ const ScheduleEditPage = () => {
   const [placeCurrentDay, setPlaceCurrentDay] = useState(-1);
   const [viewDaySchedule, setViewDaySchedule] = useState(false);
   const [day, setDay] = useState(0);
-  const scheduleList = useAppSelector(selectScheduleList);
+  const [schedule, setSchedule] = useState<scheduleConfig[][]>(useAppSelector(selectScheduleList));
   const [loading, setLoading] = useState(false);
 
   // 포함되지 않은 장소
@@ -161,7 +161,7 @@ const ScheduleEditPage = () => {
       return;
     }
 
-    const copyList = scheduleList.map((value) => value.slice());
+    const copyList = schedule.map((value) => value.slice());
     const keepList = [...keepPlaceList];
 
     // 보관함 내에서 순서만 바꾸는 경우
@@ -192,17 +192,12 @@ const ScheduleEditPage = () => {
       dispatch(setscheduleList([...copyList]));
       dispatch(setKeepPlaceList([...keepList]));
 
-      if (dragStartIndex !== scheduleList[dragStartDay - 1].length - 1) {
-        const prevEndHour = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[0];
-        const prevEndMinute = scheduleList[dragStartDay - 1][dragStartIndex - 1].endTime.split(":")[1];
-
-        dispatch(setDuration({ day: dragStartDay, index: dragStartIndex - 1, duration: 0 }));
-
-        for (let i = dragStartIndex + 1; i < scheduleList[dragStartDay].length; i++) {
-          let nextStartHour = parseInt(scheduleList[dragStartDay - 1][i].startTime.split(":")[0]);
-          let nextStartMinute = parseInt(scheduleList[dragStartDay - 1][i].startTime.split(":")[1]);
-          let nextEndHour = parseInt(scheduleList[dragStartDay - 1][i].endTime.split(":")[0]);
-          let nextEndMinute = parseInt(scheduleList[dragStartDay - 1][i].endTime.split(":")[1]);
+      if (dragStartIndex <= copyList[dragStartDay - 1].length - 1) {
+        for (let i = dragStartIndex; i < copyList[dragStartDay].length - 1; i++) {
+          let nextStartHour = parseInt(copyList[dragStartDay - 1][i].startTime.split(":")[0]);
+          let nextStartMinute = parseInt(copyList[dragStartDay - 1][i].startTime.split(":")[1]);
+          let nextEndHour = parseInt(copyList[dragStartDay - 1][i].endTime.split(":")[0]);
+          let nextEndMinute = parseInt(copyList[dragStartDay - 1][i].endTime.split(":")[1]);
 
           let stayHour = nextEndHour - nextStartHour;
           let stayMinute = nextEndMinute - nextStartMinute;
@@ -212,8 +207,23 @@ const ScheduleEditPage = () => {
             stayMinute += 60;
           }
 
-          nextStartHour = parseInt(prevEndHour);
-          nextStartMinute = parseInt(prevEndMinute);
+          if (i !== 0) {
+            const prevDataHour = copyList[dragStartDay - 1][i - 1].endTime.split(":")[0];
+            const prevDataMinute = copyList[dragStartDay - 1][i - 1].endTime.split(":")[1];
+            const prevDuration = copyList[dragStartDay - 1][i - 1].duration;
+
+            nextStartHour = parseInt(prevDataHour);
+            nextStartMinute = parseInt(prevDataMinute) + prevDuration;
+
+            if (nextStartMinute >= 60) {
+              nextStartHour += Math.floor(nextStartMinute / 60);
+              nextEndMinute -= 60 * Math.floor(nextStartMinute / 60);
+            }
+          } else {
+            nextStartHour = 10;
+            nextStartMinute = 0;
+          }
+
           nextEndHour = nextStartHour + stayHour;
           nextEndMinute = nextStartMinute + stayMinute;
 
@@ -226,8 +236,10 @@ const ScheduleEditPage = () => {
             nextStartHour.toString().padStart(2, "0") + ":" + nextStartMinute.toString().padStart(2, "0");
           const endTime = nextEndHour.toString().padStart(2, "0") + ":" + nextEndMinute.toString().padStart(2, "0");
 
-          dispatch(setStayTime({ day: dragStartDay, index: i - 1, startTime: startTime, endTime: endTime }));
+          dispatch(setStayTime({ day: dragStartDay, index: i, startTime: startTime, endTime: endTime }));
         }
+
+        setSchedule(copyList);
       }
     }
     // 보관함에서 일정으로 옮기는 경우
@@ -247,7 +259,7 @@ const ScheduleEditPage = () => {
       };
       keepList.splice(dragStartIndex, 1);
       copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
-      dispatch(setscheduleList([...copyList]));
+      setscheduleList(copyList);
       dispatch(setKeepPlaceList([...keepList]));
     } //일정 내에서 순서만 바꾸는 경우
     else {
@@ -260,7 +272,16 @@ const ScheduleEditPage = () => {
       const dragContent = copyList[dragStartDay - 1][dragStartIndex];
       copyList[dragStartDay - 1].splice(dragStartIndex, 1);
       copyList[dragEndDay - 1].splice(dragEndIndex, 0, dragContent);
-      dispatch(setscheduleList([...copyList]));
+      setscheduleList([...copyList]);
+
+      // 같은 day 안에서 이동한 경우
+      if (dragStartDay === dragEndDay) {
+        console.log("tmpSchedule", schedule);
+      }
+      // 다른 day로 이동한 경우
+      else {
+        console.log(schedule);
+      }
     }
   };
 
@@ -268,8 +289,8 @@ const ScheduleEditPage = () => {
     setLoading(true);
     const sendScheduleList: sendScheduleListProps[] = [];
 
-    scheduleList.map((val, key) => {
-      scheduleList[key].map((value, index) => {
+    schedule.map((val, key) => {
+      schedule[key].map((value, index) => {
         const scheduleItem = {
           locationId: value.location.locationId,
           day: key + 1,
@@ -282,9 +303,12 @@ const ScheduleEditPage = () => {
       });
     });
 
+    console.log("sendScheduleList", sendScheduleList);
+
     if (scheduleId !== null) {
       const sendData = {
         scheduleId: scheduleId,
+        regionId: region.id,
         scheduleRegion: region.name,
         scheduleName: scheduleTitle,
         isPrivate: scheduleOpen,
@@ -293,7 +317,7 @@ const ScheduleEditPage = () => {
         scheduleStartLocation: null,
         scheduleEndLocation: null,
         vehicle: vehicle,
-        scheduleLocationRequest: sendScheduleList,
+        scheduleLocationRequestList: sendScheduleList,
       };
 
       await Axios.put(api.createSchedule.schedule(), sendData).then((res) => {
@@ -347,7 +371,7 @@ const ScheduleEditPage = () => {
 
                 <div style={{ color: colorPalette.yellow }}>
                   <LocationOnIcon fontSize="small" />
-                  <Text value={scheduleList[day - 1].length.toString()} color="yellow" type="textTitle"></Text>
+                  <Text value={schedule[day - 1].length.toString()} color="yellow" type="textTitle"></Text>
                   <Text value="개의 장소" type="caption" en />
                 </div>
               </div>
@@ -428,7 +452,7 @@ const ScheduleEditPage = () => {
                                 img={value.locationURL}
                                 placeName={value.locationName}
                                 time={value.time}
-                                key={key}
+                                index={key}
                                 // startTime={value.startTime}
                                 // endTime={value.endTime}
                               />
