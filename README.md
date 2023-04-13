@@ -6,6 +6,7 @@
 
 - **MYRO 클론 코딩**
     - 여행 스케줄링 플래너 ‘MYRO’ 에 추가 기능을 구현한 프로젝트
+    - UI만 보고 반응형 디자인과 기능을 구현
     - MYRO 홈페이지: [https://www.myro.co.kr/](https://www.myro.co.kr/)
 
 <br>
